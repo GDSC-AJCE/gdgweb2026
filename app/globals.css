@@ -1,0 +1,188 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+
+:root {
+  /* MINDMARKET COLORS */
+  --color-fresh-grass: #8ed462;
+  --color-cream-paper: #f5f1e4;
+  --color-ink-black: #2c2e2a;
+  --color-pure-white: #ffffff;
+  --color-sandstone: #e0dbce;
+  --color-stone-gray: #80827f;
+  --color-hairline-mist: #d5d5d4;
+  --color-pure-ink: #000000;
+  --color-sky-pop: #2ba0ff;
+  --color-coral-pop: #ff705d;
+  --color-sunshine-pop: #f5e211;
+
+  --background: #f5f1e4;
+  --foreground: #2c2e2a;
+
+  /* Typography Scale */
+  --text-body-sm: 15px;
+  --leading-body-sm: 1.5;
+  --text-body-lg: 18px;
+  --leading-body-lg: 1.5;
+  --text-subheading: 20px;
+  --leading-subheading: 1.25;
+  --text-heading-sm: 30px;
+  --leading-heading-sm: 1.2;
+  --text-heading: 53px;
+  --leading-heading: 1.15;
+  --tracking-heading: -2.12px;
+  --text-heading-lg: 81px;
+  --leading-heading-lg: 1.2;
+  --tracking-heading-lg: -4.86px;
+  --text-display: 140px;
+  --leading-display: 0.95;
+  --tracking-display: -8.4px;
+  --text-display-lg: 144px;
+  --leading-display-lg: 0.95;
+  --tracking-display-lg: -8.64px;
+
+  /* Spacing */
+  --spacing-4: 4px;
+  --spacing-20: 20px;
+  --spacing-60: 60px;
+  --spacing-136: 136px;
+  --spacing-216: 216px;
+
+  /* Border Radii */
+  --radius-lg: 10px;
+  --radius-2xl: 20px;
+  --radius-full: 50px;
+  --radius-full-2: 63.75px;
+}
+
+body {
+  background-color: #f5f1e4;
+  color: #2c2e2a;
+  font-family: var(--font-inter), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  overflow-x: hidden;
+}
+
+/* MINDMARKET DISPLAY TYPOGRAPHY (Inter at Extreme Scale) */
+.font-display-hero {
+  font-family: var(--font-inter), sans-serif;
+  font-weight: 500;
+  line-height: 0.95;
+  letter-spacing: -0.06em;
+}
+
+.font-heading-lg {
+  font-family: var(--font-inter), sans-serif;
+  font-weight: 500;
+  line-height: 1.15;
+  letter-spacing: -0.04em;
+}
+
+/* NO SHADOWS OR GRADIENTS — MINDMARKET ELEVATION BY CREAM-TO-WHITE SHIFT */
+*, *::before, *::after {
+  box-shadow: none !important;
+}
+
+/* Hairline border utility */
+.border-hairline {
+  border: 1px solid #d5d5d4;
+}
+
+.border-ink {
+  border: 1px solid #2c2e2a;
+}
+
+/* Custom Minimal Scrollbar on Cream */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f5f1e4;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #e0dbce;
+  border-radius: 50px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #80827f;
+}
+
+/* Form fields — only set colour tokens here; let components control padding, bg, and radius */
+input, textarea, select {
+  color: #2c2e2a;
+}
+
+input:focus, textarea:focus, select:focus {
+  outline: none;
+}
+
+/* ==========================================================================
+   MINDMARKET ANIMATION ENGINE & EASING TOKENS
+   Reverse-engineered from mindmarket.com
+   ========================================================================== */
+
+:root {
+  /* Signature MindMarket Easing Curves */
+  --ease-mindmarket: cubic-bezier(.38, .005, .215, 1);
+  --ease-bounce: cubic-bezier(.17, .67, .3, 1.33);
+  --ease-wave: cubic-bezier(.455, .03, .515, .955);
+  --ease-snappy: cubic-bezier(.5, 0, 0, 1);
+}
+
+/* Lenis Smooth Scroll Rules */
+html.lenis, html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
+}
+
+/* MindMarket Interactive Physics Classes */
+.transition-mindmarket {
+  transition-timing-function: cubic-bezier(.38, .005, .215, 1);
+}
+
+.transition-bounce {
+  transition-timing-function: cubic-bezier(.17, .67, .3, 1.33);
+}
+
+/* Button Dot Expand Affordance on Hover */
+.group:hover .action-dot-expand {
+  transform: scale(1.6);
+  transition: transform 0.28s cubic-bezier(.17, .67, .3, 1.33);
+}
+
+.action-dot-expand {
+  transition: transform 0.22s cubic-bezier(.38, .005, .215, 1);
+}
+
+/* Subtle Gentle Wave Keyframe for Background Elements */
+@keyframes wave-subtle {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-5px) rotate(0.5deg);
+  }
+}
+
+.animate-wave-subtle {
+  animation: wave-subtle 4s cubic-bezier(.455, .03, .515, .955) infinite;
+}
+

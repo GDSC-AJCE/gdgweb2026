@@ -1,0 +1,311 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ============================================
+    // HELPER FUNCTIONS
+    // ============================================
+
+    // Check if user is authenticated
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    // Check if the user document has is_admin: true or email is an authorized chapter lead
+    function isAdmin() {
+      return isAuthenticated() && (
+        request.auth.token.email in ['dsc@amaljyothi.ac.in', 'vinayakprakash2026@cs.ajce.in', 'abinvarghese092005@gmail.com', 'abinvarghese2026@cs.ajce.in'] ||
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.get('is_admin', false) == true ||
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.get('isAdmin', false) == true ||
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.get('role', '') == 'admin'
+      );
+    }
+
+    // Check if the user is a core team member OR an admin (readers)
+    function isCoreUser() {
+      return isAuthenticated() && (
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.get('role', '') == 'core' ||
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.get('role', '') == 'core-manage' ||
+        isAdmin()
+      );
+    }
+
+    // Check if the user is a core manager, core organizer, OR an admin (writers)
+    function isCoreWriter() {
+      return isAuthenticated() && (
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.get('role', '') == 'core-manage' ||
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.get('role', '') == 'core' ||
+        isAdmin()
+      );
+    }
+
+    // Check if a 'core' member is assigned to the current event (can update it)
+    function isCoreAssignedWriter() {
+      return isAuthenticated() &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.get('role', '') == 'core' &&
+        request.auth.uid in resource.data.get('assignedCore', []) &&
+        // Prevent reassigning core members — only core-manage/admin may touch assignedCore
+        !request.resource.data.diff(resource.data).affectedKeys().hasAny(['assignedCore']);
+    }
+
+    // Check if the user has a core profile (core, ex-core, core-manage, admin)
+    function hasCoreProfile() {
+      return isAuthenticated() && (
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.get('role', '') == 'core' ||
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.get('role', '') == 'ex-core' ||
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.get('role', '') == 'core-manage' ||
+        isAdmin()
+      );
+    }
+
+    // Check if user owns the document
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    // ============================================
+    // USERS COLLECTION
+    // ============================================
+    match /users/{userId} {
+      // Users can read their own document, core/admin can read all
+      allow read: if isOwner(userId) || isCoreUser();
+
+      // Users can create their own document during signup
+      allow create: if isOwner(userId);
+
+      // Role field: only admins may change it
+      // is_admin field: immutable from the app (console-only) — nobody can write it
+      // Other fields: users can update their own; core can update all (except role/is_admin)
+      allow update: if (
+        // Designated admin can update any field
+        request.auth.token.email == 'dsc@amaljyothi.ac.in'
+      ) || (
+        // Admin can change anything, including role — but not is_admin (protected below)
+        isAdmin() && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['is_admin'])
+      ) || (
+        // Core team can update any field EXCEPT role and is_admin
+        isCoreWriter() && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['role', 'is_admin'])
+      ) || (
+        // Users can update their own doc — but not role or is_admin
+        isOwner(userId) && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['role', 'is_admin'])
+      );
+
+      // Only core/admin can delete users
+      allow delete: if isCoreWriter();
+    }
+
+    // ============================================
+    // EVENTS COLLECTION
+    // ============================================
+    match /events/{eventId} {
+      // Anyone can read events (public)
+      allow read: if true;
+
+      // core-manage/admin can create and delete events
+      allow create, delete: if isCoreWriter();
+
+      // core-manage/admin can update any field
+      // core members assigned to the event can update all fields EXCEPT assignedCore
+      allow update: if isCoreWriter() || isCoreAssignedWriter();
+
+      // ----------------------------------------
+      // PARTICIPANTS SUBCOLLECTION
+      // ----------------------------------------
+      match /participants/{participantId} {
+        // Core/admin can read all, users can read their own registration
+        allow read: if isCoreUser() ||
+                    (isAuthenticated() && resource.data.userId == request.auth.uid);
+
+        // Authenticated users can register (create) themselves, or core members can add walk-ins
+        allow create: if (isAuthenticated() && request.resource.data.userId == request.auth.uid) ||
+                      isCoreUser();
+
+        // Core members and admin writers can update details, or users can claim/link their manual entries
+        allow update: if isCoreUser() ||
+                      (isAuthenticated() &&
+                       resource.data.userId == "manual" &&
+                       resource.data.email == request.auth.token.email &&
+                       request.resource.data.userId == request.auth.uid);
+
+        // Core/admin can delete, users can withdraw their own registration
+        allow delete: if isCoreUser() ||
+                      (isAuthenticated() && resource.data.userId == request.auth.uid);
+      }
+
+      // ----------------------------------------
+      // CERTIFICATES (TEMPLATES) SUBCOLLECTION
+      // ----------------------------------------
+      match /certificates/{certificateId} {
+        allow read: if true;
+        allow create, update, delete: if isCoreUser();
+      }
+
+      // ----------------------------------------
+      // ISSUED CERTIFICATES SUBCOLLECTION
+      // ----------------------------------------
+      match /issuedCertificates/{issuedCertId} {
+        allow read: if true;
+        // Core can issue/revoke/edit, or users can claim/link their manual certificates
+        allow create, delete: if isCoreUser();
+        allow update: if isCoreUser() ||
+                      (isAuthenticated() &&
+                       resource.data.userId == "manual" &&
+                       resource.data.recipientEmail == request.auth.token.email &&
+                       request.resource.data.userId == request.auth.uid);
+      }
+    }
+
+    // ============================================
+    // MEMBERSHIP APPLICATIONS
+    // ============================================
+    match /membershipApplications/{applicationId} {
+      allow read: if isCoreUser();
+      allow create: if isAuthenticated() &&
+                    request.resource.data.userId == request.auth.uid;
+      allow update: if isCoreWriter();
+      allow delete: if isCoreWriter();
+    }
+
+    // ============================================
+    // AUDIT LOGS (Admin Read Only, Core Create)
+    // ============================================
+    match /auditLogs/{logId} {
+      allow read: if isAdmin();
+      allow create: if isCoreWriter();
+      // Audit logs are immutable — never updated or deleted by anyone
+      allow update, delete: if false;
+    }
+
+    // ============================================
+    // CONTACT FORM RESPONSES
+    // ============================================
+    match /contactFormResponses/{responseId} {
+      allow read: if isCoreUser();
+      allow create: if true;
+      allow update, delete: if isCoreWriter();
+    }
+
+    // ============================================
+    // EXECOM APPLICATIONS
+    // ============================================
+    match /execomApplications/{applicationId} {
+      allow read: if isCoreUser();
+      allow create: if true;
+      allow update, delete: if isCoreWriter();
+    }
+
+    // ============================================
+    // CERTIFICATE TEMPLATES (Top-level)
+    // ============================================
+    match /certificateTemplates/{templateId} {
+      allow read: if true;
+      allow create, update, delete: if isCoreWriter();
+    }
+
+    // ============================================
+    // CORE MEMBER PROFILES
+    // ============================================
+    match /coreProfiles/{uid} {
+      // Anyone can read (public profiles)
+      allow read: if true;
+
+      // Core member can create/update their own profile
+      // batchYears protection is handled in the app layer:
+      // the client always fetches existing batchYears before saving
+      allow create, update: if isOwner(uid) && hasCoreProfile();
+
+      // Admin can update any profile (e.g. to set batchYears)
+      allow update: if isAdmin();
+
+      // Only admin can delete a core profile
+      allow delete: if isAdmin();
+    }
+
+    // ============================================
+    // TRASH BIN
+    // ============================================
+    match /bin/{binId} {
+      // Core/admin can read the bin
+      allow read: if isCoreUser();
+      
+      // Core/admin can move items to the bin
+      allow create: if isCoreWriter();
+ 
+      // Only core/admin can restore or delete items from the bin
+      // (RESTORE involves deleting from bin after writing to original)
+      allow delete: if isCoreWriter();
+      
+      // Bin items should be immutable
+      allow update: if false;
+    }
+
+    // ============================================
+    // SETTINGS
+    // ============================================
+    match /settings/{settingId} {
+      allow read: if isCoreUser() || settingId == 'execomRecruitment';
+      allow write: if isCoreWriter();
+    }
+
+    // ============================================
+    // COLLECTION GROUP RULES
+    // ============================================
+
+    match /{path=**}/issuedCertificates/{issuedCertId} {
+      allow read: if true;
+    }
+
+    match /{path=**}/participants/{participantId} {
+      allow read: if isCoreUser() ||
+                  (isAuthenticated() && resource.data.userId == request.auth.uid);
+    }
+
+    // ============================================
+    // FUNDS COLLECTION
+    // ============================================
+    match /funds/{fundId} {
+      allow read: if isCoreUser();
+      allow create: if isCoreWriter();
+      allow update: if isCoreWriter();
+      allow delete: if isAdmin();
+    }
+
+    // ============================================
+    // NEWSLETTER SUBSCRIBERS
+    // ============================================
+    match /newsletter_subscribers/{subscriberId} {
+      // Core and admin can read all subscriber records
+      allow read: if isCoreUser();
+      
+      // Anyone can subscribe (create)
+      allow create: if request.resource.data.keys().hasAll(['email', 'status', 'subscribedAt'])
+                    && request.resource.data.email is string
+                    && request.resource.data.status in ['active', 'unsubscribed'];
+
+      // Allow unsubscribe or preference update with matching token or by core writer
+      allow update: if isCoreWriter() || (
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'unsubscribedAt', 'topics'])
+      );
+
+      // Only admins can delete subscriber records
+      allow delete: if isAdmin();
+    }
+
+    // ============================================
+    // NEWSLETTERS (WEEKLY ISSUES)
+    // ============================================
+    match /newsletters/{newsletterId} {
+      // Anyone can read published issues on the web archive
+      allow read: if resource.data.status == 'sent' || resource.data.isPublished == true || isCoreUser();
+
+      // Core writers and admins can manage newsletters
+      allow create, update: if isCoreWriter();
+      allow delete: if isAdmin();
+    }
+
+    // ============================================
+    // DEFAULT DENY ALL OTHER COLLECTIONS
+    // ============================================
+  }
+}

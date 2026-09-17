@@ -1,0 +1,36 @@
+<svg width="515" height="115" viewBox="0 0 515 115" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- GDG Brackets Logo Mark -->
+  <g id="gdg-bracket-mark">
+    <!-- Left Bracket: Upper Red Pill -->
+    <g transform="translate(48.25, 41.97) rotate(-35) translate(-45.16, -19.62)">
+      <rect x="0" y="0" width="90.33" height="39.24" rx="19.62" fill="#EA4336" stroke="#202125" stroke-width="7.22" stroke-linejoin="round" />
+    </g>
+
+    <!-- Left Bracket: Lower Blue Pill -->
+    <g transform="translate(48.25, 71.24) rotate(35) translate(-45.16, -19.62)">
+      <rect x="0" y="0" width="90.33" height="39.24" rx="19.62" fill="#4285F4" stroke="#202125" stroke-width="7.22" stroke-linejoin="round" />
+    </g>
+
+    <!-- Right Bracket: Upper Green Pill -->
+    <g transform="translate(144.75, 41.97) rotate(-145) translate(-45.16, -19.62)">
+      <rect x="0" y="0" width="90.33" height="39.24" rx="19.62" fill="#34A853" stroke="#202125" stroke-width="7.22" stroke-linejoin="round" />
+    </g>
+
+    <!-- Right Bracket: Lower Yellow Pill -->
+    <g transform="translate(144.75, 71.09) rotate(145) translate(-45.16, -19.62)">
+      <rect x="0" y="0" width="90.33" height="39.24" rx="19.62" fill="#FAAB00" stroke="#202125" stroke-width="7.22" stroke-linejoin="round" />
+    </g>
+  </g>
+
+  <!-- Typography Block (Figma Frame 3) -->
+  <g id="gdg-text" transform="translate(218, 0)">
+    <!-- Primary Title: GDG AJCE -->
+    <text x="0" y="52" fill="#202125" font-family="'Product Sans', system-ui, -apple-system, sans-serif" font-weight="700" font-size="52" letter-spacing="0.5">GDG AJCE</text>
+    
+    <!-- Subtitle: Google Developer Groups -->
+    <text x="0" y="82" fill="#202125" font-family="'Product Sans', system-ui, -apple-system, sans-serif" font-weight="500" font-size="22" letter-spacing="0.7">Google Developer Groups</text>
+    
+    <!-- College Tag: Amal Jyothi College of Engineering -->
+    <text x="0" y="107" fill="#4285F4" font-family="'Product Sans', system-ui, -apple-system, sans-serif" font-weight="400" font-size="15" letter-spacing="1.2">Amal Jyothi College of Engineering</text>
+  </g>
+</svg>

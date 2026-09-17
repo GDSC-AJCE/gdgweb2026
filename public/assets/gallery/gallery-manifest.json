@@ -1,0 +1,58 @@
+[
+  {
+    "id": "gallery-portrait-01",
+    "cleanPath": "/assets/gallery/gallery-portrait-01.jpg",
+    "originalPath": "/assets/gallery/portrait (1)(1) (Medium).jpg",
+    "caption": "GDSC AJCE Team Portrait Session",
+    "originalName": "portrait (1)(1) (Medium).jpg"
+  },
+  {
+    "id": "gallery-portrait-02",
+    "cleanPath": "/assets/gallery/gallery-portrait-02.jpg",
+    "originalPath": "/assets/gallery/portrait (2)(1) (Medium).jpg",
+    "caption": "Community Member Networking",
+    "originalName": "portrait (2)(1) (Medium).jpg"
+  },
+  {
+    "id": "gallery-side-01",
+    "cleanPath": "/assets/gallery/gallery-side-01.jpg",
+    "originalPath": "/assets/gallery/side (1) (Medium).jpg",
+    "caption": "Interactive Hands-on Tech Workshop",
+    "originalName": "side (1) (Medium).jpg"
+  },
+  {
+    "id": "gallery-side-02",
+    "cleanPath": "/assets/gallery/gallery-side-02.jpg",
+    "originalPath": "/assets/gallery/side (2) (Medium).jpg",
+    "caption": "Collaborative Coding & Hackathon Sprint",
+    "originalName": "side (2) (Medium).jpg"
+  },
+  {
+    "id": "gallery-side-03",
+    "cleanPath": "/assets/gallery/gallery-side-03.jpg",
+    "originalPath": "/assets/gallery/side (3) (Medium).JPG",
+    "caption": "Audience & Attendees at Campus Event",
+    "originalName": "side (3) (Medium).JPG"
+  },
+  {
+    "id": "gallery-top-01",
+    "cleanPath": "/assets/gallery/gallery-top-01.jpg",
+    "originalPath": "/assets/gallery/top (1) (Medium).JPG",
+    "caption": "Auditorium Keynote & Orientation Session",
+    "originalName": "top (1) (Medium).JPG"
+  },
+  {
+    "id": "gallery-top-02",
+    "cleanPath": "/assets/gallery/gallery-top-02.jpg",
+    "originalPath": "/assets/gallery/top (2) (Medium).JPG",
+    "caption": "GDSC AJCE Chapter Gathering & Showcase",
+    "originalName": "top (2) (Medium).JPG"
+  },
+  {
+    "id": "gallery-top-03",
+    "cleanPath": "/assets/gallery/gallery-top-03.jpg",
+    "originalPath": "/assets/gallery/top (3) (Medium).JPG",
+    "caption": "Tech Talk & Speaker Presentation",
+    "originalName": "top (3) (Medium).JPG"
+  }
+]
