@@ -176,12 +176,21 @@ export default function AdminPage() {
           }
         });
 
-        setExecomMembers(merged);
+        // Ensure super admin account (dsc@amaljyothi.ac.in) is never added into Execom
+        const execomOnly = merged.filter(
+          (m) => (m.email || "").toLowerCase().trim() !== "dsc@amaljyothi.ac.in"
+        );
+
+        setExecomMembers(execomOnly);
       } else {
-        setExecomMembers(GDG_EXECOM_2026);
+        setExecomMembers(
+          GDG_EXECOM_2026.filter((m) => (m.email || "").toLowerCase().trim() !== "dsc@amaljyothi.ac.in")
+        );
       }
     } catch (e) {
-      setExecomMembers(GDG_EXECOM_2026);
+      setExecomMembers(
+        GDG_EXECOM_2026.filter((m) => (m.email || "").toLowerCase().trim() !== "dsc@amaljyothi.ac.in")
+      );
     }
   }, []);
 

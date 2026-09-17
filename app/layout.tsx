@@ -24,7 +24,7 @@ const robotoMono = Roboto_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://gdg.community.dev"),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://gdgajce.vercel.app"),
   title: {
     template: "%s | GDG AJCE",
     default: "GDG AJCE | Google Developer Groups on Campus",
@@ -47,9 +47,15 @@ export const metadata: Metadata = {
   openGraph: {
     title: "GDG AJCE — Google Developer Groups on Campus",
     description: "Empowering students with cutting-edge Google technologies (AI/ML, Gemini, Cloud, Android, Web, and Open Source).",
+    url: "https://gdgajce.vercel.app",
     siteName: "GDG AJCE",
     locale: "en_US",
     type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "GDG AJCE — Google Developer Groups on Campus",
+    description: "Empowering students with cutting-edge Google technologies (AI/ML, Gemini, Cloud, Android, Web, and Open Source).",
   },
 };
 

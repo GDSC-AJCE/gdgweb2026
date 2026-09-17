@@ -63,7 +63,7 @@ export async function POST(req: NextRequest) {
       auth: { user: smtpCfg.user, pass: smtpCfg.pass },
     });
 
-    const origin = req.headers.get("origin") || req.nextUrl.origin || "https://gdgajce.com";
+    const origin = req.headers.get("origin") || req.nextUrl.origin || process.env.NEXT_PUBLIC_SITE_URL || "https://gdgajce.vercel.app";
     const fromAddress = smtpCfg.from || `"GDG Tech Pulse" <${smtpCfg.user}>`;
 
     // 1. If testEmail is specified, send single test email and exit

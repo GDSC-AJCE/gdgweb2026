@@ -75,6 +75,16 @@ export function resolveName(
     email?: string | null,
     defaultFallback = "Applicant"
 ): string {
+    const cleanEmail = (email || "").toLowerCase().trim();
+    if (cleanEmail === "dsc@amaljyothi.ac.in") {
+        for (const c of [name, fullName, displayName]) {
+            if (c && typeof c === "string" && c.trim() && !["applicant", "member", "null"].includes(c.trim().toLowerCase())) {
+                return c.trim();
+            }
+        }
+        return "Chapter Organizer";
+    }
+
     const candidates = [name, fullName, displayName];
     for (const c of candidates) {
         if (

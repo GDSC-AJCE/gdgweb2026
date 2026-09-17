@@ -275,7 +275,7 @@ export function renderNewsletterEmailHtml(
 ): { html: string; text: string } {
   const contentHtml = marked.parse(issue.markdownContent, { gfm: true, breaks: true }) as string;
   const greeting = recipientName && recipientName.trim() ? `Hello ${recipientName.trim()},` : "Hello Developer,";
-  const defaultUnsub = unsubscribeUrl || "https://gdgajce.com/newsletter/unsubscribe";
+  const defaultUnsub = unsubscribeUrl || `${process.env.NEXT_PUBLIC_SITE_URL || "https://gdgajce.vercel.app"}/newsletter/unsubscribe`;
 
   const emailHtml = `
 <!DOCTYPE html>
@@ -465,8 +465,8 @@ export function renderNewsletterEmailHtml(
         <p style="margin: 0 0 12px 0;">Amal Jyothi College of Engineering • Kanjirappally, Kerala, India</p>
         
         <div class="social-links">
-          <a href="https://gdgajce.com/newsletter">Web Archive</a> •
-          <a href="https://gdgajce.com/programs">Programs</a> •
+          <a href="https://gdgajce.vercel.app/newsletter">Web Archive</a> •
+          <a href="https://gdgajce.vercel.app/programs">Programs</a> •
           <a href="https://github.com/gdgajce">GitHub</a> •
           <a href="https://instagram.com/gdgajce">Instagram</a>
         </div>
@@ -497,7 +497,7 @@ export function renderWelcomeEmailHtml(
   unsubscribeUrl?: string
 ): { html: string; text: string } {
   const nameDisplay = recipientName && recipientName.trim() ? recipientName.trim() : "Developer";
-  const defaultUnsub = unsubscribeUrl || "https://gdgajce.com/newsletter/unsubscribe";
+  const defaultUnsub = unsubscribeUrl || `${process.env.NEXT_PUBLIC_SITE_URL || "https://gdgajce.vercel.app"}/newsletter/unsubscribe`;
 
   const emailHtml = `
 <!DOCTYPE html>
@@ -642,7 +642,7 @@ export function renderWelcomeEmailHtml(
         </p>
 
         <div style="text-align: center; margin: 24px 0;">
-          <a href="https://gdgajce.com/newsletter" class="btn" style="color: #ffffff;">Browse Past Editions →</a>
+          <a href="https://gdgajce.vercel.app/newsletter" class="btn" style="color: #ffffff;">Browse Past Editions →</a>
         </div>
 
         <p style="font-size: 13px; color: #80827f; margin-top: 24px;">
@@ -663,7 +663,7 @@ export function renderWelcomeEmailHtml(
 
   const text = `Welcome to GDG Tech Pulse, ${nameDisplay}!\n\n` +
     `You are now subscribed to receive our curated weekly tech newsletter every Monday.\n\n` +
-    `Read past issues online at: https://gdgajce.com/newsletter\n\n` +
+    `Read past issues online at: https://gdgajce.vercel.app/newsletter\n\n` +
     `---\nGDG on Campus AJCE\nUnsubscribe: ${defaultUnsub}`;
 
   return { html: emailHtml, text };

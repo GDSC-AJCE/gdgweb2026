@@ -84,8 +84,12 @@ export default function AboutPage() {
                         }
                     });
 
-                    if (finalTeam.length > 0) {
-                        setCoreMembers(finalTeam);
+                    const cleanTeam = finalTeam.filter(
+                        m => (m.email || "").toLowerCase().trim() !== "dsc@amaljyothi.ac.in"
+                    );
+
+                    if (cleanTeam.length > 0) {
+                        setCoreMembers(cleanTeam);
                     }
                 } else {
                     // Fallback to local data

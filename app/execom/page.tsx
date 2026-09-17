@@ -154,21 +154,23 @@ export default function ExecomPage() {
                 submittedAt: Timestamp.now(),
             });
 
-            // Also sync profile to users/{uid} so user profile details are remembered
-            try {
-                const { setDoc: setFirestoreDoc } = await import("firebase/firestore");
-                await setFirestoreDoc(doc(db, "users", user.uid), {
-                    name: candidateName,
-                    displayName: candidateName,
-                    fullName: candidateName,
-                    phoneNumber: candidatePhone,
-                    department: candidateDept,
-                    semester: candidateSem,
-                    college: applicantProfile.college,
-                    photoURL: candidatePhoto,
-                }, { merge: true });
-            } catch (syncErr) {
-                console.warn("Could not sync user profile:", syncErr);
+            // Also sync profile to users/{uid} so user profile details are remembered (never overwrite super admin)
+            if (user.email?.toLowerCase().trim() !== "dsc@amaljyothi.ac.in") {
+                try {
+                    const { setDoc: setFirestoreDoc } = await import("firebase/firestore");
+                    await setFirestoreDoc(doc(db, "users", user.uid), {
+                        name: candidateName,
+                        displayName: candidateName,
+                        fullName: candidateName,
+                        phoneNumber: candidatePhone,
+                        department: candidateDept,
+                        semester: candidateSem,
+                        college: applicantProfile.college,
+                        photoURL: candidatePhoto,
+                    }, { merge: true });
+                } catch (syncErr) {
+                    console.warn("Could not sync user profile:", syncErr);
+                }
             }
 
             setSubmitted(true);

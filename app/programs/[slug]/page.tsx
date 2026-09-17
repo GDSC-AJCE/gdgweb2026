@@ -45,7 +45,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const title = `${eventData.title} | GDG`;
   const description = eventData.tagline || eventData.description?.substring(0, 160) || "Join us for this exciting Google developer event!";
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://gdg.community.dev";
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://gdgajce.vercel.app";
   let posterApiUrl = `${siteUrl}/api/og/${slug}`;
 
   if (eventData.posterUrl && eventData.posterUrl.startsWith('http')) {

@@ -16,27 +16,33 @@ service cloud.firestore {
     function isAdmin() {
       return isAuthenticated() && (
         request.auth.token.email in ['dsc@amaljyothi.ac.in', 'vinayakprakash2026@cs.ajce.in', 'abinvarghese092005@gmail.com', 'abinvarghese2026@cs.ajce.in'] ||
-        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.get('is_admin', false) == true ||
-        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.get('isAdmin', false) == true ||
-        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.get('role', '') == 'admin'
+        (exists(/databases/$(database)/documents/users/$(request.auth.uid)) && (
+          get(/databases/$(database)/documents/users/$(request.auth.uid)).data.get('is_admin', false) == true ||
+          get(/databases/$(database)/documents/users/$(request.auth.uid)).data.get('isAdmin', false) == true ||
+          get(/databases/$(database)/documents/users/$(request.auth.uid)).data.get('role', '') == 'admin'
+        ))
       );
     }
 
     // Check if the user is a core team member OR an admin (readers)
     function isCoreUser() {
       return isAuthenticated() && (
-        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.get('role', '') == 'core' ||
-        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.get('role', '') == 'core-manage' ||
-        isAdmin()
+        isAdmin() ||
+        (exists(/databases/$(database)/documents/users/$(request.auth.uid)) && (
+          get(/databases/$(database)/documents/users/$(request.auth.uid)).data.get('role', '') == 'core' ||
+          get(/databases/$(database)/documents/users/$(request.auth.uid)).data.get('role', '') == 'core-manage'
+        ))
       );
     }
 
     // Check if the user is a core manager, core organizer, OR an admin (writers)
     function isCoreWriter() {
       return isAuthenticated() && (
-        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.get('role', '') == 'core-manage' ||
-        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.get('role', '') == 'core' ||
-        isAdmin()
+        isAdmin() ||
+        (exists(/databases/$(database)/documents/users/$(request.auth.uid)) && (
+          get(/databases/$(database)/documents/users/$(request.auth.uid)).data.get('role', '') == 'core-manage' ||
+          get(/databases/$(database)/documents/users/$(request.auth.uid)).data.get('role', '') == 'core'
+        ))
       );
     }
 
@@ -210,16 +216,11 @@ service cloud.firestore {
       // Anyone can read (public profiles)
       allow read: if true;
 
+      // Admin or core writer can create, update, and delete any core profile
+      allow create, update, delete: if isAdmin() || isCoreWriter();
+
       // Core member can create/update their own profile
-      // batchYears protection is handled in the app layer:
-      // the client always fetches existing batchYears before saving
       allow create, update: if isOwner(uid) && hasCoreProfile();
-
-      // Admin can update any profile (e.g. to set batchYears)
-      allow update: if isAdmin();
-
-      // Only admin can delete a core profile
-      allow delete: if isAdmin();
     }
 
     // ============================================

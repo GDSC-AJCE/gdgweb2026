@@ -87,7 +87,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Attempt to dispatch Welcome Email via SMTP
-    const origin = req.headers.get("origin") || req.nextUrl.origin || "https://gdgajce.com";
+    const origin = req.headers.get("origin") || req.nextUrl.origin || process.env.NEXT_PUBLIC_SITE_URL || "https://gdgajce.vercel.app";
     const unsubscribeUrl = `${origin}/newsletter/unsubscribe?token=${unsubscribeToken}&email=${encodeURIComponent(normalizedEmail)}`;
     const { html: emailHtml, text: emailText } = renderWelcomeEmailHtml(name, unsubscribeUrl);
 
