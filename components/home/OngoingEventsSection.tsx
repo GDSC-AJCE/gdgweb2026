@@ -410,7 +410,7 @@ export default function OngoingEventsSection() {
             {/* Horizontal Scrollable Track */}
             <div
               ref={scrollRef}
-              className="flex gap-5 overflow-x-auto pb-4 pt-1 no-scrollbar scroll-smooth snap-x snap-mandatory"
+              className="flex gap-4 sm:gap-5 overflow-x-auto pb-4 pt-1 no-scrollbar scroll-smooth snap-x snap-mandatory px-1"
               style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
             >
               {events.map((event, idx) => {
@@ -423,7 +423,7 @@ export default function OngoingEventsSection() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.5, delay: idx * 0.1 }}
-                    className="snap-start flex-shrink-0 w-[285px] sm:w-[325px] rounded-[36px] bg-[#ffffff] border border-[#e5e1d5] p-5 sm:p-6 flex flex-col justify-between shadow-[0_2px_12px_rgba(0,0,0,0.02)] hover:border-[#2c2e2a]/40 hover:shadow-md transition-all duration-300 group"
+                    className="snap-start flex-shrink-0 w-[260px] sm:w-[325px] rounded-[36px] bg-[#ffffff] border border-[#e5e1d5] p-5 sm:p-6 flex flex-col justify-between shadow-[0_2px_12px_rgba(0,0,0,0.02)] hover:border-[#2c2e2a]/40 hover:shadow-md transition-all duration-300 group"
                   >
                     <div>
                       {/* Top Row: Pill Chip + Round Arrow Link Button */}

@@ -121,9 +121,9 @@ export default function Navbar() {
               ) : !user ? (
                 <button
                   onClick={handleLogin}
-                  className="group inline-flex items-center gap-2.5 px-5 py-2.5 rounded-[50px] bg-[#ffffff] hover:bg-[#f5f1e4] text-[#2c2e2a] text-[15px] font-medium border border-[#d5d5d4] hover:border-[#2c2e2a]/30 transition-all duration-300 hover:-translate-y-[1px] active:scale-95 transition-mindmarket"
+                  className="group inline-flex items-center gap-2 sm:gap-2.5 px-3 sm:px-5 py-2.5 rounded-[50px] bg-[#ffffff] hover:bg-[#f5f1e4] text-[#2c2e2a] text-[14px] sm:text-[15px] font-medium border border-[#d5d5d4] hover:border-[#2c2e2a]/30 transition-all duration-300 hover:-translate-y-[1px] active:scale-95 transition-mindmarket"
                 >
-                  <span>Get Started</span>
+                  <span className="hidden sm:inline">Get Started</span>
                   {/* Small circular Sky Pop #2ba0ff dot embedded at right edge as visual action affordance */}
                   <span className="w-2.5 h-2.5 rounded-full bg-[#2ba0ff] action-dot-expand" />
                 </button>

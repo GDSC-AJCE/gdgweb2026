@@ -16,8 +16,8 @@ export default function Footer() {
       </div>
 
       {/* SUB-BASELINE SECTION */}
-      <div className="max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-16 pt-12 pb-6">
-        <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-12">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-10 lg:px-16 pt-8 sm:pt-12 pb-6">
+        <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-10 sm:gap-12">
           
           {/* Left Column: Headline & Social / Newsletter Actions */}
           <div className="max-w-md">
@@ -188,11 +188,11 @@ export default function Footer() {
       </div>
 
       {/* BOTTOM LEGAL & BRAND BAR */}
-      <div className="w-full border-t border-[#e5e5e5] py-4 px-6 sm:px-10 lg:px-16 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-[11px] uppercase tracking-wider text-[#5f6368] font-medium">
-        <div className="flex flex-wrap items-center gap-6 sm:gap-10">
+      <div className="w-full border-t border-[#e5e5e5] py-4 px-4 sm:px-10 lg:px-16 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4 text-[10px] sm:text-[11px] uppercase tracking-wider text-[#5f6368] font-medium">
+        <div className="flex flex-wrap items-center gap-4 sm:gap-6 lg:gap-10">
           <Link
             href="/"
-            className="text-[15px] font-semibold text-[#111111] normal-case tracking-normal hover:opacity-80 transition"
+            className="text-[13px] sm:text-[15px] font-semibold text-[#111111] normal-case tracking-normal hover:opacity-80 transition"
           >
             GDG AJCE
           </Link>
@@ -215,7 +215,7 @@ export default function Footer() {
             CONTACT
           </Link>
         </div>
-        <p className="text-[11px] text-[#80827f] font-normal normal-case">
+        <p className="text-[10px] sm:text-[11px] text-[#80827f] font-normal normal-case">
           &copy; {new Date().getFullYear()} GDG on Campus AJCE
         </p>
       </div>

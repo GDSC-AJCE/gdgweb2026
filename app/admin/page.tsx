@@ -130,23 +130,19 @@ export default function AdminPage() {
   // Fetch Execom from Firestore (coreProfiles)
   const fetchExecom = useCallback(async () => {
     try {
-      let snap;
-      try {
-        const q = query(collection(db, "coreProfiles"), orderBy("createdAt", "desc"));
-        snap = await getDocs(q);
-      } catch (err) {
-        snap = await getDocs(collection(db, "coreProfiles"));
-      }
+      const snap = await getDocs(collection(db, "coreProfiles"));
 
       if (!snap.empty) {
-        const fetched: ExecomMember[] = snap.docs.map((d) => {
+        const fetchedMap = new Map<string, ExecomMember>();
+
+        snap.docs.forEach((d) => {
           const data = d.data();
           const email = data.email || null;
           const known = email
             ? GDG_EXECOM_2026.find((m) => m.email?.toLowerCase().trim() === email.toLowerCase().trim())
             : null;
 
-          return {
+          const member: ExecomMember = {
             id: d.id,
             name: resolveName(data.name, data.displayName, data.fullName, email, known?.name || "Member"),
             role: data.role || known?.role || "Lead",
@@ -159,19 +155,30 @@ export default function AdminPage() {
             github: data.github || null,
             email,
             year: data.year || known?.year || "2026",
+            sortOrder: typeof data.sortOrder === "number" ? data.sortOrder : undefined,
           };
+
+          const key = (member.email || member.username || member.name).toLowerCase().replace(/[^a-z0-9]/g, "");
+          if (fetchedMap.has(key)) {
+            const existing = fetchedMap.get(key)!;
+            fetchedMap.set(key, {
+              ...existing,
+              ...member,
+              id: member.id || existing.id,
+              sortOrder: typeof member.sortOrder === "number" ? member.sortOrder : existing.sortOrder,
+            });
+          } else {
+            fetchedMap.set(key, member);
+          }
         });
+
+        const fetched = Array.from(fetchedMap.values());
 
         // Merge any GDG_EXECOM_2026 members not yet in Firestore
         const merged = [...fetched];
         GDG_EXECOM_2026.forEach((local) => {
-          if (
-            !merged.some(
-              (m) =>
-                (m.email && local.email && m.email.toLowerCase() === local.email.toLowerCase()) ||
-                (m.username && local.username && m.username.toLowerCase() === local.username.toLowerCase())
-            )
-          ) {
+          const key = (local.email || local.username || local.name).toLowerCase().replace(/[^a-z0-9]/g, "");
+          if (!fetchedMap.has(key)) {
             merged.push(local);
           }
         });
@@ -180,6 +187,14 @@ export default function AdminPage() {
         const execomOnly = merged.filter(
           (m) => (m.email || "").toLowerCase().trim() !== "dsc@amaljyothi.ac.in"
         );
+
+        // Sort by sortOrder if defined
+        execomOnly.sort((a, b) => {
+          const orderA = typeof a.sortOrder === "number" ? a.sortOrder : 9999;
+          const orderB = typeof b.sortOrder === "number" ? b.sortOrder : 9999;
+          if (orderA !== orderB) return orderA - orderB;
+          return a.name.localeCompare(b.name);
+        });
 
         setExecomMembers(execomOnly);
       } else {

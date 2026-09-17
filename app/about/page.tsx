@@ -15,21 +15,16 @@ export default function AboutPage() {
     useEffect(() => {
         const fetchTeam = async () => {
             try {
-                let snap;
-                try {
-                    const q = query(collection(db, "coreProfiles"), orderBy("createdAt", "desc"));
-                    snap = await getDocs(q);
-                } catch (queryErr) {
-                    snap = await getDocs(collection(db, "coreProfiles"));
-                }
+                const snap = await getDocs(collection(db, "coreProfiles"));
                 if (!snap.empty) {
-                    const fetched: ExecomMember[] = snap.docs.map(d => {
+                    const fetchedMap = new Map<string, ExecomMember>();
+                    snap.docs.forEach(d => {
                         const data = d.data();
                         const socials = (data.socialLinks as Array<{ platform?: string; url?: string }>) || [];
                         const liSocial = socials.find(s => s.platform?.toLowerCase() === "linkedin")?.url;
                         const ghSocial = socials.find(s => s.platform?.toLowerCase() === "github")?.url;
 
-                        return {
+                        const member: ExecomMember = {
                             id: d.id,
                             name: data.name || "GDG Member",
                             role: data.role || "Core Lead",
@@ -39,14 +34,30 @@ export default function AboutPage() {
                             username: data.username || d.id,
                             dept: data.dept || "CSE",
                             year: data.year || "2026",
+                            email: data.email || undefined,
                             linkedin: data.linkedin || liSocial || undefined,
                             github: data.github || ghSocial || undefined,
+                            sortOrder: typeof data.sortOrder === "number" ? data.sortOrder : undefined,
                         };
+
+                        const key = (member.email || member.username || member.name).toLowerCase().replace(/[^a-z0-9]/g, "");
+                        if (fetchedMap.has(key)) {
+                            const existing = fetchedMap.get(key)!;
+                            fetchedMap.set(key, {
+                                ...existing,
+                                ...member,
+                                id: member.id || existing.id,
+                                sortOrder: typeof member.sortOrder === "number" ? member.sortOrder : existing.sortOrder,
+                            });
+                        } else {
+                            fetchedMap.set(key, member);
+                        }
                     });
+
                     // Merge with local team data
-                    const merged = fetched.map(f => {
+                    const merged = Array.from(fetchedMap.values()).map(f => {
                         const local = GDG_EXECOM_2026.find(
-                            m => m.name.toLowerCase() === f.name.toLowerCase() || m.username?.toLowerCase() === f.username?.toLowerCase()
+                            m => m.name.toLowerCase() === f.name.toLowerCase() || m.username?.toLowerCase() === f.username?.toLowerCase() || (m.email && f.email && m.email.toLowerCase() === f.email.toLowerCase())
                         );
                         return local
                             ? {
@@ -59,6 +70,7 @@ export default function AboutPage() {
                                 role: f.role || local.role,
                                 track: f.track || local.track,
                                 year: f.year || local.year || "2026",
+                                sortOrder: typeof f.sortOrder === "number" ? f.sortOrder : local.sortOrder,
                               }
                             : f;
                     });
@@ -66,7 +78,8 @@ export default function AboutPage() {
                     // Ensure all official 2025-26 members are retained
                     const finalTeam = [...merged];
                     GDG_EXECOM_2026.forEach(local => {
-                        if (!finalTeam.some(m => m.name.toLowerCase() === local.name.toLowerCase() || m.username?.toLowerCase() === local.username?.toLowerCase())) {
+                        const localKey = (local.email || local.username || local.name).toLowerCase().replace(/[^a-z0-9]/g, "");
+                        if (!fetchedMap.has(localKey)) {
                             finalTeam.push(local);
                         }
                     });
@@ -87,6 +100,14 @@ export default function AboutPage() {
                     const cleanTeam = finalTeam.filter(
                         m => (m.email || "").toLowerCase().trim() !== "dsc@amaljyothi.ac.in"
                     );
+
+                    // Sort by sortOrder
+                    cleanTeam.sort((a, b) => {
+                        const orderA = typeof a.sortOrder === "number" ? a.sortOrder : 9999;
+                        const orderB = typeof b.sortOrder === "number" ? b.sortOrder : 9999;
+                        if (orderA !== orderB) return orderA - orderB;
+                        return a.name.localeCompare(b.name);
+                    });
 
                     if (cleanTeam.length > 0) {
                         setCoreMembers(cleanTeam);

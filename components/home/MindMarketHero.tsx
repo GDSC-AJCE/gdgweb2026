@@ -345,7 +345,7 @@ function InteractiveMascotVideo() {
 
 export default function MindMarketHero() {
   return (
-    <section className="relative w-full bg-transparent text-[#2c2e2a] pt-10 sm:pt-14 pb-16 sm:pb-20 px-4 sm:px-6 select-none overflow-hidden">
+    <section className="relative w-full bg-transparent text-[#2c2e2a] pt-10 sm:pt-14 pb-24 sm:pb-28 md:pb-20 px-4 sm:px-6 select-none overflow-hidden">
       
       {/* BACKGROUND FLOATING GOOGLE LABS ORGANIC SHAPES & CLOUDS (Scattered harmoniously across all quadrants) */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
@@ -440,11 +440,11 @@ export default function MindMarketHero() {
       <div className="max-w-[1200px] mx-auto text-center flex flex-col items-center relative">
 
         {/* CHAPTER IDENTITY PILL CHIP */}
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-[50px] bg-[#ffffff] border border-[#d5d5d4] text-[13px] font-medium text-[#2c2e2a] mb-6 sm:mb-8 md:mb-10 shadow-xs">
-          <span className="w-2 h-2 rounded-full bg-[#8ed462]" />
+        <div className="inline-flex flex-wrap items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 rounded-[50px] bg-[#ffffff] border border-[#d5d5d4] text-[11px] sm:text-[13px] font-medium text-[#2c2e2a] mb-6 sm:mb-8 md:mb-10 shadow-xs max-w-[320px] sm:max-w-none text-center">
+          <span className="w-2 h-2 rounded-full bg-[#8ed462] shrink-0" />
           <span>Google Developer Groups on Campus</span>
-          <span className="text-[#80827f]">•</span>
-          <span className="text-[#80827f]">Amal Jyothi College of Engineering</span>
+          <span className="text-[#80827f] hidden sm:inline">•</span>
+          <span className="text-[#80827f] hidden sm:inline">Amal Jyothi College of Engineering</span>
         </div>
 
         {/* HERO DISPLAY: GDG AJCE IN TWO LINES OF ULTRA-BOLD TYPOGRAPHY WITH RIGHT-CORNER MASCOT */}
@@ -458,7 +458,7 @@ export default function MindMarketHero() {
           </h1>
 
           {/* Animated Mascot Layered in the Right Corner */}
-          <div id="mascot-character-container" className="absolute -bottom-3 sm:-bottom-5 -right-4 sm:-right-8 md:-right-14 lg:-right-20 pointer-events-none z-10">
+          <div id="mascot-character-container" className="absolute -bottom-3 sm:-bottom-5 right-0 sm:-right-8 md:-right-14 lg:-right-20 pointer-events-none z-10">
             <div className="pointer-events-auto">
               <InteractiveMascotVideo />
             </div>

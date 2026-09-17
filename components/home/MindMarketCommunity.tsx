@@ -31,10 +31,14 @@ export default function MindMarketCommunity() {
       try {
         const { collection, getDocs, query, orderBy } = await import("firebase/firestore");
         const { db } = await import("@/lib/firebase");
-        const q = query(collection(db, "coreProfiles"), orderBy("createdAt", "desc"));
-        const snap = await getDocs(q);
+        const snap = await getDocs(collection(db, "coreProfiles"));
         if (!snap.empty) {
           const fetched = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+          fetched.sort((a: any, b: any) => {
+            const orderA = typeof a.sortOrder === "number" ? a.sortOrder : 9999;
+            const orderB = typeof b.sortOrder === "number" ? b.sortOrder : 9999;
+            return orderA - orderB;
+          });
           setExecomMembers(fetched);
         }
       } catch (err) {
@@ -102,7 +106,7 @@ export default function MindMarketCommunity() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-60px" }}
             transition={{ duration: 0.8, ease: [0.38, 0.005, 0.215, 1.0] }}
-            className="lg:col-span-7 rounded-[50px] bg-[#ffffff] border border-[#d5d5d4] p-8 sm:p-10 flex flex-col justify-between shadow-xs"
+            className="lg:col-span-7 rounded-[50px] bg-[#ffffff] border border-[#d5d5d4] p-6 sm:p-8 lg:p-10 flex flex-col justify-between shadow-xs"
           >
             <div className="space-y-6">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -111,17 +115,17 @@ export default function MindMarketCommunity() {
                     <Trophy className="w-3.5 h-3.5 text-[#ff705d]" />
                     <span>Spring 2026 Sprint Arena</span>
                   </div>
-                  <h3 className="text-[28px] sm:text-[34px] font-medium text-[#2c2e2a] tracking-[-0.03em] pt-2">
+                  <h3 className="text-[26px] sm:text-[34px] font-medium text-[#2c2e2a] tracking-[-0.03em] pt-2">
                     Chapter Leaderboard
                   </h3>
                 </div>
 
                 {/* Interactive Highlights Pill Selector */}
-                <div className="flex items-center bg-[#f5f1e4] p-1 rounded-[50px] border border-[#d5d5d4] self-start sm:self-auto">
+                <div className="flex items-center bg-[#f5f1e4] p-1 rounded-[50px] border border-[#d5d5d4] self-start sm:self-auto overflow-x-auto no-scrollbar shrink-0">
                   <button
                     type="button"
                     onClick={() => setActiveTab("xp")}
-                    className={`px-3 py-1 rounded-full text-xs font-semibold transition cursor-pointer ${
+                    className={`px-3 py-1 rounded-full text-xs font-semibold transition cursor-pointer whitespace-nowrap ${
                       activeTab === "xp" ? "bg-white text-[#2c2e2a] shadow-xs" : "text-[#80827f] hover:text-[#2c2e2a]"
                     }`}
                   >
@@ -130,7 +134,7 @@ export default function MindMarketCommunity() {
                   <button
                     type="button"
                     onClick={() => setActiveTab("streaks")}
-                    className={`px-3 py-1 rounded-full text-xs font-semibold transition cursor-pointer ${
+                    className={`px-3 py-1 rounded-full text-xs font-semibold transition cursor-pointer whitespace-nowrap ${
                       activeTab === "streaks" ? "bg-white text-[#2c2e2a] shadow-xs" : "text-[#80827f] hover:text-[#2c2e2a]"
                     }`}
                   >
@@ -139,7 +143,7 @@ export default function MindMarketCommunity() {
                   <button
                     type="button"
                     onClick={() => setActiveTab("badges")}
-                    className={`px-3 py-1 rounded-full text-xs font-semibold transition cursor-pointer ${
+                    className={`px-3 py-1 rounded-full text-xs font-semibold transition cursor-pointer whitespace-nowrap ${
                       activeTab === "badges" ? "bg-white text-[#2c2e2a] shadow-xs" : "text-[#80827f] hover:text-[#2c2e2a]"
                     }`}
                   >
@@ -224,7 +228,7 @@ export default function MindMarketCommunity() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-60px" }}
               transition={{ duration: 0.8, delay: 0.1, ease: [0.38, 0.005, 0.215, 1.0] }}
-              className="rounded-[50px] bg-[#ffffff] border border-[#d5d5d4] p-8 flex flex-col justify-between flex-1 shadow-xs"
+              className="rounded-[50px] bg-[#ffffff] border border-[#d5d5d4] p-6 sm:p-8 flex flex-col justify-between flex-1 shadow-xs"
             >
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
@@ -271,7 +275,7 @@ export default function MindMarketCommunity() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-60px" }}
               transition={{ duration: 0.8, delay: 0.2, ease: [0.38, 0.005, 0.215, 1.0] }}
-              className="rounded-[50px] bg-[#ffffff] border border-[#d5d5d4] p-8 flex flex-col justify-between flex-1 shadow-xs"
+              className="rounded-[50px] bg-[#ffffff] border border-[#d5d5d4] p-6 sm:p-8 flex flex-col justify-between flex-1 shadow-xs"
             >
               <div className="space-y-4">
                 <div className="flex items-center justify-between">

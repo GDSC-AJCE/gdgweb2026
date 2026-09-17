@@ -12,6 +12,7 @@ export interface ExecomMember {
   username?: string;
   linkedin?: string;
   github?: string;
+  sortOrder?: number;
 }
 
 export interface ExecomCategory {

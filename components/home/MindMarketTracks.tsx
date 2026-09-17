@@ -113,7 +113,7 @@ export default function MindMarketTracks() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-40px" }}
               transition={{ duration: 0.65, delay: 0.05, ease: [0.38, 0.005, 0.215, 1.0] }}
-              className="rounded-[36px] bg-[#ffd600] p-7 sm:p-8 pt-10 relative flex flex-col justify-between min-h-[250px] transition-transform duration-300 hover:-translate-y-1"
+              className="rounded-[36px] bg-[#ffd600] p-7 sm:p-8 pt-12 sm:pt-12 relative flex flex-col justify-between min-h-[250px] transition-transform duration-300 hover:-translate-y-1"
             >
               {/* Cute Smiling Face Sticker nested in top notch */}
               <div className="absolute -top-7 left-1/2 -translate-x-1/2 z-20">

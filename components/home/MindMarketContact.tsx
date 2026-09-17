@@ -281,7 +281,7 @@ export default function MindMarketContact() {
         </div>
 
         {/* Quick Links Below Form */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 pt-2">
           {/* Email Copy Pill */}
           <button
             type="button"
@@ -348,9 +348,9 @@ export default function MindMarketContact() {
       {/* ========================================================================= */}
       {/* 4. ANIMATED MASCOT: Positioned near the Right Corner (Not on top of form) */}
       {/* ========================================================================= */}
-      <div className="mt-8 sm:mt-10 lg:mt-0 lg:absolute lg:right-8 xl:right-16 lg:bottom-16 z-20 flex justify-end">
+      <div className="mt-8 sm:mt-10 lg:mt-0 lg:absolute lg:right-8 xl:right-16 lg:bottom-16 z-20 flex justify-center lg:justify-end">
         <div
-          className="flex flex-col items-center sm:items-end cursor-pointer group select-none"
+          className="flex flex-col items-center cursor-pointer group select-none"
           onClick={handleMascotClick}
           title="Click me for confetti!"
         >

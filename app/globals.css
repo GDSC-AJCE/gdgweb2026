@@ -186,3 +186,11 @@ html.lenis, html.lenis body {
   animation: wave-subtle 4s cubic-bezier(.455, .03, .515, .955) infinite;
 }
 
+/* Hide scrollbars utility */
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}

@@ -12,6 +12,7 @@ import {
   ExternalLink,
   Lock,
   Settings,
+  ArrowUpDown,
 } from "lucide-react";
 import { doc, deleteDoc, writeBatch, collection, Timestamp, addDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
@@ -21,6 +22,7 @@ import { FaLinkedin, FaGithub } from "react-icons/fa";
 import { GDG_EXECOM_2026, ExecomMember } from "@/lib/data/TeamData";
 import AddExecomMemberModal from "../modals/AddExecomMemberModal";
 import UploadPreviousExecomModal from "../modals/UploadPreviousExecomModal";
+import ReorderExecomModal from "../modals/ReorderExecomModal";
 
 interface ExecomManagementTabProps {
   members: ExecomMember[];
@@ -40,6 +42,7 @@ export default function ExecomManagementTab({
   const [viewMode, setViewMode] = useState<"grid" | "table">("grid");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isUploadPastOpen, setIsUploadPastOpen] = useState(false);
+  const [isReorderOpen, setIsReorderOpen] = useState(false);
   const [selectedCohort, setSelectedCohort] = useState<string>("all");
   const [editingMember, setEditingMember] = useState<ExecomMember | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
@@ -176,6 +179,16 @@ export default function ExecomManagementTab({
 
           {isSuperAdmin ? (
             <>
+              {/* Rearrange Order Button */}
+              <button
+                onClick={() => setIsReorderOpen(true)}
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-[50px] bg-[#f5f1e4] hover:bg-[#eae5d7] border border-[#d5d5d4] text-xs font-semibold text-[#2c2e2a] transition cursor-pointer"
+                title="Rearrange Execom member display order"
+              >
+                <ArrowUpDown className="w-3.5 h-3.5 text-[#2ba0ff]" />
+                <span>Rearrange Order</span>
+              </button>
+
               {/* Upload Past Execom Button */}
               <button
                 onClick={() => setIsUploadPastOpen(true)}
@@ -428,6 +441,22 @@ export default function ExecomManagementTab({
         onClose={() => setIsUploadPastOpen(false)}
         onSaved={onRefresh}
         adminName={adminName}
+      />
+
+      {/* REARRANGE / REORDER EXECOM MODAL */}
+      <ReorderExecomModal
+        isOpen={isReorderOpen}
+        onClose={() => setIsReorderOpen(false)}
+        onSaved={onRefresh}
+        members={displayedMembers}
+        adminName={adminName}
+        cohortTitle={
+          selectedCohort === "all"
+            ? "All Rosters"
+            : selectedCohort === "2026"
+            ? "2025-26 Active"
+            : `${selectedCohort} Cohort`
+        }
       />
     </div>
   );
