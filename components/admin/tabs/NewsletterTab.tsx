@@ -412,8 +412,8 @@ export default function NewsletterTab({ adminEmail, adminName = "Core Admin" }: 
             <span className="text-xs font-semibold uppercase tracking-wider">Delivery Engine</span>
             <ShieldCheck className="w-4 h-4 text-[#EA4335]" />
           </div>
-          <div className="text-sm font-bold text-[#2c2e2a] mt-2">Nodemailer + SMTP</div>
-          <p className="text-[11px] text-[#34A853] font-semibold mt-1">Ready for Weekly Broadcast</p>
+          <div className="text-sm font-bold text-[#2c2e2a] mt-2">Resend + emailmd</div>
+          <p className="text-[11px] text-[#34A853] font-semibold mt-1">Modern API Email Engine</p>
         </div>
       </div>
 

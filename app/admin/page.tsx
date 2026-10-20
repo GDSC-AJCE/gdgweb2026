@@ -183,10 +183,13 @@ export default function AdminPage() {
           }
         });
 
-        // Ensure super admin account (dsc@amaljyothi.ac.in) is never added into Execom
-        const execomOnly = merged.filter(
-          (m) => (m.email || "").toLowerCase().trim() !== "dsc@amaljyothi.ac.in"
-        );
+        // Ensure super admin accounts are never added into Execom
+        const isSuperAdminEmail = (email?: string) => {
+          const e = (email || "").toLowerCase().trim();
+          return e === "dsc@amaljyothi.ac.in" || e === "karthiksambhu123@gmail.com";
+        };
+
+        const execomOnly = merged.filter((m) => !isSuperAdminEmail(m.email));
 
         // Sort by sortOrder if defined
         execomOnly.sort((a, b) => {
@@ -199,12 +202,12 @@ export default function AdminPage() {
         setExecomMembers(execomOnly);
       } else {
         setExecomMembers(
-          GDG_EXECOM_2026.filter((m) => (m.email || "").toLowerCase().trim() !== "dsc@amaljyothi.ac.in")
+          GDG_EXECOM_2026.filter((m) => (m.email || "").toLowerCase().trim() !== "dsc@amaljyothi.ac.in" && (m.email || "").toLowerCase().trim() !== "karthiksambhu123@gmail.com")
         );
       }
     } catch (e) {
       setExecomMembers(
-        GDG_EXECOM_2026.filter((m) => (m.email || "").toLowerCase().trim() !== "dsc@amaljyothi.ac.in")
+        GDG_EXECOM_2026.filter((m) => (m.email || "").toLowerCase().trim() !== "dsc@amaljyothi.ac.in" && (m.email || "").toLowerCase().trim() !== "karthiksambhu123@gmail.com")
       );
     }
   }, []);
@@ -454,7 +457,7 @@ export default function AdminPage() {
               GDG Chapter Admin
             </h2>
             <p className="text-xs text-[#80827f] leading-relaxed">
-              Sign in with your Google Account to access the Chapter Organizer console. Admin access is restricted to authorized accounts (<span className="font-mono font-medium text-[#2c2e2a]">dsc@amaljyothi.ac.in</span>).
+              Sign in with your Google Account to access the Chapter Organizer console. Admin access is restricted to authorized accounts (<span className="font-mono font-medium text-[#2c2e2a]">dsc@amaljyothi.ac.in</span>, <span className="font-mono font-medium text-[#2c2e2a]">karthiksambhu123@gmail.com</span>).
             </p>
           </div>
 
@@ -518,7 +521,7 @@ export default function AdminPage() {
   const adminName = user?.displayName || user?.email || "Chapter Organizer";
 
   return (
-    <main className="min-h-screen bg-[#f5f1e4] text-[#2c2e2a] select-none p-4 sm:p-8 lg:p-12">
+    <main className="min-h-screen bg-[#f8fafc] text-[#0f172a] select-none p-4 sm:p-8 lg:p-12">
       <div className="max-w-[1440px] mx-auto space-y-8">
         {/* TOP ADMIN HEADER */}
         <AdminHeader

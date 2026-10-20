@@ -15,7 +15,7 @@ service cloud.firestore {
     // Check if the user document has is_admin: true or email is an authorized chapter lead
     function isAdmin() {
       return isAuthenticated() && (
-        request.auth.token.email in ['dsc@amaljyothi.ac.in', 'vinayakprakash2026@cs.ajce.in', 'abinvarghese092005@gmail.com', 'abinvarghese2026@cs.ajce.in'] ||
+        request.auth.token.email in ['dsc@amaljyothi.ac.in', 'vinayakprakash2026@cs.ajce.in', 'abinvarghese092005@gmail.com', 'abinvarghese2026@cs.ajce.in', 'karthiksambhu123@gmail.com'] ||
         (exists(/databases/$(database)/documents/users/$(request.auth.uid)) && (
           get(/databases/$(database)/documents/users/$(request.auth.uid)).data.get('is_admin', false) == true ||
           get(/databases/$(database)/documents/users/$(request.auth.uid)).data.get('isAdmin', false) == true ||
@@ -85,7 +85,7 @@ service cloud.firestore {
       // Other fields: users can update their own; core can update all (except role/is_admin)
       allow update: if (
         // Designated admin can update any field
-        request.auth.token.email == 'dsc@amaljyothi.ac.in'
+        request.auth.token.email in ['dsc@amaljyothi.ac.in', 'karthiksambhu123@gmail.com']
       ) || (
         // Admin can change anything, including role — but not is_admin (protected below)
         isAdmin() && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['is_admin'])
@@ -242,11 +242,37 @@ service cloud.firestore {
     }
 
     // ============================================
+    // AUDIT LOGS
+    // ============================================
+    match /auditLogs/{logId} {
+      allow read: if isCoreUser();
+      allow create: if isAuthenticated();
+      allow update, delete: if isAdmin();
+    }
+
+    // ============================================
     // SETTINGS
     // ============================================
     match /settings/{settingId} {
       allow read: if isCoreUser() || settingId == 'execomRecruitment';
       allow write: if isCoreWriter();
+    }
+
+    // ============================================
+    // EXECOM APPLICATIONS COLLECTION
+    // ============================================
+    match /execomApplications/{applicationId} {
+      // Core members and admins can read all applications; applicants can read their own
+      allow read: if isCoreUser() || (isAuthenticated() && resource.data.userId == request.auth.uid);
+      
+      // Authenticated users can submit (create) an application
+      allow create: if isAuthenticated() && request.resource.data.userId == request.auth.uid;
+      
+      // Core writers can update (accept, reject status) or owner can update their own
+      allow update: if isCoreWriter() || (isAuthenticated() && resource.data.userId == request.auth.uid);
+      
+      // Core writers and admins can delete applications
+      allow delete: if isCoreWriter();
     }
 
     // ============================================

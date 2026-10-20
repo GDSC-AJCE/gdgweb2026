@@ -9,14 +9,16 @@ import {
     ChevronDown,
     FileText,
     Hash,
-    Phone,
-    Mail,
     ListFilter,
     Users,
     CheckSquare,
     User
 } from "lucide-react";
-import Badge from "./ui/Badge";
+import { Badge } from "@/components/ui/Badge";
+import { Input } from "@/components/ui/Input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/Button";
+import { Checkbox } from "@/components/ui/checkbox";
 
 export interface FormField {
     id: string;
@@ -136,32 +138,32 @@ export default function CustomFormBuilder({
         <div className="space-y-6">
             {/* Event Participation Type Selector - only for events */}
             {!hideParticipationFormat && (
-                <div className="p-5 rounded-[28px] bg-[#f5f1e4] border border-[#d5d5d4] space-y-4">
+                <div className="p-5 rounded-2xl bg-[#faf8f4] border border-[#d5d5d4] space-y-4 shadow-2xs">
                     <div className="flex items-center justify-between">
                         <div>
                             <h4 className="text-sm font-bold text-[#2c2e2a] tracking-tight">Participation Format</h4>
                             <p className="text-xs text-[#80827f] mt-0.5">Determine if participants register individually or as a squad.</p>
                         </div>
-                        <Badge label="FORMAT" variant="blue" dot={true} />
+                        <Badge variant="outline">FORMAT</Badge>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                         <button
                             type="button"
                             onClick={() => handleFormatChange("solo")}
-                            className={`p-4 rounded-[24px] border text-left transition-all duration-200 cursor-pointer ${
+                            className={`p-4 rounded-xl border text-left transition-all duration-200 cursor-pointer ${
                                 eventType === "solo"
-                                    ? "bg-white border-2 border-[#2ba0ff] text-[#2c2e2a] shadow-xs"
-                                    : "bg-white/60 border-[#d5d5d4] text-[#80827f] hover:border-[#2c2e2a]/30 hover:bg-white"
+                                    ? "bg-white border-2 border-[#4285F4] text-[#2c2e2a] shadow-sm"
+                                    : "bg-white/70 border-[#d5d5d4] text-[#80827f] hover:border-[#2c2e2a]/30 hover:bg-white"
                             }`}
                         >
                             <div className="flex items-center justify-between mb-1">
-                                <span className="text-sm font-bold text-[#2c2e2a] flex items-center gap-1.5">
-                                    <User className="w-4 h-4 text-[#2ba0ff]" />
+                                <span className="text-sm font-bold text-[#2c2e2a] flex items-center gap-2">
+                                    <User className="w-4 h-4 text-[#4285F4]" />
                                     Individual / Solo
                                 </span>
                                 {eventType === "solo" && (
-                                    <span className="w-2 h-2 rounded-full bg-[#2ba0ff]" />
+                                    <span className="w-2 h-2 rounded-full bg-[#4285F4]" />
                                 )}
                             </div>
                             <span className="text-xs text-[#80827f]">Each attendee registers and checks in separately.</span>
@@ -170,19 +172,19 @@ export default function CustomFormBuilder({
                         <button
                             type="button"
                             onClick={() => handleFormatChange("team")}
-                            className={`p-4 rounded-[24px] border text-left transition-all duration-200 cursor-pointer ${
+                            className={`p-4 rounded-xl border text-left transition-all duration-200 cursor-pointer ${
                                 eventType === "team"
-                                    ? "bg-white border-2 border-[#8ed462] text-[#2c2e2a] shadow-xs"
-                                    : "bg-white/60 border-[#d5d5d4] text-[#80827f] hover:border-[#2c2e2a]/30 hover:bg-white"
+                                    ? "bg-white border-2 border-[#34A853] text-[#2c2e2a] shadow-sm"
+                                    : "bg-white/70 border-[#d5d5d4] text-[#80827f] hover:border-[#2c2e2a]/30 hover:bg-white"
                             }`}
                         >
                             <div className="flex items-center justify-between mb-1">
-                                <span className="text-sm font-bold text-[#2c2e2a] flex items-center gap-1.5">
-                                    <Users className="w-4 h-4 text-[#8ed462]" />
-                                    Team / Hackathon
+                                <span className="text-sm font-bold text-[#2c2e2a] flex items-center gap-2">
+                                    <Users className="w-4 h-4 text-[#34A853]" />
+                                    Team / Squad
                                 </span>
                                 {eventType === "team" && (
-                                    <span className="w-2 h-2 rounded-full bg-[#8ed462]" />
+                                    <span className="w-2 h-2 rounded-full bg-[#34A853]" />
                                 )}
                             </div>
                             <span className="text-xs text-[#80827f]">Team leader registers and manages teammates.</span>
@@ -193,11 +195,11 @@ export default function CustomFormBuilder({
                         <motion.div
                             initial={{ opacity: 0, height: 0 }}
                             animate={{ opacity: 1, height: "auto" }}
-                            className="pt-4 border-t border-[#d5d5d4] grid grid-cols-2 gap-3"
+                            className="pt-4 border-t border-[#d5d5d4] grid grid-cols-2 gap-4"
                         >
-                            <div>
-                                <label className="text-[10px] font-mono uppercase text-[#80827f] font-semibold block mb-1.5">Min Team Size</label>
-                                <input
+                            <div className="space-y-1.5">
+                                <Label className="text-xs font-semibold text-[#2c2e2a]">Min Team Size</Label>
+                                <Input
                                     type="number"
                                     min={1}
                                     max={currentTeamConfig.maxMembers}
@@ -206,12 +208,12 @@ export default function CustomFormBuilder({
                                         ...currentTeamConfig,
                                         minMembers: Math.max(1, parseInt(e.target.value) || 1)
                                     })}
-                                    className="w-full px-4 py-2.5 rounded-[50px] bg-white border border-[#d5d5d4] text-xs font-semibold text-[#2c2e2a] focus:outline-none focus:border-[#2ba0ff]"
+                                    className="font-bold"
                                 />
                             </div>
-                            <div>
-                                <label className="text-[10px] font-mono uppercase text-[#80827f] font-semibold block mb-1.5">Max Team Size</label>
-                                <input
+                            <div className="space-y-1.5">
+                                <Label className="text-xs font-semibold text-[#2c2e2a]">Max Team Size</Label>
+                                <Input
                                     type="number"
                                     min={currentTeamConfig.minMembers}
                                     max={10}
@@ -220,7 +222,7 @@ export default function CustomFormBuilder({
                                         ...currentTeamConfig,
                                         maxMembers: Math.max(currentTeamConfig.minMembers, parseInt(e.target.value) || 4)
                                     })}
-                                    className="w-full px-4 py-2.5 rounded-[50px] bg-white border border-[#d5d5d4] text-xs font-semibold text-[#2c2e2a] focus:outline-none focus:border-[#2ba0ff]"
+                                    className="font-bold"
                                 />
                             </div>
                         </motion.div>
@@ -235,50 +237,60 @@ export default function CustomFormBuilder({
                         <h4 className="text-sm font-bold text-[#2c2e2a] tracking-tight">Custom Questions</h4>
                         <p className="text-xs text-[#80827f]">Collect tailored information and responses from applicants.</p>
                     </div>
-                    <Badge label={`${fields.length} Questions`} variant="neutral" dot={false} />
+                    <Badge variant="outline">{fields.length} Questions</Badge>
                 </div>
 
                 {/* Quick Add Buttons at Top */}
-                <div className="p-3.5 rounded-[24px] bg-[#f5f1e4] border border-[#d5d5d4] flex items-center justify-between flex-wrap gap-2">
-                    <span className="text-[11px] font-mono uppercase text-[#80827f] font-semibold flex items-center gap-1">
-                        <Plus className="w-3.5 h-3.5 text-[#2ba0ff]" /> Quick Add:
+                <div className="p-3.5 rounded-2xl bg-[#faf8f4] border border-[#d5d5d4] flex items-center justify-between flex-wrap gap-2 shadow-2xs">
+                    <span className="text-xs font-semibold text-[#80827f] flex items-center gap-1.5">
+                        <Plus className="w-3.5 h-3.5 text-[#4285F4]" /> Quick Add:
                     </span>
-                    <div className="flex flex-wrap gap-1.5">
-                        <button
+                    <div className="flex flex-wrap gap-2">
+                        <Button
                             type="button"
+                            variant="outline"
+                            size="sm"
                             onClick={() => addField("text")}
-                            className="px-3 py-1.5 rounded-[50px] bg-white hover:border-[#2c2e2a]/40 border border-[#d5d5d4] text-[11px] font-semibold text-[#2c2e2a] transition flex items-center gap-1 shadow-2xs active:scale-95 cursor-pointer"
+                            className="h-8 gap-1.5 text-xs rounded-lg"
                         >
-                            <FileText className="w-3 h-3 text-[#2ba0ff]" /> Short Text
-                        </button>
-                        <button
+                            <FileText className="w-3.5 h-3.5 text-[#4285F4]" /> Short Text
+                        </Button>
+                        <Button
                             type="button"
+                            variant="outline"
+                            size="sm"
                             onClick={() => addField("textarea")}
-                            className="px-3 py-1.5 rounded-[50px] bg-white hover:border-[#2c2e2a]/40 border border-[#d5d5d4] text-[11px] font-semibold text-[#2c2e2a] transition flex items-center gap-1 shadow-2xs active:scale-95 cursor-pointer"
+                            className="h-8 gap-1.5 text-xs rounded-lg"
                         >
-                            <FileText className="w-3 h-3 text-[#ff705d]" /> Paragraph
-                        </button>
-                        <button
+                            <FileText className="w-3.5 h-3.5 text-[#EA4335]" /> Paragraph
+                        </Button>
+                        <Button
                             type="button"
+                            variant="outline"
+                            size="sm"
                             onClick={() => addField("select")}
-                            className="px-3 py-1.5 rounded-[50px] bg-white hover:border-[#2c2e2a]/40 border border-[#d5d5d4] text-[11px] font-semibold text-[#2c2e2a] transition flex items-center gap-1 shadow-2xs active:scale-95 cursor-pointer"
+                            className="h-8 gap-1.5 text-xs rounded-lg"
                         >
-                            <ListFilter className="w-3 h-3 text-[#fbbc04]" /> Dropdown
-                        </button>
-                        <button
+                            <ListFilter className="w-3.5 h-3.5 text-[#FBBC04]" /> Dropdown
+                        </Button>
+                        <Button
                             type="button"
+                            variant="outline"
+                            size="sm"
                             onClick={() => addField("checkbox")}
-                            className="px-3 py-1.5 rounded-[50px] bg-white hover:border-[#2c2e2a]/40 border border-[#d5d5d4] text-[11px] font-semibold text-[#2c2e2a] transition flex items-center gap-1 shadow-2xs active:scale-95 cursor-pointer"
+                            className="h-8 gap-1.5 text-xs rounded-lg"
                         >
-                            <CheckSquare className="w-3 h-3 text-[#8ed462]" /> Checkbox
-                        </button>
-                        <button
+                            <CheckSquare className="w-3.5 h-3.5 text-[#34A853]" /> Checkbox
+                        </Button>
+                        <Button
                             type="button"
+                            variant="outline"
+                            size="sm"
                             onClick={() => addField("number")}
-                            className="px-3 py-1.5 rounded-[50px] bg-white hover:border-[#2c2e2a]/40 border border-[#d5d5d4] text-[11px] font-semibold text-[#2c2e2a] transition flex items-center gap-1 shadow-2xs active:scale-95 cursor-pointer"
+                            className="h-8 gap-1.5 text-xs rounded-lg"
                         >
-                            <Hash className="w-3 h-3 text-[#80827f]" /> Number
-                        </button>
+                            <Hash className="w-3.5 h-3.5 text-[#80827f]" /> Number
+                        </Button>
                     </div>
                 </div>
 
@@ -287,27 +299,27 @@ export default function CustomFormBuilder({
                     {fields.map((field, idx) => (
                         <div
                             key={field.id}
-                            className="p-4 rounded-[24px] bg-[#f5f1e4] border border-[#d5d5d4] space-y-3 transition-colors hover:border-[#80827f]"
+                            className="p-4.5 rounded-2xl bg-white border border-[#d5d5d4] space-y-3.5 transition-all shadow-xs hover:border-[#a0a29f]"
                         >
                             <div className="flex items-center justify-between gap-3">
-                                <div className="flex items-center gap-2 flex-1 min-w-0">
-                                    <span className="w-6 h-6 rounded-full bg-white border border-[#d5d5d4] text-[11px] font-mono font-bold flex items-center justify-center text-[#2c2e2a] shrink-0">
+                                <div className="flex items-center gap-2.5 flex-1 min-w-0">
+                                    <span className="w-6 h-6 rounded-lg bg-[#ebe7dc] text-[11px] font-mono font-bold flex items-center justify-center text-[#2c2e2a] shrink-0">
                                         {idx + 1}
                                     </span>
                                     <span className="text-xs font-bold text-[#2c2e2a] truncate">
                                         {field.label || "Untitled Question"}
                                     </span>
-                                    <span className="text-[10px] text-[#80827f] font-mono px-2.5 py-0.5 rounded-[50px] bg-white border border-[#d5d5d4] shrink-0">
+                                    <Badge variant="secondary" className="text-[10px] shrink-0 font-normal">
                                         {fieldTypeLabels[field.type]}
-                                    </span>
+                                    </Badge>
                                 </div>
 
-                                <div className="flex items-center gap-1 shrink-0">
+                                <div className="flex items-center gap-1.5 shrink-0">
                                     <button
                                         type="button"
                                         onClick={() => moveField(idx, "up")}
                                         disabled={idx === 0}
-                                        className="w-7 h-7 rounded-full bg-white border border-[#d5d5d4] flex items-center justify-center text-[#80827f] hover:text-[#2c2e2a] hover:border-[#2c2e2a]/30 disabled:opacity-30 disabled:pointer-events-none transition cursor-pointer"
+                                        className="w-7 h-7 rounded-lg bg-white border border-[#d5d5d4] flex items-center justify-center text-[#80827f] hover:text-[#2c2e2a] hover:border-[#2c2e2a]/40 disabled:opacity-30 disabled:pointer-events-none transition cursor-pointer shadow-2xs"
                                         title="Move up"
                                     >
                                         <ChevronUp className="w-3.5 h-3.5" />
@@ -316,7 +328,7 @@ export default function CustomFormBuilder({
                                         type="button"
                                         onClick={() => moveField(idx, "down")}
                                         disabled={idx === fields.length - 1}
-                                        className="w-7 h-7 rounded-full bg-white border border-[#d5d5d4] flex items-center justify-center text-[#80827f] hover:text-[#2c2e2a] hover:border-[#2c2e2a]/30 disabled:opacity-30 disabled:pointer-events-none transition cursor-pointer"
+                                        className="w-7 h-7 rounded-lg bg-white border border-[#d5d5d4] flex items-center justify-center text-[#80827f] hover:text-[#2c2e2a] hover:border-[#2c2e2a]/40 disabled:opacity-30 disabled:pointer-events-none transition cursor-pointer shadow-2xs"
                                         title="Move down"
                                     >
                                         <ChevronDown className="w-3.5 h-3.5" />
@@ -324,7 +336,7 @@ export default function CustomFormBuilder({
                                     <button
                                         type="button"
                                         onClick={() => removeField(field.id)}
-                                        className="w-7 h-7 rounded-full bg-white border border-[#ff705d]/30 flex items-center justify-center text-[#ff705d] hover:bg-[#ff705d]/10 transition ml-1 cursor-pointer"
+                                        className="w-7 h-7 rounded-lg bg-white border border-[#EA4335]/30 flex items-center justify-center text-[#EA4335] hover:bg-[#EA4335]/10 transition ml-1 cursor-pointer shadow-2xs"
                                         title="Remove question"
                                     >
                                         <Trash2 className="w-3.5 h-3.5" />
@@ -333,24 +345,21 @@ export default function CustomFormBuilder({
                             </div>
 
                             {/* Field Details */}
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 border-t border-[#d5d5d4]">
-                                <div>
-                                    <label className="text-[10px] font-mono uppercase text-[#80827f] font-semibold block mb-1">Question Title</label>
-                                    <input
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2 border-t border-[#d5d5d4]">
+                                <div className="space-y-1.5">
+                                    <Label className="text-xs font-semibold text-[#2c2e2a]">Question Title</Label>
+                                    <Input
                                         type="text"
                                         value={field.label}
                                         onChange={(e) => updateField(field.id, { label: e.target.value })}
                                         placeholder="e.g. GitHub Profile or Dietary preference"
-                                        className="w-full px-4 py-2 rounded-[50px] bg-white border border-[#d5d5d4] text-[#2c2e2a] text-xs font-medium focus:outline-none focus:border-[#2ba0ff]"
                                     />
                                 </div>
-                                <div className="flex items-center justify-between sm:justify-end pt-2 sm:pt-4">
-                                    <label className="flex items-center gap-2 text-xs font-medium text-[#2c2e2a] cursor-pointer">
-                                        <input
-                                            type="checkbox"
+                                <div className="flex items-center justify-between sm:justify-end pt-3 sm:pt-6">
+                                    <label className="flex items-center gap-2.5 text-xs font-semibold text-[#2c2e2a] cursor-pointer">
+                                        <Checkbox
                                             checked={field.required}
-                                            onChange={(e) => updateField(field.id, { required: e.target.checked })}
-                                            className="w-4 h-4 rounded border-[#d5d5d4] text-[#2ba0ff] focus:ring-0 cursor-pointer accent-[#2ba0ff]"
+                                            onCheckedChange={(c) => updateField(field.id, { required: Boolean(c) })}
                                         />
                                         <span>Mandatory / Required</span>
                                     </label>
@@ -360,10 +369,10 @@ export default function CustomFormBuilder({
                             {/* Options Editor for Select/Radio/Checkbox */}
                             {["radio", "checkbox", "select"].includes(field.type) && (
                                 <div className="space-y-2 pt-2 border-t border-[#d5d5d4]">
-                                    <label className="text-[10px] font-mono uppercase text-[#80827f] font-semibold block">Options</label>
+                                    <Label className="text-xs font-semibold text-[#80827f]">Options</Label>
                                     <div className="flex flex-wrap gap-2">
                                         {field.options?.map((opt, oIdx) => (
-                                            <div key={oIdx} className="flex items-center gap-1.5 px-3 py-1 bg-white border border-[#d5d5d4] rounded-[50px] text-xs text-[#2c2e2a]">
+                                            <div key={oIdx} className="flex items-center gap-2 px-3 py-1 bg-[#faf8f4] border border-[#d5d5d4] rounded-lg text-xs font-medium text-[#2c2e2a]">
                                                 <span>{opt}</span>
                                                 <button
                                                     type="button"
@@ -371,7 +380,7 @@ export default function CustomFormBuilder({
                                                         const updated = field.options?.filter((_, i) => i !== oIdx);
                                                         updateField(field.id, { options: updated });
                                                     }}
-                                                    className="text-[#80827f] hover:text-[#ff705d] ml-1 cursor-pointer font-bold"
+                                                    className="text-[#80827f] hover:text-[#EA4335] cursor-pointer font-bold text-sm"
                                                 >
                                                     &times;
                                                 </button>
@@ -379,7 +388,7 @@ export default function CustomFormBuilder({
                                         ))}
                                     </div>
                                     <div className="pt-1">
-                                        <input
+                                        <Input
                                             type="text"
                                             id={`new-opt-${field.id}`}
                                             placeholder="Type option and press Enter to add..."
@@ -394,7 +403,6 @@ export default function CustomFormBuilder({
                                                     }
                                                 }
                                             }}
-                                            className="w-full px-4 py-2 rounded-[50px] bg-white border border-[#d5d5d4] text-[#2c2e2a] text-xs placeholder:text-[#80827f] focus:outline-none focus:border-[#2ba0ff]"
                                         />
                                     </div>
                                 </div>
@@ -404,44 +412,54 @@ export default function CustomFormBuilder({
                 </div>
 
                 {/* Add Question Toolbar */}
-                <div className="p-4 rounded-[24px] bg-[#f5f1e4] border border-[#d5d5d4] space-y-2.5">
-                    <p className="text-[11px] font-mono uppercase text-[#80827f] font-semibold">Add Question Type:</p>
+                <div className="p-4 rounded-2xl bg-[#faf8f4] border border-[#d5d5d4] space-y-3 shadow-2xs">
+                    <p className="text-xs font-semibold text-[#80827f]">Add Question Type:</p>
                     <div className="flex flex-wrap gap-2">
-                        <button
+                        <Button
                             type="button"
+                            variant="outline"
+                            size="sm"
                             onClick={() => addField("text")}
-                            className="px-4 py-2 rounded-[50px] bg-white hover:border-[#2c2e2a]/40 border border-[#d5d5d4] text-xs font-semibold text-[#2c2e2a] transition flex items-center gap-1.5 shadow-xs active:scale-95 cursor-pointer"
+                            className="gap-1.5"
                         >
-                            <FileText className="w-3.5 h-3.5 text-[#2ba0ff]" /> Short Text
-                        </button>
-                        <button
+                            <FileText className="w-3.5 h-3.5 text-[#4285F4]" /> Short Text
+                        </Button>
+                        <Button
                             type="button"
+                            variant="outline"
+                            size="sm"
                             onClick={() => addField("textarea")}
-                            className="px-4 py-2 rounded-[50px] bg-white hover:border-[#2c2e2a]/40 border border-[#d5d5d4] text-xs font-semibold text-[#2c2e2a] transition flex items-center gap-1.5 shadow-xs active:scale-95 cursor-pointer"
+                            className="gap-1.5"
                         >
-                            <FileText className="w-3.5 h-3.5 text-[#ff705d]" /> Paragraph
-                        </button>
-                        <button
+                            <FileText className="w-3.5 h-3.5 text-[#EA4335]" /> Paragraph
+                        </Button>
+                        <Button
                             type="button"
+                            variant="outline"
+                            size="sm"
                             onClick={() => addField("select")}
-                            className="px-4 py-2 rounded-[50px] bg-white hover:border-[#2c2e2a]/40 border border-[#d5d5d4] text-xs font-semibold text-[#2c2e2a] transition flex items-center gap-1.5 shadow-xs active:scale-95 cursor-pointer"
+                            className="gap-1.5"
                         >
-                            <ListFilter className="w-3.5 h-3.5 text-[#fbbc04]" /> Dropdown
-                        </button>
-                        <button
+                            <ListFilter className="w-3.5 h-3.5 text-[#FBBC04]" /> Dropdown
+                        </Button>
+                        <Button
                             type="button"
+                            variant="outline"
+                            size="sm"
                             onClick={() => addField("checkbox")}
-                            className="px-4 py-2 rounded-[50px] bg-white hover:border-[#2c2e2a]/40 border border-[#d5d5d4] text-xs font-semibold text-[#2c2e2a] transition flex items-center gap-1.5 shadow-xs active:scale-95 cursor-pointer"
+                            className="gap-1.5"
                         >
-                            <CheckSquare className="w-3.5 h-3.5 text-[#8ed462]" /> Checkbox
-                        </button>
-                        <button
+                            <CheckSquare className="w-3.5 h-3.5 text-[#34A853]" /> Checkbox
+                        </Button>
+                        <Button
                             type="button"
+                            variant="outline"
+                            size="sm"
                             onClick={() => addField("number")}
-                            className="px-4 py-2 rounded-[50px] bg-white hover:border-[#2c2e2a]/40 border border-[#d5d5d4] text-xs font-semibold text-[#2c2e2a] transition flex items-center gap-1.5 shadow-xs active:scale-95 cursor-pointer"
+                            className="gap-1.5"
                         >
                             <Hash className="w-3.5 h-3.5 text-[#80827f]" /> Number
-                        </button>
+                        </Button>
                     </div>
                 </div>
             </div>

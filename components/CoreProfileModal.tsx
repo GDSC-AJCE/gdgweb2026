@@ -34,6 +34,10 @@ import {
 import { FaGithub, FaLinkedin, FaInstagram, FaTwitter, FaYoutube, FaGlobe } from "react-icons/fa";
 import { ensureAbsoluteUrl } from "@/lib/utils";
 import CreativeProfileAvatar from "@/components/ui/CreativeProfileAvatar";
+import { Input } from "@/components/ui/Input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/Button";
 
 interface SocialLink {
     platform: string;
@@ -251,6 +255,8 @@ export default function CoreProfileModal({
             />
 
             <motion.div
+                data-scroll-allow
+                data-lenis-prevent
                 initial={{ opacity: 0, scale: 0.95, y: 20 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95, y: 20 }}
@@ -307,14 +313,14 @@ export default function CoreProfileModal({
                             {activeTab === "basics" && (
                                 <div className="space-y-6 max-w-xl">
                                     <div>
-                                        <label className="text-xs font-bold text-[#80827f] uppercase tracking-wider block mb-1.5">
+                                        <Label className="text-xs font-semibold text-[#2c2e2a] block mb-1.5">
                                             Username / Handle *
-                                        </label>
+                                        </Label>
                                         <div className="relative">
                                             <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#80827f]">
                                                 <AtSymbolIcon className="w-4 h-4" />
                                             </div>
-                                            <input
+                                            <Input
                                                 type="text"
                                                 value={username}
                                                 onChange={e => {
@@ -323,7 +329,7 @@ export default function CoreProfileModal({
                                                 }}
                                                 onBlur={() => username && validateUsername(username)}
                                                 placeholder="yourhandle"
-                                                className="w-full bg-[#f5f1e4] border border-[#d5d5d4] rounded-2xl pl-10 pr-4 py-2.5 text-[#2c2e2a] text-sm focus:border-[#4285F4] focus:bg-[#ffffff] outline-none font-mono transition-colors"
+                                                className="w-full bg-white rounded-xl pl-10 pr-4 h-10 text-[#2c2e2a] text-sm font-mono border-[#d5d5d4]"
                                             />
                                         </div>
                                         {usernameError && <p className="text-xs text-[#EA4335] mt-1.5">{usernameError}</p>}
@@ -335,9 +341,9 @@ export default function CoreProfileModal({
                                     </div>
 
                                     <div>
-                                        <label className="text-xs font-bold text-[#80827f] uppercase tracking-wider block mb-1.5">
+                                        <Label className="text-xs font-semibold text-[#2c2e2a] block mb-1.5">
                                             Avatar URL
-                                        </label>
+                                        </Label>
                                         <div className="flex items-center gap-3">
                                             <div className="w-12 h-12 rounded-xl overflow-hidden flex items-center justify-center flex-shrink-0 border border-[#d5d5d4]">
                                                 <CreativeProfileAvatar
@@ -348,33 +354,33 @@ export default function CoreProfileModal({
                                                     className="w-12 h-12 rounded-xl"
                                                 />
                                             </div>
-                                            <input
+                                            <Input
                                                 type="url"
                                                 value={avatarUrl}
                                                 onChange={e => setAvatarUrl(e.target.value)}
                                                 placeholder="https://..."
-                                                className="flex-1 bg-[#f5f1e4] border border-[#d5d5d4] rounded-2xl px-4 py-2.5 text-[#2c2e2a] text-sm focus:border-[#4285F4] focus:bg-[#ffffff] outline-none font-mono transition-colors"
+                                                className="flex-1 bg-white rounded-xl px-4 h-10 text-[#2c2e2a] text-sm font-mono border-[#d5d5d4]"
                                             />
                                         </div>
                                     </div>
 
                                     <div>
-                                        <label className="text-xs font-bold text-[#80827f] uppercase tracking-wider block mb-1.5">
+                                        <Label className="text-xs font-semibold text-[#2c2e2a] block mb-1.5">
                                             Motto or Tagline
-                                        </label>
-                                        <input
+                                        </Label>
+                                        <Input
                                             type="text"
                                             value={motto}
                                             onChange={e => setMotto(e.target.value)}
                                             placeholder="e.g. Building scalable cloud apps and mentoring engineers."
-                                            className="w-full bg-[#f5f1e4] border border-[#d5d5d4] rounded-2xl px-4 py-2.5 text-[#2c2e2a] text-sm focus:border-[#4285F4] focus:bg-[#ffffff] outline-none transition-colors"
+                                            className="w-full bg-white rounded-xl px-4 h-10 text-[#2c2e2a] text-sm border-[#d5d5d4]"
                                         />
                                     </div>
 
                                     <div>
-                                        <label className="text-xs font-bold text-[#80827f] uppercase tracking-wider block mb-1.5">
+                                        <Label className="text-xs font-semibold text-[#2c2e2a] block mb-1.5">
                                             Bio (Markdown)
-                                        </label>
+                                        </Label>
                                         <div data-color-mode="light">
                                             <MDEditor
                                                 value={bio}
@@ -391,9 +397,9 @@ export default function CoreProfileModal({
 
                             {activeTab === "theme" && (
                                 <div className="space-y-6 max-w-xl">
-                                    <label className="text-xs font-bold text-[#80827f] uppercase tracking-wider block">
+                                    <Label className="text-xs font-semibold text-[#2c2e2a] block">
                                         Color Presets
-                                    </label>
+                                    </Label>
                                     <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                                         {THEME_PRESETS.map(preset => (
                                             <button
@@ -404,7 +410,7 @@ export default function CoreProfileModal({
                                                     setCardFgColor(preset.fg);
                                                     setBgPattern(preset.pattern);
                                                 }}
-                                                className={`p-3 rounded-2xl border text-left flex items-center gap-3 transition-all ${themePreset === preset.id ? "bg-[#ffffff] border-[#4285F4] shadow-sm" : "bg-[#f5f1e4] border-[#d5d5d4] hover:bg-[#e0dbce]"}`}
+                                                className={`p-3 rounded-2xl border text-left flex items-center gap-3 transition-all cursor-pointer ${themePreset === preset.id ? "bg-white border-[#4285F4] shadow-sm" : "bg-[#faf9f6] border-[#d5d5d4] hover:bg-white"}`}
                                             >
                                                 <div className="w-5 h-5 rounded-full flex-shrink-0 shadow-sm" style={{ backgroundColor: preset.bg }} />
                                                 <span className="text-xs font-semibold text-[#2c2e2a] truncate">{preset.label}</span>
@@ -414,17 +420,17 @@ export default function CoreProfileModal({
 
                                     <div className="grid grid-cols-2 gap-4 pt-2">
                                         <div>
-                                            <label className="text-xs font-bold text-[#80827f] uppercase tracking-wider block mb-1.5">Card Background</label>
+                                            <Label className="text-xs font-semibold text-[#2c2e2a] block mb-1.5">Card Background</Label>
                                             <div className="flex items-center gap-2">
-                                                <input type="color" value={cardBgColor} onChange={e => setCardBgColor(e.target.value)} className="w-9 h-9 rounded-xl bg-transparent border border-[#d5d5d4] cursor-pointer" />
-                                                <input type="text" value={cardBgColor} onChange={e => setCardBgColor(e.target.value)} className="w-full bg-[#f5f1e4] border border-[#d5d5d4] rounded-2xl px-3 py-1.5 text-xs text-[#2c2e2a] font-mono transition-colors focus:border-[#4285F4] focus:bg-[#ffffff] outline-none" />
+                                                <input type="color" value={cardBgColor} onChange={e => setCardBgColor(e.target.value)} className="w-10 h-10 rounded-xl bg-transparent border border-[#d5d5d4] cursor-pointer shrink-0" />
+                                                <Input type="text" value={cardBgColor} onChange={e => setCardBgColor(e.target.value)} className="w-full bg-white rounded-xl h-10 text-xs font-mono border-[#d5d5d4]" />
                                             </div>
                                         </div>
                                         <div>
-                                            <label className="text-xs font-bold text-[#80827f] uppercase tracking-wider block mb-1.5">Card Foreground</label>
+                                            <Label className="text-xs font-semibold text-[#2c2e2a] block mb-1.5">Card Foreground</Label>
                                             <div className="flex items-center gap-2">
-                                                <input type="color" value={cardFgColor} onChange={e => setCardFgColor(e.target.value)} className="w-9 h-9 rounded-xl bg-transparent border border-[#d5d5d4] cursor-pointer" />
-                                                <input type="text" value={cardFgColor} onChange={e => setCardFgColor(e.target.value)} className="w-full bg-[#f5f1e4] border border-[#d5d5d4] rounded-2xl px-3 py-1.5 text-xs text-[#2c2e2a] font-mono transition-colors focus:border-[#4285F4] focus:bg-[#ffffff] outline-none" />
+                                                <input type="color" value={cardFgColor} onChange={e => setCardFgColor(e.target.value)} className="w-10 h-10 rounded-xl bg-transparent border border-[#d5d5d4] cursor-pointer shrink-0" />
+                                                <Input type="text" value={cardFgColor} onChange={e => setCardFgColor(e.target.value)} className="w-full bg-white rounded-xl h-10 text-xs font-mono border-[#d5d5d4]" />
                                             </div>
                                         </div>
                                     </div>
@@ -435,8 +441,8 @@ export default function CoreProfileModal({
                                 <div className="space-y-6 max-w-xl">
                                     <div>
                                         <div className="flex items-center justify-between mb-3">
-                                            <label className="text-xs font-bold text-[#80827f] uppercase tracking-wider">Social Links</label>
-                                            <button onClick={addSocial} className="text-xs text-[#4285F4] hover:underline flex items-center gap-1 font-medium">
+                                            <Label className="text-xs font-semibold text-[#2c2e2a]">Social Links</Label>
+                                            <button onClick={addSocial} className="text-xs text-[#4285F4] hover:underline flex items-center gap-1 font-semibold cursor-pointer">
                                                 <PlusIcon className="w-3.5 h-3.5" /> Add Link
                                             </button>
                                         </div>
@@ -446,20 +452,20 @@ export default function CoreProfileModal({
                                                     <select
                                                         value={s.platform}
                                                         onChange={e => updateSocial(idx, "platform", e.target.value)}
-                                                        className="bg-[#ffffff] border border-[#d5d5d4] rounded-2xl px-3 py-2 text-xs text-[#2c2e2a] outline-none transition-colors"
+                                                        className="bg-white border border-[#d5d5d4] rounded-xl px-3 h-10 text-xs text-[#2c2e2a] outline-none"
                                                     >
                                                         {SOCIAL_PLATFORMS.map(p => (
                                                             <option key={p.id} value={p.id}>{p.label}</option>
                                                         ))}
                                                     </select>
-                                                    <input
+                                                    <Input
                                                         type="url"
                                                         value={s.url}
                                                         onChange={e => updateSocial(idx, "url", e.target.value)}
                                                         placeholder="URL..."
-                                                        className="flex-1 bg-[#f5f1e4] border border-[#d5d5d4] rounded-2xl px-3 py-2 text-xs text-[#2c2e2a] font-mono outline-none focus:border-[#4285F4] focus:bg-[#ffffff] transition-colors"
+                                                        className="flex-1 bg-white rounded-xl h-10 text-xs font-mono border-[#d5d5d4]"
                                                     />
-                                                    <button onClick={() => removeSocial(idx)} className="p-2 text-[#80827f] hover:text-[#EA4335] transition-colors">
+                                                    <button onClick={() => removeSocial(idx)} className="p-2 text-[#80827f] hover:text-[#EA4335] transition-colors cursor-pointer">
                                                         <TrashIcon className="w-4 h-4" />
                                                     </button>
                                                 </div>
@@ -469,29 +475,29 @@ export default function CoreProfileModal({
 
                                     <div className="pt-4 border-t border-[#f5f1e4]">
                                         <div className="flex items-center justify-between mb-3">
-                                            <label className="text-xs font-bold text-[#80827f] uppercase tracking-wider">Custom Links</label>
-                                            <button onClick={addCustomLink} className="text-xs text-[#4285F4] hover:underline flex items-center gap-1 font-medium">
+                                            <Label className="text-xs font-semibold text-[#2c2e2a]">Custom Links</Label>
+                                            <button onClick={addCustomLink} className="text-xs text-[#4285F4] hover:underline flex items-center gap-1 font-semibold cursor-pointer">
                                                 <PlusIcon className="w-3.5 h-3.5" /> Add Link
                                             </button>
                                         </div>
                                         <div className="space-y-3">
                                             {customLinks.map((l, idx) => (
                                                 <div key={idx} className="flex items-center gap-2">
-                                                    <input
+                                                    <Input
                                                         type="text"
                                                         value={l.label}
                                                         onChange={e => updateCustomLink(idx, "label", e.target.value)}
                                                         placeholder="Label"
-                                                        className="w-36 bg-[#f5f1e4] border border-[#d5d5d4] rounded-2xl px-3 py-2 text-xs text-[#2c2e2a] outline-none focus:border-[#4285F4] focus:bg-[#ffffff] transition-colors"
+                                                        className="w-36 bg-white rounded-xl h-10 text-xs border-[#d5d5d4]"
                                                     />
-                                                    <input
+                                                    <Input
                                                         type="url"
                                                         value={l.url}
                                                         onChange={e => updateCustomLink(idx, "url", e.target.value)}
                                                         placeholder="https://..."
-                                                        className="flex-1 bg-[#f5f1e4] border border-[#d5d5d4] rounded-2xl px-3 py-2 text-xs text-[#2c2e2a] font-mono outline-none focus:border-[#4285F4] focus:bg-[#ffffff] transition-colors"
+                                                        className="flex-1 bg-white rounded-xl h-10 text-xs font-mono border-[#d5d5d4]"
                                                     />
-                                                    <button onClick={() => removeCustomLink(idx)} className="p-2 text-[#80827f] hover:text-[#EA4335] transition-colors">
+                                                    <button onClick={() => removeCustomLink(idx)} className="p-2 text-[#80827f] hover:text-[#EA4335] transition-colors cursor-pointer">
                                                         <TrashIcon className="w-4 h-4" />
                                                     </button>
                                                 </div>
@@ -504,28 +510,28 @@ export default function CoreProfileModal({
                             {activeTab === "more" && (
                                 <div className="space-y-6 max-w-xl">
                                     <div>
-                                        <label className="text-xs font-bold text-[#80827f] uppercase tracking-wider block mb-1.5">
+                                        <Label className="text-xs font-semibold text-[#2c2e2a] block mb-1.5">
                                             Skills / Focus Areas (Comma-separated)
-                                        </label>
-                                        <input
+                                        </Label>
+                                        <Input
                                             type="text"
                                             value={skills}
                                             onChange={e => setSkills(e.target.value)}
                                             placeholder="e.g. Flutter, Android Jetpack, Gemini API, Cloud Run, Firebase"
-                                            className="w-full bg-[#f5f1e4] border border-[#d5d5d4] rounded-2xl px-4 py-2.5 text-[#2c2e2a] text-sm focus:border-[#4285F4] focus:bg-[#ffffff] outline-none transition-colors"
+                                            className="w-full bg-white rounded-xl h-10 text-[#2c2e2a] text-sm border-[#d5d5d4]"
                                         />
                                     </div>
 
                                     <div>
-                                        <label className="text-xs font-bold text-[#80827f] uppercase tracking-wider block mb-1.5">
-                                            What I'm Working On ("Now" Section)
-                                        </label>
-                                        <textarea
+                                        <Label className="text-xs font-semibold text-[#2c2e2a] block mb-1.5">
+                                            What I&apos;m Working On (&quot;Now&quot; Section)
+                                        </Label>
+                                        <Textarea
                                             value={nowSection}
                                             onChange={e => setNowSection(e.target.value)}
                                             rows={3}
                                             placeholder="Exploring LLM agents and preparing the next GDG workshop..."
-                                            className="w-full bg-[#f5f1e4] border border-[#d5d5d4] rounded-2xl p-3 text-[#2c2e2a] text-xs focus:border-[#4285F4] focus:bg-[#ffffff] outline-none resize-none transition-colors"
+                                            className="w-full bg-white rounded-xl p-3 text-[#2c2e2a] text-xs border-[#d5d5d4]"
                                         />
                                     </div>
                                 </div>
@@ -544,16 +550,16 @@ export default function CoreProfileModal({
                         )}
                     </div>
                     <div className="flex gap-3">
-                        <button onClick={onClose} className="px-4 py-2 text-xs font-semibold text-[#80827f] hover:text-[#2c2e2a] hover:bg-[#f5f1e4] rounded-full transition-colors">
+                        <Button variant="outline" onClick={onClose} className="h-10 px-5 rounded-xl border-[#d5d5d4] text-xs font-semibold">
                             Close
-                        </button>
-                        <button
+                        </Button>
+                        <Button
                             onClick={handleSave}
                             disabled={saving}
-                            className="px-6 py-2 rounded-full bg-[#2c2e2a] hover:bg-[#1a1a1a] text-white text-xs font-semibold shadow-xs transition-colors disabled:opacity-50 cursor-pointer"
+                            className="h-10 px-6 rounded-xl bg-[#2c2e2a] hover:bg-[#1a1a1a] text-white text-xs font-semibold shadow-xs transition-colors disabled:opacity-50 cursor-pointer"
                         >
                             {saving ? "Saving..." : "Save Profile"}
-                        </button>
+                        </Button>
                     </div>
                 </div>
             </motion.div>

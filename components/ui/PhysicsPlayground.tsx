@@ -208,7 +208,7 @@ export default function PhysicsPlayground() {
       active: false,
     };
 
-    const handlePointerMove = (clientX: number, clientY: number) => {
+    const updateMouseCoordinates = (clientX: number, clientY: number) => {
       const rect = canvas.getBoundingClientRect();
       const currentX = clientX - rect.left;
       const currentY = clientY - rect.top;
@@ -227,13 +227,29 @@ export default function PhysicsPlayground() {
       setInteracted(true);
     };
 
+    // Interactive State & Visibility Management
+    let isVisible = false;
+    let isSleeping = false;
+    let animationFrameId: number | null = null;
+
+    const wakeUp = () => {
+      if (isSleeping && isVisible) {
+        isSleeping = false;
+        if (!animationFrameId) {
+          animationFrameId = requestAnimationFrame(render);
+        }
+      }
+    };
+
     const onMouseMove = (e: MouseEvent) => {
-      handlePointerMove(e.clientX, e.clientY);
+      updateMouseCoordinates(e.clientX, e.clientY);
+      wakeUp();
     };
 
     const onTouchMove = (e: TouchEvent) => {
       if (e.touches.length > 0) {
-        handlePointerMove(e.touches[0].clientX, e.touches[0].clientY);
+        updateMouseCoordinates(e.touches[0].clientX, e.touches[0].clientY);
+        wakeUp();
       }
     };
 
@@ -252,9 +268,13 @@ export default function PhysicsPlayground() {
 
     // Canvas Render Loop
     const ctx = canvas.getContext("2d");
-    let animationFrameId: number;
 
     const render = () => {
+      if (!isVisible) {
+        animationFrameId = null;
+        return;
+      }
+
       // Hover kinetic interaction
       if (mouseState.active) {
         const hoverRadius = 240;
@@ -399,10 +419,47 @@ export default function PhysicsPlayground() {
         ctx.restore();
       }
 
+      // Check if bodies are at rest to enter sleeping mode (0% CPU/GPU)
+      if (!mouseState.active) {
+        let maxSpeed = 0;
+        for (let i = 0; i < physicsBodies.length; i++) {
+          const s = physicsBodies[i].body.speed + Math.abs(physicsBodies[i].body.angularSpeed);
+          if (s > maxSpeed) maxSpeed = s;
+        }
+        if (maxSpeed < 0.04) {
+          isSleeping = true;
+          animationFrameId = null;
+          return;
+        }
+      }
+
       animationFrameId = requestAnimationFrame(render);
     };
 
-    animationFrameId = requestAnimationFrame(render);
+    // Viewport Intersection Observer: Only compute and draw when visible
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0];
+        const nowVisible = entry?.isIntersecting ?? false;
+        if (nowVisible !== isVisible) {
+          isVisible = nowVisible;
+          if (isVisible) {
+            isSleeping = false;
+            if (!animationFrameId) {
+              animationFrameId = requestAnimationFrame(render);
+            }
+          } else {
+            if (animationFrameId) {
+              cancelAnimationFrame(animationFrameId);
+              animationFrameId = null;
+            }
+          }
+        }
+      },
+      { threshold: 0.05 }
+    );
+
+    observer.observe(container);
 
     const handleResize = () => {
       if (!container || !canvas) return;
@@ -413,12 +470,14 @@ export default function PhysicsPlayground() {
       canvas.style.height = `${height}px`;
       Body.setPosition(floor, { x: newWidth / 2, y: height + 25 });
       Body.setPosition(rightWall, { x: newWidth + 30, y: height / 2 });
+      wakeUp();
     };
 
-    window.addEventListener("resize", handleResize);
+    window.addEventListener("resize", handleResize, { passive: true });
 
     return () => {
-      cancelAnimationFrame(animationFrameId);
+      if (animationFrameId) cancelAnimationFrame(animationFrameId);
+      observer.disconnect();
       container.removeEventListener("mousemove", onMouseMove);
       container.removeEventListener("touchmove", onTouchMove);
       container.removeEventListener("mouseleave", onPointerLeave);

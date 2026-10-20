@@ -17,24 +17,24 @@ const RESTRICTED_TAB_DETAILS: Record<
     name: "Members & Permissions",
     requiredRole: "Super Administrator",
     description:
-      "Modifying student privilege levels, assigning executive roles, and revoking administrative clearance is restricted to Chapter Leads and Faculty Advisors.",
+      "Modifying user permissions and assigning administrative roles is restricted to Chapter Leads and Faculty Advisors.",
     coreAlternative: "As a Core Lead, you can manage chapter workshops and review incoming student applications.",
     alternativeTab: "applications",
   },
   funds: {
     name: "Chapter Treasury",
-    requiredRole: "Super Administrator / Lead Organizer",
+    requiredRole: "Super Administrator",
     description:
-      "Viewing sensitive chapter financial balances, recording sponsor fund disbursements, and managing bank ledgers requires root administrative privileges.",
+      "Viewing financial balances and recording sponsor fund disbursements requires Super Administrator access.",
     coreAlternative: "To request event logistics funding, submit a proposal during chapter executive meetings.",
     alternativeTab: "events",
   },
   audit: {
     name: "Security Audit Trail",
-    requiredRole: "Super Administrator / Security Officer",
+    requiredRole: "Super Administrator",
     description:
-      "Cryptographic administrative logs and immutable system action histories are restricted to chapter compliance officers and faculty advisors.",
-    coreAlternative: "Review chapter event history and attendee velocity from the operational dashboard.",
+      "Administrative audit logs and system history are restricted to Super Administrators.",
+    coreAlternative: "Review chapter event history and attendee numbers from the dashboard.",
     alternativeTab: "overview",
   },
 };
@@ -44,56 +44,52 @@ export default function RestrictedAccessCard({
   onNavigateTab,
 }: RestrictedAccessCardProps) {
   const details = RESTRICTED_TAB_DETAILS[tab] || {
-    name: "Governance Module",
+    name: "Governance",
     requiredRole: "Super Administrator",
-    description: "This administrative section requires elevated security clearance.",
+    description: "This section requires Super Administrator privileges.",
     coreAlternative: "Return to chapter operations to manage events and candidate reviews.",
     alternativeTab: "overview",
   };
 
   return (
-    <div className="p-8 sm:p-12 rounded-[40px] bg-white border border-[#d5d5d4] shadow-sm space-y-8 select-none max-w-3xl mx-auto my-6 text-center">
+    <div className="p-8 sm:p-12 rounded-[32px] bg-white border border-slate-200 shadow-sm space-y-6 select-none max-w-2xl mx-auto my-6 text-center">
       {/* Icon Badge */}
-      <div className="relative w-20 h-20 rounded-full bg-[#f5f1e4] border border-[#d5d5d4] flex items-center justify-center mx-auto shadow-inner">
-        <ShieldAlert className="w-9 h-9 text-[#ff705d]" />
-        <div className="absolute -bottom-1 -right-1 w-7 h-7 rounded-full bg-[#2c2e2a] text-white flex items-center justify-center border-2 border-white">
-          <Lock className="w-3.5 h-3.5 text-[#FBBC04]" />
+      <div className="relative w-16 h-16 rounded-full bg-red-50 border border-red-100 flex items-center justify-center mx-auto shadow-xs">
+        <ShieldAlert className="w-8 h-8 text-[#EF4444]" />
+        <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-[#0f172a] text-white flex items-center justify-center border-2 border-white">
+          <Lock className="w-3 h-3 text-[#F59E0B]" />
         </div>
       </div>
 
-      {/* Title & Badge */}
-      <div className="space-y-3">
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#ff705d]/10 border border-[#ff705d]/20 text-[11px] font-mono font-semibold text-[#ff705d]">
-          <KeyRound className="w-3 h-3" />
-          <span>ROOT CLEARANCE REQUIRED</span>
-        </div>
-        <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#2c2e2a]">
+      {/* Title */}
+      <div className="space-y-2">
+        <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#0f172a]">
           {details.name} Access Restricted
         </h2>
-        <p className="text-sm text-[#80827f] max-w-xl mx-auto leading-relaxed">
+        <p className="text-sm text-slate-500 max-w-lg mx-auto leading-relaxed">
           {details.description}
         </p>
       </div>
 
-      {/* Clearance Comparison Card */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-left p-5 rounded-[28px] bg-[#f5f1e4] border border-[#d5d5d4]">
-        <div className="space-y-1.5 p-3 rounded-[20px] bg-white border border-[#d5d5d4]">
+      {/* Role Comparison Card */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-left p-4 rounded-[20px] bg-slate-50 border border-slate-200">
+        <div className="space-y-1 p-3 rounded-[16px] bg-white border border-slate-200">
           <div className="flex items-center gap-2">
-            <div className="w-2 h-2 rounded-full bg-[#8ed462]" />
-            <span className="text-xs font-bold text-[#2c2e2a]">Your Clearance: Core Member</span>
+            <div className="w-2 h-2 rounded-full bg-[#10B981]" />
+            <span className="text-xs font-bold text-[#0f172a]">Your Role: Core Member</span>
           </div>
-          <p className="text-[11px] text-[#80827f] leading-normal">
-            Operational access to Events, Execom Directory, and Applications Pipeline.
+          <p className="text-[11px] text-slate-500 leading-normal">
+            Access to Events, Execom Directory, and Applications Pipeline.
           </p>
         </div>
 
-        <div className="space-y-1.5 p-3 rounded-[20px] bg-white border border-[#d5d5d4]">
+        <div className="space-y-1 p-3 rounded-[16px] bg-white border border-slate-200">
           <div className="flex items-center gap-2">
-            <div className="w-2 h-2 rounded-full bg-[#ff705d]" />
-            <span className="text-xs font-bold text-[#2c2e2a]">Required: Super Admin</span>
+            <div className="w-2 h-2 rounded-full bg-[#EF4444]" />
+            <span className="text-xs font-bold text-[#0f172a]">Required: Super Admin</span>
           </div>
-          <p className="text-[11px] text-[#80827f] leading-normal">
-            Permission delegation, Chapter Treasury ledger, and security audit trail.
+          <p className="text-[11px] text-slate-500 leading-normal">
+            User permission delegation, Treasury ledger, and audit trail.
           </p>
         </div>
       </div>

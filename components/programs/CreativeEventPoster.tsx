@@ -121,33 +121,47 @@ export function LavenderRacquetArt() {
     <div className="w-full h-full bg-[#D6C7FF] relative flex items-center justify-center overflow-hidden select-none">
       <svg viewBox="0 0 240 180" className="w-[85%] h-[85%] max-w-[260px] drop-shadow-xs" fill="none">
         {/* Soft Background Dome Shape */}
-        <path d="M 140 170 L 210 170 C 210 90 140 90 140 170 Z" fill="#C4B5FD" opacity="0.6" />
-
-        {/* Cute Mascot Character */}
-        <g transform="translate(90, 105)">
-          <ellipse cx="0" cy="20" rx="36" ry="42" fill="#8B5CF6" stroke="#2c2e2a" strokeWidth="2.5" />
-          <circle cx="-12" cy="10" r="3.5" fill="#2c2e2a" />
-          <circle cx="12" cy="10" r="3.5" fill="#2c2e2a" />
-          <path d="M -6 22 Q 0 27 6 22" stroke="#2c2e2a" strokeWidth="2.5" strokeLinecap="round" fill="none" />
-          {/* Racquet */}
-          <g transform="translate(38, -12)">
-            <ellipse cx="20" cy="-10" rx="24" ry="28" fill="#FFFBEB" stroke="#2c2e2a" strokeWidth="3" />
-            <line x1="8" y1="12" x2="-4" y2="38" stroke="#2c2e2a" strokeWidth="4" strokeLinecap="round" />
-            <line x1="20" y1="-38" x2="20" y2="18" stroke="#2c2e2a" strokeWidth="1.5" strokeDasharray="3,3" />
-            <line x1="-4" y1="-10" x2="44" y2="-10" stroke="#2c2e2a" strokeWidth="1.5" strokeDasharray="3,3" />
-          </g>
-        </g>
-
-        {/* Floating Glowing Code Ball */}
-        <g transform="translate(175, 55)">
-          <circle cx="0" cy="0" r="14" fill="#FFFFFF" stroke="#2c2e2a" strokeWidth="2" />
-          <path d="M -5 -4 L -9 0 L -5 4" stroke="#4285F4" strokeWidth="2" strokeLinecap="round" />
-          <path d="M 5 -4 L 9 0 L 5 4" stroke="#34A853" strokeWidth="2" strokeLinecap="round" />
-        </g>
+        <path d="M 145 175 L 215 175 C 215 95 145 95 145 175 Z" fill="#C4B5FD" opacity="0.6" />
 
         {/* Small floating sparkles */}
-        <circle cx="65" cy="50" r="4" fill="#FFFFFF" />
-        <circle cx="195" cy="115" r="3" fill="#FFFFFF" />
+        <circle cx="50" cy="45" r="4" fill="#FFFFFF" opacity="0.9" />
+        <circle cx="205" cy="115" r="3" fill="#FFFFFF" opacity="0.8" />
+
+        {/* Cute Mascot Character with Racquet */}
+        <g transform="translate(85, 80)">
+          {/* Racquet Handle (behind or emerging naturally from arm) */}
+          <line x1="28" y1="36" x2="48" y2="10" stroke="#2c2e2a" strokeWidth="4" strokeLinecap="round" />
+
+          {/* Racquet Head */}
+          <g transform="translate(56, -4)">
+            <ellipse cx="0" cy="0" rx="22" ry="26" fill="#FFFBEB" stroke="#2c2e2a" strokeWidth="3" />
+            <line x1="0" y1="-26" x2="0" y2="26" stroke="#2c2e2a" strokeWidth="1.5" strokeDasharray="3,3" />
+            <line x1="-22" y1="0" x2="22" y2="0" stroke="#2c2e2a" strokeWidth="1.5" strokeDasharray="3,3" />
+          </g>
+
+          {/* Oval Mascot Body */}
+          <ellipse cx="0" cy="30" rx="34" ry="40" fill="#8B5CF6" stroke="#2c2e2a" strokeWidth="2.5" />
+
+          {/* Cute Eyes & Smile */}
+          <circle cx="-11" cy="22" r="3.5" fill="#2c2e2a" />
+          <circle cx="11" cy="22" r="3.5" fill="#2c2e2a" />
+          <path d="M -5 34 Q 0 39 5 34" stroke="#2c2e2a" strokeWidth="2.5" strokeLinecap="round" fill="none" />
+          {/* Rosy Cheeks */}
+          <circle cx="-18" cy="28" r="3" fill="#A78BFA" opacity="0.5" />
+          <circle cx="18" cy="28" r="3" fill="#A78BFA" opacity="0.5" />
+
+          {/* Mascot Hand holding the handle */}
+          <circle cx="28" cy="36" r="6" fill="#8B5CF6" stroke="#2c2e2a" strokeWidth="2" />
+        </g>
+
+        {/* Floating Glowing Code Ball (Google Brackets) */}
+        <g transform="translate(162, 54)">
+          <circle cx="0" cy="0" r="14" fill="#FFFFFF" stroke="#2c2e2a" strokeWidth="2" />
+          <path d="M -5 -4 L -9 0 L -5 4" stroke="#4285F4" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M 5 -4 L 9 0 L 5 4" stroke="#34A853" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          {/* Sparkle dot above ball */}
+          <circle cx="12" cy="-12" r="2.5" fill="#FFFFFF" />
+        </g>
       </svg>
     </div>
   );

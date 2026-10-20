@@ -49,7 +49,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       if (error?.code === "auth/configuration-not-found") {
         window.alert(
           "Firebase Authentication is not yet activated on your project.\n\n" +
-          "1. Open Firebase Console: https://console.firebase.google.com/project/gdg-community-ajce/authentication\n" +
+          "1. Open Firebase Console: https://console.firebase.google.com/project/gdgajce/authentication\n" +
           "2. Click 'Get Started'\n" +
           "3. Enable 'Google' sign-in provider and click Save."
         );

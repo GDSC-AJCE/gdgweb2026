@@ -113,36 +113,47 @@ function LavenderRacquetArt() {
     <div className="w-full h-full bg-[#D6C7FF] relative flex items-center justify-center overflow-hidden select-none">
       <svg viewBox="0 0 240 180" className="w-[85%] h-[85%] max-w-[260px] drop-shadow-xs" fill="none">
         {/* Soft Background Dome Shape */}
-        <path d="M 140 170 L 210 170 C 210 90 140 90 140 170 Z" fill="#C4B5FD" opacity="0.6" />
-
-        {/* Cute Mascot Character */}
-        <g transform="translate(90, 105)">
-          {/* Oval Body */}
-          <ellipse cx="0" cy="20" rx="36" ry="42" fill="#8B5CF6" />
-          {/* Face */}
-          <circle cx="-12" cy="10" r="3.5" fill="#2c2e2a" />
-          <circle cx="12" cy="10" r="3.5" fill="#2c2e2a" />
-          <path d="M -6 22 Q 0 27 6 22" stroke="#2c2e2a" strokeWidth="2.5" strokeLinecap="round" fill="none" />
-          {/* Racquet / Paddle */}
-          <g transform="translate(38, -12)">
-            <ellipse cx="20" cy="-10" rx="24" ry="28" fill="none" stroke="#2c2e2a" strokeWidth="3" />
-            <line x1="8" y1="12" x2="-4" y2="38" stroke="#2c2e2a" strokeWidth="4" strokeLinecap="round" />
-            {/* Grid strings */}
-            <line x1="20" y1="-38" x2="20" y2="18" stroke="#2c2e2a" strokeWidth="1.5" strokeDasharray="3,3" />
-            <line x1="-4" y1="-10" x2="44" y2="-10" stroke="#2c2e2a" strokeWidth="1.5" strokeDasharray="3,3" />
-          </g>
-        </g>
-
-        {/* Floating Glowing Code Ball */}
-        <g transform="translate(175, 55)">
-          <circle cx="0" cy="0" r="14" fill="#FFFFFF" />
-          <path d="M -5 -4 L -9 0 L -5 4" stroke="#4285F4" strokeWidth="2" strokeLinecap="round" />
-          <path d="M 5 -4 L 9 0 L 5 4" stroke="#34A853" strokeWidth="2" strokeLinecap="round" />
-        </g>
+        <path d="M 145 175 L 215 175 C 215 95 145 95 145 175 Z" fill="#C4B5FD" opacity="0.6" />
 
         {/* Small floating sparkles */}
-        <circle cx="65" cy="50" r="4" fill="#FFFFFF" />
-        <circle cx="195" cy="115" r="3" fill="#FFFFFF" />
+        <circle cx="50" cy="45" r="4" fill="#FFFFFF" opacity="0.9" />
+        <circle cx="205" cy="115" r="3" fill="#FFFFFF" opacity="0.8" />
+
+        {/* Cute Mascot Character with Racquet */}
+        <g transform="translate(85, 80)">
+          {/* Racquet Handle (behind or emerging naturally from arm) */}
+          <line x1="28" y1="36" x2="48" y2="10" stroke="#2c2e2a" strokeWidth="4" strokeLinecap="round" />
+
+          {/* Racquet Head */}
+          <g transform="translate(56, -4)">
+            <ellipse cx="0" cy="0" rx="22" ry="26" fill="#FFFBEB" stroke="#2c2e2a" strokeWidth="3" />
+            <line x1="0" y1="-26" x2="0" y2="26" stroke="#2c2e2a" strokeWidth="1.5" strokeDasharray="3,3" />
+            <line x1="-22" y1="0" x2="22" y2="0" stroke="#2c2e2a" strokeWidth="1.5" strokeDasharray="3,3" />
+          </g>
+
+          {/* Oval Mascot Body */}
+          <ellipse cx="0" cy="30" rx="34" ry="40" fill="#8B5CF6" stroke="#2c2e2a" strokeWidth="2.5" />
+
+          {/* Cute Eyes & Smile */}
+          <circle cx="-11" cy="22" r="3.5" fill="#2c2e2a" />
+          <circle cx="11" cy="22" r="3.5" fill="#2c2e2a" />
+          <path d="M -5 34 Q 0 39 5 34" stroke="#2c2e2a" strokeWidth="2.5" strokeLinecap="round" fill="none" />
+          {/* Rosy Cheeks */}
+          <circle cx="-18" cy="28" r="3" fill="#A78BFA" opacity="0.5" />
+          <circle cx="18" cy="28" r="3" fill="#A78BFA" opacity="0.5" />
+
+          {/* Mascot Hand holding the handle */}
+          <circle cx="28" cy="36" r="6" fill="#8B5CF6" stroke="#2c2e2a" strokeWidth="2" />
+        </g>
+
+        {/* Floating Glowing Code Ball (Google Brackets) */}
+        <g transform="translate(162, 54)">
+          <circle cx="0" cy="0" r="14" fill="#FFFFFF" stroke="#2c2e2a" strokeWidth="2" />
+          <path d="M -5 -4 L -9 0 L -5 4" stroke="#4285F4" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M 5 -4 L 9 0 L 5 4" stroke="#34A853" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          {/* Sparkle dot above ball */}
+          <circle cx="12" cy="-12" r="2.5" fill="#FFFFFF" />
+        </g>
       </svg>
     </div>
   );
@@ -205,12 +216,45 @@ interface OngoingEventItem {
 }
 
 // =============================================================================
-// DEFAULT / CURATED ONGOING EVENTS (High-polish fallback ensuring vibrancy)
+// SHOWCASE / CURATED ONGOING EVENTS (Ensures carousel is never blank)
 // =============================================================================
-// No default events, purely dynamic from firestore
+const SHOWCASE_EVENTS: OngoingEventItem[] = [
+  {
+    id: "solution-challenge-2026",
+    slug: "solution-challenge-2026",
+    title: "Google Solution Challenge 2026",
+    description: "Build an impactful project addressing the UN 17 Sustainable Development Goals using Google Cloud, Vertex AI, and Flutter.",
+    tag: "GLOBAL INITIATIVE",
+    artIndex: 0,
+  },
+  {
+    id: "build-with-ai-sprint",
+    slug: "build-with-ai-sprint",
+    title: "Build with AI: Gemini & GenAI Sprint",
+    description: "Hands-on build sprint integrating Gemini 1.5 Pro, function calling, and multimodal agents into real apps.",
+    tag: "LIVE SPRINT",
+    artIndex: 1,
+  },
+  {
+    id: "cloud-study-jam-bootcamp",
+    slug: "cloud-study-jam-bootcamp",
+    title: "Cloud Study Jam & Kubernetes Bootcamp",
+    description: "Earn Google Cloud skill badges, deploy containerized workloads, and master production-grade architecture.",
+    tag: "STUDY JAM",
+    artIndex: 2,
+  },
+  {
+    id: "android-compose-camp",
+    slug: "android-compose-camp",
+    title: "Android Compose & Modern Kotlin",
+    description: "Master modern declarative Android UI with Jetpack Compose, Kotlin Coroutines, and clean architecture.",
+    tag: "WORKSHOP",
+    artIndex: 3,
+  },
+];
 
 export default function OngoingEventsSection() {
-  const [events, setEvents] = useState<OngoingEventItem[]>([]);
+  const [events, setEvents] = useState<OngoingEventItem[]>(SHOWCASE_EVENTS);
   const [email, setEmail] = useState("");
   const [subscribing, setSubscribing] = useState(false);
   const [subscribed, setSubscribed] = useState(false);
@@ -264,7 +308,7 @@ export default function OngoingEventsSection() {
           setEvents(liveEvents);
         }
       } catch (err) {
-        console.warn("Using default curated ongoing events:", err);
+        console.warn("Using curated fallback events:", err);
       }
     };
 
@@ -310,31 +354,27 @@ export default function OngoingEventsSection() {
           {/* ===================== LEFT COLUMN (HEADLINE & SUBSCRIBE) ===================== */}
           <div className="lg:col-span-5 flex flex-col justify-between space-y-8">
             <div className="space-y-6">
-              {/* Header Status Chip */}
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-[50px] bg-[#ffffff] border border-[#d5d5d4] text-[12px] font-medium text-[#2c2e2a] shadow-xs">
-                <span className="w-2 h-2 rounded-full bg-[#EA4335] animate-ping" />
-                <span>Active & Live Now</span>
-              </div>
 
-              {/* 3-Line Inter Display Headline (Exactly matched to reference mockup) */}
-              <h2 className="text-[44px] sm:text-[54px] md:text-[62px] font-bold text-[#2c2e2a] leading-[1.02] tracking-[-0.04em]">
+
+              {/* 3-Line Inter Display Headline */}
+              <h2 className="text-[44px] sm:text-[54px] md:text-[62px] font-bold text-[#0f172a] leading-[1.02] tracking-[-0.04em]">
                 Build Bold.<br />
                 Code Free.<br />
                 Ship Hard.
               </h2>
 
               {/* Descriptive Paragraph */}
-              <p className="text-[15px] sm:text-[16px] font-normal text-[#80827f] leading-relaxed max-w-md">
+              <p className="text-[15px] sm:text-[16px] font-normal text-slate-600 leading-relaxed max-w-md">
                 A community where student developers discover tech through building, sprints, and teamwork. 
                 Our clubs help members grow stronger, more confident, and launch real projects in a collaborative environment.
               </p>
             </div>
 
-            {/* Newsletter / Event Alert Input (Pill-rounded proper input box) */}
+            {/* Newsletter / Event Alert Input */}
             <div className="pt-2 max-w-md">
               <form onSubmit={handleSubscribe} className="relative">
-                <div className="flex items-center bg-[#ffffff] border border-[#d5d5d4] hover:border-[#2c2e2a]/40 focus-within:border-[#2c2e2a] focus-within:ring-2 focus-within:ring-[#2c2e2a]/10 rounded-[50px] p-1.5 sm:p-2 shadow-xs transition-all">
-                  <div className="pl-3.5 pr-2.5 text-[#80827f]">
+                <div className="flex items-center bg-white border border-slate-200 hover:border-slate-300 focus-within:border-[#2563EB] focus-within:ring-2 focus-within:ring-[#2563EB]/15 rounded-[50px] p-1.5 sm:p-2 shadow-xs transition-all">
+                  <div className="pl-3.5 pr-2.5 text-slate-400">
                     <Mail className="w-4 h-4" />
                   </div>
                   <input
@@ -342,23 +382,23 @@ export default function OngoingEventsSection() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="Enter your email address..."
-                    className="w-full bg-transparent text-[14px] sm:text-[15px] text-[#2c2e2a] placeholder-[#80827f]/80 outline-none font-medium pr-2"
+                    className="w-full bg-transparent text-[14px] sm:text-[15px] text-[#0f172a] placeholder-slate-400 outline-none font-medium pr-2"
                     required
                   />
                   <button
                     type="submit"
                     disabled={subscribing}
-                    className="group shrink-0 inline-flex items-center gap-2 px-5 sm:px-6 py-2.5 sm:py-3 rounded-[50px] bg-[#2c2e2a] hover:bg-[#1b1c19] text-[#ffffff] text-[13px] sm:text-[14px] font-medium transition-all duration-300 active:scale-95 shadow-xs cursor-pointer disabled:opacity-60"
+                    className="group shrink-0 inline-flex items-center gap-2 px-5 sm:px-6 py-2.5 sm:py-3 rounded-[50px] bg-[#0f172a] hover:bg-slate-800 text-white text-[13px] sm:text-[14px] font-medium transition-all duration-300 active:scale-95 shadow-xs cursor-pointer disabled:opacity-60"
                   >
                     <span>
                       {subscribing ? "Subscribing..." : subscribed ? "Subscribed!" : "Subscribe"}
                     </span>
                     {subscribed ? (
-                      <Check className="w-3.5 h-3.5 text-[#8ed462]" />
+                      <Check className="w-3.5 h-3.5 text-[#10B981]" />
                     ) : subscribing ? (
                       <span className="w-2 h-2 rounded-full bg-white animate-ping" />
                     ) : (
-                      <span className="w-2 h-2 rounded-full bg-[#8ed462] transition-all duration-300 group-hover:scale-125" />
+                      <span className="w-2 h-2 rounded-full bg-[#10B981] transition-all duration-300 group-hover:scale-125" />
                     )}
                   </button>
                 </div>
@@ -367,8 +407,8 @@ export default function OngoingEventsSection() {
               {/* Quick Link to Master Programs directory */}
               <div className="pt-5">
                 <Link
-                  href="/programs/ongoing"
-                  className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#2c2e2a] hover:text-[#ff705d] transition-colors group"
+                  href="/programs"
+                  className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#0f172a] hover:text-[#2563EB] transition-colors group"
                 >
                   <span>Explore all active & ongoing sessions</span>
                   <span className="group-hover:translate-x-1 transition-transform">→</span>
@@ -382,7 +422,7 @@ export default function OngoingEventsSection() {
             
             {/* Navigational Controls Header */}
             <div className="flex items-center justify-between px-1 pb-1">
-              <span className="text-xs font-mono text-[#80827f] uppercase tracking-wider">
+              <span className="text-xs font-mono text-slate-500 uppercase tracking-wider font-semibold">
                 {events.length} Live Opportunities
               </span>
 
@@ -392,7 +432,7 @@ export default function OngoingEventsSection() {
                   type="button"
                   onClick={() => handleScroll("left")}
                   aria-label="Previous events"
-                  className="w-9 h-9 rounded-full bg-[#ffffff] border border-[#e5e1d5] hover:border-[#2c2e2a]/40 text-[#2c2e2a] flex items-center justify-center transition-all hover:scale-105 active:scale-95 shadow-xs cursor-pointer"
+                  className="w-9 h-9 rounded-full bg-white border border-slate-200 hover:border-slate-300 text-[#0f172a] flex items-center justify-center transition-all hover:scale-105 active:scale-95 shadow-xs cursor-pointer"
                 >
                   <ChevronLeft className="w-4 h-4" />
                 </button>
@@ -400,7 +440,7 @@ export default function OngoingEventsSection() {
                   type="button"
                   onClick={() => handleScroll("right")}
                   aria-label="Next events"
-                  className="w-9 h-9 rounded-full bg-[#ffffff] border border-[#e5e1d5] hover:border-[#2c2e2a]/40 text-[#2c2e2a] flex items-center justify-center transition-all hover:scale-105 active:scale-95 shadow-xs cursor-pointer"
+                  className="w-9 h-9 rounded-full bg-white border border-slate-200 hover:border-slate-300 text-[#0f172a] flex items-center justify-center transition-all hover:scale-105 active:scale-95 shadow-xs cursor-pointer"
                 >
                   <ChevronRight className="w-4 h-4" />
                 </button>
@@ -414,8 +454,6 @@ export default function OngoingEventsSection() {
               style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
             >
               {events.map((event, idx) => {
-                const ArtComponent = ART_COMPONENTS[event.artIndex % ART_COMPONENTS.length];
-
                 return (
                   <motion.div
                     key={event.id || idx}
@@ -423,39 +461,39 @@ export default function OngoingEventsSection() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.5, delay: idx * 0.1 }}
-                    className="snap-start flex-shrink-0 w-[260px] sm:w-[325px] rounded-[36px] bg-[#ffffff] border border-[#e5e1d5] p-5 sm:p-6 flex flex-col justify-between shadow-[0_2px_12px_rgba(0,0,0,0.02)] hover:border-[#2c2e2a]/40 hover:shadow-md transition-all duration-300 group"
+                    className="snap-start flex-shrink-0 w-[260px] sm:w-[325px] rounded-[32px] bg-white border border-slate-200 p-5 sm:p-6 flex flex-col justify-between shadow-sm hover:border-slate-300 hover:shadow-md transition-all duration-300 group"
                   >
                     <div>
                       {/* Top Row: Pill Chip + Round Arrow Link Button */}
                       <div className="flex items-center justify-between gap-2">
-                        <span className="inline-flex items-center px-3 py-1 rounded-[50px] bg-[#f5f1e4] border border-[#e5e1d5] text-[11px] font-semibold text-[#2c2e2a] tracking-tight">
+                        <span className="inline-flex items-center px-3 py-1 rounded-[50px] bg-slate-100 border border-slate-200 text-[11px] font-semibold text-[#0f172a] tracking-tight">
                           {event.tag}
                         </span>
 
                         <Link
                           href={`/programs/${event.slug}`}
                           aria-label={`View ${event.title}`}
-                          className="w-8 h-8 rounded-full border border-[#e5e1d5] bg-[#ffffff] text-[#2c2e2a] group-hover:bg-[#2c2e2a] group-hover:text-white group-hover:border-[#2c2e2a] flex items-center justify-center transition-all duration-200"
+                          className="w-8 h-8 rounded-full border border-slate-200 bg-white text-[#0f172a] group-hover:bg-[#0f172a] group-hover:text-white group-hover:border-[#0f172a] flex items-center justify-center transition-all duration-200"
                         >
                           <ArrowUpRight className="w-4 h-4" />
                         </Link>
                       </div>
 
                       {/* Card Title */}
-                      <h3 className="text-[23px] sm:text-[25px] font-bold text-[#2c2e2a] leading-tight tracking-[-0.03em] mt-3.5 mb-2">
+                      <h3 className="text-[22px] sm:text-[24px] font-bold text-[#0f172a] leading-tight tracking-[-0.03em] mt-3.5 mb-2">
                         <Link href={`/programs/${event.slug}`} className="hover:underline">
                           {event.title}
                         </Link>
                       </h3>
 
                       {/* Card Description */}
-                      <p className="text-[13px] text-[#80827f] line-clamp-2 leading-relaxed mb-5">
+                      <p className="text-[13px] text-slate-600 line-clamp-2 leading-relaxed mb-5">
                         {event.description}
                       </p>
                     </div>
 
-                    {/* Bottom Poster / Illustration Block (Rounded, Pastel & Playful) */}
-                    <div className="w-full h-[205px] sm:h-[220px] rounded-[26px] overflow-hidden border border-[#e5e1d5]/70 relative">
+                    {/* Bottom Poster / Illustration Block */}
+                    <div className="w-full h-[205px] sm:h-[220px] rounded-[24px] overflow-hidden border border-slate-200/80 relative">
                       <CreativeEventPoster
                         posterUrl={event.posterUrl}
                         title={event.title}
@@ -476,3 +514,4 @@ export default function OngoingEventsSection() {
     </section>
   );
 }
+

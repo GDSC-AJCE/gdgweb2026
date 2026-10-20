@@ -1,33 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { collection, query, where, getDocs, doc, updateDoc, getDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
-import nodemailer from "nodemailer";
 import { renderNewsletterEmailHtml, NewsletterIssue } from "@/lib/newsletter";
-
-const COOKIE_NAME = "gdg_smtp_cfg";
-
-function getSmtpConfig(req: NextRequest) {
-  if (process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS) {
-    return {
-      host: process.env.SMTP_HOST,
-      port: parseInt(process.env.SMTP_PORT || "587"),
-      user: process.env.SMTP_USER,
-      pass: process.env.SMTP_PASS,
-      from: process.env.SMTP_FROM || process.env.SMTP_USER,
-      secure: process.env.SMTP_SECURE === "true",
-    };
-  }
-
-  const raw = req.cookies.get(COOKIE_NAME)?.value;
-  if (raw) {
-    try {
-      return JSON.parse(raw);
-    } catch {
-      return null;
-    }
-  }
-  return null;
-}
+import { getResendConfig, dispatchResendEmail } from "@/lib/resend";
 
 export async function POST(req: NextRequest) {
   try {
@@ -48,30 +23,24 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Missing newsletterId or issueData." }, { status: 400 });
     }
 
-    const smtpCfg = getSmtpConfig(req);
-    if (!smtpCfg || !smtpCfg.host || !smtpCfg.user || !smtpCfg.pass) {
+    const resendCfg = getResendConfig(req.cookies);
+    if (!resendCfg.configured || !resendCfg.apiKey) {
       return NextResponse.json(
-        { error: "SMTP credentials not configured. Please configure SMTP in chapter settings or environment variables." },
+        { error: "Resend credentials not configured. Please add RESEND_API_KEY to your .env or configure it in chapter settings." },
         { status: 400 }
       );
     }
 
-    const transporter = nodemailer.createTransport({
-      host: smtpCfg.host,
-      port: smtpCfg.port || 587,
-      secure: smtpCfg.secure ?? false,
-      auth: { user: smtpCfg.user, pass: smtpCfg.pass },
-    });
-
     const origin = req.headers.get("origin") || req.nextUrl.origin || process.env.NEXT_PUBLIC_SITE_URL || "https://gdgajce.vercel.app";
-    const fromAddress = smtpCfg.from || `"GDG Tech Pulse" <${smtpCfg.user}>`;
+    const fromAddress = resendCfg.from || `"GDG Tech Pulse" <onboarding@resend.dev>`;
 
     // 1. If testEmail is specified, send single test email and exit
     if (testEmail) {
       const testUnsubUrl = `${origin}/newsletter/unsubscribe?token=test_token&email=${encodeURIComponent(testEmail)}`;
       const { html, text } = renderNewsletterEmailHtml(issue, "Test Admin", testUnsubUrl);
 
-      await transporter.sendMail({
+      await dispatchResendEmail({
+        apiKey: resendCfg.apiKey,
         from: fromAddress,
         to: testEmail,
         subject: `[TEST] ${issue.title}`,
@@ -83,7 +52,7 @@ export async function POST(req: NextRequest) {
         success: true,
         testMode: true,
         sentTo: testEmail,
-        message: `Test email dispatched successfully to ${testEmail}!`,
+        message: `Test email dispatched successfully to ${testEmail} via Resend!`,
       });
     }
 
@@ -116,7 +85,8 @@ export async function POST(req: NextRequest) {
           const unsubUrl = `${origin}/newsletter/unsubscribe?token=${sub.unsubscribeToken || ""}&email=${encodeURIComponent(sub.email)}`;
           const { html, text } = renderNewsletterEmailHtml(issue, sub.name, unsubUrl);
 
-          await transporter.sendMail({
+          await dispatchResendEmail({
+            apiKey: resendCfg.apiKey!,
             from: fromAddress,
             to: sub.email,
             subject: issue.title,
@@ -144,14 +114,15 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      totalSubscribers: subscribers.length,
-      sentCount: successCount,
-      failedCount,
+      provider: "resend",
+      totalAttempted: subscribers.length,
+      delivered: successCount,
+      failed: failedCount,
       errors: errors.slice(0, 10),
-      message: `Weekly newsletter broadcast complete! Delivered to ${successCount} out of ${subscribers.length} subscribers.`,
+      message: `Broadcast complete! Successfully delivered to ${successCount} subscriber${successCount === 1 ? "" : "s"}.`,
     });
   } catch (err: any) {
-    console.error("[newsletter-send]", err);
-    return NextResponse.json({ error: err.message || "Failed to broadcast weekly newsletter" }, { status: 500 });
+    console.error("[newsletter-send with Resend]", err);
+    return NextResponse.json({ error: err.message || "Failed to dispatch newsletter" }, { status: 500 });
   }
 }

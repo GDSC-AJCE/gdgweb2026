@@ -23,6 +23,7 @@ import {
 import { collection, getDocs, query, orderBy, limit } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import CreativeProfileAvatar from "@/components/ui/CreativeProfileAvatar";
+import { Input } from "@/components/ui/Input";
 import { 
   YellowHexagon, 
   BlueWavyRosette, 
@@ -523,12 +524,12 @@ export default function LeaderboardTable() {
         {/* Row 2: Search Input — icon always vertically centred */}
         <div className="relative flex items-center w-full">
           <Search className="w-4 h-4 text-[#80827f] absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none z-10" />
-          <input
+          <Input
             type="text"
             placeholder="Search by student name, department, or badge (e.g. Gemini, CSE, Flutter)..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className={`w-full h-10 bg-[#f5f1e4] border border-[#d5d5d4] hover:border-[#2c2e2a]/40 text-[#2c2e2a] text-xs pl-10 ${searchQuery ? "pr-9" : "pr-4"} rounded-[50px] focus:outline-none focus:border-[#2c2e2a] transition placeholder-[#80827f] shadow-xs`}
+            className={`w-full h-11 bg-white border-[#d5d5d4] text-[#2c2e2a] text-xs pl-10 ${searchQuery ? "pr-9" : "pr-4"} rounded-xl transition placeholder-[#80827f] shadow-xs`}
           />
           {searchQuery && (
             <button

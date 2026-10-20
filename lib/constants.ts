@@ -3,6 +3,7 @@ export const ADMIN_EMAILS = [
   "vinayakprakash2026@cs.ajce.in",
   "abinvarghese092005@gmail.com",
   "abinvarghese2026@cs.ajce.in",
+  "karthiksambhu123@gmail.com",
 ];
 
 export const isAdminEmail = (email?: string | null): boolean => {

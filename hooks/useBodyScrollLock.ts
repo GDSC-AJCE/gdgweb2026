@@ -4,15 +4,8 @@ import { stopLenis, startLenis } from "@/components/providers/SmoothScrollProvid
 let lockCount = 0;
 
 /**
- * Locks background scroll when a modal/overlay is active.
- *
- * Handles three scroll vectors:
- *  1. Native browser overflow  – sets `overflow: hidden` on <html> + <body>
- *  2. Lenis smooth-scroll       – calls lenis.stop() / lenis.start()
- *  3. Touch scroll              – blocks touchmove events on the document
- *
- * Automatically compensates for scrollbar width to prevent layout shift.
- * Reference-counted so multiple simultaneous modals work correctly.
+ * Locks background window scroll when a modal or overlay is active,
+ * while ensuring internal modal content scrolls smoothly without getting blocked.
  */
 export function useBodyScrollLock(active: boolean = true) {
     useEffect(() => {
@@ -24,7 +17,7 @@ export function useBodyScrollLock(active: boolean = true) {
             const scrollbarWidth =
                 window.innerWidth - document.documentElement.clientWidth;
 
-            // 1. Native overflow lock (+ scrollbar compensation)
+            // 1. Native overflow lock on documentElement and body
             const style = document.createElement("style");
             style.id = "__scroll-lock__";
             style.textContent = `
@@ -35,34 +28,38 @@ export function useBodyScrollLock(active: boolean = true) {
             `;
             document.head.appendChild(style);
 
-            // 2. Pause Lenis smooth-scroll engine
+            // 2. Pause Lenis smooth-scroll on main page
             stopLenis();
 
-            // 3. Block touch scroll on the background
+            // 3. Prevent touch-drag on backdrop outside modal scroll areas
             document.addEventListener("touchmove", preventTouchScroll, { passive: false });
         }
 
         return () => {
             lockCount = Math.max(0, lockCount - 1);
             if (lockCount === 0) {
-                // Remove native overflow lock
                 const style = document.getElementById("__scroll-lock__");
                 if (style) style.remove();
 
-                // Resume Lenis
                 startLenis();
 
-                // Restore touch scroll
                 document.removeEventListener("touchmove", preventTouchScroll);
             }
         };
     }, [active]);
 }
 
-/** Prevent native touchmove on the document (blocks iOS rubber-band scroll). */
+/** Prevent touchmove on backdrop while permitting scroll inside any scrollable container */
 function preventTouchScroll(e: TouchEvent) {
-    // Allow scrolling inside elements that explicitly opt-in via data-scroll-allow
     const target = e.target as HTMLElement;
-    if (target?.closest("[data-scroll-allow]")) return;
+    if (
+        target?.closest("[data-scroll-allow]") ||
+        target?.closest("[data-lenis-prevent]") ||
+        target?.closest(".overflow-y-auto") ||
+        target?.closest(".overflow-y-scroll") ||
+        target?.closest(".overflow-auto")
+    ) {
+        return;
+    }
     e.preventDefault();
 }

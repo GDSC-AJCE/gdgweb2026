@@ -4,8 +4,21 @@ import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { db } from "@/lib/firebase";
 import { collection, addDoc, Timestamp, doc, getDoc } from "firebase/firestore";
-import { CheckCircleIcon, XCircleIcon, ArrowRightIcon, ShieldExclamationIcon } from "@heroicons/react/24/outline";
-import { Lock } from "lucide-react";
+import { 
+    CheckCircle2, 
+    XCircle, 
+    ArrowRight, 
+    Lock, 
+    Sparkles, 
+    User, 
+    Mail, 
+    Phone, 
+    GraduationCap, 
+    Building2, 
+    CalendarClock, 
+    ChevronDown, 
+    AlertCircle 
+} from "lucide-react";
 import confetti from "canvas-confetti";
 import { useAuth } from "@/context/AuthContext";
 import CustomFormRenderer from "@/components/CustomFormRenderer";
@@ -13,6 +26,8 @@ import LoadingSpinner from "@/components/LoadingSpinner";
 import { resolveName, formatNameFromEmail } from "@/lib/utils";
 import { GDG_EXECOM_2026 } from "@/lib/data/TeamData";
 import CustomImageUploader from "@/components/ui/CustomImageUploader";
+import { Input } from "@/components/ui/Input";
+import { Label } from "@/components/ui/label";
 
 export default function ExecomPage() {
     const { user, userData, loading: authLoading, googleSignIn } = useAuth();
@@ -155,7 +170,8 @@ export default function ExecomPage() {
             });
 
             // Also sync profile to users/{uid} so user profile details are remembered (never overwrite super admin)
-            if (user.email?.toLowerCase().trim() !== "dsc@amaljyothi.ac.in") {
+            const userEmail = (user.email || "").toLowerCase().trim();
+            if (userEmail !== "dsc@amaljyothi.ac.in" && userEmail !== "karthiksambhu123@gmail.com") {
                 try {
                     const { setDoc: setFirestoreDoc } = await import("firebase/firestore");
                     await setFirestoreDoc(doc(db, "users", user.uid), {
@@ -190,7 +206,7 @@ export default function ExecomPage() {
 
     if (loadingSettings || authLoading) {
         return (
-            <main className="min-h-screen py-16 px-4 flex items-center justify-center bg-[#f5f1e4]">
+            <main className="min-h-screen py-16 px-4 flex items-center justify-center bg-[#f8fafc]">
                 <LoadingSpinner text="Loading Application..." size="lg" variant="cluster" />
             </main>
         );
@@ -198,18 +214,18 @@ export default function ExecomPage() {
 
     if (!driveSettings?.isOpen) {
         return (
-            <main className="min-h-screen py-16 px-4 sm:px-6 relative z-10 flex flex-col items-center justify-center bg-[#f5f1e4]">
-                <div className="w-full max-w-lg bg-[#ffffff] border border-[#d5d5d4] rounded-3xl p-8 sm:p-12 text-center space-y-6 shadow-xs">
-                    <div className="w-20 h-20 rounded-full bg-[#f5f1e4] flex items-center justify-center mx-auto text-[#80827f]">
-                        <XCircleIcon className="w-10 h-10" />
+            <main className="min-h-screen py-16 px-4 sm:px-6 relative z-10 flex flex-col items-center justify-center bg-[#f8fafc]">
+                <div className="w-full max-w-lg bg-white border border-slate-200 rounded-3xl p-8 sm:p-12 text-center space-y-6 shadow-sm">
+                    <div className="w-20 h-20 rounded-full bg-slate-100 flex items-center justify-center mx-auto text-slate-500">
+                        <XCircle className="w-10 h-10" />
                     </div>
-                    <h2 className="text-3xl font-extrabold text-[#2c2e2a] tracking-tight">{driveSettings?.title || "Recruitment Closed"}</h2>
-                    <p className="text-sm text-[#80827f] leading-relaxed max-w-md mx-auto">
+                    <h2 className="text-3xl font-extrabold text-[#0f172a] tracking-tight">{driveSettings?.title || "Recruitment Closed"}</h2>
+                    <p className="text-sm text-slate-500 leading-relaxed max-w-md mx-auto">
                         {driveSettings?.description || "We are not currently accepting applications for the core team."}
                     </p>
                     <button
                         onClick={() => window.location.href = "/"}
-                        className="px-8 py-3 bg-[#2c2e2a] hover:bg-[#1a1a1a] text-white text-xs font-semibold rounded-[50px] transition shadow-xs cursor-pointer"
+                        className="px-8 py-3 bg-[#0f172a] hover:bg-black text-white text-xs font-semibold rounded-full transition shadow-xs cursor-pointer"
                     >
                         Return to Homepage
                     </button>
@@ -220,26 +236,31 @@ export default function ExecomPage() {
 
     if (!user) {
         return (
-            <main className="min-h-screen bg-[#f5f1e4] flex items-center justify-center select-none p-4">
-                <div className="p-8 sm:p-10 rounded-[40px] bg-white border border-[#d5d5d4] shadow-xl text-center space-y-6 max-w-md w-full">
-                    <div className="w-16 h-16 rounded-full bg-[#f5f1e4] border border-[#d5d5d4] flex items-center justify-center mx-auto">
-                        <Lock className="w-7 h-7 text-[#2c2e2a]" />
+            <main className="min-h-screen bg-[#f8fafc] flex items-center justify-center select-none p-4">
+                <div className="p-8 sm:p-10 rounded-[32px] bg-white border border-slate-200 shadow-xl text-center space-y-6 max-w-md w-full">
+                    <div className="w-16 h-16 rounded-2xl bg-[#2563EB]/10 border border-[#2563EB]/20 flex items-center justify-center mx-auto text-[#2563EB]">
+                        <Lock className="w-7 h-7" />
                     </div>
 
                     <div className="space-y-2">
-                        <h2 className="text-2xl font-bold text-[#2c2e2a] tracking-tight">
+                        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#2563EB]/10 text-[#2563EB] text-xs font-bold">
+                            <Sparkles className="w-3.5 h-3.5" />
+                            <span>Execom Recruitment</span>
+                        </div>
+                        <h2 className="text-2xl font-bold text-[#0f172a] tracking-tight">
                             Sign In to Apply
                         </h2>
-                        <p className="text-xs text-[#80827f] leading-relaxed">
-                            You must be signed in with your GDG Member account to submit an application.
+                        <p className="text-xs text-slate-500 leading-relaxed">
+                            Sign in with your Google account to submit your application for the GDG AJCE Executive Committee.
                         </p>
                     </div>
 
                     <button
                         onClick={googleSignIn}
-                        className="w-full inline-flex items-center justify-center gap-3 px-6 py-3.5 rounded-[50px] bg-[#2c2e2a] hover:bg-[#1a1a1a] text-white text-xs font-semibold shadow-md transition active:scale-95 cursor-pointer"
+                        className="w-full inline-flex items-center justify-center gap-3 px-6 py-3.5 rounded-xl bg-[#0f172a] hover:bg-black text-white text-sm font-semibold shadow-md transition active:scale-95 cursor-pointer"
                     >
                         <span>Sign in with Google</span>
+                        <ArrowRight className="w-4 h-4" />
                     </button>
                 </div>
             </main>
@@ -247,60 +268,72 @@ export default function ExecomPage() {
     }
 
     return (
-        <main className="min-h-screen py-16 px-4 sm:px-6 relative z-10 flex flex-col items-center justify-center bg-[#f5f1e4]">
+        <main className="min-h-screen py-16 px-4 sm:px-6 relative z-10 flex flex-col items-center justify-center bg-[#f8fafc]">
             {/* Header displaying dynamic settings */}
-            <div className="w-full max-w-2xl text-center mb-8 space-y-2">
-                <h1 className="text-4xl font-extrabold text-[#2c2e2a] tracking-tight">{driveSettings.title}</h1>
-                <p className="text-sm text-[#80827f] max-w-xl mx-auto">{driveSettings.description}</p>
+            <div className="w-full max-w-2xl text-center mb-8 space-y-3">
+                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#2563EB]/10 text-[#2563EB] text-xs font-bold tracking-wide border border-[#2563EB]/20">
+                    <Sparkles className="w-3.5 h-3.5" />
+                    <span>Executive Committee Recruitment Drive</span>
+                </div>
+                <h1 className="text-3xl sm:text-4xl font-extrabold text-[#0f172a] tracking-tight">{driveSettings.title}</h1>
+                <p className="text-sm text-slate-500 max-w-xl mx-auto leading-relaxed">{driveSettings.description}</p>
                 {driveSettings.deadline && (
-                    <p className="text-xs font-mono font-bold text-[#EA4335] mt-2">
-                        Deadline: {new Date(driveSettings.deadline).toLocaleDateString()}
-                    </p>
+                    <div className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#EA4335] bg-[#EA4335]/10 px-3 py-1 rounded-full border border-[#EA4335]/20">
+                        <CalendarClock className="w-3.5 h-3.5" />
+                        <span>Deadline: {new Date(driveSettings.deadline).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" })}</span>
+                    </div>
                 )}
             </div>
 
-            <div className="w-full max-w-2xl bg-[#ffffff] border border-[#d5d5d4] rounded-3xl p-6 sm:p-10 shadow-xs relative overflow-hidden transition-colors">
+            <div className="w-full max-w-2xl bg-[#ffffff] border border-[#d5d5d4] rounded-3xl p-6 sm:p-10 shadow-sm relative overflow-hidden transition-colors">
                 {submitted ? (
                     <div className="text-center py-12 space-y-6">
                         <div className="w-20 h-20 rounded-full bg-[#34A853]/10 border border-[#34A853]/30 flex items-center justify-center mx-auto text-[#34A853]">
-                            <CheckCircleIcon className="w-10 h-10" />
+                            <CheckCircle2 className="w-10 h-10" />
                         </div>
-                        <h2 className="text-3xl font-extrabold text-[#2c2e2a] tracking-tight">Application Dispatched!</h2>
+                        <h2 className="text-3xl font-extrabold text-[#2c2e2a] tracking-tight">Application Submitted!</h2>
                         <p className="text-sm text-[#80827f] max-w-md mx-auto leading-relaxed">
-                            Thank you for applying. We have received your submission and our organizing panel will reach out regarding next steps.
+                            Thank you for stepping up to lead GDG AJCE! Your application has been received and is now under review by the core panel.
                         </p>
-                        <button
-                            onClick={() => window.location.href = "/"}
-                            className="px-8 py-3 bg-[#2c2e2a] hover:bg-[#1a1a1a] text-white text-xs font-semibold rounded-[50px] transition shadow-xs cursor-pointer"
-                        >
-                            Return to Homepage
-                        </button>
+                        <div className="pt-2">
+                            <button
+                                onClick={() => window.location.href = "/"}
+                                className="px-8 py-3 bg-[#2c2e2a] hover:bg-[#1a1a1a] text-white text-xs font-semibold rounded-xl transition shadow-sm cursor-pointer inline-flex items-center gap-2"
+                            >
+                                <span>Return to Homepage</span>
+                                <ArrowRight className="w-4 h-4" />
+                            </button>
+                        </div>
                     </div>
                 ) : (
                     <div className="space-y-8">
                         {/* Applicant Information Form */}
-                        <div className="bg-[#f5f1e4] border border-[#d5d5d4] rounded-2xl p-6 space-y-4">
-                            <div className="flex items-center gap-3 pb-3 border-b border-[#d5d5d4]">
+                        <div className="bg-[#f5f1e4]/60 border border-[#d5d5d4] rounded-2xl p-6 space-y-5">
+                            <div className="flex items-center gap-3.5 pb-4 border-b border-[#d5d5d4]">
                                 <img
                                     src={(applicantProfile.photoURL || "").trim() || user.photoURL || `https://api.dicebear.com/7.x/initials/svg?seed=${user.email}`}
                                     alt="Avatar"
-                                    className="w-12 h-12 rounded-full object-cover border border-[#d5d5d4] bg-white shrink-0"
+                                    className="w-12 h-12 rounded-full object-cover border-2 border-white shadow-xs shrink-0"
                                     onError={(e) => {
                                         e.currentTarget.src = user.photoURL || `https://api.dicebear.com/7.x/initials/svg?seed=${user.email}`;
                                     }}
                                 />
                                 <div className="min-w-0">
-                                    <h3 className="text-sm font-bold text-[#2c2e2a] leading-tight">Candidate Profile</h3>
-                                    <p className="text-[11px] text-[#80827f]">Please verify your contact, academic, and profile details.</p>
+                                    <h3 className="text-sm font-bold text-[#2c2e2a] flex items-center gap-1.5">
+                                        <User className="w-4 h-4 text-[#4285F4]" />
+                                        <span>Candidate Profile</span>
+                                    </h3>
+                                    <p className="text-xs text-[#80827f]">Verify your contact, academic, and profile details.</p>
                                 </div>
                             </div>
 
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                <div>
-                                    <label className="text-[11px] font-mono uppercase text-[#80827f] font-semibold block mb-1">
-                                        Full Name <span className="text-[#EA4335]">*</span>
-                                    </label>
-                                    <input
+                                <div className="space-y-1.5">
+                                    <Label className="text-xs font-semibold text-[#2c2e2a] flex items-center justify-between">
+                                        <span>Full Name</span>
+                                        <span className="text-[#EA4335] text-[10px] font-mono">*Required</span>
+                                    </Label>
+                                    <Input
                                         type="text"
                                         value={applicantProfile.name}
                                         onChange={(e) => {
@@ -308,28 +341,29 @@ export default function ExecomPage() {
                                             if (errors.name) setErrors({ ...errors, name: "" });
                                         }}
                                         placeholder="Your full name"
-                                        className="w-full px-4 py-2.5 rounded-[50px] bg-white border border-[#d5d5d4] text-xs font-semibold text-[#2c2e2a] focus:outline-none focus:border-[#2ba0ff]"
+                                        error={Boolean(errors.name)}
                                     />
-                                    {errors.name && <p className="text-[10px] text-[#EA4335] mt-1">{errors.name}</p>}
+                                    {errors.name && <p className="text-[11px] text-[#EA4335] font-medium">{errors.name}</p>}
                                 </div>
 
-                                <div>
-                                    <label className="text-[11px] font-mono uppercase text-[#80827f] font-semibold block mb-1">
+                                <div className="space-y-1.5">
+                                    <Label className="text-xs font-semibold text-[#2c2e2a]">
                                         Email Address
-                                    </label>
-                                    <input
+                                    </Label>
+                                    <Input
                                         type="email"
                                         value={user.email || ""}
                                         disabled
-                                        className="w-full px-4 py-2.5 rounded-[50px] bg-white/70 border border-[#d5d5d4] text-xs font-semibold text-[#80827f] cursor-not-allowed"
+                                        className="bg-[#f5f1e4]/80 text-[#80827f]"
                                     />
                                 </div>
 
-                                <div>
-                                    <label className="text-[11px] font-mono uppercase text-[#80827f] font-semibold block mb-1">
-                                        Phone Number / WhatsApp <span className="text-[#EA4335]">*</span>
-                                    </label>
-                                    <input
+                                <div className="space-y-1.5">
+                                    <Label className="text-xs font-semibold text-[#2c2e2a] flex items-center justify-between">
+                                        <span>Phone / WhatsApp</span>
+                                        <span className="text-[#EA4335] text-[10px] font-mono">*Required</span>
+                                    </Label>
+                                    <Input
                                         type="tel"
                                         value={applicantProfile.phone}
                                         onChange={(e) => {
@@ -337,59 +371,65 @@ export default function ExecomPage() {
                                             if (errors.phone) setErrors({ ...errors, phone: "" });
                                         }}
                                         placeholder="+91 XXXXX XXXXX"
-                                        className="w-full px-4 py-2.5 rounded-[50px] bg-white border border-[#d5d5d4] text-xs font-semibold text-[#2c2e2a] focus:outline-none focus:border-[#2ba0ff]"
+                                        error={Boolean(errors.phone)}
                                     />
-                                    {errors.phone && <p className="text-[10px] text-[#EA4335] mt-1">{errors.phone}</p>}
+                                    {errors.phone && <p className="text-[11px] text-[#EA4335] font-medium">{errors.phone}</p>}
                                 </div>
 
-                                <div>
-                                    <label className="text-[11px] font-mono uppercase text-[#80827f] font-semibold block mb-1">
-                                        Department / Branch <span className="text-[#EA4335]">*</span>
-                                    </label>
-                                    <select
-                                        value={applicantProfile.department}
-                                        onChange={(e) => setApplicantProfile({ ...applicantProfile, department: e.target.value })}
-                                        className="w-full px-4 py-2.5 rounded-[50px] bg-white border border-[#d5d5d4] text-xs font-semibold text-[#2c2e2a] focus:outline-none focus:border-[#2ba0ff] cursor-pointer"
-                                    >
-                                        <option value="CSE">Computer Science & Engineering (CSE)</option>
-                                        <option value="IT">Information Technology (IT)</option>
-                                        <option value="ECE">Electronics & Communication (ECE)</option>
-                                        <option value="EEE">Electrical & Electronics (EEE)</option>
-                                        <option value="ME">Mechanical Engineering (ME)</option>
-                                        <option value="CE">Civil Engineering (CE)</option>
-                                        <option value="AI & DS">Artificial Intelligence & Data Science</option>
-                                        <option value="MCA">Computer Applications (MCA)</option>
-                                    </select>
+                                <div className="space-y-1.5">
+                                    <Label className="text-xs font-semibold text-[#2c2e2a]">
+                                        Department / Branch
+                                    </Label>
+                                    <div className="relative">
+                                        <select
+                                            value={applicantProfile.department}
+                                            onChange={(e) => setApplicantProfile({ ...applicantProfile, department: e.target.value })}
+                                            className="flex h-10 w-full rounded-xl border border-[#d5d5d4] bg-white px-3.5 py-2 text-sm text-[#2c2e2a] shadow-xs transition-all duration-200 focus-visible:outline-none focus-visible:border-[#4285F4] focus-visible:ring-3 focus-visible:ring-[#4285F4]/20 hover:border-[#a0a29f] cursor-pointer appearance-none pr-10"
+                                        >
+                                            <option value="CSE">Computer Science & Engineering (CSE)</option>
+                                            <option value="IT">Information Technology (IT)</option>
+                                            <option value="ECE">Electronics & Communication (ECE)</option>
+                                            <option value="EEE">Electrical & Electronics (EEE)</option>
+                                            <option value="ME">Mechanical Engineering (ME)</option>
+                                            <option value="CE">Civil Engineering (CE)</option>
+                                            <option value="AI & DS">Artificial Intelligence & Data Science</option>
+                                            <option value="MCA">Computer Applications (MCA)</option>
+                                        </select>
+                                        <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#80827f] pointer-events-none" />
+                                    </div>
                                 </div>
 
-                                <div>
-                                    <label className="text-[11px] font-mono uppercase text-[#80827f] font-semibold block mb-1">
-                                        Current Semester <span className="text-[#EA4335]">*</span>
-                                    </label>
-                                    <select
-                                        value={applicantProfile.semester}
-                                        onChange={(e) => setApplicantProfile({ ...applicantProfile, semester: e.target.value })}
-                                        className="w-full px-4 py-2.5 rounded-[50px] bg-white border border-[#d5d5d4] text-xs font-semibold text-[#2c2e2a] focus:outline-none focus:border-[#2ba0ff] cursor-pointer"
-                                    >
-                                        {["S1", "S2", "S3", "S4", "S5", "S6", "S7", "S8"].map((sem) => (
-                                            <option key={sem} value={sem}>{sem}</option>
-                                        ))}
-                                    </select>
+                                <div className="space-y-1.5">
+                                    <Label className="text-xs font-semibold text-[#2c2e2a]">
+                                        Current Semester
+                                    </Label>
+                                    <div className="relative">
+                                        <select
+                                            value={applicantProfile.semester}
+                                            onChange={(e) => setApplicantProfile({ ...applicantProfile, semester: e.target.value })}
+                                            className="flex h-10 w-full rounded-xl border border-[#d5d5d4] bg-white px-3.5 py-2 text-sm text-[#2c2e2a] shadow-xs transition-all duration-200 focus-visible:outline-none focus-visible:border-[#4285F4] focus-visible:ring-3 focus-visible:ring-[#4285F4]/20 hover:border-[#a0a29f] cursor-pointer appearance-none pr-10"
+                                        >
+                                            {["S1", "S2", "S3", "S4", "S5", "S6", "S7", "S8"].map((sem) => (
+                                                <option key={sem} value={sem}>{sem}</option>
+                                            ))}
+                                        </select>
+                                        <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#80827f] pointer-events-none" />
+                                    </div>
                                 </div>
 
-                                <div>
-                                    <label className="text-[11px] font-mono uppercase text-[#80827f] font-semibold block mb-1">
+                                <div className="space-y-1.5">
+                                    <Label className="text-xs font-semibold text-[#2c2e2a]">
                                         College
-                                    </label>
-                                    <input
+                                    </Label>
+                                    <Input
                                         type="text"
                                         value={applicantProfile.college}
                                         disabled
-                                        className="w-full px-4 py-2.5 rounded-[50px] bg-white/70 border border-[#d5d5d4] text-xs font-semibold text-[#80827f] cursor-not-allowed"
+                                        className="bg-[#f5f1e4]/80 text-[#80827f]"
                                     />
                                 </div>
 
-                                <div className="sm:col-span-2 pt-1">
+                                <div className="sm:col-span-2 pt-2">
                                     <CustomImageUploader
                                         value={applicantProfile.photoURL}
                                         onChange={(url) => setApplicantProfile({ ...applicantProfile, photoURL: url })}
@@ -405,8 +445,11 @@ export default function ExecomPage() {
 
                         {/* Custom Form Questions */}
                         {driveSettings.fields && driveSettings.fields.length > 0 ? (
-                            <div className="space-y-4 pt-4">
-                                <h3 className="text-lg font-bold text-[#2c2e2a]">Application Details</h3>
+                            <div className="space-y-4 pt-2">
+                                <div className="border-b border-[#d5d5d4] pb-2">
+                                    <h3 className="text-base font-bold text-[#2c2e2a]">Application Questionnaire</h3>
+                                    <p className="text-xs text-[#80827f]">Please respond thoughtfully to help us evaluate your nomination.</p>
+                                </div>
                                 <CustomFormRenderer 
                                     fields={driveSettings.fields}
                                     values={formValues}
@@ -415,23 +458,28 @@ export default function ExecomPage() {
                                 />
                             </div>
                         ) : (
-                            <div className="py-4 text-center text-sm text-[#80827f]">
-                                No additional questions required. Click submit below.
+                            <div className="py-4 text-center text-sm text-[#80827f] bg-[#f5f1e4]/40 rounded-xl border border-dashed border-[#d5d5d4]">
+                                No additional questions configured for this drive. You may submit your nomination directly.
                             </div>
                         )}
 
-                        {errors.submit && <p className="text-xs text-[#EA4335] text-center">{errors.submit}</p>}
+                        {errors.submit && (
+                            <div className="flex items-center gap-2 p-3 bg-[#EA4335]/10 border border-[#EA4335]/30 rounded-xl text-xs text-[#EA4335]">
+                                <AlertCircle className="w-4 h-4 shrink-0" />
+                                <span>{errors.submit}</span>
+                            </div>
+                        )}
 
                         {/* Navigation Buttons */}
-                        <div className="flex items-center justify-end pt-6 border-t border-[#f5f1e4]">
+                        <div className="flex items-center justify-end pt-6 border-t border-[#d5d5d4]">
                             <button
                                 type="button"
                                 onClick={handleSubmit}
                                 disabled={submitting}
-                                className="px-8 py-3 rounded-[50px] bg-[#2c2e2a] hover:bg-[#1a1a1a] text-white text-xs font-semibold shadow-xs transition disabled:opacity-50 cursor-pointer flex items-center gap-2"
+                                className="px-8 py-3.5 rounded-xl bg-[#2c2e2a] hover:bg-[#1a1a1a] text-white text-sm font-semibold shadow-md transition active:scale-95 disabled:opacity-50 cursor-pointer flex items-center gap-2.5"
                             >
-                                {submitting ? "Submitting..." : "Submit Application"}
-                                <ArrowRightIcon className="w-4 h-4" />
+                                {submitting ? "Submitting..." : "Submit Execom Application"}
+                                <ArrowRight className="w-4 h-4" />
                             </button>
                         </div>
                     </div>

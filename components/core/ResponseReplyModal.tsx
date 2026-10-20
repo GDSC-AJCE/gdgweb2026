@@ -19,6 +19,7 @@ import MDEditor, { commands } from "@uiw/react-md-editor";
 import "@uiw/react-md-editor/markdown-editor.css";
 import "@uiw/react-markdown-preview/markdown.css";
 import { FaUnderline, FaStrikethrough } from "react-icons/fa";
+import { Input } from "@/components/ui/Input";
 
 interface ResponseReplyModalProps {
     onClose: () => void;
@@ -290,9 +291,9 @@ export default function ResponseReplyModal({ onClose, response }: ResponseReplyM
                                 <AnimatePresence>
                                     {smtpOpen && (
                                         <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="pt-3 space-y-3">
-                                            <input disabled={viaEnv} type="text" value={smtpHost} onChange={(e) => setSmtpHost(e.target.value)} placeholder="SMTP Host" className="w-full bg-white/[0.04] border border-white/10 rounded-lg px-3 py-1.5 text-[11px] text-white focus:border-[#4285F4] outline-none" />
-                                            <input disabled={viaEnv} type="text" value={smtpUser} onChange={(e) => setSmtpUser(e.target.value)} placeholder="Username" className="w-full bg-white/[0.04] border border-white/10 rounded-lg px-3 py-1.5 text-[11px] text-white focus:border-[#4285F4] outline-none" />
-                                            <input disabled={viaEnv} type="password" value={smtpPass} onChange={(e) => setSmtpPass(e.target.value)} placeholder="Password" className="w-full bg-white/[0.04] border border-white/10 rounded-lg px-3 py-1.5 text-[11px] text-white focus:border-[#4285F4] outline-none" />
+                                            <Input disabled={viaEnv} type="text" value={smtpHost} onChange={(e) => setSmtpHost(e.target.value)} placeholder="SMTP Host" className="w-full bg-white/[0.05] border-white/10 rounded-lg px-3 py-1.5 h-8 text-[11px] text-white focus:border-[#4285F4]" />
+                                            <Input disabled={viaEnv} type="text" value={smtpUser} onChange={(e) => setSmtpUser(e.target.value)} placeholder="Username" className="w-full bg-white/[0.05] border-white/10 rounded-lg px-3 py-1.5 h-8 text-[11px] text-white focus:border-[#4285F4]" />
+                                            <Input disabled={viaEnv} type="password" value={smtpPass} onChange={(e) => setSmtpPass(e.target.value)} placeholder="Password" className="w-full bg-white/[0.05] border-white/10 rounded-lg px-3 py-1.5 h-8 text-[11px] text-white focus:border-[#4285F4]" />
                                             {!viaEnv && (
                                                 <button onClick={handleSaveSmtp} disabled={savingSmtp} className="w-full py-2 rounded-lg bg-[#4285F4]/10 border border-[#4285F4]/20 text-[10px] font-bold text-[#4285F4] hover:bg-[#4285F4]/20 transition">
                                                     {savingSmtp ? "Saving..." : "Save Config"}
@@ -348,7 +349,7 @@ export default function ResponseReplyModal({ onClose, response }: ResponseReplyM
 
                                     <div>
                                         <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5 block">Subject</label>
-                                        <input type="text" value={subject} onChange={(e) => setSubject(e.target.value)} className="w-full bg-white/[0.04] border border-white/[0.1] rounded-xl px-4 py-2.5 text-white text-sm focus:outline-none focus:border-[#4285F4] transition" />
+                                        <Input type="text" value={subject} onChange={(e) => setSubject(e.target.value)} className="w-full bg-white/[0.04] border border-white/[0.1] rounded-xl px-4 py-2.5 h-11 text-white text-sm focus:border-[#4285F4] transition" />
                                     </div>
 
                                     {!previewMode ? (

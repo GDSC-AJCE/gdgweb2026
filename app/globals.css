@@ -2,22 +2,70 @@
 
 @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
 
-:root {
-  /* MINDMARKET COLORS */
-  --color-fresh-grass: #8ed462;
-  --color-cream-paper: #f5f1e4;
-  --color-ink-black: #2c2e2a;
-  --color-pure-white: #ffffff;
-  --color-sandstone: #e0dbce;
-  --color-stone-gray: #80827f;
-  --color-hairline-mist: #d5d5d4;
-  --color-pure-ink: #000000;
-  --color-sky-pop: #2ba0ff;
-  --color-coral-pop: #ff705d;
-  --color-sunshine-pop: #f5e211;
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --font-sans: var(--font-urbanist), system-ui, sans-serif;
+  --font-urbanist: var(--font-urbanist), system-ui, sans-serif;
+  --font-mono: var(--font-mono), monospace;
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
 
-  --background: #f5f1e4;
-  --foreground: #2c2e2a;
+:root {
+  /* VIBRANT MODERN COLOR PALETTE */
+  --color-fresh-grass: #10B981;     /* Saturated Emerald Green (replaces murky #8ed462) */
+  --color-cream-paper: #f8fafc;     /* Crisp, clean, luminous modern canvas (replaces dirty #f5f1e4) */
+  --color-ink-black: #0f172a;       /* Razor-sharp deep slate ink (replaces brownish #2c2e2a) */
+  --color-pure-white: #ffffff;
+  --color-sandstone: #f1f5f9;       /* Crisp light slate recess (replaces muddy #e0dbce) */
+  --color-stone-gray: #64748b;      /* Clean slate-500 text (replaces dull #80827f) */
+  --color-hairline-mist: #e2e8f0;   /* Clean slate-200 border (replaces murky #d5d5d4) */
+  --color-pure-ink: #000000;
+  --color-sky-pop: #2563EB;         /* Vibrant Electric Google Blue (replaces faded #2ba0ff) */
+  --color-coral-pop: #EF4444;       /* Punchy Saturated Crimson/Coral (replaces washed #ff705d) */
+  --color-sunshine-pop: #F59E0B;     /* Rich Luminous Gold/Amber (replaces pale #f5e211) */
+
+  /* SHADCN THEME TOKENS */
+  --background: #f8fafc;
+  --foreground: #0f172a;
+  --card: #ffffff;
+  --card-foreground: #0f172a;
+  --popover: #ffffff;
+  --popover-foreground: #0f172a;
+  --primary: #0f172a;
+  --primary-foreground: #ffffff;
+  --secondary: #f1f5f9;
+  --secondary-foreground: #0f172a;
+  --muted: #f1f5f9;
+  --muted-foreground: #64748b;
+  --accent: #f1f5f9;
+  --accent-foreground: #0f172a;
+  --destructive: #EF4444;
+  --destructive-foreground: #ffffff;
+  --border: #e2e8f0;
+  --input: #e2e8f0;
+  --ring: #2563EB;
+  --radius: 0.75rem;
 
   /* Typography Scale */
   --text-body-sm: 15px;
@@ -49,70 +97,65 @@
   --spacing-216: 216px;
 
   /* Border Radii */
-  --radius-lg: 10px;
+  --radius-lg: 12px;
   --radius-2xl: 20px;
   --radius-full: 50px;
   --radius-full-2: 63.75px;
 }
 
-body {
-  background-color: #f5f1e4;
-  color: #2c2e2a;
-  font-family: var(--font-inter), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  overflow-x: hidden;
-}
-
-/* MINDMARKET DISPLAY TYPOGRAPHY (Inter at Extreme Scale) */
-.font-display-hero {
-  font-family: var(--font-inter), sans-serif;
-  font-weight: 500;
-  line-height: 0.95;
-  letter-spacing: -0.06em;
-}
-
-.font-heading-lg {
-  font-family: var(--font-inter), sans-serif;
-  font-weight: 500;
-  line-height: 1.15;
-  letter-spacing: -0.04em;
-}
-
-/* NO SHADOWS OR GRADIENTS — MINDMARKET ELEVATION BY CREAM-TO-WHITE SHIFT */
-*, *::before, *::after {
-  box-shadow: none !important;
+.dark, [data-theme="dark"] {
+  --background: #090d16;
+  --foreground: #f8fafc;
+  --card: #111827;
+  --card-foreground: #f8fafc;
+  --popover: #111827;
+  --popover-foreground: #f8fafc;
+  --primary: #f8fafc;
+  --primary-foreground: #090d16;
+  --secondary: #1e293b;
+  --secondary-foreground: #f8fafc;
+  --muted: #1e293b;
+  --muted-foreground: #94a3b8;
+  --accent: #1e293b;
+  --accent-foreground: #f8fafc;
+  --destructive: #EF4444;
+  --destructive-foreground: #ffffff;
+  --border: #1e293b;
+  --input: #1e293b;
+  --ring: #3B82F6;
 }
 
 /* Hairline border utility */
 .border-hairline {
-  border: 1px solid #d5d5d4;
+  border: 1px solid #e2e8f0;
 }
 
 .border-ink {
-  border: 1px solid #2c2e2a;
+  border: 1px solid #0f172a;
 }
 
-/* Custom Minimal Scrollbar on Cream */
+/* Clean Minimal Scrollbar on Crisp Slate */
 ::-webkit-scrollbar {
   width: 7px;
   height: 7px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #f5f1e4;
+  background: #f8fafc;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #e0dbce;
+  background: #cbd5e1;
   border-radius: 50px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #80827f;
+  background: #94a3b8;
 }
 
-/* Form fields — only set colour tokens here; let components control padding, bg, and radius */
+/* Form fields — clean crisp contrast */
 input, textarea, select {
-  color: #2c2e2a;
+  color: #0f172a;
 }
 
 input:focus, textarea:focus, select:focus {
@@ -120,12 +163,118 @@ input:focus, textarea:focus, select:focus {
 }
 
 /* ==========================================================================
+   GLOBAL MAPPINGS: PURGE PALE DIRTY YELLOWS & WASHED GREENS IN FAVOR OF VIBRANT TECH PALETTE
+   ========================================================================== */
+
+/* Replace muddy dirty-yellow #f5f1e4 with modern crisp slate/white */
+.bg-\[\#f5f1e4\],
+.bg-\[\#f5f1e4\]\/90,
+.bg-\[\#f5f1e4\]\/80 {
+  background-color: #f8fafc !important;
+}
+
+.bg-\[\#f5f1e4\]\/70,
+.bg-\[\#f5f1e4\]\/60 {
+  background-color: rgba(248, 250, 252, 0.75) !important;
+}
+
+.bg-\[\#f5f1e4\]\/50,
+.bg-\[\#f5f1e4\]\/40,
+.bg-\[\#f5f1e4\]\/30 {
+  background-color: rgba(241, 245, 249, 0.6) !important;
+}
+
+.hover\:bg-\[\#f5f1e4\]:hover,
+.hover\:bg-\[\#eae5d7\]:hover,
+.hover\:bg-\[\#e0dbce\]:hover {
+  background-color: #f1f5f9 !important;
+}
+
+.border-\[\#f5f1e4\],
+.border-\[\#e0dbce\],
+.border-\[\#e5e1d5\],
+.border-\[\#d5d5d4\] {
+  border-color: #e2e8f0 !important;
+}
+
+.hover\:border-\[\#d5d5d4\]:hover {
+  border-color: #cbd5e1 !important;
+}
+
+/* Deep razor-sharp slate ink */
+.text-\[\#2c2e2a\] {
+  color: #0f172a !important;
+}
+
+.text-\[\#80827f\],
+.text-\[\#9a9c98\] {
+  color: #64748b !important;
+}
+
+.bg-\[\#e0dbce\],
+.bg-\[\#eadecd\],
+.bg-\[\#ebe7dc\] {
+  background-color: #f1f5f9 !important;
+}
+
+/* Replace pale murky green (#8ed462) with vibrant saturated Emerald (#10B981) */
+.bg-\[\#8ed462\] {
+  background-color: #10B981 !important;
+  color: #ffffff !important;
+}
+
+.text-\[\#8ed462\] {
+  color: #10B981 !important;
+}
+
+.border-\[\#8ed462\],
+.border-\[\#8ed462\]\/40 {
+  border-color: #10B981 !important;
+}
+
+.hover\:bg-\[\#7ec452\]:hover {
+  background-color: #059669 !important;
+}
+
+/* Replace washed coral (#ff705d) with vibrant Google Red (#EF4444) */
+.bg-\[\#ff705d\] {
+  background-color: #EF4444 !important;
+  color: #ffffff !important;
+}
+
+.text-\[\#ff705d\] {
+  color: #EF4444 !important;
+}
+
+.border-\[\#ff705d\] {
+  border-color: #EF4444 !important;
+}
+
+.hover\:bg-\[\#ee6350\]:hover {
+  background-color: #DC2626 !important;
+}
+
+/* Replace pale sky blue (#2ba0ff) with vibrant electric blue (#2563EB) */
+.bg-\[\#2ba0ff\] {
+  background-color: #2563EB !important;
+  color: #ffffff !important;
+}
+
+.text-\[\#2ba0ff\] {
+  color: #2563EB !important;
+}
+
+/* Replace dirty yellow (#f5e211) with rich warm gold (#F59E0B) */
+.bg-\[\#f5e211\],
+.bg-\[\#ffd600\] {
+  background-color: #F59E0B !important;
+}
+
+/* ==========================================================================
    MINDMARKET ANIMATION ENGINE & EASING TOKENS
-   Reverse-engineered from mindmarket.com
    ========================================================================== */
 
 :root {
-  /* Signature MindMarket Easing Curves */
   --ease-mindmarket: cubic-bezier(.38, .005, .215, 1);
   --ease-bounce: cubic-bezier(.17, .67, .3, 1.33);
   --ease-wave: cubic-bezier(.455, .03, .515, .955);
@@ -194,3 +343,78 @@ html.lenis, html.lenis body {
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
+
+/* ==========================================================================
+   HARDWARE-ACCELERATED COMPOSITOR FLOAT ANIMATIONS
+   Zero JS main thread overhead, executes purely on GPU compositor.
+   ========================================================================== */
+@keyframes hero-float-1 {
+  0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg); }
+  50% { transform: translate3d(0, -10px, 0) rotate(6deg); }
+}
+
+@keyframes hero-float-2 {
+  0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg); }
+  50% { transform: translate3d(0, 11px, 0) rotate(-8deg); }
+}
+
+@keyframes hero-float-3 {
+  0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg); }
+  50% { transform: translate3d(0, -8px, 0) rotate(12deg); }
+}
+
+@keyframes hero-float-4 {
+  0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg); }
+  50% { transform: translate3d(0, 9px, 0) rotate(-6deg); }
+}
+
+@keyframes hero-cloud-drift-1 {
+  0%, 100% { transform: translate3d(-10px, 0, 0); }
+  50% { transform: translate3d(10px, -5px, 0); }
+}
+
+@keyframes hero-cloud-drift-2 {
+  0%, 100% { transform: translate3d(8px, 0, 0); }
+  50% { transform: translate3d(-8px, 4px, 0); }
+}
+
+@keyframes hero-spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.anim-float-1 {
+  animation: hero-float-1 6s ease-in-out infinite;
+  will-change: transform;
+}
+
+.anim-float-2 {
+  animation: hero-float-2 7s ease-in-out infinite;
+  will-change: transform;
+}
+
+.anim-float-3 {
+  animation: hero-float-3 8s ease-in-out infinite;
+  will-change: transform;
+}
+
+.anim-float-4 {
+  animation: hero-float-4 7.5s ease-in-out infinite;
+  will-change: transform;
+}
+
+.anim-drift-1 {
+  animation: hero-cloud-drift-1 16s ease-in-out infinite;
+  will-change: transform;
+}
+
+.anim-drift-2 {
+  animation: hero-cloud-drift-2 13s ease-in-out infinite;
+  will-change: transform;
+}
+
+.anim-spin-daisy {
+  animation: hero-spin-slow 34s linear infinite;
+  will-change: transform;
+}
+
