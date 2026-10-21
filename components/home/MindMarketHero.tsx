@@ -2,9 +2,10 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { Sparkles } from "lucide-react";
+import { Sparkles, ArrowRight } from "lucide-react";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "@/lib/firebase";
 
 // =============================================================================
 // GOOGLE LABS ORGANIC SHAPES & KINETIC PILLS (Exact Match to Footer Physics Suite)
@@ -14,10 +15,8 @@ import { Sparkles } from "lucide-react";
 function YellowHexagon({ className = "" }: { className?: string }) {
   return (
     <motion.div
-      animate={{ y: [0, -10, 0], rotate: [0, 6, 0] }}
-      transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
       whileHover={{ scale: 1.18, rotate: 18 }}
-      className={`cursor-pointer select-none drop-shadow-sm ${className}`}
+      className={`cursor-pointer select-none drop-shadow-sm anim-float-1 ${className}`}
       title="Yellow Hexagon"
     >
       <svg viewBox="0 0 100 100" className="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24">
@@ -54,14 +53,12 @@ function BlueWavyRosette({ className = "" }: { className?: string }) {
 
   return (
     <motion.div
-      animate={{ y: [0, 11, 0], rotate: [0, -8, 0] }}
-      transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 0.4 }}
       whileHover={{ scale: 1.18, rotate: -25 }}
-      className={`cursor-pointer select-none drop-shadow-sm ${className}`}
+      className={`cursor-pointer select-none drop-shadow-sm anim-float-2 ${className}`}
       title="Blue Wavy Starburst"
     >
       <svg viewBox="0 0 100 100" className="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24">
-        <path d={pathD} fill="#5483F6" />
+        <path d={pathD} fill="#2563EB" />
       </svg>
     </motion.div>
   );
@@ -71,10 +68,8 @@ function BlueWavyRosette({ className = "" }: { className?: string }) {
 function PeriwinkleDome({ className = "" }: { className?: string }) {
   return (
     <motion.div
-      animate={{ y: [0, -9, 0], rotate: [0, 6, 0] }}
-      transition={{ duration: 8, repeat: Infinity, ease: "easeInOut", delay: 1 }}
       whileHover={{ scale: 1.18, rotate: 12 }}
-      className={`cursor-pointer select-none drop-shadow-sm ${className}`}
+      className={`cursor-pointer select-none drop-shadow-sm anim-float-3 ${className}`}
       title="Periwinkle Dome"
     >
       <svg viewBox="0 0 110 80" className="w-18 h-14 sm:w-24 sm:h-18 lg:w-28 lg:h-20">
@@ -95,14 +90,12 @@ function PeriwinkleDome({ className = "" }: { className?: string }) {
 function OrangeClover({ className = "" }: { className?: string }) {
   return (
     <motion.div
-      animate={{ y: [0, 9, 0], rotate: [0, 10, 0] }}
-      transition={{ duration: 7.5, repeat: Infinity, ease: "easeInOut", delay: 0.8 }}
       whileHover={{ scale: 1.18, rotate: 45 }}
-      className={`cursor-pointer select-none drop-shadow-sm ${className}`}
+      className={`cursor-pointer select-none drop-shadow-sm anim-float-4 ${className}`}
       title="Orange Clover"
     >
       <svg viewBox="0 0 100 100" className="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24">
-        <g fill="#FF7B47">
+        <g fill="#EF4444">
           <circle cx="50" cy="27" r="21" />
           <circle cx="73" cy="50" r="21" />
           <circle cx="50" cy="73" r="21" />
@@ -118,10 +111,8 @@ function OrangeClover({ className = "" }: { className?: string }) {
 function PinkCloud({ className = "" }: { className?: string }) {
   return (
     <motion.div
-      animate={{ y: [0, -8, 0], rotate: [0, -5, 0] }}
-      transition={{ duration: 6.5, repeat: Infinity, ease: "easeInOut", delay: 1.2 }}
       whileHover={{ scale: 1.18, rotate: -12 }}
-      className={`cursor-pointer select-none drop-shadow-sm ${className}`}
+      className={`cursor-pointer select-none drop-shadow-sm anim-float-3 ${className}`}
       title="Pink Scallop Cloud"
     >
       <svg viewBox="0 0 130 80" className="w-20 h-14 sm:w-26 sm:h-18 lg:w-30 lg:h-20">
@@ -138,18 +129,16 @@ function PinkCloud({ className = "" }: { className?: string }) {
   );
 }
 
-// 6. Lime Green 4-Leaf Clover (#C6EB3D) - Seamless organic clover
+// 6. Lime Green 4-Leaf Clover (#10B981) - Seamless organic clover
 function LimeClover({ className = "" }: { className?: string }) {
   return (
     <motion.div
-      animate={{ y: [0, -10, 0], rotate: [0, -8, 0] }}
-      transition={{ duration: 7.2, repeat: Infinity, ease: "easeInOut", delay: 0.3 }}
       whileHover={{ scale: 1.18, rotate: -35 }}
-      className={`cursor-pointer select-none drop-shadow-sm ${className}`}
-      title="Lime Green Clover"
+      className={`cursor-pointer select-none drop-shadow-sm anim-float-2 ${className}`}
+      title="Emerald Clover"
     >
       <svg viewBox="0 0 100 100" className="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24">
-        <g fill="#C6EB3D">
+        <g fill="#10B981">
           <circle cx="50" cy="27" r="21" />
           <circle cx="73" cy="50" r="21" />
           <circle cx="50" cy="73" r="21" />
@@ -165,37 +154,30 @@ function LimeClover({ className = "" }: { className?: string }) {
 function CoralDonut({ className = "" }: { className?: string }) {
   return (
     <motion.div
-      animate={{ y: [0, 8, 0], rotate: [0, 15, 0] }}
-      transition={{ duration: 6.8, repeat: Infinity, ease: "easeInOut", delay: 0.6 }}
       whileHover={{ scale: 1.2, rotate: 45 }}
-      className={`cursor-pointer select-none drop-shadow-sm ${className}`}
+      className={`cursor-pointer select-none drop-shadow-sm anim-float-1 ${className}`}
       title="Coral Ring"
     >
       <svg viewBox="0 0 100 100" className="w-12 h-12 sm:w-16 sm:h-16 lg:w-18 lg:h-18">
         <path
           d="M 50 14 A 36 36 0 1 0 50 86 A 36 36 0 1 0 50 14 Z M 50 32 A 18 18 0 1 1 50 68 A 18 18 0 1 1 50 32 Z"
-          fill="#FF705D"
+          fill="#EF4444"
         />
       </svg>
     </motion.div>
   );
 }
 
-// 8. Sunshine 8-Petal Daisy Starburst (#FBBC04 / #FCE72D) - Google Labs floral pattern
+// 8. Sunshine 8-Petal Daisy Starburst - Google Labs floral pattern
 function DaisyStarburst({ className = "" }: { className?: string }) {
   return (
     <motion.div
-      animate={{ y: [0, -7, 0], rotate: [0, 360] }}
-      transition={{
-        y: { duration: 5.5, repeat: Infinity, ease: "easeInOut" },
-        rotate: { duration: 34, repeat: Infinity, ease: "linear" },
-      }}
       whileHover={{ scale: 1.25 }}
-      className={`cursor-pointer select-none drop-shadow-sm ${className}`}
+      className={`cursor-pointer select-none drop-shadow-sm anim-spin-daisy ${className}`}
       title="Sunshine Daisy"
     >
       <svg viewBox="0 0 100 100" className="w-14 h-14 sm:w-16 sm:h-16 lg:w-20 lg:h-20">
-        <g fill="#FBBC04" transform="translate(50, 50)">
+        <g fill="#F59E0B" transform="translate(50, 50)">
           {[0, 45, 90, 135, 180, 225, 270, 315].map((deg) => (
             <ellipse key={deg} cx="0" cy="-28" rx="8" ry="15" transform={`rotate(${deg})`} />
           ))}
@@ -210,16 +192,14 @@ function DaisyStarburst({ className = "" }: { className?: string }) {
 function GoogleCodeToken({ className = "" }: { className?: string }) {
   return (
     <motion.div
-      animate={{ y: [0, 7, 0], rotate: [0, -5, 0] }}
-      transition={{ duration: 6.2, repeat: Infinity, ease: "easeInOut", delay: 0.9 }}
       whileHover={{ scale: 1.15, rotate: 0 }}
-      className={`cursor-pointer select-none drop-shadow-sm ${className}`}
+      className={`cursor-pointer select-none drop-shadow-sm anim-float-4 ${className}`}
       title="GDG Code Token"
     >
-      <div className="w-13 h-13 sm:w-15 sm:h-15 rounded-2xl bg-white border border-[#d5d5d4] flex items-center justify-center shadow-xs">
+      <div className="w-13 h-13 sm:w-15 sm:h-15 rounded-2xl bg-white border border-slate-200 flex items-center justify-center shadow-xs">
         <svg viewBox="0 0 40 40" className="w-8 h-8">
-          <path d="M 17 12 L 9 20 L 17 28" fill="none" stroke="#4285F4" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" />
-          <path d="M 23 12 L 31 20 L 23 28" fill="none" stroke="#34A853" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M 17 12 L 9 20 L 17 28" fill="none" stroke="#2563EB" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M 23 12 L 31 20 L 23 28" fill="none" stroke="#10B981" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
       </div>
     </motion.div>
@@ -229,10 +209,8 @@ function GoogleCodeToken({ className = "" }: { className?: string }) {
 // 10. Fluffy Paper-Cut Cloud (#FFFFFF) - Pure white storybook cloud with gentle horizontal drift
 function PaperCutCloud({ className = "", scale = 1 }: { className?: string; scale?: number }) {
   return (
-    <motion.div
-      animate={{ x: [-10, 10, -10], y: [0, -5, 0] }}
-      transition={{ duration: 16, repeat: Infinity, ease: "easeInOut" }}
-      className={`select-none pointer-events-none drop-shadow-[0_2px_8px_rgba(0,0,0,0.03)] ${className}`}
+    <div
+      className={`select-none pointer-events-none drop-shadow-[0_2px_8px_rgba(0,0,0,0.03)] anim-drift-1 ${className}`}
       style={{ transform: `scale(${scale})` }}
     >
       <svg width="190" height="95" viewBox="0 0 190 95" fill="none">
@@ -243,17 +221,15 @@ function PaperCutCloud({ className = "", scale = 1 }: { className?: string; scal
           <circle cx="136" cy="44" r="26" />
         </g>
       </svg>
-    </motion.div>
+    </div>
   );
 }
 
 // 11. Small Companion Cloud (#FFFFFF)
 function SmallCloud({ className = "" }: { className?: string }) {
   return (
-    <motion.div
-      animate={{ x: [8, -8, 8], y: [0, 4, 0] }}
-      transition={{ duration: 13, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
-      className={`select-none pointer-events-none drop-shadow-[0_2px_8px_rgba(0,0,0,0.03)] ${className}`}
+    <div
+      className={`select-none pointer-events-none drop-shadow-[0_2px_8px_rgba(0,0,0,0.03)] anim-drift-2 ${className}`}
     >
       <svg width="130" height="70" viewBox="0 0 130 70" fill="none">
         <g fill="#FFFFFF" opacity="0.95">
@@ -263,7 +239,7 @@ function SmallCloud({ className = "" }: { className?: string }) {
           <circle cx="102" cy="38" r="16" />
         </g>
       </svg>
-    </motion.div>
+    </div>
   );
 }
 
@@ -289,14 +265,12 @@ function InteractiveMascotVideo() {
       <motion.button
         type="button"
         onClick={cycleGreeting}
-        animate={{ y: [0, -4, 0] }}
-        transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
         whileHover={{ scale: 1.08 }}
         whileTap={{ scale: 0.94 }}
-        className="absolute -top-6 -left-6 sm:-left-12 z-30 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#ffffff] border border-[#d5d5d4] shadow-md text-[11px] sm:text-xs font-semibold text-[#2c2e2a] hover:border-[#2c2e2a]/40 transition-all cursor-pointer select-none whitespace-nowrap"
+        className="absolute -top-6 -left-6 sm:-left-12 z-30 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white border border-slate-200 shadow-md text-[11px] sm:text-xs font-semibold text-[#0f172a] hover:border-slate-400 transition-all cursor-pointer select-none whitespace-nowrap anim-float-1"
         title="Click to interact with the mascot!"
       >
-        <span className="w-2 h-2 rounded-full bg-[#34A853] animate-pulse" />
+        <span className="w-2 h-2 rounded-full bg-[#10B981] animate-pulse" />
         <AnimatePresence mode="wait">
           <motion.span
             key={greetingIndex}
@@ -308,33 +282,29 @@ function InteractiveMascotVideo() {
             {greetings[greetingIndex]}
           </motion.span>
         </AnimatePresence>
-        <Sparkles className="w-3 h-3 text-[#fbbc04]" />
+        <Sparkles className="w-3 h-3 text-[#F59E0B]" />
       </motion.button>
 
-      {/* 2D Animated Mascot Video */}
+      {/* 2D Animated Mascot Video with Robust Poster & Fallback */}
       <motion.div
         onClick={cycleGreeting}
-        animate={{ y: [0, -5, 0] }}
-        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.96 }}
-        className="relative w-[150px] sm:w-[195px] md:w-[230px] lg:w-[260px] aspect-square cursor-pointer"
+        className="relative w-[150px] sm:w-[195px] md:w-[230px] lg:w-[260px] aspect-square cursor-pointer anim-float-2"
       >
         <video
           autoPlay
           loop
           muted
           playsInline
+          poster="/gdg-mascot.png"
           className="w-full h-full object-contain pointer-events-none select-none"
         >
           <source src="/mascot.webm" type="video/webm; codecs=vp9" />
-          <Image
-            src="/mascot-animated.webp"
-            alt="GDG AJCE Mascot Waving"
-            width={260}
-            height={260}
-            unoptimized
-            priority
+          <source src="/mascot.webm" type="video/webm" />
+          <img
+            src="/gdg-mascot.png"
+            alt="GDG AJCE Mascot"
             className="w-full h-full object-contain pointer-events-none select-none"
           />
         </video>
@@ -344,6 +314,22 @@ function InteractiveMascotVideo() {
 }
 
 export default function MindMarketHero() {
+  const [driveOpen, setDriveOpen] = useState(false);
+
+  useEffect(() => {
+    const checkDrive = async () => {
+      try {
+        const snap = await getDoc(doc(db, "settings", "execomRecruitment"));
+        if (snap.exists() && snap.data()?.isOpen) {
+          setDriveOpen(true);
+        }
+      } catch (e) {
+        console.error("Error checking recruitment status:", e);
+      }
+    };
+    checkDrive();
+  }, []);
+
   return (
     <section className="relative w-full bg-transparent text-[#2c2e2a] pt-10 sm:pt-14 pb-24 sm:pb-28 md:pb-20 px-4 sm:px-6 select-none overflow-hidden">
       
@@ -440,17 +426,17 @@ export default function MindMarketHero() {
       <div className="max-w-[1200px] mx-auto text-center flex flex-col items-center relative">
 
         {/* CHAPTER IDENTITY PILL CHIP */}
-        <div className="inline-flex flex-wrap items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 rounded-[50px] bg-[#ffffff] border border-[#d5d5d4] text-[11px] sm:text-[13px] font-medium text-[#2c2e2a] mb-6 sm:mb-8 md:mb-10 shadow-xs max-w-[320px] sm:max-w-none text-center">
-          <span className="w-2 h-2 rounded-full bg-[#8ed462] shrink-0" />
+        <div className="inline-flex flex-wrap items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 rounded-[50px] bg-white border border-slate-200 text-[11px] sm:text-[13px] font-semibold text-[#0f172a] mb-6 sm:mb-8 md:mb-10 shadow-sm max-w-[320px] sm:max-w-none text-center">
+          <span className="w-2 h-2 rounded-full bg-[#10B981] shrink-0 animate-pulse" />
           <span>Google Developer Groups on Campus</span>
-          <span className="text-[#80827f] hidden sm:inline">•</span>
-          <span className="text-[#80827f] hidden sm:inline">Amal Jyothi College of Engineering</span>
+          <span className="text-slate-400 hidden sm:inline">•</span>
+          <span className="text-slate-600 hidden sm:inline">Amal Jyothi College of Engineering</span>
         </div>
 
         {/* HERO DISPLAY: GDG AJCE IN TWO LINES OF ULTRA-BOLD TYPOGRAPHY WITH RIGHT-CORNER MASCOT */}
         <div className="relative w-full max-w-4xl mx-auto my-3 sm:my-5 flex flex-col items-center justify-center">
           {/* Giant Ultra Bold 2-Line Headline */}
-          <h1 className="font-black text-[96px] sm:text-[145px] md:text-[185px] lg:text-[215px] text-[#2c2e2a] tracking-[-0.065em] leading-[0.82] m-0 p-0 select-none uppercase text-center">
+          <h1 className="font-black text-[96px] sm:text-[145px] md:text-[185px] lg:text-[215px] text-[#0f172a] tracking-[-0.065em] leading-[0.82] m-0 p-0 select-none uppercase text-center">
             <span className="block">GDG</span>
             <span className="block">
               AJC<span className="relative">E<span id="scroll-path-origin" className="absolute bottom-2 -right-1 w-0 h-0 pointer-events-none select-none" /></span>
@@ -466,33 +452,44 @@ export default function MindMarketHero() {
         </div>
 
         {/* HERO TAGLINE */}
-        <p className="text-[24px] sm:text-[32px] md:text-[40px] font-medium text-[#2c2e2a] tracking-[-0.04em] leading-[1.1] max-w-3xl mx-auto">
+        <p className="text-[24px] sm:text-[32px] md:text-[40px] font-bold text-[#0f172a] tracking-[-0.04em] leading-[1.1] max-w-3xl mx-auto">
           Where Student Innovators Build Real Software.
         </p>
 
         {/* SUBHEADLINE */}
-        <p className="mt-4 text-[17px] sm:text-[19px] font-normal text-[#5f6368] max-w-2xl mx-auto leading-[1.5]">
-          A warm editorial community where developers build with Google AI, Cloud, Android, and Open Source. Zero chaos, pure hands-on codelabs.
+        <p className="mt-4 text-[17px] sm:text-[19px] font-normal text-slate-600 max-w-2xl mx-auto leading-[1.5]">
+          A high-energy student community where developers build with Google AI, Cloud, Android, and Open Source. Zero chaos, pure hands-on codelabs.
         </p>
 
-        {/* ACTION BUTTON GROUP (Explore Events & About Us) */}
+        {/* ACTION BUTTON GROUP (Explore Events & About Us & Apply for Execom) */}
         <div className="mt-8 flex flex-wrap items-center justify-center gap-3.5 z-10">
+          {driveOpen && (
+            <Link
+              href="/execom"
+              className="group inline-flex items-center gap-2.5 px-6 sm:px-7 py-3 rounded-[50px] bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-[15px] font-bold transition-all duration-300 hover:-translate-y-[1px] active:scale-95 shadow-md shadow-blue-500/20"
+            >
+              <Sparkles className="w-4 h-4 text-[#FDE047]" />
+              <span>Join Community / Apply for Execom</span>
+              <span className="w-2.5 h-2.5 rounded-full bg-[#10B981] action-dot-expand shadow-xs" />
+            </Link>
+          )}
+
           {/* Explore Events Button */}
           <Link
             href="/programs"
-            className="group inline-flex items-center gap-2.5 px-6 sm:px-7 py-3 rounded-[50px] bg-[#ff705d] hover:bg-[#ee6350] text-[#ffffff] text-[15px] font-medium transition-all duration-300 hover:-translate-y-[1px] active:scale-95 shadow-xs"
+            className="group inline-flex items-center gap-2.5 px-6 sm:px-7 py-3 rounded-[50px] bg-[#EF4444] hover:bg-[#DC2626] text-white text-[15px] font-semibold transition-all duration-300 hover:-translate-y-[1px] active:scale-95 shadow-md shadow-red-500/20"
           >
             <span>Explore Events</span>
-            <span className="w-2.5 h-2.5 rounded-full bg-[#ffffff] action-dot-expand" />
+            <span className="w-2.5 h-2.5 rounded-full bg-white action-dot-expand shadow-xs" />
           </Link>
 
           {/* About Us Button */}
           <Link
             href="/about"
-            className="group inline-flex items-center gap-2.5 px-6 sm:px-7 py-3 rounded-[50px] bg-[#ffffff] hover:bg-[#eae5d7] text-[#2c2e2a] text-[15px] font-medium border border-[#d5d5d4] hover:border-[#2c2e2a]/30 transition-all duration-300 hover:-translate-y-[1px] active:scale-95 shadow-xs"
+            className="group inline-flex items-center gap-2.5 px-6 sm:px-7 py-3 rounded-[50px] bg-white hover:bg-slate-50 text-[#0f172a] text-[15px] font-semibold border border-slate-200 hover:border-slate-300 transition-all duration-300 hover:-translate-y-[1px] active:scale-95 shadow-sm"
           >
             <span>About Us</span>
-            <span className="w-2.5 h-2.5 rounded-full bg-[#2ba0ff] action-dot-expand" />
+            <span className="w-2.5 h-2.5 rounded-full bg-[#2563EB] action-dot-expand shadow-xs" />
           </Link>
         </div>
 

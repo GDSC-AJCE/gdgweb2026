@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { Save, AlertCircle } from "lucide-react";
+import { Switch } from "@/components/ui/switch";
+import { Button } from "@/components/ui/Button";
 
 interface WebsiteManagementTabProps {
   adminName?: string | null;
@@ -102,14 +104,14 @@ export default function WebsiteManagementTab({ adminName }: WebsiteManagementTab
               Toggle the visibility of different sections on the homepage. Useful for hiding sections during maintenance or when no data is available.
             </p>
           </div>
-          <button
+          <Button
             onClick={handleSave}
             disabled={saving}
-            className="shrink-0 inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-[50px] bg-[#2c2e2a] text-white text-xs font-semibold hover:bg-[#1a1a1a] transition-all shadow-md active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="shrink-0 h-10 px-5 rounded-xl bg-[#2c2e2a] hover:bg-[#1a1a1a] text-white text-xs font-semibold shadow-sm cursor-pointer"
           >
-            <Save className="w-4 h-4" />
+            <Save className="w-4 h-4 mr-2" />
             <span>{saving ? "Saving..." : "Save Configuration"}</span>
-          </button>
+          </Button>
         </div>
 
         {saveMessage && (
@@ -135,22 +137,11 @@ export default function WebsiteManagementTab({ adminName }: WebsiteManagementTab
                   <h4 className="text-sm font-semibold text-[#2c2e2a]">{section.label}</h4>
                   <p className="text-xs text-[#80827f] mt-1">{section.description}</p>
                 </div>
-                <button
-                  onClick={() => handleToggle(section.id as keyof HomepageConfig)}
-                  className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer items-center justify-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-[#2ba0ff] focus:ring-offset-2 ${
-                    isEnabled ? "bg-[#2ba0ff]" : "bg-gray-200"
-                  }`}
-                  role="switch"
-                  aria-checked={isEnabled}
-                >
-                  <span className="sr-only">Toggle {section.label}</span>
-                  <span
-                    aria-hidden="true"
-                    className={`pointer-events-none absolute left-0.5 inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
-                      isEnabled ? "translate-x-5" : "translate-x-0"
-                    }`}
-                  />
-                </button>
+                <Switch
+                  checked={Boolean(isEnabled)}
+                  onCheckedChange={() => handleToggle(section.id as keyof HomepageConfig)}
+                  aria-label={`Toggle ${section.label}`}
+                />
               </div>
             );
           })}

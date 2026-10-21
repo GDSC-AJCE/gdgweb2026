@@ -10,6 +10,7 @@ import { useDialog } from "@/context/DialogContext";
 import TextLoop from "@/components/ui/TextLoop";
 import { Send, Copy, Check, Sparkles } from "lucide-react";
 import { FaGithub, FaLinkedinIn, FaXTwitter, FaDiscord, FaWhatsapp } from "react-icons/fa6";
+import { Button } from "@/components/ui/Button";
 
 export default function MindMarketContact() {
   const dialog = useDialog();
@@ -176,19 +177,13 @@ export default function MindMarketContact() {
           transition={{ duration: 0.6 }}
           className="space-y-3.5 max-w-2xl mx-auto"
         >
-          {/* Chapter Pill Badge */}
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-[50px] bg-white border border-[#d5d5d4] text-[13px] font-medium text-[#2c2e2a] shadow-xs">
-            <span className="w-2 h-2 rounded-full bg-[#ff705d] animate-pulse" />
-            <span>Direct Desk & Chapter Dispatch</span>
-          </div>
-
-          {/* Proper Headline */}
-          <h2 className="text-[38px] sm:text-[54px] md:text-[64px] font-medium tracking-[-0.04em] text-[#2c2e2a] leading-[1.05]">
-            Get in Touch with Our Chapter
+          {/* Headline */}
+          <h2 className="text-[38px] sm:text-[54px] md:text-[64px] font-bold tracking-[-0.04em] text-[#0f172a] leading-[1.05]">
+            Get in Touch
           </h2>
 
           {/* Subtitle */}
-          <p className="text-sm sm:text-[16px] font-normal text-[#80827f] max-w-lg mx-auto leading-relaxed">
+          <p className="text-sm sm:text-[16px] font-normal text-slate-600 max-w-lg mx-auto leading-relaxed">
             Have inquiries about workshops, speaker invitations, hackathon partnerships, or chapter tracks? Send our organizing crew a direct message.
           </p>
         </motion.div>
@@ -200,14 +195,14 @@ export default function MindMarketContact() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.65, ease: [0.38, 0.005, 0.215, 1.0] }}
-            className="rounded-[36px] sm:rounded-[40px] bg-white border border-[#e5e1d5] shadow-[0_12px_36px_rgba(0,0,0,0.04)] overflow-hidden text-left"
+            className="rounded-[32px] sm:rounded-[36px] bg-white border border-slate-200 shadow-md overflow-hidden text-left"
           >
-            <form onSubmit={handleSubmit} className="divide-y divide-[#ece7db]">
+            <form onSubmit={handleSubmit} className="divide-y divide-slate-100">
               
               {/* Row 1: Name */}
-              <div className="px-7 py-5 sm:py-5.5 bg-[#fdfbf7] transition-colors focus-within:bg-white">
-                <label className="block text-[11px] font-mono uppercase tracking-wider text-[#80827f] mb-1">
-                  Full Name <span className="text-[#ff705d]">*</span>
+              <div className="px-7 py-5 sm:py-5.5 bg-slate-50/40 hover:bg-slate-50/80 transition-colors focus-within:bg-white">
+                <label className="block text-[11px] font-mono uppercase tracking-wider text-slate-500 font-semibold mb-1">
+                  Full Name <span className="text-[#EF4444]">*</span>
                 </label>
                 <input
                   type="text"
@@ -215,14 +210,14 @@ export default function MindMarketContact() {
                   value={formData.name}
                   onFocus={() => setMascotSpeech("What should we call you? 😊")}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="w-full bg-transparent text-sm sm:text-[16px] text-[#2c2e2a] placeholder-[#9a9c98] font-normal outline-none"
+                  className="w-full bg-transparent text-sm sm:text-[16px] text-[#0f172a] placeholder-slate-400 font-medium outline-none"
                 />
               </div>
 
               {/* Row 2: Email */}
-              <div className="px-7 py-5 sm:py-5.5 bg-[#fdfbf7] transition-colors focus-within:bg-white">
-                <label className="block text-[11px] font-mono uppercase tracking-wider text-[#80827f] mb-1">
-                  Email Address <span className="text-[#ff705d]">*</span>
+              <div className="px-7 py-5 sm:py-5.5 bg-slate-50/40 hover:bg-slate-50/80 transition-colors focus-within:bg-white">
+                <label className="block text-[11px] font-mono uppercase tracking-wider text-slate-500 font-semibold mb-1">
+                  Email Address <span className="text-[#EF4444]">*</span>
                 </label>
                 <input
                   type="email"
@@ -230,14 +225,14 @@ export default function MindMarketContact() {
                   value={formData.email}
                   onFocus={() => setMascotSpeech("We'll write back here! 📬")}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="w-full bg-transparent text-sm sm:text-[16px] text-[#2c2e2a] placeholder-[#9a9c98] font-normal outline-none"
+                  className="w-full bg-transparent text-sm sm:text-[16px] text-[#0f172a] placeholder-slate-400 font-medium outline-none"
                 />
               </div>
 
               {/* Row 3: Phone */}
-              <div className="px-7 py-5 sm:py-5.5 bg-[#fdfbf7] transition-colors focus-within:bg-white">
-                <label className="block text-[11px] font-mono uppercase tracking-wider text-[#80827f] mb-1">
-                  Phone Number <span className="text-[#80827f]/60 font-sans font-normal">(optional)</span>
+              <div className="px-7 py-5 sm:py-5.5 bg-slate-50/40 hover:bg-slate-50/80 transition-colors focus-within:bg-white">
+                <label className="block text-[11px] font-mono uppercase tracking-wider text-slate-500 font-semibold mb-1">
+                  Phone Number <span className="text-slate-400 font-sans font-normal">(optional)</span>
                 </label>
                 <input
                   type="tel"
@@ -245,14 +240,14 @@ export default function MindMarketContact() {
                   value={formData.phone}
                   onFocus={() => setMascotSpeech("Optional, but great for quick syncs! 📞")}
                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                  className="w-full bg-transparent text-sm sm:text-[16px] text-[#2c2e2a] placeholder-[#9a9c98] font-normal outline-none"
+                  className="w-full bg-transparent text-sm sm:text-[16px] text-[#0f172a] placeholder-slate-400 font-medium outline-none"
                 />
               </div>
 
               {/* Row 4: Message */}
-              <div className="px-7 py-5 sm:py-5.5 bg-[#fdfbf7] transition-colors focus-within:bg-white">
-                <label className="block text-[11px] font-mono uppercase tracking-wider text-[#80827f] mb-1">
-                  Message Details <span className="text-[#ff705d]">*</span>
+              <div className="px-7 py-5 sm:py-5.5 bg-slate-50/40 hover:bg-slate-50/80 transition-colors focus-within:bg-white">
+                <label className="block text-[11px] font-mono uppercase tracking-wider text-slate-500 font-semibold mb-1">
+                  Message Details <span className="text-[#EF4444]">*</span>
                 </label>
                 <textarea
                   rows={4}
@@ -260,21 +255,20 @@ export default function MindMarketContact() {
                   value={formData.message}
                   onFocus={() => setMascotSpeech("Tell us everything! ✨")}
                   onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                  className="w-full bg-transparent text-sm sm:text-[16px] text-[#2c2e2a] placeholder-[#9a9c98] font-normal outline-none resize-none leading-relaxed min-h-[110px]"
+                  className="w-full bg-transparent text-sm sm:text-[16px] text-[#0f172a] placeholder-slate-400 font-medium outline-none resize-none leading-relaxed min-h-[110px]"
                 />
               </div>
 
               {/* Row 5: Full-Width Submit Button */}
               <div>
-                <button
+                <Button
                   type="submit"
                   disabled={submitting}
-                  className="group w-full py-5 sm:py-5.5 bg-[#ff705d] hover:bg-[#ee6350] text-white font-medium text-[16px] sm:text-[17px] transition-all flex items-center justify-center gap-2.5 disabled:opacity-50 cursor-pointer active:scale-[0.99]"
+                  className="w-full h-14 sm:h-16 bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-bold text-base rounded-none transition-all flex items-center justify-center gap-2.5 disabled:opacity-50 cursor-pointer border-0 shadow-md shadow-blue-500/20"
                 >
-                  <Send className="w-4 h-4" />
+                  <Send className="w-4 h-4 mr-1" />
                   <span>{submitting ? "Submitting inquiry..." : "Send Message"}</span>
-                  <span className="w-2.5 h-2.5 rounded-full bg-white transition-all duration-300 group-hover:scale-125" />
-                </button>
+                </Button>
               </div>
             </form>
           </motion.div>

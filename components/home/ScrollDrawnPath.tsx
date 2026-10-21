@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useEffect, useState, RefObject } from "react";
-import { motion, useScroll, useSpring, useTransform } from "framer-motion";
+import React, { useEffect, useState, RefObject, useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 
 interface ScrollDrawnPathProps {
   containerRef: RefObject<HTMLDivElement | null>;
@@ -10,6 +10,7 @@ interface ScrollDrawnPathProps {
 export default function ScrollDrawnPath({ containerRef }: ScrollDrawnPathProps) {
   const [dimensions, setDimensions] = useState({ width: 1200, height: 3600 });
   const [startPoint, setStartPoint] = useState({ x: 760, y: 520 });
+  const resizeTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   // 1. Scroll progress relative to the entire home container
   const { scrollYProgress } = useScroll({
@@ -17,11 +18,10 @@ export default function ScrollDrawnPath({ containerRef }: ScrollDrawnPathProps) 
     offset: ["start start", "end end"],
   });
 
-  // 2. Direct, zero-lag scroll synchronization (Lenis already provides buttery smooth 60/120fps inertia)
-  // Eliminates double-damping, spring hysteresis, and artificial pace drops.
+  // 2. Direct, zero-lag scroll synchronization
   const pathLength = useTransform(scrollYProgress, [0, 1], [0.035, 1]);
 
-  // 3. Measure container & exact position of the letter 'E' (#scroll-path-origin)
+  // 3. Measure container & exact position of origin
   useEffect(() => {
     const updateMeasurements = () => {
       if (!containerRef.current) return;
@@ -60,19 +60,25 @@ export default function ScrollDrawnPath({ containerRef }: ScrollDrawnPathProps) 
 
     updateMeasurements();
 
+    const debouncedUpdate = () => {
+      if (resizeTimerRef.current) clearTimeout(resizeTimerRef.current);
+      resizeTimerRef.current = setTimeout(updateMeasurements, 150);
+    };
+
     // Re-measure after fonts & video load
     const timeout = setTimeout(updateMeasurements, 400);
 
-    const ro = new ResizeObserver(() => updateMeasurements());
+    const ro = new ResizeObserver(debouncedUpdate);
     if (containerRef.current) {
       ro.observe(containerRef.current);
     }
-    window.addEventListener("resize", updateMeasurements);
+    window.addEventListener("resize", debouncedUpdate, { passive: true });
 
     return () => {
       clearTimeout(timeout);
+      if (resizeTimerRef.current) clearTimeout(resizeTimerRef.current);
       ro.disconnect();
-      window.removeEventListener("resize", updateMeasurements);
+      window.removeEventListener("resize", debouncedUpdate);
     };
   }, [containerRef]);
 
@@ -81,7 +87,6 @@ export default function ScrollDrawnPath({ containerRef }: ScrollDrawnPathProps) 
   const rem = Math.max(1200, h - y0);
 
   // Generate dynamic, organic Bézier curves flowing down through the sections
-  // Starts directly behind mascot, swoops right, curves dynamically across Innovation Pathways and Chapter Arena
   const pathData = `
     M ${x0} ${y0}
     C ${x0 + 75} ${y0 + rem * 0.025}, ${w * 0.88} ${y0 + rem * 0.055}, ${w * 0.82} ${y0 + rem * 0.10}
@@ -101,67 +106,54 @@ export default function ScrollDrawnPath({ containerRef }: ScrollDrawnPathProps) 
       xmlns="http://www.w3.org/2000/svg"
     >
       <defs>
-        {/* 1. Four-Way Design System Gradient (Google Blue -> Coral Red -> Sunshine Yellow -> Fresh Green) */}
+        {/* Four-Way Design System Gradient (Google Electric Blue -> Crimson Red -> Warm Amber -> Emerald Green) */}
         <linearGradient id="fourWayBrandGradient" x1="0" y1="0" x2="0" y2="1">
-          {/* Blue Pop: #2ba0ff */}
-          <stop offset="0%" stopColor="#2ba0ff" stopOpacity="1" />
-          <stop offset="22%" stopColor="#2ba0ff" stopOpacity="1" />
-          {/* Coral Pop / Red: #ff705d */}
-          <stop offset="38%" stopColor="#ff705d" stopOpacity="1" />
-          <stop offset="55%" stopColor="#ff705d" stopOpacity="1" />
-          {/* Sunshine Pop / Yellow: #f5e211 */}
-          <stop offset="68%" stopColor="#f5e211" stopOpacity="1" />
-          <stop offset="82%" stopColor="#f5e211" stopOpacity="1" />
-          {/* Fresh Grass / Green: #8ed462 */}
-          <stop offset="93%" stopColor="#8ed462" stopOpacity="1" />
-          <stop offset="100%" stopColor="#8ed462" stopOpacity="1" />
+          {/* Electric Blue */}
+          <stop offset="0%" stopColor="#2563EB" stopOpacity="1" />
+          <stop offset="24%" stopColor="#2563EB" stopOpacity="1" />
+          {/* Crimson Red */}
+          <stop offset="38%" stopColor="#EF4444" stopOpacity="1" />
+          <stop offset="55%" stopColor="#EF4444" stopOpacity="1" />
+          {/* Warm Amber */}
+          <stop offset="68%" stopColor="#F59E0B" stopOpacity="1" />
+          <stop offset="82%" stopColor="#F59E0B" stopOpacity="1" />
+          {/* Emerald Green */}
+          <stop offset="93%" stopColor="#10B981" stopOpacity="1" />
+          <stop offset="100%" stopColor="#10B981" stopOpacity="1" />
         </linearGradient>
 
-        {/* 2. GPU-Accelerated Tiled Noise Pattern (Zero CPU overhead during scroll) */}
-        <pattern id="grainTile" width="128" height="128" patternUnits="userSpaceOnUse">
-          <image href="/noise.png" width="128" height="128" opacity="0.32" />
-        </pattern>
+        {/* Lightweight SVG Shadow filter */}
+        <filter id="pathGlow" x="-10%" y="-10%" width="120%" height="120%">
+          <feDropShadow dx="0" dy="2" stdDeviation="4" floodColor="#0f172a" floodOpacity="0.08" />
+        </filter>
       </defs>
 
       {/* Background track (faint dashed trail) */}
       <path
         d={pathData}
         fill="none"
-        stroke="#2c2e2a"
+        stroke="#cbd5e1"
         strokeWidth={14}
-        strokeDasharray="20 28"
-        strokeOpacity={0.16}
+        strokeDasharray="18 24"
+        strokeOpacity={0.45}
         strokeLinecap="round"
       />
 
-      {/* Primary Scroll-Drawn Animated Line with Four-Way Gradient */}
+      {/* Primary Scroll-Drawn Animated Line with Vibrant Google 4-Way Gradient */}
       <motion.path
         d={pathData}
         fill="none"
         stroke="url(#fourWayBrandGradient)"
-        strokeWidth={32}
+        strokeWidth={26}
         strokeLinecap="round"
         strokeLinejoin="round"
+        filter="url(#pathGlow)"
         style={{
           pathLength,
-          willChange: "stroke-dashoffset",
-        }}
-      />
-
-      {/* Organic Noise Grain Overlay (Tightly bound to the animated stroke) */}
-      <motion.path
-        d={pathData}
-        fill="none"
-        stroke="url(#grainTile)"
-        strokeWidth={32}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        style={{
-          pathLength,
-          mixBlendMode: "multiply",
           willChange: "stroke-dashoffset",
         }}
       />
     </svg>
   );
 }
+

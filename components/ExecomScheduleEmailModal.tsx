@@ -13,6 +13,7 @@ import { fmtDate, slotTime } from "@/lib/scheduler-utils";
 import { createAuditLog } from "@/lib/audit";
 import MDEditor, { commands } from "@uiw/react-md-editor";
 import { FaUnderline } from "react-icons/fa";
+import { Input } from "@/components/ui/Input";
 
 interface Recipient {
     id: string;
@@ -241,8 +242,8 @@ export default function ExecomScheduleEmailModal({ onClose, applications }: { on
                         <div className="flex-1 overflow-y-auto p-6 space-y-6">
                             <div>
                                 <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5 block">Subject Line</label>
-                                <input value={subject} onChange={e => setSubject(e.target.value)}
-                                    className="w-full bg-white/[0.04] border border-white/[0.1] rounded-xl px-4 py-2.5 text-sm text-white focus:border-[#4285F4] outline-none transition" />
+                                <Input value={subject} onChange={e => setSubject(e.target.value)}
+                                    className="w-full bg-white/[0.04] border border-white/[0.1] rounded-xl px-4 py-2.5 h-11 text-sm text-white focus:border-[#4285F4] transition" />
                             </div>
 
                             <div data-color-mode="dark" className="space-y-2">

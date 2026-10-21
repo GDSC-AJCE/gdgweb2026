@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { FaDiscord, FaReddit, FaTwitter } from "react-icons/fa";
 import Link from "next/link";
 import { useDialog } from "@/context/DialogContext";
+import { Button } from "@/components/ui/Button";
 
 export default function LabsStayConnected() {
   const dialog = useDialog();
@@ -100,13 +101,13 @@ export default function LabsStayConnected() {
               placeholder="Enter your email..."
               className="flex-1 px-5 py-2 text-xs text-black bg-transparent outline-none"
             />
-            <button
+            <Button
               type="submit"
               disabled={submitted}
-              className="px-6 py-2 rounded-full bg-[#1F1F1F] text-white text-xs font-semibold hover:bg-black transition"
+              className="h-8 px-5 rounded-full bg-[#1F1F1F] text-white text-xs font-semibold hover:bg-black transition cursor-pointer"
             >
               {submitted ? "Subscribed" : "Join"}
-            </button>
+            </Button>
           </motion.form>
         )}
 

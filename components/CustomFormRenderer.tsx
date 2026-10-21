@@ -1,6 +1,12 @@
 "use client";
 
+import React from "react";
 import { FormField } from "./CustomFormBuilder";
+import { Input } from "@/components/ui/Input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
+import { ChevronDown } from "lucide-react";
 
 export interface TeamMemberEntry {
     [fieldId: string]: any;
@@ -20,35 +26,38 @@ export function MemberFieldsForm({
     errors?: Record<string, string>;
 }) {
     return (
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
             {memberFields.map((mField) => (
                 <div key={mField.id} className="space-y-1.5">
-                    <label className="text-[10px] font-mono font-medium text-[#80827f] uppercase tracking-wider flex items-center justify-between">
+                    <Label className="text-xs font-semibold text-[#2c2e2a] flex items-center justify-between">
                         <span>{mField.label}</span>
-                        {mField.required && <span className="text-[#EA4335] text-[9px] font-mono">*Required</span>}
-                    </label>
+                        {mField.required && <span className="text-[#EA4335] text-[10px] font-mono">*Required</span>}
+                    </Label>
                     {mField.type === "select" ? (
-                        <select
-                            value={member[mField.id] || ""}
-                            onChange={(e) => onChange(mField.id, e.target.value)}
-                            className="w-full bg-[#f5f1e4] border border-[#d5d5d4] focus:border-[#4285F4] focus:bg-[#ffffff] rounded-2xl px-3.5 py-2.5 text-[#2c2e2a] text-xs outline-none transition cursor-pointer"
-                        >
-                            <option value="">Select option...</option>
-                            {mField.options?.map((opt: string, oIdx: number) => (
-                                <option key={oIdx} value={opt}>{opt}</option>
-                            ))}
-                        </select>
+                        <div className="relative">
+                            <select
+                                value={member[mField.id] || ""}
+                                onChange={(e) => onChange(mField.id, e.target.value)}
+                                className="flex h-10 w-full rounded-xl border border-[#d5d5d4] bg-white px-3.5 py-2 text-sm text-[#2c2e2a] shadow-xs transition-all duration-200 focus-visible:outline-none focus-visible:border-[#4285F4] focus-visible:ring-3 focus-visible:ring-[#4285F4]/20 hover:border-[#a0a29f] cursor-pointer appearance-none pr-10"
+                            >
+                                <option value="">Select option...</option>
+                                {mField.options?.map((opt: string, oIdx: number) => (
+                                    <option key={oIdx} value={opt}>{opt}</option>
+                                ))}
+                            </select>
+                            <ChevronDown className="absolute right-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#80827f] pointer-events-none" />
+                        </div>
                     ) : (
-                        <input
+                        <Input
                             type={mField.type === "number" ? "number" : mField.type === "email" ? "email" : mField.type === "phone" ? "tel" : "text"}
                             placeholder={mField.placeholder || ""}
                             value={member[mField.id] || ""}
                             onChange={(e) => onChange(mField.id, e.target.value)}
-                            className="w-full bg-[#f5f1e4] border border-[#d5d5d4] focus:border-[#4285F4] focus:bg-[#ffffff] rounded-2xl px-3.5 py-2.5 text-[#2c2e2a] text-xs outline-none transition placeholder:text-[#80827f]"
+                            error={Boolean(errors?.[`member_${index}_${mField.id}`])}
                         />
                     )}
                     {errors?.[`member_${index}_${mField.id}`] && (
-                        <p className="text-[#EA4335] text-[10px] mt-0.5">{errors[`member_${index}_${mField.id}`]}</p>
+                        <p className="text-[#EA4335] text-[11px] font-medium mt-0.5">{errors[`member_${index}_${mField.id}`]}</p>
                     )}
                 </div>
             ))}
@@ -83,99 +92,107 @@ export function CustomFieldsForm({
         <div className="space-y-4">
             {fields.map((field) => (
                 <div key={field.id} className="space-y-1.5">
-                    <label className="text-[10px] font-mono font-medium text-[#80827f] uppercase tracking-wider flex items-center justify-between">
+                    <Label className="text-xs font-semibold text-[#2c2e2a] flex items-center justify-between">
                         <span>{field.label}</span>
-                        {field.required && <span className="text-[#EA4335] text-[9px] font-mono">*Required</span>}
-                    </label>
+                        {field.required && <span className="text-[#EA4335] text-[10px] font-mono">*Required</span>}
+                    </Label>
 
                     {/* Text Input */}
                     {field.type === "text" && (
-                        <input
+                        <Input
                             type="text"
                             placeholder={field.placeholder || "Your answer"}
                             value={values[field.id] || ""}
                             onChange={(e) => handleChange(field.id, e.target.value)}
-                            className="w-full bg-[#f5f1e4] border border-[#d5d5d4] focus:border-[#4285F4] focus:bg-[#ffffff] rounded-2xl px-4 py-3 text-[#2c2e2a] text-xs outline-none transition placeholder:text-[#80827f]"
+                            error={Boolean(errors?.[field.id])}
                         />
                     )}
 
                     {/* Textarea */}
                     {field.type === "textarea" && (
-                        <textarea
+                        <Textarea
                             rows={3}
                             placeholder={field.placeholder || "Enter details..."}
                             value={values[field.id] || ""}
                             onChange={(e) => handleChange(field.id, e.target.value)}
-                            className="w-full bg-[#f5f1e4] border border-[#d5d5d4] focus:border-[#4285F4] focus:bg-[#ffffff] rounded-2xl px-4 py-3 text-[#2c2e2a] text-xs outline-none transition placeholder:text-[#80827f] resize-none"
+                            error={Boolean(errors?.[field.id])}
                         />
                     )}
 
                     {/* Number */}
                     {field.type === "number" && (
-                        <input
+                        <Input
                             type="number"
                             placeholder={field.placeholder || "0"}
                             value={values[field.id] || ""}
                             onChange={(e) => handleChange(field.id, e.target.value)}
-                            className="w-full bg-[#f5f1e4] border border-[#d5d5d4] focus:border-[#4285F4] focus:bg-[#ffffff] rounded-2xl px-4 py-3 text-[#2c2e2a] text-xs outline-none transition"
+                            error={Boolean(errors?.[field.id])}
                         />
                     )}
 
                     {/* Email */}
                     {field.type === "email" && (
-                        <input
+                        <Input
                             type="email"
                             placeholder={field.placeholder || "email@example.com"}
                             value={values[field.id] || ""}
                             onChange={(e) => handleChange(field.id, e.target.value)}
-                            className="w-full bg-[#f5f1e4] border border-[#d5d5d4] focus:border-[#4285F4] focus:bg-[#ffffff] rounded-2xl px-4 py-3 text-[#2c2e2a] text-xs outline-none transition placeholder:text-[#80827f]"
+                            error={Boolean(errors?.[field.id])}
                         />
                     )}
 
                     {/* Phone */}
                     {field.type === "phone" && (
-                        <input
+                        <Input
                             type="tel"
                             placeholder={field.placeholder || "+91 XXXXX XXXXX"}
                             value={values[field.id] || ""}
                             onChange={(e) => handleChange(field.id, e.target.value)}
-                            className="w-full bg-[#f5f1e4] border border-[#d5d5d4] focus:border-[#4285F4] focus:bg-[#ffffff] rounded-2xl px-4 py-3 text-[#2c2e2a] text-xs outline-none transition placeholder:text-[#80827f]"
+                            error={Boolean(errors?.[field.id])}
                         />
                     )}
 
                     {/* Select Dropdown */}
                     {field.type === "select" && (
-                        <select
-                            value={values[field.id] || ""}
-                            onChange={(e) => handleChange(field.id, e.target.value)}
-                            className="w-full bg-[#f5f1e4] border border-[#d5d5d4] focus:border-[#4285F4] focus:bg-[#ffffff] rounded-2xl px-4 py-3 text-[#2c2e2a] text-xs outline-none transition cursor-pointer"
-                        >
-                            <option value="">Select option...</option>
-                            {field.options?.map((opt, oIdx) => (
-                                <option key={oIdx} value={opt}>{opt}</option>
-                            ))}
-                        </select>
+                        <div className="relative">
+                            <select
+                                value={values[field.id] || ""}
+                                onChange={(e) => handleChange(field.id, e.target.value)}
+                                className="flex h-10 w-full rounded-xl border border-[#d5d5d4] bg-white px-3.5 py-2 text-sm text-[#2c2e2a] shadow-xs transition-all duration-200 focus-visible:outline-none focus-visible:border-[#4285F4] focus-visible:ring-3 focus-visible:ring-[#4285F4]/20 hover:border-[#a0a29f] cursor-pointer appearance-none pr-10"
+                            >
+                                <option value="">Select option...</option>
+                                {field.options?.map((opt, oIdx) => (
+                                    <option key={oIdx} value={opt}>{opt}</option>
+                                ))}
+                            </select>
+                            <ChevronDown className="absolute right-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#80827f] pointer-events-none" />
+                        </div>
                     )}
 
                     {/* Radio Options */}
                     {field.type === "radio" && (
                         <div className="space-y-2 pt-1">
-                            {field.options?.map((opt, oIdx) => (
-                                <label
-                                    key={oIdx}
-                                    className="flex items-center gap-2.5 p-3 rounded-2xl bg-[#f5f1e4] border border-[#d5d5d4] hover:border-[#2c2e2a]/40 cursor-pointer transition text-xs text-[#2c2e2a]"
-                                >
-                                    <input
-                                        type="radio"
-                                        name={field.id}
-                                        value={opt}
-                                        checked={values[field.id] === opt}
-                                        onChange={() => handleChange(field.id, opt)}
-                                        className="text-[#4285F4] focus:ring-0"
-                                    />
-                                    <span>{opt}</span>
-                                </label>
-                            ))}
+                            {field.options?.map((opt, oIdx) => {
+                                const isChecked = values[field.id] === opt;
+                                return (
+                                    <label
+                                        key={oIdx}
+                                        onClick={() => handleChange(field.id, opt)}
+                                        className={`flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition text-xs font-medium ${
+                                            isChecked
+                                                ? "bg-[#4285F4]/5 border-[#4285F4] text-[#2c2e2a] shadow-2xs"
+                                                : "bg-white border-[#d5d5d4] hover:border-[#a0a29f] text-[#2c2e2a]"
+                                        }`}
+                                    >
+                                        <div className={`w-4 h-4 rounded-full border flex items-center justify-center transition-colors ${
+                                            isChecked ? "border-[#4285F4] bg-[#4285F4]" : "border-[#d5d5d4] bg-white"
+                                        }`}>
+                                            {isChecked && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
+                                        </div>
+                                        <span>{opt}</span>
+                                    </label>
+                                );
+                            })}
                         </div>
                     )}
 
@@ -187,13 +204,15 @@ export function CustomFieldsForm({
                                 return (
                                     <label
                                         key={oIdx}
-                                        className="flex items-center gap-2.5 p-3 rounded-2xl bg-[#f5f1e4] border border-[#d5d5d4] hover:border-[#2c2e2a]/40 cursor-pointer transition text-xs text-[#2c2e2a]"
+                                        className={`flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition text-xs font-medium ${
+                                            checked
+                                                ? "bg-[#4285F4]/5 border-[#4285F4] text-[#2c2e2a] shadow-2xs"
+                                                : "bg-white border-[#d5d5d4] hover:border-[#a0a29f] text-[#2c2e2a]"
+                                        }`}
                                     >
-                                        <input
-                                            type="checkbox"
+                                        <Checkbox
                                             checked={checked}
-                                            onChange={(e) => handleCheckboxChange(field.id, opt, e.target.checked)}
-                                            className="rounded text-[#4285F4] focus:ring-0"
+                                            onCheckedChange={(c) => handleCheckboxChange(field.id, opt, Boolean(c))}
                                         />
                                         <span>{opt}</span>
                                     </label>
@@ -203,7 +222,7 @@ export function CustomFieldsForm({
                     )}
 
                     {errors?.[field.id] && (
-                        <p className="text-[#EA4335] text-[10px] mt-0.5">{errors[field.id]}</p>
+                        <p className="text-[#EA4335] text-[11px] font-medium mt-0.5">{errors[field.id]}</p>
                     )}
                 </div>
             ))}

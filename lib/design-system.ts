@@ -13,8 +13,8 @@ export const DESIGN_TOKENS = {
   // Core Surfaces & Neutral Canvas Tokens
   surfaces: {
     creamPaper: {
-      name: "Cream Paper",
-      hex: "#f5f1e4",
+      name: "Modern Canvas",
+      hex: "#f8fafc",
       token: "--color-cream-paper",
       role: "Global base canvas background for all pages",
     },
@@ -25,32 +25,32 @@ export const DESIGN_TOKENS = {
       role: "Elevated bento cards, floating nav background, storybook clouds",
     },
     sandstone: {
-      name: "Sandstone",
-      hex: "#e0dbce",
+      name: "Slate Mist",
+      hex: "#f1f5f9",
       token: "--color-sandstone",
       role: "Recessed surface, subtle inset containers, hover states",
     },
     inkBlack: {
-      name: "Ink Black",
-      hex: "#2c2e2a",
+      name: "Slate Ink",
+      hex: "#0f172a",
       token: "--color-ink-black",
       role: "Primary typography, dark buttons, dominant hairline borders",
     },
     stoneGray: {
-      name: "Stone Gray",
-      hex: "#80827f",
+      name: "Slate Gray",
+      hex: "#64748b",
       token: "--color-stone-gray",
       role: "Secondary body text, metadata, deactivated tab labels",
     },
     hairlineMist: {
       name: "Hairline Mist",
-      hex: "#d5d5d4",
+      hex: "#e2e8f0",
       token: "--color-hairline-mist",
       role: "Hairline borders, nav dividers, card outlines",
     },
     borderWarm: {
-      name: "Warm Sand Border",
-      hex: "#e5e1d5",
+      name: "Slate Border",
+      hex: "#e2e8f0",
       token: "--color-border-warm",
       role: "Bento card boundary borders on pure white cards",
     },
@@ -59,26 +59,26 @@ export const DESIGN_TOKENS = {
   // Chromatic Accents & Google Labs Geometries
   accents: {
     freshGrass: {
-      name: "Fresh Grass",
-      hex: "#8ed462",
+      name: "Vibrant Emerald",
+      hex: "#10B981",
       token: "--color-fresh-grass",
       role: "Primary brand structural accent, active badges, green cards",
     },
     coralPop: {
-      name: "Coral Pop",
-      hex: "#ff705d",
+      name: "Vibrant Red",
+      hex: "#EF4444",
       token: "--color-coral-pop",
       role: "Primary CTA button fill, quote marks, flame accents",
     },
     skyPop: {
-      name: "Sky Pop",
-      hex: "#2ba0ff",
+      name: "Electric Blue",
+      hex: "#2563EB",
       token: "--color-sky-pop",
       role: "Action dot indicator, cloud technology highlights",
     },
     sunshinePop: {
-      name: "Sunshine Pop",
-      hex: "#ffd600",
+      name: "Luminous Amber",
+      hex: "#F59E0B",
       token: "--color-sunshine-pop",
       role: "Yellow feature cards, daisy petals, smiling sticker badges",
     },

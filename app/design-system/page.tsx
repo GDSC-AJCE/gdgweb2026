@@ -261,7 +261,7 @@ export default function DesignSystemPage() {
                       className="w-12 h-12 rounded-2xl border border-black/10 flex items-center justify-center shadow-xs"
                       style={{ backgroundColor: item.hex }}
                     >
-                      {item.hex === "#2c2e2a" && <span className="text-[10px] text-white font-mono">Ink</span>}
+                      {key === "inkBlack" && <span className="text-[10px] text-white font-mono">Ink</span>}
                     </div>
                     <button
                       type="button"

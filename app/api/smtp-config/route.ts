@@ -1,84 +1,65 @@
 import { NextRequest, NextResponse } from "next/server";
-
-const COOKIE_NAME = "gdg_smtp_cfg";
-
-interface SmtpConfig {
-    host: string;
-    port: number;
-    user: string;
-    pass: string;
-    from: string;
-    secure: boolean;
-}
+import { getResendConfig, RESEND_COOKIE_NAME, LEGACY_SMTP_COOKIE_NAME } from "@/lib/resend";
 
 export async function GET(req: NextRequest) {
-    if (process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS) {
+    const resendCfg = getResendConfig(req.cookies);
+
+    if (resendCfg.configured) {
+        const maskedKey = resendCfg.apiKey
+            ? `${resendCfg.apiKey.slice(0, 7)}...${resendCfg.apiKey.slice(-4)}`
+            : "";
         return NextResponse.json({
             configured: true,
-            viaEnv: true,
-            host: process.env.SMTP_HOST,
-            port: parseInt(process.env.SMTP_PORT || "587"),
-            user: process.env.SMTP_USER,
-            from: process.env.SMTP_FROM || process.env.SMTP_USER,
-            secure: process.env.SMTP_SECURE === "true",
+            provider: "resend",
+            viaEnv: resendCfg.viaEnv,
+            from: resendCfg.from,
+            apiKeyMasked: maskedKey,
+            // Fallback backward-compat fields
+            host: "api.resend.com",
+            user: resendCfg.from,
         });
     }
 
-    const raw = req.cookies.get(COOKIE_NAME)?.value;
-    if (!raw) {
-        return NextResponse.json({ configured: false });
-    }
-    try {
-        const cfg: SmtpConfig = JSON.parse(raw);
-        return NextResponse.json({
-            configured: !!(cfg.host && cfg.user && cfg.pass),
-            host: cfg.host,
-            port: cfg.port,
-            user: cfg.user,
-            from: cfg.from,
-            secure: cfg.secure,
-        });
-    } catch {
-        return NextResponse.json({ configured: false });
-    }
+    return NextResponse.json({ 
+        configured: false, 
+        provider: "resend",
+        from: process.env.RESEND_FROM || "GDG Community <onboarding@resend.dev>" 
+    });
 }
 
 export async function POST(req: NextRequest) {
     try {
-        const body: SmtpConfig = await req.json();
-        const { host, port, user, pass, from, secure } = body;
+        const body = await req.json();
+        const apiKey = (body.apiKey || body.pass || "").trim();
+        const from = (body.from || body.user || "GDG Community <onboarding@resend.dev>").trim();
 
-        if (!host?.trim()) return NextResponse.json({ error: "SMTP host is required." }, { status: 400 });
-        if (!user?.trim()) return NextResponse.json({ error: "SMTP username is required." }, { status: 400 });
-        if (!pass?.trim()) return NextResponse.json({ error: "SMTP password is required." }, { status: 400 });
+        if (!apiKey) {
+            return NextResponse.json({ error: "Resend API Key is required (starts with re_)." }, { status: 400 });
+        }
 
-        const cfg: SmtpConfig = {
-            host: host.trim(),
-            port: port || 587,
-            user: user.trim(),
-            pass: pass.trim(),
-            from: from?.trim() || user.trim(),
-            secure: secure ?? false,
-        };
+        const cfg = { apiKey, from, provider: "resend" };
+        const res = NextResponse.json({ success: true, provider: "resend" });
 
-        const res = NextResponse.json({ success: true });
-
-        res.cookies.set(COOKIE_NAME, JSON.stringify(cfg), {
+        const cookieOptions = {
             httpOnly: true,
-            sameSite: "strict",
+            sameSite: "strict" as const,
             secure: process.env.NODE_ENV === "production",
             path: "/",
-            maxAge: 60 * 60 * 24 * 30,
-        });
+            maxAge: 60 * 60 * 24 * 30, // 30 days
+        };
+
+        res.cookies.set(RESEND_COOKIE_NAME, JSON.stringify(cfg), cookieOptions);
+        res.cookies.set(LEGACY_SMTP_COOKIE_NAME, JSON.stringify(cfg), cookieOptions);
 
         return res;
     } catch (err: any) {
-        return NextResponse.json({ error: err.message ?? "Failed to save config." }, { status: 500 });
+        return NextResponse.json({ error: err.message ?? "Failed to save Resend config." }, { status: 500 });
     }
 }
 
 export async function DELETE() {
     const res = NextResponse.json({ success: true });
-    res.cookies.set(COOKIE_NAME, "", { maxAge: 0, path: "/" });
+    res.cookies.set(RESEND_COOKIE_NAME, "", { maxAge: 0, path: "/" });
+    res.cookies.set(LEGACY_SMTP_COOKIE_NAME, "", { maxAge: 0, path: "/" });
     return res;
 }

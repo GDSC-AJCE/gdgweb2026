@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { History, ShieldCheck, Search, Filter } from "lucide-react";
+import { Input } from "@/components/ui/Input";
 
 interface AuditLogsTabProps {
   logs: any[];
@@ -71,13 +72,13 @@ export default function AuditLogsTab({ logs }: AuditLogsTabProps) {
         </div>
 
         <div className="relative">
-          <Search className="w-3.5 h-3.5 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#80827f]" />
-          <input
+          <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-[#80827f] pointer-events-none" />
+          <Input
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search audit trail..."
-            className="pl-9 pr-4 py-2 rounded-[50px] bg-[#f5f1e4] border border-[#d5d5d4] text-xs font-medium text-[#2c2e2a] focus:outline-none focus:border-[#2ba0ff] w-56 sm:w-64"
+            className="pl-9 h-9 w-56 sm:w-64 bg-white rounded-xl border-[#d5d5d4] text-xs text-[#2c2e2a]"
           />
         </div>
       </div>

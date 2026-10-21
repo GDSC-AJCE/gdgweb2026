@@ -1,49 +1,69 @@
-"use client";
+import * as React from "react";
+import { cva, type VariantProps } from "class-variance-authority";
+import { cn } from "@/lib/utils";
 
-import React from "react";
+const badgeVariants = cva(
+  "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 select-none",
+  {
+    variants: {
+      variant: {
+        default:
+          "border-transparent bg-[#0f172a] text-white hover:bg-black shadow-xs",
+        secondary:
+          "border-slate-200 bg-slate-100 text-slate-800 hover:bg-slate-200",
+        destructive:
+          "border-transparent bg-[#EF4444] text-white hover:bg-[#DC2626] shadow-xs",
+        outline:
+          "border-slate-200 bg-white text-slate-800 hover:border-slate-300",
+        google:
+          "border-transparent bg-[#2563EB] text-white shadow-xs",
+        blue:
+          "border-[#2563EB]/30 bg-[#2563EB]/10 text-[#2563EB] font-bold",
+        green:
+          "border-[#10B981]/30 bg-[#10B981]/15 text-[#059669] font-bold",
+        coral:
+          "border-[#EF4444]/30 bg-[#EF4444]/10 text-[#DC2626] font-bold",
+        yellow:
+          "border-[#F59E0B]/30 bg-[#F59E0B]/15 text-[#D97706] font-bold",
+        neutral:
+          "border-slate-200 bg-white text-slate-700",
+        success:
+          "border-[#10B981]/30 bg-[#10B981]/15 text-[#059669] font-bold",
+        warning:
+          "border-[#F59E0B]/30 bg-[#F59E0B]/15 text-[#D97706] font-bold",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+    },
+  }
+);
 
-export interface BadgeProps {
-  label: string;
-  variant?: "green" | "blue" | "coral" | "yellow" | "neutral";
+export interface BadgeProps
+  extends React.HTMLAttributes<HTMLDivElement>,
+    VariantProps<typeof badgeVariants> {
+  label?: string;
   dot?: boolean;
   icon?: React.ReactNode;
-  className?: string;
 }
 
-export default function Badge({
+function Badge({
+  className,
+  variant,
+  children,
   label,
-  variant = "green",
-  dot = true,
+  dot,
   icon,
-  className = "",
+  ...props
 }: BadgeProps) {
-  // MindMarket 10px or 50px micro-label pills
-  const variantStyles = {
-    green: "bg-[#8ed462]/20 border-[#8ed462]/40 text-[#2c2e2a]",
-    blue: "bg-[#2ba0ff]/15 border-[#2ba0ff]/35 text-[#2c2e2a]",
-    coral: "bg-[#ff705d]/15 border-[#ff705d]/35 text-[#2c2e2a]",
-    yellow: "bg-[#f5e211]/30 border-[#f5e211]/50 text-[#2c2e2a]",
-    neutral: "bg-[#ffffff] border-[#d5d5d4] text-[#2c2e2a]",
-  };
-
-  const dotStyles = {
-    green: "bg-[#8ed462]",
-    blue: "bg-[#2ba0ff]",
-    coral: "bg-[#ff705d]",
-    yellow: "bg-[#f5e211]",
-    neutral: "bg-[#80827f]",
-  };
-
   return (
-    <span
-      className={`inline-flex items-center gap-2 px-3 py-1 rounded-[50px] text-xs font-medium border select-none ${variantStyles[variant]} ${className}`}
-    >
-      {icon ? (
-        <span className="shrink-0">{icon}</span>
-      ) : dot ? (
-        <span className={`w-1.5 h-1.5 rounded-full ${dotStyles[variant]}`} />
-      ) : null}
-      <span>{label}</span>
-    </span>
+    <div className={cn(badgeVariants({ variant }), className)} {...props}>
+      {icon && <span className="shrink-0">{icon}</span>}
+      {dot && <span className="h-1.5 w-1.5 rounded-full bg-current" />}
+      {children || label}
+    </div>
   );
 }
+
+export { Badge, badgeVariants };
+export default Badge;

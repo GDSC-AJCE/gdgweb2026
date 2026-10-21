@@ -1,70 +1,63 @@
-"use client";
+import * as React from "react";
+import { Slot } from "@radix-ui/react-slot";
+import { cva, type VariantProps } from "class-variance-authority";
+import { cn } from "@/lib/utils";
 
-import React from "react";
-import { Loader2 } from "lucide-react";
+const buttonVariants = cva(
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl text-sm font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 cursor-pointer active:scale-[0.98]",
+  {
+    variants: {
+      variant: {
+        default:
+          "bg-[#0f172a] text-white hover:bg-[#020617] shadow-sm hover:shadow",
+        destructive:
+          "bg-[#EF4444] text-white hover:bg-[#DC2626] shadow-sm hover:shadow",
+        outline:
+          "border border-slate-200 bg-white text-slate-800 hover:bg-slate-50 hover:border-slate-300 shadow-xs",
+        secondary:
+          "bg-slate-100 text-slate-900 hover:bg-slate-200",
+        ghost:
+          "text-slate-700 hover:bg-slate-100 hover:text-slate-900",
+        link:
+          "text-[#2563EB] underline-offset-4 hover:underline",
+        google:
+          "bg-[#2563EB] text-white hover:bg-[#1D4ED8] shadow-md hover:shadow-lg",
+        emerald:
+          "bg-[#10B981] text-white hover:bg-[#059669] shadow-sm hover:shadow",
+      },
+      size: {
+        default: "h-10 px-4 py-2",
+        sm: "h-8 rounded-lg px-3 text-xs",
+        lg: "h-12 rounded-xl px-6 text-base",
+        pill: "h-10 rounded-full px-5 text-sm",
+        icon: "h-10 w-10 rounded-xl",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+      size: "default",
+    },
+  }
+);
 
-export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: "primary" | "secondary" | "coral" | "ghost" | "destructive" | "success";
-  size?: "sm" | "md" | "lg";
-  isLoading?: boolean;
-  dotColor?: "blue" | "green" | "coral" | "none";
-  icon?: React.ReactNode;
-  children: React.ReactNode;
+export interface ButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+    VariantProps<typeof buttonVariants> {
+  asChild?: boolean;
 }
 
-export default function Button({
-  variant = "primary",
-  size = "md",
-  isLoading = false,
-  dotColor = "blue",
-  icon,
-  children,
-  className = "",
-  disabled,
-  ...props
-}: ButtonProps) {
-  // MindMarket 50px pill buttons with minimal borders, subtle float, and chromatic dot affordance
-  const baseStyles = "group inline-flex items-center justify-center font-medium transition-all duration-300 hover:-translate-y-[1px] active:translate-y-0 active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none rounded-[50px] select-none text-[15px] transition-mindmarket";
+const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+  ({ className, variant, size, asChild = false, ...props }, ref) => {
+    const Comp = asChild ? Slot : "button";
+    return (
+      <Comp
+        className={cn(buttonVariants({ variant, size, className }))}
+        ref={ref}
+        {...props}
+      />
+    );
+  }
+);
+Button.displayName = "Button";
 
-  const sizeStyles = {
-    sm: "px-4 py-2 text-xs gap-2 rounded-[50px]",
-    md: "px-5 py-2.5 text-[15px] gap-2.5 rounded-[50px]",
-    lg: "px-7 py-3 text-[17px] gap-3 rounded-[50px]",
-  };
-
-  const variantStyles = {
-    // Light/white ghost pill with hairline border and text in #2c2e2a
-    primary: "bg-[#ffffff] text-[#2c2e2a] border border-[#d5d5d4] hover:bg-[#f5f1e4] hover:border-[#2c2e2a]/30",
-    secondary: "bg-[#f5f1e4] text-[#2c2e2a] border border-[#e0dbce] hover:bg-[#e0dbce]",
-    // Service-level action button: Coral Pop (#ff705d) fill with white text
-    coral: "bg-[#ff705d] hover:bg-[#ee6350] text-[#ffffff] border border-[#ff705d]",
-    ghost: "bg-transparent text-[#2c2e2a] hover:bg-[#ffffff]/80",
-    destructive: "bg-[#ff705d]/15 text-[#ff705d] border border-[#ff705d]/30 hover:bg-[#ff705d]/25",
-    success: "bg-[#8ed462] text-[#2c2e2a] hover:bg-[#7ec452] border border-[#8ed462]",
-  };
-
-  const dotClasses = {
-    blue: "w-2 h-2 rounded-full bg-[#2ba0ff] shrink-0 action-dot-expand",
-    green: "w-2 h-2 rounded-full bg-[#8ed462] shrink-0 action-dot-expand",
-    coral: "w-2 h-2 rounded-full bg-[#ff705d] shrink-0 action-dot-expand",
-    none: "hidden",
-  };
-
-  return (
-    <button
-      disabled={disabled || isLoading}
-      className={`${baseStyles} ${sizeStyles[size]} ${variantStyles[variant]} ${className}`}
-      {...props}
-    >
-      {isLoading ? (
-        <Loader2 className="w-4 h-4 animate-spin text-current" />
-      ) : (
-        icon && <span className="shrink-0">{icon}</span>
-      )}
-      <span>{children}</span>
-      {dotColor !== "none" && !isLoading && (
-        <span className={dotClasses[dotColor]} />
-      )}
-    </button>
-  );
-}
+export { Button, buttonVariants };

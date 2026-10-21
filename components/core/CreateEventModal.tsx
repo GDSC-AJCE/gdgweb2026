@@ -21,8 +21,8 @@ import {
     Eye,
     EyeOff,
     Clock,
-    MapPin,
-    AlertCircle
+    AlertCircle,
+    ChevronDown,
 } from "lucide-react";
 import { addDoc, collection, Timestamp, doc, updateDoc, setDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
@@ -30,7 +30,20 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { createAuditLog } from "@/lib/audit";
 import CustomFormBuilder, { FormField, TeamConfig } from "@/components/CustomFormBuilder";
-import Badge from "@/components/ui/Badge";
+import { Input } from "@/components/ui/Input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/Button";
+import { Switch } from "@/components/ui/switch";
+import { Badge } from "@/components/ui/Badge";
+import { DateTimePicker } from "@/components/ui/date-time-picker";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
 
 interface CreateEventModalProps {
     onClose: () => void;
@@ -319,7 +332,7 @@ export default function CreateEventModal({
     };
 
     return (
-        <div className="fixed inset-0 z-[120] flex items-center justify-center p-3 sm:p-4 bg-black/40 backdrop-blur-xs select-none">
+        <div className="fixed inset-0 z-[120] flex items-center justify-center p-3 sm:p-4 bg-black/40 backdrop-blur-xs">
             <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -330,6 +343,7 @@ export default function CreateEventModal({
 
             <motion.div
                 data-scroll-allow
+                data-lenis-prevent
                 initial={{ opacity: 0, scale: 0.95, y: 15 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95, y: 15 }}
@@ -364,8 +378,8 @@ export default function CreateEventModal({
                     </div>
                 </div>
 
-                {/* Step Tabs Pill Bar */}
-                <div className="px-6 py-2.5 border-b border-[#d5d5d4] bg-[#f5f1e4]/60 flex items-center gap-2 shrink-0 overflow-x-auto">
+                {/* Step Tabs Bar */}
+                <div className="px-6 py-3 border-b border-[#d5d5d4] bg-[#faf8f4] flex items-center gap-2 shrink-0 overflow-x-auto">
                     {[
                         { id: "details", num: "1", label: "Details & Schedule" },
                         { id: "content", num: "2", label: "Description & Rules" },
@@ -377,23 +391,20 @@ export default function CreateEventModal({
                                 key={tab.id}
                                 type="button"
                                 onClick={() => handleSelectStep(tab.id as any)}
-                                className={`flex-1 min-w-[140px] py-2 px-3.5 rounded-[50px] text-xs font-semibold flex items-center justify-center gap-2 transition-all duration-200 cursor-pointer ${
+                                className={`flex-1 min-w-[150px] py-2 px-4 rounded-xl text-xs font-semibold flex items-center justify-center gap-2.5 transition-all duration-150 cursor-pointer ${
                                     isActive
                                         ? "bg-white border border-[#d5d5d4] text-[#2c2e2a] shadow-xs"
-                                        : "border border-transparent text-[#80827f] hover:text-[#2c2e2a] hover:bg-white/60"
+                                        : "border border-transparent text-[#80827f] hover:text-[#2c2e2a] hover:bg-white/50"
                                 }`}
                             >
-                                <span className={`w-5 h-5 rounded-full text-[10px] font-mono font-bold flex items-center justify-center ${
+                                <span className={`w-5 h-5 rounded-md text-[11px] font-mono font-bold flex items-center justify-center transition-colors ${
                                     isActive
-                                        ? "bg-[#2ba0ff] text-white"
-                                        : "bg-white border border-[#d5d5d4] text-[#80827f]"
+                                        ? "bg-[#4285F4] text-white"
+                                        : "bg-[#eadecd] text-[#80827f]"
                                 }`}>
                                     {tab.num}
                                 </span>
                                 <span>{tab.label}</span>
-                                {isActive && (
-                                    <span className="w-1.5 h-1.5 rounded-full bg-[#2ba0ff] ml-0.5" />
-                                )}
                             </button>
                         );
                     })}
@@ -401,7 +412,7 @@ export default function CreateEventModal({
 
                 {/* Error Banner */}
                 {errorMessage && (
-                    <div className="mx-6 mt-4 p-3.5 rounded-[20px] bg-[#ff705d]/10 border border-[#ff705d]/30 text-[#ff705d] text-xs font-semibold flex items-center justify-between shrink-0">
+                    <div className="mx-6 mt-4 p-3.5 rounded-xl bg-[#EA4335]/10 border border-[#EA4335]/30 text-[#EA4335] text-xs font-semibold flex items-center justify-between shrink-0">
                         <div className="flex items-center gap-2">
                             <AlertCircle className="w-4 h-4 shrink-0" />
                             <span>{errorMessage}</span>
@@ -421,167 +432,168 @@ export default function CreateEventModal({
                     onSubmit={handleSubmit}
                     onKeyDown={handleFormKeyDown}
                     data-scroll-allow
-                    className="flex-1 overflow-y-auto p-6 space-y-6 bg-white"
+                    data-lenis-prevent
+                    className="flex-1 overflow-y-auto p-6 space-y-6 bg-white overscroll-contain"
                 >
                     {/* STEP 1: DETAILS */}
                     {step === "details" && (
                         <div className="space-y-4">
-                            <div>
-                                <label className="block text-xs font-bold text-[#2c2e2a] mb-1.5">
-                                    Event Title *
-                                </label>
-                                <input
+                            <div className="space-y-1.5">
+                                <Label htmlFor="event-title" className="text-xs font-semibold text-[#2c2e2a]">
+                                    Event Title <span className="text-[#EA4335]">*</span>
+                                </Label>
+                                <Input
+                                    id="event-title"
                                     type="text"
                                     required
                                     value={title}
                                     onChange={(e) => handleAutoSlug(e.target.value)}
                                     placeholder="e.g. Google Cloud & GenAI Hackathon 2026"
-                                    className="w-full px-4 py-2.5 rounded-[50px] bg-[#f5f1e4] border border-[#d5d5d4] text-xs font-semibold text-[#2c2e2a] placeholder:text-[#80827f] focus:outline-none focus:border-[#2ba0ff] focus:bg-white transition"
                                 />
                             </div>
 
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                <div>
-                                    <label className="block text-xs font-bold text-[#2c2e2a] mb-1.5">
-                                        URL Slug *
-                                    </label>
-                                    <input
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div className="space-y-1.5">
+                                    <Label htmlFor="event-slug" className="text-xs font-semibold text-[#2c2e2a]">
+                                        URL Slug <span className="text-[#EA4335]">*</span>
+                                    </Label>
+                                    <Input
+                                        id="event-slug"
                                         type="text"
                                         required
                                         value={slug}
                                         onChange={(e) => setSlug(e.target.value)}
                                         placeholder="cloud-genai-hackathon"
-                                        className="w-full px-4 py-2.5 rounded-[50px] bg-[#f5f1e4] border border-[#d5d5d4] text-xs font-mono text-[#2c2e2a] placeholder:text-[#80827f] focus:outline-none focus:border-[#2ba0ff] focus:bg-white transition"
+                                        className="font-mono text-xs"
                                     />
                                 </div>
-                                <div>
-                                    <label className="block text-xs font-bold text-[#2c2e2a] mb-1.5">
+                                <div className="space-y-1.5">
+                                    <Label htmlFor="event-category" className="text-xs font-semibold text-[#2c2e2a]">
                                         Category
-                                    </label>
-                                    <select
-                                        value={category}
-                                        onChange={(e: any) => setCategory(e.target.value)}
-                                        className="w-full px-4 py-2.5 rounded-[50px] bg-[#f5f1e4] border border-[#d5d5d4] text-xs font-medium text-[#2c2e2a] focus:outline-none focus:border-[#2ba0ff] focus:bg-white transition cursor-pointer"
-                                    >
-                                        <option value="workshop">Workshop</option>
-                                        <option value="hackathon">Hackathon</option>
-                                        <option value="studyjam">Study Jam</option>
-                                        <option value="techtalk">Tech Talk</option>
-                                        <option value="competition">Competition</option>
-                                        <option value="meetup">Meetup</option>
-                                        <option value="execom_call">Execom Call</option>
-                                        <option value="other">Other</option>
-                                    </select>
+                                    </Label>
+                                    <Select value={category} onValueChange={(val) => setCategory(val as any)}>
+                                        <SelectTrigger id="event-category" className="w-full">
+                                            <SelectValue placeholder="Select Category" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="workshop">Workshop</SelectItem>
+                                            <SelectItem value="hackathon">Hackathon</SelectItem>
+                                            <SelectItem value="studyjam">Study Jam</SelectItem>
+                                            <SelectItem value="techtalk">Tech Talk</SelectItem>
+                                            <SelectItem value="competition">Competition</SelectItem>
+                                            <SelectItem value="meetup">Meetup</SelectItem>
+                                            <SelectItem value="execom_call">Execom Call</SelectItem>
+                                            <SelectItem value="other">Other</SelectItem>
+                                        </SelectContent>
+                                    </Select>
                                 </div>
                             </div>
 
-                            <div>
-                                <label className="block text-xs font-bold text-[#2c2e2a] mb-1.5">
+                            <div className="space-y-1.5">
+                                <Label htmlFor="event-tagline" className="text-xs font-semibold text-[#2c2e2a]">
                                     Short Tagline / Catchphrase
-                                </label>
-                                <input
+                                </Label>
+                                <Input
+                                    id="event-tagline"
                                     type="text"
                                     value={tagline}
                                     onChange={(e) => setTagline(e.target.value)}
                                     placeholder="Build next-gen multimodal apps using Gemini API and Firebase"
-                                    className="w-full px-4 py-2.5 rounded-[50px] bg-[#f5f1e4] border border-[#d5d5d4] text-xs font-medium text-[#2c2e2a] placeholder:text-[#80827f] focus:outline-none focus:border-[#2ba0ff] focus:bg-white transition"
                                 />
                             </div>
 
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                <div>
-                                    <label className="block text-xs font-bold text-[#2c2e2a] mb-1.5">
-                                        Event Date & Time *
-                                    </label>
-                                    <input
-                                        type="datetime-local"
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div className="space-y-1.5">
+                                    <Label htmlFor="event-date" className="text-xs font-semibold text-[#2c2e2a]">
+                                        Event Date & Time <span className="text-[#EA4335]">*</span>
+                                    </Label>
+                                    <DateTimePicker
+                                        id="event-date"
                                         required
                                         value={date}
-                                        onChange={(e) => setDate(e.target.value)}
-                                        className="w-full px-4 py-2.5 rounded-[50px] bg-[#f5f1e4] border border-[#d5d5d4] text-xs font-medium text-[#2c2e2a] focus:outline-none focus:border-[#2ba0ff] focus:bg-white transition"
+                                        onChange={setDate}
+                                        placeholder="Pick date & time..."
                                     />
                                 </div>
-                                <div>
-                                    <label className="block text-xs font-bold text-[#2c2e2a] mb-1.5">
+                                <div className="space-y-1.5">
+                                    <Label htmlFor="event-reg-date" className="text-xs font-semibold text-[#2c2e2a]">
                                         Registration Deadline
-                                    </label>
-                                    <input
-                                        type="datetime-local"
+                                    </Label>
+                                    <DateTimePicker
+                                        id="event-reg-date"
                                         value={regDate}
-                                        onChange={(e) => setRegDate(e.target.value)}
-                                        className="w-full px-4 py-2.5 rounded-[50px] bg-[#f5f1e4] border border-[#d5d5d4] text-xs font-medium text-[#2c2e2a] focus:outline-none focus:border-[#2ba0ff] focus:bg-white transition"
+                                        onChange={setRegDate}
+                                        placeholder="Pick deadline..."
                                     />
                                 </div>
                             </div>
 
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                <div>
-                                    <label className="block text-xs font-bold text-[#2c2e2a] mb-1.5">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div className="space-y-1.5">
+                                    <Label htmlFor="event-location" className="text-xs font-semibold text-[#2c2e2a]">
                                         Location / Venue
-                                    </label>
-                                    <input
+                                    </Label>
+                                    <Input
+                                        id="event-location"
                                         type="text"
                                         value={location}
                                         onChange={(e) => setLocation(e.target.value)}
                                         placeholder="Auditorium / Lab 3 / Online"
-                                        className="w-full px-4 py-2.5 rounded-[50px] bg-[#f5f1e4] border border-[#d5d5d4] text-xs font-medium text-[#2c2e2a] placeholder:text-[#80827f] focus:outline-none focus:border-[#2ba0ff] focus:bg-white transition"
                                     />
                                 </div>
-                                <div>
-                                    <label className="block text-xs font-bold text-[#2c2e2a] mb-1.5">
+                                <div className="space-y-1.5">
+                                    <Label htmlFor="event-poster" className="text-xs font-semibold text-[#2c2e2a]">
                                         Poster / Banner Image URL
-                                    </label>
-                                    <input
+                                    </Label>
+                                    <Input
+                                        id="event-poster"
                                         type="text"
                                         value={posterUrl}
                                         onChange={(e) => setPosterUrl(e.target.value)}
                                         placeholder="https://.../poster.webp"
-                                        className="w-full px-4 py-2.5 rounded-[50px] bg-[#f5f1e4] border border-[#d5d5d4] text-xs font-medium text-[#2c2e2a] placeholder:text-[#80827f] focus:outline-none focus:border-[#2ba0ff] focus:bg-white transition"
                                     />
                                 </div>
                             </div>
 
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                <div>
-                                    <label className="block text-xs font-bold text-[#2c2e2a] mb-1.5">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div className="space-y-1.5">
+                                    <Label htmlFor="event-whatsapp" className="text-xs font-semibold text-[#2c2e2a]">
                                         WhatsApp Group URL (On Registration)
-                                    </label>
-                                    <input
+                                    </Label>
+                                    <Input
+                                        id="event-whatsapp"
                                         type="text"
                                         value={whatsappUrl}
                                         onChange={(e) => setWhatsappUrl(e.target.value)}
                                         placeholder="https://chat.whatsapp.com/..."
-                                        className="w-full px-4 py-2.5 rounded-[50px] bg-[#f5f1e4] border border-[#d5d5d4] text-xs font-medium text-[#2c2e2a] placeholder:text-[#80827f] focus:outline-none focus:border-[#2ba0ff] focus:bg-white transition"
                                     />
                                 </div>
-                                <div>
-                                    <label className="block text-xs font-bold text-[#2c2e2a] mb-1.5">
+                                <div className="space-y-1.5">
+                                    <Label htmlFor="event-external-url" className="text-xs font-semibold text-[#2c2e2a]">
                                         External Registration URL (Optional)
-                                    </label>
-                                    <input
+                                    </Label>
+                                    <Input
+                                        id="event-external-url"
                                         type="text"
                                         value={externalRegistrationUrl}
                                         onChange={(e) => setExternalRegistrationUrl(e.target.value)}
                                         placeholder="Leave empty to use built-in GDG registration"
-                                        className="w-full px-4 py-2.5 rounded-[50px] bg-[#f5f1e4] border border-[#d5d5d4] text-xs font-medium text-[#2c2e2a] placeholder:text-[#80827f] focus:outline-none focus:border-[#2ba0ff] focus:bg-white transition"
                                     />
                                 </div>
                             </div>
 
-                            <div className="p-4 rounded-[24px] bg-[#f5f1e4] border border-[#d5d5d4] flex items-center justify-between">
+                            <div className="p-4 rounded-2xl bg-[#faf8f4] border border-[#d5d5d4] flex items-center justify-between shadow-2xs">
                                 <div>
-                                    <span className="font-bold text-xs text-[#2c2e2a]">Hide from Public Listing</span>
-                                    <p className="text-[11px] text-[#80827f]">Keep event hidden in drafts until officially ready to announce.</p>
+                                    <Label htmlFor="hide-event-switch" className="font-semibold text-xs text-[#2c2e2a] cursor-pointer">
+                                        Hide from Public Listing
+                                    </Label>
+                                    <p className="text-[11px] text-[#80827f] mt-0.5">Keep event hidden in drafts until officially ready to announce.</p>
                                 </div>
-                                <label className="relative inline-flex items-center cursor-pointer">
-                                    <input
-                                        type="checkbox"
-                                        checked={isHidden}
-                                        onChange={(e) => setIsHidden(e.target.checked)}
-                                        className="sr-only peer"
-                                    />
-                                    <div className="w-11 h-6 bg-[#d5d5d4] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-zinc-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#2ba0ff]"></div>
-                                </label>
+                                <Switch
+                                    id="hide-event-switch"
+                                    checked={isHidden}
+                                    onCheckedChange={setIsHidden}
+                                />
                             </div>
                         </div>
                     )}
@@ -590,80 +602,90 @@ export default function CreateEventModal({
                     {step === "content" && (
                         <div className="space-y-4">
                             <div className="flex items-center justify-between">
-                                <label className="block text-xs font-bold text-[#2c2e2a]">
+                                <Label className="text-xs font-semibold text-[#2c2e2a]">
                                     Event Description (Markdown)
-                                </label>
-                                <button
+                                </Label>
+                                <Button
                                     type="button"
+                                    variant="outline"
+                                    size="sm"
                                     onClick={() => setPreviewDesc(!previewDesc)}
-                                    className="px-3.5 py-1.5 rounded-[50px] bg-[#f5f1e4] hover:bg-[#e0dbce] border border-[#d5d5d4] text-[#2c2e2a] text-xs font-semibold transition cursor-pointer flex items-center gap-1.5 shadow-xs"
+                                    className="gap-1.5"
                                 >
-                                    {previewDesc ? <FileText className="w-3.5 h-3.5 text-[#2ba0ff]" /> : <Eye className="w-3.5 h-3.5 text-[#2ba0ff]" />}
+                                    {previewDesc ? <FileText className="w-3.5 h-3.5 text-[#4285F4]" /> : <Eye className="w-3.5 h-3.5 text-[#4285F4]" />}
                                     <span>{previewDesc ? "Edit Mode" : "Preview Markdown"}</span>
-                                </button>
+                                </Button>
                             </div>
 
                             {previewDesc ? (
-                                <div className="p-5 rounded-[24px] bg-[#f5f1e4] border border-[#d5d5d4] min-h-[220px] prose prose-neutral max-w-none text-xs text-[#2c2e2a] leading-relaxed">
+                                <div className="p-5 rounded-2xl bg-white border border-[#d5d5d4] min-h-[220px] prose prose-neutral max-w-none text-xs text-[#2c2e2a] leading-relaxed shadow-xs">
                                     <ReactMarkdown remarkPlugins={[remarkGfm]}>
                                         {description || "*No description entered.*"}
                                     </ReactMarkdown>
                                 </div>
                             ) : (
-                                <textarea
+                                <Textarea
                                     rows={8}
                                     value={description}
                                     onChange={(e) => setDescription(e.target.value)}
                                     placeholder="Write markdown overview, prerequisites, agenda, speakers..."
-                                    className="w-full p-4 rounded-[24px] bg-[#f5f1e4] border border-[#d5d5d4] text-[#2c2e2a] font-mono text-xs focus:outline-none focus:border-[#2ba0ff] focus:bg-white resize-y transition"
+                                    className="font-mono text-xs"
                                 />
                             )}
 
                             {/* Extra Sections Toggles */}
-                            <div className="space-y-4 pt-2">
-                                <div className="p-4 rounded-[24px] bg-[#f5f1e4] border border-[#d5d5d4] flex flex-wrap items-center gap-6">
-                                    <label className="flex items-center gap-2 cursor-pointer text-[#2c2e2a] font-semibold text-xs">
-                                        <input
-                                            type="checkbox"
+                            <div className="space-y-3 pt-2">
+                                <div className="p-4 rounded-2xl bg-[#faf8f4] border border-[#d5d5d4] flex flex-wrap items-center justify-between gap-4 shadow-2xs">
+                                    <div className="flex items-center gap-3">
+                                        <Switch
+                                            id="rules-toggle"
                                             checked={showRules}
-                                            onChange={(e) => setShowRules(e.target.checked)}
-                                            className="w-4 h-4 rounded border-[#d5d5d4] text-[#2ba0ff] accent-[#2ba0ff] cursor-pointer"
+                                            onCheckedChange={setShowRules}
                                         />
-                                        <span>Include Rules & Guidelines</span>
-                                    </label>
-                                    <label className="flex items-center gap-2 cursor-pointer text-[#2c2e2a] font-semibold text-xs">
-                                        <input
-                                            type="checkbox"
+                                        <div>
+                                            <Label htmlFor="rules-toggle" className="cursor-pointer font-semibold text-xs text-[#2c2e2a]">
+                                                Include Rules & Guidelines
+                                            </Label>
+                                            <p className="text-[11px] text-[#80827f]">Code of conduct, eligibility and constraints</p>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-center gap-3">
+                                        <Switch
+                                            id="prizepool-toggle"
                                             checked={showPrizepool}
-                                            onChange={(e) => setShowPrizepool(e.target.checked)}
-                                            className="w-4 h-4 rounded border-[#d5d5d4] text-[#fbbc04] accent-[#fbbc04] cursor-pointer"
+                                            onCheckedChange={setShowPrizepool}
                                         />
-                                        <span>Include Prize Pool Breakdown</span>
-                                    </label>
+                                        <div>
+                                            <Label htmlFor="prizepool-toggle" className="cursor-pointer font-semibold text-xs text-[#2c2e2a]">
+                                                Include Prize Pool Breakdown
+                                            </Label>
+                                            <p className="text-[11px] text-[#80827f]">Cash prizes, goodies, certificates</p>
+                                        </div>
+                                    </div>
                                 </div>
 
                                 {showRules && (
-                                    <div className="p-4 rounded-[24px] bg-[#f5f1e4] border border-[#d5d5d4] space-y-2">
-                                        <label className="text-[10px] font-mono uppercase text-[#80827f] font-semibold block">Rules & Guidelines (Markdown)</label>
-                                        <textarea
+                                    <div className="p-4 rounded-2xl bg-white border border-[#d5d5d4] space-y-2 shadow-xs">
+                                        <Label className="text-[11px] font-mono uppercase text-[#80827f] font-semibold block">Rules & Guidelines (Markdown)</Label>
+                                        <Textarea
                                             rows={4}
                                             value={rules}
                                             onChange={(e) => setRules(e.target.value)}
                                             placeholder="Code of conduct, submission deadlines, technical constraints..."
-                                            className="w-full p-3.5 rounded-[20px] bg-white border border-[#d5d5d4] text-[#2c2e2a] text-xs font-mono resize-y focus:outline-none focus:border-[#2ba0ff]"
+                                            className="font-mono text-xs"
                                         />
                                     </div>
                                 )}
 
                                 {showPrizepool && (
-                                    <div className="p-4 rounded-[24px] bg-[#f5f1e4] border border-[#d5d5d4] space-y-2">
-                                        <label className="text-[10px] font-mono uppercase text-[#80827f] font-semibold block">Prize Pool Details (Markdown)</label>
-                                        <textarea
+                                    <div className="p-4 rounded-2xl bg-white border border-[#d5d5d4] space-y-2 shadow-xs">
+                                        <Label className="text-[11px] font-mono uppercase text-[#80827f] font-semibold block">Prize Pool Details (Markdown)</Label>
+                                        <Textarea
                                             rows={3}
                                             value={prizepool}
                                             onChange={(e) => setPrizepool(e.target.value)}
                                             placeholder="1st Place: ₹15,000 + Google Swag Pack&#10;2nd Place: ₹10,000..."
-                                            className="w-full p-3.5 rounded-[20px] bg-white border border-[#d5d5d4] text-[#2c2e2a] text-xs font-mono resize-y focus:outline-none focus:border-[#2ba0ff]"
+                                            className="font-mono text-xs"
                                         />
                                     </div>
                                 )}
@@ -675,42 +697,38 @@ export default function CreateEventModal({
                     {step === "registration" && (
                         <div className="space-y-6">
                             {/* Paid Event Toggle */}
-                            <div className="p-5 rounded-[28px] bg-[#f5f1e4] border border-[#d5d5d4] space-y-4">
+                            <div className="p-5 rounded-2xl bg-[#faf8f4] border border-[#d5d5d4] space-y-4 shadow-2xs">
                                 <div className="flex items-center justify-between">
                                     <div>
                                         <h4 className="font-bold text-[#2c2e2a] text-sm tracking-tight">Ticketing & Fee</h4>
                                         <p className="text-[#80827f] text-xs mt-0.5">Is this a free workshop or a paid ticketed event?</p>
                                     </div>
-                                    <label className="relative inline-flex items-center cursor-pointer">
-                                        <input
-                                            type="checkbox"
-                                            checked={isPaid}
-                                            onChange={(e) => setIsPaid(e.target.checked)}
-                                            className="sr-only peer"
-                                        />
-                                        <div className="w-11 h-6 bg-[#d5d5d4] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-zinc-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#8ed462]"></div>
-                                    </label>
+                                    <Switch
+                                        checked={isPaid}
+                                        onCheckedChange={setIsPaid}
+                                    />
                                 </div>
 
                                 {isPaid && (
-                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-3 border-t border-[#d5d5d4]">
-                                        <div>
-                                            <label className="text-[10px] font-mono uppercase text-[#80827f] font-semibold block mb-1.5">Ticket Fee (INR)</label>
-                                            <input
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-3 border-t border-[#d5d5d4]">
+                                        <div className="space-y-1.5">
+                                            <Label className="text-xs font-semibold text-[#2c2e2a]">Ticket Fee (INR)</Label>
+                                            <Input
                                                 type="number"
                                                 min={1}
                                                 value={paymentAmount}
                                                 onChange={(e) => setPaymentAmount(Number(e.target.value))}
-                                                className="w-full px-4 py-2.5 rounded-[50px] bg-white border border-[#d5d5d4] text-xs font-bold text-[#2c2e2a] focus:outline-none focus:border-[#2ba0ff]"
+                                                className="font-bold"
                                             />
                                         </div>
-                                        <div>
-                                            <label className="text-[10px] font-mono uppercase text-[#80827f] font-semibold block mb-1.5">Receiving UPI ID</label>
-                                            <input
+                                        <div className="space-y-1.5">
+                                            <Label className="text-xs font-semibold text-[#2c2e2a]">Receiving UPI ID</Label>
+                                            <Input
                                                 type="text"
                                                 value={upiId}
                                                 onChange={(e) => setUpiId(e.target.value)}
-                                                className="w-full px-4 py-2.5 rounded-[50px] bg-white border border-[#d5d5d4] text-xs font-mono text-[#2c2e2a] focus:outline-none focus:border-[#2ba0ff]"
+                                                placeholder="e.g. gdg@okaxis"
+                                                className="font-mono text-xs"
                                             />
                                         </div>
                                     </div>
@@ -730,50 +748,47 @@ export default function CreateEventModal({
                     )}
 
                     {/* Bottom Navigation Toolbar */}
-                    <div className="pt-4 border-t border-[#d5d5d4] flex justify-between items-center bg-white">
+                    <div className="pt-4 border-t border-[#d5d5d4] flex justify-between items-center bg-white shrink-0">
                         <div>
                             {step !== "details" && (
-                                <button
+                                <Button
                                     type="button"
+                                    variant="outline"
                                     onClick={() => setStep(step === "registration" ? "content" : "details")}
-                                    className="px-5 py-2.5 rounded-[50px] bg-white border border-[#d5d5d4] text-xs font-medium text-[#2c2e2a] hover:bg-[#f5f1e4] transition cursor-pointer"
                                 >
                                     Back
-                                </button>
+                                </Button>
                             )}
                         </div>
 
-                        <div className="flex items-center gap-2.5">
+                        <div className="flex items-center gap-3">
                             {/* In edit mode, allow saving immediately from ANY step */}
                             {isEdit && (
-                                <button
+                                <Button
                                     type="submit"
+                                    variant="destructive"
                                     disabled={submitting}
-                                    className="group inline-flex items-center gap-2 px-6 py-2.5 rounded-[50px] bg-[#ff705d] hover:bg-[#ee6350] disabled:opacity-50 text-white text-xs font-bold shadow-xs transition active:scale-95 cursor-pointer"
                                 >
-                                    <span>{submitting ? "Saving..." : "Save Changes"}</span>
-                                    <span className="w-2 h-2 rounded-full bg-white transition-all group-hover:scale-125" />
-                                </button>
+                                    {submitting ? "Saving..." : "Save Changes"}
+                                </Button>
                             )}
 
                             {step !== "registration" ? (
-                                <button
+                                <Button
                                     type="button"
+                                    variant="default"
                                     onClick={handleNextStep}
-                                    className="group inline-flex items-center gap-2 px-6 py-2.5 rounded-[50px] bg-[#2c2e2a] hover:bg-[#1a1a1a] text-white text-xs font-semibold shadow-xs transition active:scale-95 cursor-pointer"
                                 >
                                     <span>Next Step</span>
-                                    <span className="w-2 h-2 rounded-full bg-[#2ba0ff] transition-all group-hover:scale-125" />
-                                </button>
+                                </Button>
                             ) : !isEdit ? (
-                                <button
+                                <Button
                                     type="submit"
+                                    variant="google"
                                     disabled={submitting}
-                                    className="group inline-flex items-center gap-2 px-7 py-2.5 rounded-[50px] bg-[#ff705d] hover:bg-[#ee6350] disabled:opacity-50 text-white text-xs font-bold shadow-xs transition active:scale-95 cursor-pointer"
                                 >
-                                    <span>{submitting ? "Publishing..." : "Publish GDG Event"}</span>
-                                    <span className="w-2 h-2 rounded-full bg-white transition-all group-hover:scale-125" />
-                                </button>
+                                    {submitting ? "Publishing..." : "Publish GDG Event"}
+                                </Button>
                             ) : null}
                         </div>
                     </div>

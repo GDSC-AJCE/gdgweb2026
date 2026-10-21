@@ -6,6 +6,13 @@ import { doc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { motion, AnimatePresence } from "framer-motion";
 import CustomFormBuilder, { FormField } from "@/components/CustomFormBuilder";
+import { Input } from "@/components/ui/Input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
+import { Button } from "@/components/ui/Button";
+import { DateTimePicker } from "@/components/ui/date-time-picker";
+import { useBodyScrollLock } from "@/hooks/useBodyScrollLock";
 
 interface ExecomDriveSettingsModalProps {
   isOpen: boolean;
@@ -14,6 +21,7 @@ interface ExecomDriveSettingsModalProps {
 }
 
 export default function ExecomDriveSettingsModal({ isOpen, onClose, adminName }: ExecomDriveSettingsModalProps) {
+  useBodyScrollLock(isOpen);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -117,32 +125,37 @@ function cleanFirestoreData(data: any): any {
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#2c2e2a]/40 backdrop-blur-sm">
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#0f172a]/50 backdrop-blur-sm">
         <motion.div
+          data-lenis-prevent
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.95 }}
-          className="bg-white rounded-[32px] shadow-2xl w-full max-w-4xl overflow-hidden border border-[#d5d5d4] max-h-[90vh] flex flex-col"
+          className="bg-white rounded-[32px] shadow-2xl w-full max-w-4xl overflow-hidden border border-slate-200 max-h-[90vh] flex flex-col"
         >
           {/* Header */}
-          <div className="flex items-center justify-between p-6 border-b border-[#f5f1e4] shrink-0">
+          <div className="flex items-center justify-between p-6 border-b border-slate-100 shrink-0">
             <div>
-              <h2 className="text-xl font-bold text-[#2c2e2a]">Recruitment Settings</h2>
-              <p className="text-xs text-[#80827f]">Configure the frontend application drive.</p>
+              <h2 className="text-xl font-bold text-[#0f172a]">Core Team Application Settings</h2>
+              <p className="text-xs text-slate-500">Manage when student applications are open and customize questions on the form.</p>
             </div>
-            <button onClick={onClose} className="p-2 rounded-full hover:bg-[#f5f1e4] text-[#80827f] transition">
+            <button onClick={onClose} className="p-2 rounded-full hover:bg-slate-100 text-slate-500 transition cursor-pointer">
               <X className="w-5 h-5" />
             </button>
           </div>
 
           {/* Body */}
-          <div className="flex-1 p-6 space-y-6 overflow-y-auto">
+          <div
+            data-scroll-allow
+            data-lenis-prevent
+            className="flex-1 p-6 space-y-6 overflow-y-auto overscroll-contain"
+          >
             {loading ? (
-              <div className="text-center text-sm text-[#80827f] py-8">Loading settings...</div>
+              <div className="text-center text-sm text-slate-500 py-8">Loading settings...</div>
             ) : (
               <>
                 {error && (
-                  <div className="p-3 bg-[#EA4335]/10 border border-[#EA4335]/20 rounded-2xl flex items-center gap-2 text-[#EA4335]">
+                  <div className="p-3 bg-[#EF4444]/10 border border-[#EF4444]/20 rounded-2xl flex items-center gap-2 text-[#EF4444]">
                     <AlertCircle className="w-4 h-4" />
                     <span className="text-xs font-medium">{error}</span>
                   </div>
@@ -151,60 +164,59 @@ function cleanFirestoreData(data: any): any {
                 <div className="flex flex-col lg:flex-row gap-6">
                   {/* Left Column: Basic Settings */}
                   <div className="space-y-4 w-full lg:w-1/3 shrink-0">
-                    <div className="flex items-center justify-between p-4 bg-[#f5f1e4] rounded-2xl border border-[#d5d5d4]">
+                    <div className="flex items-center justify-between p-4 bg-white rounded-2xl border border-slate-200 shadow-xs">
                       <div>
-                        <h4 className="text-sm font-bold text-[#2c2e2a]">Accept Applications</h4>
-                        <p className="text-[10px] text-[#80827f]">Toggle whether the form is open.</p>
+                        <h4 className="text-sm font-bold text-[#0f172a]">Accept Applications</h4>
+                        <p className="text-[11px] text-slate-500">Turn on to show the "Join Execom" button on the website.</p>
                       </div>
-                      <label className="relative inline-flex items-center cursor-pointer">
-                        <input
-                          type="checkbox"
-                          className="sr-only peer"
-                          checked={formData.isOpen}
-                          onChange={(e) => setFormData({ ...formData, isOpen: e.target.checked })}
-                        />
-                        <div className="w-11 h-6 bg-[#d5d5d4] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-[#d5d5d4] after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#34A853]"></div>
-                      </label>
+                      <Switch
+                        checked={formData.isOpen}
+                        onCheckedChange={(checked) => setFormData({ ...formData, isOpen: checked })}
+                      />
                     </div>
 
-                    <div>
-                      <label className="block text-xs font-semibold text-[#2c2e2a] mb-1">Drive Title</label>
-                      <input
+                    <div className="space-y-1.5">
+                      <Label htmlFor="drive-title" className="text-xs font-semibold text-[#0f172a]">Recruitment Title</Label>
+                      <Input
+                        id="drive-title"
                         type="text"
                         value={formData.title}
                         onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                        className="w-full bg-[#f5f1e4] border border-[#d5d5d4] rounded-2xl px-4 py-3 text-sm text-[#2c2e2a] focus:border-[#4285F4] focus:bg-[#ffffff] outline-none transition-colors"
+                        className="w-full bg-white rounded-xl border-slate-200 text-sm text-[#0f172a]"
                         placeholder="e.g. Core Team Recruitment 2026"
                       />
                     </div>
 
-                    <div>
-                      <label className="block text-xs font-semibold text-[#2c2e2a] mb-1">Description</label>
-                      <textarea
+                    <div className="space-y-1.5">
+                      <Label htmlFor="drive-desc" className="text-xs font-semibold text-[#0f172a]">Short Description / Instructions</Label>
+                      <Textarea
+                        id="drive-desc"
                         rows={3}
                         value={formData.description}
                         onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                        className="w-full bg-[#f5f1e4] border border-[#d5d5d4] rounded-2xl px-4 py-3 text-sm text-[#2c2e2a] focus:border-[#4285F4] focus:bg-[#ffffff] outline-none transition-colors resize-none"
-                        placeholder="Details about the recruitment drive..."
+                        className="w-full bg-white rounded-xl border-slate-200 text-sm text-[#0f172a]"
+                        placeholder="Instructions or roles available for student applicants..."
                       />
                     </div>
 
-                    <div>
-                      <label className="block text-xs font-semibold text-[#2c2e2a] mb-1">Deadline</label>
-                      <input
-                        type="date"
+                    <div className="space-y-1.5">
+                      <Label htmlFor="drive-deadline" className="text-xs font-semibold text-[#0f172a]">Application Deadline</Label>
+                      <DateTimePicker
+                        id="drive-deadline"
+                        showTime={false}
                         value={formData.deadline}
-                        onChange={(e) => setFormData({ ...formData, deadline: e.target.value })}
-                        className="w-full bg-[#f5f1e4] border border-[#d5d5d4] rounded-2xl px-4 py-3 text-sm text-[#2c2e2a] focus:border-[#4285F4] focus:bg-[#ffffff] outline-none transition-colors"
+                        onChange={(val) => setFormData({ ...formData, deadline: val })}
+                        placeholder="Pick closing date..."
                       />
                     </div>
                   </div>
 
                   {/* Right Column: Custom Form Builder */}
-                  <div className="flex-1 w-full border-t lg:border-t-0 lg:border-l border-[#d5d5d4] pt-6 lg:pt-0 lg:pl-6">
-                    <h3 className="text-sm font-bold text-[#2c2e2a] mb-4">Application Form Questions</h3>
-                    <div className="p-3 bg-[#f5f1e4] rounded-xl text-xs text-[#80827f] mb-4">
-                      <strong>Note:</strong> We automatically collect the applicant's Name, Email, Phone, Department, and Semester from their signed-in profile. You only need to add questions specific to this application (e.g. tracks, portfolio links, motivation).
+                  <div className="flex-1 w-full border-t lg:border-t-0 lg:border-l border-slate-200 pt-6 lg:pt-0 lg:pl-6">
+                    <h3 className="text-sm font-bold text-[#0f172a] mb-2">Custom Application Questions</h3>
+                    <div className="p-3 bg-slate-50 border border-slate-200/80 rounded-xl text-xs text-slate-600 mb-4 leading-relaxed">
+                      <p className="mb-1">Add any extra questions you want applicants to answer (e.g. portfolio links, domain experience, motivation).</p>
+                      <p className="text-[11px] text-slate-500"><strong>Note:</strong> We automatically collect the applicant&apos;s Name, Email, Phone, Department, and Semester from their profile.</p>
                     </div>
                     <CustomFormBuilder 
                       fields={formFields} 
@@ -219,20 +231,22 @@ function cleanFirestoreData(data: any): any {
 
           {/* Footer */}
           <div className="p-6 border-t border-[#f5f1e4] flex justify-end gap-3 bg-[#faf9f6] shrink-0">
-            <button
+            <Button
+              type="button"
+              variant="outline"
               onClick={onClose}
-              className="px-5 py-2.5 rounded-full text-xs font-semibold text-[#2c2e2a] hover:bg-[#f5f1e4] transition"
+              className="h-10 px-5 rounded-xl border-[#d5d5d4] text-xs font-semibold"
             >
               Cancel
-            </button>
-            <button
+            </Button>
+            <Button
               onClick={handleSave}
               disabled={loading || saving}
-              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-[#2c2e2a] hover:bg-[#1a1a1a] text-white text-xs font-semibold shadow-xs transition disabled:opacity-50"
+              className="h-10 px-6 rounded-xl bg-[#2c2e2a] hover:bg-[#1a1a1a] text-white text-xs font-semibold shadow-xs transition disabled:opacity-50 cursor-pointer"
             >
-              <Save className="w-4 h-4" />
+              <Save className="w-4 h-4 mr-2" />
               <span>{saving ? "Saving..." : "Save Settings"}</span>
-            </button>
+            </Button>
           </div>
         </motion.div>
       </div>

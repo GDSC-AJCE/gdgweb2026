@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Roboto_Mono } from "next/font/google";
+import { Urbanist, Roboto_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -10,10 +10,10 @@ import { DialogProvider } from "@/context/DialogContext";
 import { ThemeProvider } from "@/context/ThemeContext";
 import CustomDialog from "@/components/CustomDialog";
 
-const inter = Inter({
+const urbanist = Urbanist({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800", "900"],
-  variable: "--font-inter",
+  weight: ["300", "400", "500", "600", "700", "800", "900"],
+  variable: "--font-urbanist",
   display: "swap",
 });
 
@@ -81,7 +81,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className={`${inter.className} ${robotoMono.variable} bg-[#f5f1e4] text-[#2c2e2a] antialiased min-h-screen flex flex-col selection:bg-[#8ed462]/35 selection:text-[#2c2e2a]`}>
+      <body className={`${urbanist.className} ${urbanist.variable} ${robotoMono.variable} bg-[#f8fafc] text-[#0f172a] antialiased min-h-screen flex flex-col selection:bg-[#2563EB]/20 selection:text-[#0f172a]`}>
         <SmoothScrollProvider>
           <GoogleLabsPreloader />
           <ThemeProvider>

@@ -11,12 +11,15 @@ import {
   ExternalLink,
   Clock,
   MapPin,
+  Search,
 } from "lucide-react";
 import { doc, deleteDoc, addDoc, collection, Timestamp } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import * as XLSX from "xlsx";
 import Link from "next/link";
 import CreativeEventPoster from "@/components/programs/CreativeEventPoster";
+import { Input } from "@/components/ui/Input";
+import { Button } from "@/components/ui/Button";
 
 interface EventsManagementTabProps {
   events: any[];
@@ -115,21 +118,24 @@ export default function EventsManagementTab({
 
         <div className="flex items-center gap-2.5 flex-wrap">
           {/* Search */}
-          <input
-            type="text"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search events..."
-            className="px-4 py-2 rounded-[50px] bg-[#f5f1e4] border border-[#d5d5d4] text-xs font-medium text-[#2c2e2a] focus:outline-none focus:border-[#2ba0ff] w-40 sm:w-48"
-          />
+          <div className="relative">
+            <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-[#80827f] pointer-events-none" />
+            <Input
+              type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search events..."
+              className="pl-9 h-9 w-44 sm:w-56 bg-white rounded-xl border-[#d5d5d4] text-xs text-[#2c2e2a]"
+            />
+          </div>
 
           {/* Filter Pills */}
-          <div className="flex items-center p-1 rounded-full bg-[#f5f1e4] border border-[#d5d5d4]">
+          <div className="flex items-center p-1 rounded-xl bg-[#f5f1e4] border border-[#d5d5d4]">
             {(["all", "upcoming", "past"] as const).map((f) => (
               <button
                 key={f}
                 onClick={() => setFilter(f)}
-                className={`px-3 py-1 rounded-full text-xs font-semibold capitalize transition ${
+                className={`px-3 py-1 rounded-lg text-xs font-semibold capitalize transition cursor-pointer ${
                   filter === f
                     ? "bg-white text-[#2c2e2a] shadow-xs"
                     : "text-[#80827f] hover:text-[#2c2e2a]"
@@ -141,13 +147,13 @@ export default function EventsManagementTab({
           </div>
 
           {/* Create Event Button */}
-          <button
+          <Button
             onClick={onOpenCreateModal}
-            className="inline-flex items-center gap-1.5 px-5 py-2 rounded-[50px] bg-[#2c2e2a] hover:bg-[#141414] text-white text-xs font-semibold shadow-md transition active:scale-95"
+            className="h-9 px-4 rounded-xl bg-[#2c2e2a] hover:bg-[#141414] text-white text-xs font-semibold shadow-sm transition active:scale-95 cursor-pointer"
           >
-            <Plus className="w-3.5 h-3.5" />
+            <Plus className="w-3.5 h-3.5 mr-1.5" />
             <span>Create Event</span>
-          </button>
+          </Button>
         </div>
       </div>
 

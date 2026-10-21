@@ -16,6 +16,9 @@ import {
 } from "lucide-react";
 import { collection, doc, writeBatch, Timestamp, addDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/Button";
+import { useBodyScrollLock } from "@/hooks/useBodyScrollLock";
 
 interface UploadPreviousExecomModalProps {
   isOpen: boolean;
@@ -49,6 +52,7 @@ export default function UploadPreviousExecomModal({
   onSaved,
   adminName = "Admin",
 }: UploadPreviousExecomModalProps) {
+  useBodyScrollLock(isOpen);
   const [selectedYear, setSelectedYear] = useState<string>("2025");
   const [customYear, setCustomYear] = useState<string>("");
   const [inputMode, setInputMode] = useState<"paste" | "file" | "manual">("paste");
@@ -327,7 +331,10 @@ export default function UploadPreviousExecomModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/45 backdrop-blur-xs select-none">
-      <div className="relative w-full max-w-4xl bg-white border border-[#d5d5d4] rounded-[36px] shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+      <div
+        data-lenis-prevent
+        className="relative w-full max-w-4xl bg-white border border-[#d5d5d4] rounded-[36px] shadow-2xl overflow-hidden flex flex-col max-h-[90vh]"
+      >
         {/* MODAL HEADER */}
         <div className="p-6 border-b border-[#d5d5d4] flex items-center justify-between bg-white">
           <div className="flex items-center gap-3">
@@ -355,7 +362,11 @@ export default function UploadPreviousExecomModal({
         </div>
 
         {/* MODAL BODY */}
-        <div className="flex-1 overflow-y-auto p-6 space-y-6">
+        <div
+          data-scroll-allow
+          data-lenis-prevent
+          className="flex-1 overflow-y-auto p-6 space-y-6 overscroll-contain"
+        >
           {/* STEP 1: TARGET COHORT SELECTION */}
           <div className="p-4 rounded-[24px] bg-[#f5f1e4] border border-[#d5d5d4] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div className="flex items-center gap-2.5">
@@ -478,23 +489,23 @@ export default function UploadPreviousExecomModal({
                   </div>
                 </div>
 
-                <textarea
+                <Textarea
                   value={rawText}
                   onChange={(e) => setRawText(e.target.value)}
                   placeholder={`Example:\nNAME\tMAIL\tTEAM\nNandhu Babu\tnandhubabuvktd@gmail.com\tAI/ML Team\nAravind R Nair\tarnair126@gmail.com\tAI/ML Team\nAdithya Ajay\tadityaajay574@gmail.com\tAndroid Team\nAlan Jimmy\talanjimmy993@gmail.com\tDesign Team`}
                   rows={6}
-                  className="w-full p-4 rounded-[24px] bg-[#f5f1e4] border border-[#d5d5d4] font-mono text-xs text-[#2c2e2a] focus:outline-none focus:border-[#2ba0ff] resize-y"
+                  className="w-full p-4 rounded-2xl bg-white border-[#d5d5d4] font-mono text-xs text-[#2c2e2a] focus-visible:border-[#2ba0ff] resize-y"
                 />
 
                 <div className="flex justify-end">
-                  <button
+                  <Button
                     type="button"
                     onClick={() => handleParseText(rawText)}
-                    className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-[#2c2e2a] hover:bg-black text-white text-xs font-semibold shadow-xs transition cursor-pointer"
+                    className="h-10 px-5 rounded-xl bg-[#2c2e2a] hover:bg-black text-white text-xs font-semibold shadow-xs transition cursor-pointer"
                   >
-                    <Sparkles className="w-3.5 h-3.5 text-[#ffd600]" />
+                    <Sparkles className="w-3.5 h-3.5 mr-2 text-[#ffd600]" />
                     <span>Parse Pasted Data</span>
-                  </button>
+                  </Button>
                 </div>
               </div>
             )}

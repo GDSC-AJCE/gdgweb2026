@@ -17,6 +17,7 @@ import { doc, writeBatch, addDoc, collection, Timestamp } from "firebase/firesto
 import { db } from "@/lib/firebase";
 import { ExecomMember } from "@/lib/data/TeamData";
 import CreativeProfileAvatar from "@/components/ui/CreativeProfileAvatar";
+import { useBodyScrollLock } from "@/hooks/useBodyScrollLock";
 
 interface ReorderExecomModalProps {
   isOpen: boolean;
@@ -35,6 +36,7 @@ export default function ReorderExecomModal({
   adminName = "Admin",
   cohortTitle,
 }: ReorderExecomModalProps) {
+  useBodyScrollLock(isOpen);
   const [ordered, setOrdered] = useState<ExecomMember[]>([]);
   const [initialList, setInitialList] = useState<ExecomMember[]>([]);
   const [saving, setSaving] = useState(false);
@@ -234,6 +236,7 @@ export default function ReorderExecomModal({
 
           {/* Modal Card */}
           <motion.div
+            data-lenis-prevent
             className="relative z-10 w-full max-w-xl bg-white rounded-[32px] border border-[#d5d5d4] shadow-2xl flex flex-col max-h-[90vh] overflow-hidden"
             initial={{ scale: 0.95, opacity: 0, y: 16 }}
             animate={{ scale: 1, opacity: 1, y: 0 }}
@@ -289,7 +292,11 @@ export default function ReorderExecomModal({
             </div>
 
             {/* Scrollable list of members */}
-            <div className="flex-1 overflow-y-auto px-6 py-3 space-y-2">
+            <div
+              data-scroll-allow
+              data-lenis-prevent
+              className="flex-1 overflow-y-auto px-6 py-3 space-y-2 overscroll-contain"
+            >
               {filteredOrdered.map((member) => {
                 const actualIndex = ordered.findIndex((m) => (m.id && m.id === member.id) || m.name === member.name);
                 const isDragOver = dragOverIdx === actualIndex;

@@ -31,6 +31,9 @@ import {
 } from "lucide-react";
 import GDGLogoMark from "./ui/GDGLogoMark";
 import { useAuth } from "@/context/AuthContext";
+import { Input } from "@/components/ui/Input";
+import { Button } from "@/components/ui/Button";
+import { Label } from "@/components/ui/label";
 import { 
   YellowHexagon, 
   BlueWavyRosette, 
@@ -432,14 +435,14 @@ export default function Onboarding({ user }: { user: User }) {
                 </div>
               </div>
 
-              <button
+              <Button
                 onClick={nextStep}
                 type="button"
-                className="group w-full inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-[50px] bg-[#ff705d] hover:bg-[#ee6350] text-[#ffffff] text-sm font-medium transition-all shadow-xs cursor-pointer active:scale-[0.99]"
+                className="w-full h-12 rounded-xl bg-[#ff705d] hover:bg-[#ee6350] text-white text-sm font-semibold shadow-sm transition-all"
               >
                 <span>Get Started</span>
-                <span className="w-2.5 h-2.5 rounded-full bg-[#ffffff] transition-all duration-300 group-hover:scale-125" />
-              </button>
+                <ArrowRight className="w-4 h-4 ml-1.5" />
+              </Button>
             </motion.div>
           )}
 
@@ -453,7 +456,7 @@ export default function Onboarding({ user }: { user: User }) {
               transition={{ duration: 0.18 }}
               className="space-y-6"
             >
-              <div className="w-12 h-12 rounded-[20px] bg-[#f5f1e4] border border-[#d5d5d4] flex items-center justify-center text-[#2ba0ff]">
+              <div className="w-12 h-12 rounded-2xl bg-[#f5f1e4] border border-[#d5d5d4] flex items-center justify-center text-[#2ba0ff]">
                 <UserIcon className="w-6 h-6" />
               </div>
 
@@ -467,39 +470,42 @@ export default function Onboarding({ user }: { user: User }) {
               </div>
 
               <div className="space-y-2">
-                <div className="flex items-center bg-[#ffffff] border border-[#d5d5d4] hover:border-[#2c2e2a]/40 focus-within:border-[#2c2e2a] rounded-[28px] px-4 py-3 gap-3 transition-all shadow-xs">
-                  <div className="w-7 h-7 rounded-full bg-[#f5f1e4] flex items-center justify-center text-[#80827f] shrink-0">
-                    <UserIcon className="w-3.5 h-3.5" />
-                  </div>
-                  <input
+                <Label htmlFor="onboarding-fullname" className="text-xs font-medium text-[#80827f]">
+                  Full Name
+                </Label>
+                <div className="relative">
+                  <UserIcon className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#80827f] pointer-events-none" />
+                  <Input
+                    id="onboarding-fullname"
                     type="text"
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
-                    onKeyDown={(e) => e.key === "Enter" && nextStep()}
+                    onKeyDown={(e) => e.key === "Enter" && fullName.trim() && nextStep()}
                     placeholder="e.g. Alex Morgan"
                     autoFocus
-                    className="flex-1 bg-transparent text-sm font-medium text-[#2c2e2a] outline-none placeholder-[#80827f]"
+                    className="pl-10 h-11 bg-white rounded-xl border-[#d5d5d4] text-sm text-[#2c2e2a]"
                   />
                 </div>
               </div>
 
               <div className="flex items-center gap-3 pt-2">
-                <button
+                <Button
                   type="button"
+                  variant="outline"
                   onClick={prevStep}
-                  className="inline-flex items-center justify-center px-5 py-3 rounded-[50px] bg-[#ffffff] hover:bg-[#eae5d7] text-[#2c2e2a] text-sm font-medium border border-[#d5d5d4] transition-all cursor-pointer shadow-xs active:scale-95"
+                  className="h-11 px-5 rounded-xl border-[#d5d5d4] bg-white hover:bg-[#f5f1e4] text-[#2c2e2a]"
                 >
                   <ArrowLeft className="w-4 h-4" />
-                </button>
-                <button
+                </Button>
+                <Button
                   type="button"
                   onClick={nextStep}
                   disabled={!fullName.trim()}
-                  className="group flex-1 inline-flex items-center justify-center gap-2 px-6 py-3 rounded-[50px] bg-[#2c2e2a] hover:bg-[#1f201d] disabled:opacity-50 text-[#ffffff] text-sm font-medium transition-all shadow-xs cursor-pointer active:scale-[0.99]"
+                  className="flex-1 h-11 rounded-xl bg-[#2c2e2a] hover:bg-[#1f201d] text-white text-sm font-semibold shadow-sm"
                 >
                   <span>Continue</span>
-                  <span className="w-2.5 h-2.5 rounded-full bg-[#8ed462] transition-all duration-300 group-hover:scale-125" />
-                </button>
+                  <ArrowRight className="w-4 h-4 ml-2" />
+                </Button>
               </div>
             </motion.div>
           )}
@@ -514,7 +520,7 @@ export default function Onboarding({ user }: { user: User }) {
               transition={{ duration: 0.18 }}
               className="space-y-6"
             >
-              <div className="w-12 h-12 rounded-[20px] bg-[#f5f1e4] border border-[#d5d5d4] flex items-center justify-center text-[#8ed462]">
+              <div className="w-12 h-12 rounded-2xl bg-[#f5f1e4] border border-[#d5d5d4] flex items-center justify-center text-[#8ed462]">
                 <Phone className="w-6 h-6" />
               </div>
 
@@ -528,43 +534,48 @@ export default function Onboarding({ user }: { user: User }) {
               </div>
 
               <div className="space-y-2">
-                <div className="flex items-center bg-[#ffffff] border border-[#d5d5d4] hover:border-[#2c2e2a]/40 focus-within:border-[#2c2e2a] rounded-[28px] px-3.5 py-2.5 gap-2.5 transition-all shadow-xs">
-                  <div className="w-7 h-7 rounded-full bg-[#f5f1e4] flex items-center justify-center text-[#34A853] shrink-0">
-                    <Phone className="w-3.5 h-3.5" />
-                  </div>
-                  <span className="px-3 py-1 rounded-[50px] bg-[#f5f1e4] border border-[#d5d5d4] text-xs font-mono font-bold text-[#2c2e2a] shrink-0 select-none">
+                <Label htmlFor="onboarding-phone" className="text-xs font-medium text-[#80827f]">
+                  Phone Number
+                </Label>
+                <div className="flex items-center gap-2">
+                  <span className="h-11 px-3.5 rounded-xl bg-[#f5f1e4] border border-[#d5d5d4] text-xs font-mono font-bold text-[#2c2e2a] flex items-center shrink-0">
                     +{countryCode}
                   </span>
-                  <input
-                    type="tel"
-                    value={phoneNumber}
-                    onChange={(e) => setPhoneNumber(e.target.value.replace(/[^0-9]/g, ""))}
-                    onKeyDown={(e) => e.key === "Enter" && nextStep()}
-                    placeholder="9876543210"
-                    maxLength={10}
-                    autoFocus
-                    className="flex-1 bg-transparent text-sm font-medium text-[#2c2e2a] outline-none placeholder-[#80827f]"
-                  />
+                  <div className="relative flex-1">
+                    <Phone className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#80827f] pointer-events-none" />
+                    <Input
+                      id="onboarding-phone"
+                      type="tel"
+                      value={phoneNumber}
+                      onChange={(e) => setPhoneNumber(e.target.value.replace(/[^0-9]/g, ""))}
+                      onKeyDown={(e) => e.key === "Enter" && phoneNumber.length >= 10 && nextStep()}
+                      placeholder="9876543210"
+                      maxLength={10}
+                      autoFocus
+                      className="pl-10 h-11 bg-white rounded-xl border-[#d5d5d4] text-sm text-[#2c2e2a]"
+                    />
+                  </div>
                 </div>
               </div>
 
               <div className="flex items-center gap-3 pt-2">
-                <button
+                <Button
                   type="button"
+                  variant="outline"
                   onClick={prevStep}
-                  className="inline-flex items-center justify-center px-5 py-3 rounded-[50px] bg-[#ffffff] hover:bg-[#eae5d7] text-[#2c2e2a] text-sm font-medium border border-[#d5d5d4] transition-all cursor-pointer shadow-xs active:scale-95"
+                  className="h-11 px-5 rounded-xl border-[#d5d5d4] bg-white hover:bg-[#f5f1e4] text-[#2c2e2a]"
                 >
                   <ArrowLeft className="w-4 h-4" />
-                </button>
-                <button
+                </Button>
+                <Button
                   type="button"
                   onClick={nextStep}
                   disabled={!phoneNumber.trim() || phoneNumber.length < 10}
-                  className="group flex-1 inline-flex items-center justify-center gap-2 px-6 py-3 rounded-[50px] bg-[#2c2e2a] hover:bg-[#1f201d] disabled:opacity-50 text-[#ffffff] text-sm font-medium transition-all shadow-xs cursor-pointer active:scale-[0.99]"
+                  className="flex-1 h-11 rounded-xl bg-[#2c2e2a] hover:bg-[#1f201d] text-white text-sm font-semibold shadow-sm"
                 >
                   <span>Continue</span>
-                  <span className="w-2.5 h-2.5 rounded-full bg-[#8ed462] transition-all duration-300 group-hover:scale-125" />
-                </button>
+                  <ArrowRight className="w-4 h-4 ml-2" />
+                </Button>
               </div>
             </motion.div>
           )}
@@ -579,7 +590,7 @@ export default function Onboarding({ user }: { user: User }) {
               transition={{ duration: 0.18 }}
               className="space-y-6"
             >
-              <div className="w-12 h-12 rounded-[20px] bg-[#f5f1e4] border border-[#d5d5d4] flex items-center justify-center text-[#ffd600]">
+              <div className="w-12 h-12 rounded-2xl bg-[#f5f1e4] border border-[#d5d5d4] flex items-center justify-center text-[#ffd600]">
                 <Building2 className="w-6 h-6" />
               </div>
 
@@ -601,14 +612,14 @@ export default function Onboarding({ user }: { user: User }) {
                       key={c}
                       type="button"
                       onClick={() => setCollege(c)}
-                      className={`w-full p-4 rounded-[28px] border text-left transition-all flex items-center justify-between cursor-pointer ${
+                      className={`w-full p-3.5 rounded-2xl border text-left transition-all flex items-center justify-between cursor-pointer ${
                         isSelected
                           ? "bg-[#2c2e2a] text-[#ffffff] border-[#2c2e2a] shadow-xs"
                           : "bg-[#ffffff] border-[#d5d5d4] hover:bg-[#f5f1e4] text-[#2c2e2a]"
                       }`}
                     >
                       <div className="flex items-center gap-3">
-                        <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${
+                        <div className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 ${
                           isSelected ? "bg-white/10 text-white" : "bg-[#f5f1e4] text-[#2c2e2a]"
                         }`}>
                           {isHost ? <Building2 className="w-4 h-4" /> : <School className="w-4 h-4" />}
@@ -630,37 +641,44 @@ export default function Onboarding({ user }: { user: User }) {
                 })}
 
                 {college === "Other" && (
-                  <div className="flex items-center bg-[#ffffff] border border-[#d5d5d4] hover:border-[#2c2e2a]/40 focus-within:border-[#2c2e2a] rounded-[28px] px-4 py-3 gap-2.5 transition-all shadow-xs">
-                    <School className="w-4 h-4 text-[#80827f] shrink-0" />
-                    <input
-                      type="text"
-                      value={otherCollege}
-                      onChange={(e) => setOtherCollege(e.target.value)}
-                      placeholder="Enter campus / college name"
-                      className="flex-1 bg-transparent text-sm font-medium text-[#2c2e2a] outline-none placeholder-[#80827f]"
-                      autoFocus
-                    />
+                  <div className="pt-1">
+                    <Label htmlFor="onboarding-other-college" className="text-xs font-medium text-[#80827f] mb-1.5 block">
+                      College Name
+                    </Label>
+                    <div className="relative">
+                      <School className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#80827f] pointer-events-none" />
+                      <Input
+                        id="onboarding-other-college"
+                        type="text"
+                        value={otherCollege}
+                        onChange={(e) => setOtherCollege(e.target.value)}
+                        placeholder="Enter campus / college name"
+                        className="pl-10 h-11 bg-white rounded-xl border-[#d5d5d4] text-sm text-[#2c2e2a]"
+                        autoFocus
+                      />
+                    </div>
                   </div>
                 )}
               </div>
 
               <div className="flex items-center gap-3 pt-2">
-                <button
+                <Button
                   type="button"
+                  variant="outline"
                   onClick={prevStep}
-                  className="inline-flex items-center justify-center px-5 py-3 rounded-[50px] bg-[#ffffff] hover:bg-[#eae5d7] text-[#2c2e2a] text-sm font-medium border border-[#d5d5d4] transition-all cursor-pointer shadow-xs active:scale-95"
+                  className="h-11 px-5 rounded-xl border-[#d5d5d4] bg-white hover:bg-[#f5f1e4] text-[#2c2e2a]"
                 >
                   <ArrowLeft className="w-4 h-4" />
-                </button>
-                <button
+                </Button>
+                <Button
                   type="button"
                   onClick={nextStep}
                   disabled={college === "Other" && !otherCollege.trim()}
-                  className="group flex-1 inline-flex items-center justify-center gap-2 px-6 py-3 rounded-[50px] bg-[#2c2e2a] hover:bg-[#1f201d] disabled:opacity-50 text-[#ffffff] text-sm font-medium transition-all shadow-xs cursor-pointer active:scale-[0.99]"
+                  className="flex-1 h-11 rounded-xl bg-[#2c2e2a] hover:bg-[#1f201d] text-white text-sm font-semibold shadow-sm"
                 >
                   <span>Continue</span>
-                  <span className="w-2.5 h-2.5 rounded-full bg-[#ffd600] transition-all duration-300 group-hover:scale-125" />
-                </button>
+                  <ArrowRight className="w-4 h-4 ml-2" />
+                </Button>
               </div>
             </motion.div>
           )}
@@ -675,7 +693,7 @@ export default function Onboarding({ user }: { user: User }) {
               transition={{ duration: 0.18 }}
               className="space-y-6"
             >
-              <div className="w-12 h-12 rounded-[20px] bg-[#f5f1e4] border border-[#d5d5d4] flex items-center justify-center text-[#ff705d]">
+              <div className="w-12 h-12 rounded-2xl bg-[#f5f1e4] border border-[#d5d5d4] flex items-center justify-center text-[#ff705d]">
                 <GraduationCap className="w-6 h-6" />
               </div>
 
@@ -690,104 +708,116 @@ export default function Onboarding({ user }: { user: User }) {
 
               <div className="space-y-3">
                 {/* Department dropdown */}
-                <div className="relative" ref={deptDropdownRef}>
-                  <button
-                    type="button"
-                    onClick={() => setShowDeptDropdown(!showDeptDropdown)}
-                    className="w-full flex items-center justify-between bg-[#ffffff] border border-[#d5d5d4] hover:border-[#2c2e2a]/40 rounded-[28px] px-4 py-3 text-left text-sm font-medium text-[#2c2e2a] transition-all cursor-pointer shadow-xs"
-                  >
-                    <div className="flex items-center gap-2.5">
-                      <GraduationCap className="w-4 h-4 text-[#80827f] shrink-0" />
-                      <span className={dept ? "text-[#2c2e2a] font-semibold" : "text-[#80827f]"}>
-                        {dept || "Select Department Track"}
-                      </span>
-                    </div>
-                    <ChevronDown className={`w-4 h-4 text-[#80827f] transition-transform duration-200 ${showDeptDropdown ? "rotate-180" : ""}`} />
-                  </button>
-
-                  {showDeptDropdown && (
-                    <div 
-                      data-lenis-prevent="true"
-                      onWheel={(e) => e.stopPropagation()}
-                      onTouchMove={(e) => e.stopPropagation()}
-                      className="absolute top-full mt-2 left-0 right-0 max-h-60 overflow-y-auto overscroll-contain bg-[#ffffff] border border-[#d5d5d4] rounded-[28px] p-2 z-50 shadow-lg space-y-1 touch-pan-y"
-                      style={{ 
-                        scrollbarWidth: "thin", 
-                        scrollbarColor: "#d5d5d4 transparent",
-                        WebkitOverflowScrolling: "touch"
-                      }}
+                <div className="space-y-1.5" ref={deptDropdownRef}>
+                  <Label className="text-xs font-medium text-[#80827f]">Department / Major</Label>
+                  <div className="relative">
+                    <button
+                      type="button"
+                      onClick={() => setShowDeptDropdown(!showDeptDropdown)}
+                      className="w-full flex items-center justify-between bg-white border border-[#d5d5d4] hover:border-[#2c2e2a]/40 rounded-xl px-4 py-2.5 text-left text-sm font-medium text-[#2c2e2a] transition-all cursor-pointer shadow-xs focus:ring-2 focus:ring-[#4285F4]/30"
                     >
-                      {DEPARTMENTS.map((d) => (
-                        <button
-                          key={d}
-                          type="button"
-                          onClick={() => {
-                            setDept(d);
-                            setShowDeptDropdown(false);
-                          }}
-                          className={`w-full px-3.5 py-2.5 rounded-[20px] text-left text-xs font-semibold transition cursor-pointer flex items-center justify-between ${
-                            dept === d ? "bg-[#2c2e2a] text-white" : "text-[#2c2e2a] hover:bg-[#f5f1e4]"
-                          }`}
-                        >
-                          <span>{d}</span>
-                          {dept === d && <Check className="w-3.5 h-3.5 stroke-[3]" />}
-                        </button>
-                      ))}
-                    </div>
-                  )}
+                      <div className="flex items-center gap-2.5 truncate">
+                        <GraduationCap className="w-4 h-4 text-[#80827f] shrink-0" />
+                        <span className={dept ? "text-[#2c2e2a] font-medium" : "text-[#80827f]"}>
+                          {dept || "Select Department Track"}
+                        </span>
+                      </div>
+                      <ChevronDown className={`w-4 h-4 text-[#80827f] shrink-0 transition-transform duration-200 ${showDeptDropdown ? "rotate-180" : ""}`} />
+                    </button>
+
+                    {showDeptDropdown && (
+                      <div 
+                        data-lenis-prevent="true"
+                        onWheel={(e) => e.stopPropagation()}
+                        onTouchMove={(e) => e.stopPropagation()}
+                        className="absolute top-full mt-2 left-0 right-0 max-h-60 overflow-y-auto overscroll-contain bg-white border border-[#d5d5d4] rounded-2xl p-1.5 z-50 shadow-xl space-y-1 touch-pan-y"
+                        style={{ 
+                          scrollbarWidth: "thin", 
+                          scrollbarColor: "#d5d5d4 transparent",
+                          WebkitOverflowScrolling: "touch"
+                        }}
+                      >
+                        {DEPARTMENTS.map((d) => (
+                          <button
+                            key={d}
+                            type="button"
+                            onClick={() => {
+                              setDept(d);
+                              setShowDeptDropdown(false);
+                            }}
+                            className={`w-full px-3 py-2 rounded-xl text-left text-xs font-medium transition cursor-pointer flex items-center justify-between ${
+                              dept === d ? "bg-[#2c2e2a] text-white" : "text-[#2c2e2a] hover:bg-[#f5f1e4]"
+                            }`}
+                          >
+                            <span>{d}</span>
+                            {dept === d && <Check className="w-3.5 h-3.5 stroke-[3]" />}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 </div>
 
                 {dept === "Other" && (
-                  <div className="flex items-center bg-[#ffffff] border border-[#d5d5d4] hover:border-[#2c2e2a]/40 focus-within:border-[#2c2e2a] rounded-[28px] px-4 py-3 gap-2.5 transition-all shadow-xs">
-                    <Code className="w-4 h-4 text-[#80827f] shrink-0" />
-                    <input
-                      type="text"
-                      value={otherDept}
-                      onChange={(e) => setOtherDept(e.target.value)}
-                      placeholder="Specify department name"
-                      className="flex-1 bg-transparent text-sm font-medium text-[#2c2e2a] outline-none placeholder-[#80827f]"
-                      autoFocus
-                    />
+                  <div className="space-y-1.5">
+                    <Label htmlFor="onboarding-other-dept" className="text-xs font-medium text-[#80827f]">Specify Department</Label>
+                    <div className="relative">
+                      <Code className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#80827f] pointer-events-none" />
+                      <Input
+                        id="onboarding-other-dept"
+                        type="text"
+                        value={otherDept}
+                        onChange={(e) => setOtherDept(e.target.value)}
+                        placeholder="Specify department name"
+                        className="pl-10 h-11 bg-white rounded-xl border-[#d5d5d4] text-sm text-[#2c2e2a]"
+                        autoFocus
+                      />
+                    </div>
                   </div>
                 )}
 
                 {/* Graduation Year */}
-                <div className="flex items-center bg-[#ffffff] border border-[#d5d5d4] hover:border-[#2c2e2a]/40 focus-within:border-[#2c2e2a] rounded-[28px] px-4 py-3 gap-2.5 transition-all shadow-xs">
-                  <Calendar className="w-4 h-4 text-[#80827f] shrink-0" />
-                  <input
-                    type="number"
-                    value={gradYear}
-                    onChange={(e) => setGradYear(e.target.value)}
-                    placeholder="Graduation Year (e.g. 2027)"
-                    min={2020}
-                    max={2035}
-                    className="flex-1 bg-transparent text-sm font-medium text-[#2c2e2a] outline-none placeholder-[#80827f]"
-                  />
+                <div className="space-y-1.5">
+                  <Label htmlFor="onboarding-gradyear" className="text-xs font-medium text-[#80827f]">Graduation Year</Label>
+                  <div className="relative">
+                    <Calendar className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#80827f] pointer-events-none" />
+                    <Input
+                      id="onboarding-gradyear"
+                      type="number"
+                      value={gradYear}
+                      onChange={(e) => setGradYear(e.target.value)}
+                      placeholder="e.g. 2027"
+                      min={2020}
+                      max={2035}
+                      className="pl-10 h-11 bg-white rounded-xl border-[#d5d5d4] text-sm text-[#2c2e2a]"
+                    />
+                  </div>
                 </div>
               </div>
 
               <div className="flex items-center gap-3 pt-2">
-                <button
+                <Button
                   type="button"
+                  variant="outline"
                   onClick={prevStep}
-                  className="inline-flex items-center justify-center px-5 py-3 rounded-[50px] bg-[#ffffff] hover:bg-[#eae5d7] text-[#2c2e2a] text-sm font-medium border border-[#d5d5d4] transition-all cursor-pointer shadow-xs active:scale-95"
+                  className="h-11 px-5 rounded-xl border-[#d5d5d4] bg-white hover:bg-[#f5f1e4] text-[#2c2e2a]"
                 >
                   <ArrowLeft className="w-4 h-4" />
-                </button>
-                <button
+                </Button>
+                <Button
                   type="button"
                   onClick={nextStep}
                   disabled={!dept || !gradYear || (dept === "Other" && !otherDept.trim())}
-                  className="group flex-1 inline-flex items-center justify-center gap-2 px-6 py-3 rounded-[50px] bg-[#2c2e2a] hover:bg-[#1f201d] disabled:opacity-50 text-[#ffffff] text-sm font-medium transition-all shadow-xs cursor-pointer active:scale-[0.99]"
+                  className="flex-1 h-11 rounded-xl bg-[#2c2e2a] hover:bg-[#1f201d] text-white text-sm font-semibold shadow-sm"
                 >
                   <span>Continue</span>
-                  <span className="w-2.5 h-2.5 rounded-full bg-[#ff705d] transition-all duration-300 group-hover:scale-125" />
-                </button>
+                  <ArrowRight className="w-4 h-4 ml-2" />
+                </Button>
               </div>
             </motion.div>
           )}
 
-          {/* 6. ONLINE PRESENCE STEP (With Dual "Skip For Now" Options) */}
+          {/* 6. ONLINE PRESENCE STEP */}
           {step === "presence" && (
             <motion.div
               key="presence"
@@ -798,19 +828,19 @@ export default function Onboarding({ user }: { user: User }) {
               className="space-y-5"
             >
               <div className="flex items-center justify-between">
-                <div className="w-12 h-12 rounded-[20px] bg-[#f5f1e4] border border-[#d5d5d4] flex items-center justify-center text-[#2ba0ff]">
+                <div className="w-12 h-12 rounded-2xl bg-[#f5f1e4] border border-[#d5d5d4] flex items-center justify-center text-[#2ba0ff]">
                   <Link2 className="w-6 h-6" />
                 </div>
 
-                {/* Option 1: Top Skip Button in Header */}
-                <button
+                <Button
                   type="button"
+                  variant="ghost"
                   onClick={skipPresence}
-                  className="text-xs font-medium text-[#80827f] hover:text-[#2c2e2a] px-3 py-1.5 rounded-[50px] hover:bg-[#f5f1e4] transition-all cursor-pointer flex items-center gap-1"
+                  className="text-xs font-medium text-[#80827f] hover:text-[#2c2e2a] h-8 px-3 rounded-lg"
                 >
                   <span>Skip for now</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </button>
+                  <ArrowRight className="w-3.5 h-3.5 ml-1" />
+                </Button>
               </div>
 
               <div className="space-y-1">
@@ -822,93 +852,93 @@ export default function Onboarding({ user }: { user: User }) {
                 </p>
               </div>
 
-              {/* Clean inline flex groups with website icons only (No URL extension prefix) */}
               <div className="space-y-2.5 pt-1">
                 {/* GitHub */}
-                <div className="flex items-center bg-[#ffffff] border border-[#d5d5d4] hover:border-[#2c2e2a]/40 focus-within:border-[#2c2e2a] rounded-[28px] px-3.5 py-2.5 gap-2.5 transition-all shadow-xs">
-                  <div className="w-7 h-7 rounded-full bg-[#2c2e2a] flex items-center justify-center text-white shrink-0 shadow-xs">
+                <div className="relative">
+                  <div className="w-6 h-6 rounded-lg bg-[#2c2e2a] flex items-center justify-center text-white absolute left-3 top-1/2 -translate-y-1/2">
                     <FaGithub className="w-3.5 h-3.5" />
                   </div>
-                  <input
+                  <Input
                     type="text"
                     value={github}
                     onChange={(e) => setGithub(e.target.value)}
-                    placeholder="GitHub"
-                    className="flex-1 bg-transparent text-sm font-medium text-[#2c2e2a] outline-none placeholder-[#80827f]"
+                    placeholder="GitHub username or profile URL"
+                    className="pl-12 h-11 bg-white rounded-xl border-[#d5d5d4] text-sm text-[#2c2e2a]"
                   />
                 </div>
 
                 {/* LinkedIn */}
-                <div className="flex items-center bg-[#ffffff] border border-[#d5d5d4] hover:border-[#2c2e2a]/40 focus-within:border-[#2c2e2a] rounded-[28px] px-3.5 py-2.5 gap-2.5 transition-all shadow-xs">
-                  <div className="w-7 h-7 rounded-full bg-[#0A66C2] flex items-center justify-center text-white shrink-0 shadow-xs">
+                <div className="relative">
+                  <div className="w-6 h-6 rounded-lg bg-[#0A66C2] flex items-center justify-center text-white absolute left-3 top-1/2 -translate-y-1/2">
                     <FaLinkedin className="w-3.5 h-3.5" />
                   </div>
-                  <input
+                  <Input
                     type="text"
                     value={linkedin}
                     onChange={(e) => setLinkedin(e.target.value)}
-                    placeholder="LinkedIn"
-                    className="flex-1 bg-transparent text-sm font-medium text-[#2c2e2a] outline-none placeholder-[#80827f]"
+                    placeholder="LinkedIn profile or handle"
+                    className="pl-12 h-11 bg-white rounded-xl border-[#d5d5d4] text-sm text-[#2c2e2a]"
                   />
                 </div>
 
                 {/* Instagram */}
-                <div className="flex items-center bg-[#ffffff] border border-[#d5d5d4] hover:border-[#2c2e2a]/40 focus-within:border-[#2c2e2a] rounded-[28px] px-3.5 py-2.5 gap-2.5 transition-all shadow-xs">
-                  <div className="w-7 h-7 rounded-full bg-[#E4405F] flex items-center justify-center text-white shrink-0 shadow-xs">
+                <div className="relative">
+                  <div className="w-6 h-6 rounded-lg bg-[#E4405F] flex items-center justify-center text-white absolute left-3 top-1/2 -translate-y-1/2">
                     <FaInstagram className="w-3.5 h-3.5" />
                   </div>
-                  <input
+                  <Input
                     type="text"
                     value={instagram}
                     onChange={(e) => setInstagram(e.target.value)}
-                    placeholder="Instagram"
-                    className="flex-1 bg-transparent text-sm font-medium text-[#2c2e2a] outline-none placeholder-[#80827f]"
+                    placeholder="Instagram handle"
+                    className="pl-12 h-11 bg-white rounded-xl border-[#d5d5d4] text-sm text-[#2c2e2a]"
                   />
                 </div>
 
                 {/* Portfolio */}
-                <div className="flex items-center bg-[#ffffff] border border-[#d5d5d4] hover:border-[#2c2e2a]/40 focus-within:border-[#2c2e2a] rounded-[28px] px-3.5 py-2.5 gap-2.5 transition-all shadow-xs">
-                  <div className="w-7 h-7 rounded-full bg-[#2ba0ff] flex items-center justify-center text-white shrink-0 shadow-xs">
+                <div className="relative">
+                  <div className="w-6 h-6 rounded-lg bg-[#2ba0ff] flex items-center justify-center text-white absolute left-3 top-1/2 -translate-y-1/2">
                     <FaGlobe className="w-3.5 h-3.5" />
                   </div>
-                  <input
+                  <Input
                     type="text"
                     value={portfolio}
                     onChange={(e) => setPortfolio(e.target.value)}
-                    placeholder="Portfolio or personal website"
-                    className="flex-1 bg-transparent text-sm font-medium text-[#2c2e2a] outline-none placeholder-[#80827f]"
+                    placeholder="Portfolio or personal website URL"
+                    className="pl-12 h-11 bg-white rounded-xl border-[#d5d5d4] text-sm text-[#2c2e2a]"
                   />
                 </div>
               </div>
 
-              {/* Action Buttons with Option 2: Dedicated button beneath */}
+              {/* Action Buttons */}
               <div className="space-y-2 pt-2">
                 <div className="flex items-center gap-3">
-                  <button
+                  <Button
                     type="button"
+                    variant="outline"
                     onClick={prevStep}
-                    className="inline-flex items-center justify-center px-5 py-3 rounded-[50px] bg-[#ffffff] hover:bg-[#eae5d7] text-[#2c2e2a] text-sm font-medium border border-[#d5d5d4] transition-all cursor-pointer shadow-xs active:scale-95"
+                    className="h-11 px-5 rounded-xl border-[#d5d5d4] bg-white hover:bg-[#f5f1e4] text-[#2c2e2a]"
                   >
                     <ArrowLeft className="w-4 h-4" />
-                  </button>
-                  <button
+                  </Button>
+                  <Button
                     type="button"
                     onClick={nextStep}
-                    className="group flex-1 inline-flex items-center justify-center gap-2 px-6 py-3 rounded-[50px] bg-[#2c2e2a] hover:bg-[#1f201d] text-[#ffffff] text-sm font-medium transition-all shadow-xs cursor-pointer active:scale-[0.99]"
+                    className="flex-1 h-11 rounded-xl bg-[#2c2e2a] hover:bg-[#1f201d] text-white text-sm font-semibold shadow-sm"
                   >
                     <span>Save & Review</span>
-                    <span className="w-2.5 h-2.5 rounded-full bg-[#2ba0ff] transition-all duration-300 group-hover:scale-125" />
-                  </button>
+                    <ArrowRight className="w-4 h-4 ml-2" />
+                  </Button>
                 </div>
 
-                {/* Option 2: Dedicated Skip button right beneath */}
-                <button
+                <Button
                   type="button"
+                  variant="ghost"
                   onClick={skipPresence}
-                  className="w-full py-2 text-xs text-[#80827f] hover:text-[#2c2e2a] text-center font-medium transition cursor-pointer flex items-center justify-center gap-1.5"
+                  className="w-full h-8 text-xs text-[#80827f] hover:text-[#2c2e2a] font-medium"
                 >
                   <span>Skip for now · I&apos;ll link these later</span>
-                </button>
+                </Button>
               </div>
             </motion.div>
           )}
@@ -923,7 +953,7 @@ export default function Onboarding({ user }: { user: User }) {
               transition={{ duration: 0.18 }}
               className="space-y-6"
             >
-              <div className="w-12 h-12 rounded-[20px] bg-[#f5f1e4] border border-[#d5d5d4] flex items-center justify-center text-[#8ed462]">
+              <div className="w-12 h-12 rounded-2xl bg-[#f5f1e4] border border-[#d5d5d4] flex items-center justify-center text-[#8ed462]">
                 <CheckCircle2 className="w-6 h-6" />
               </div>
 
@@ -936,9 +966,9 @@ export default function Onboarding({ user }: { user: User }) {
                 </p>
               </div>
 
-              {/* Review summary box with proper icons */}
-              <div className="p-4 rounded-[28px] bg-[#f5f1e4] border border-[#d5d5d4] space-y-2.5 text-xs">
-                <div className="flex items-center justify-between border-b border-[#d5d5d4] pb-2">
+              {/* Review summary box */}
+              <div className="p-4 rounded-2xl bg-[#faf9f6] border border-[#d5d5d4] space-y-2.5 text-xs">
+                <div className="flex items-center justify-between border-b border-[#e5e1d5] pb-2">
                   <div className="flex items-center gap-2 text-[#80827f]">
                     <UserIcon className="w-3.5 h-3.5" />
                     <span>Member Name</span>
@@ -946,7 +976,7 @@ export default function Onboarding({ user }: { user: User }) {
                   <span className="font-semibold text-[#2c2e2a]">{toTitleCase(fullName)}</span>
                 </div>
 
-                <div className="flex items-center justify-between border-b border-[#d5d5d4] pb-2">
+                <div className="flex items-center justify-between border-b border-[#e5e1d5] pb-2">
                   <div className="flex items-center gap-2 text-[#80827f]">
                     <Phone className="w-3.5 h-3.5" />
                     <span>Phone</span>
@@ -954,7 +984,7 @@ export default function Onboarding({ user }: { user: User }) {
                   <span className="font-mono font-semibold text-[#2c2e2a]">+{countryCode} {phoneNumber}</span>
                 </div>
 
-                <div className="flex items-center justify-between border-b border-[#d5d5d4] pb-2">
+                <div className="flex items-center justify-between border-b border-[#e5e1d5] pb-2">
                   <div className="flex items-center gap-2 text-[#80827f]">
                     <Building2 className="w-3.5 h-3.5" />
                     <span>Campus</span>
@@ -964,7 +994,7 @@ export default function Onboarding({ user }: { user: User }) {
                   </span>
                 </div>
 
-                <div className="flex items-center justify-between border-b border-[#d5d5d4] pb-2">
+                <div className="flex items-center justify-between border-b border-[#e5e1d5] pb-2">
                   <div className="flex items-center gap-2 text-[#80827f]">
                     <GraduationCap className="w-3.5 h-3.5" />
                     <span>Academic</span>
@@ -986,23 +1016,24 @@ export default function Onboarding({ user }: { user: User }) {
               </div>
 
               <div className="flex items-center gap-3 pt-2">
-                <button
+                <Button
                   type="button"
+                  variant="outline"
                   onClick={prevStep}
                   disabled={submitting}
-                  className="inline-flex items-center justify-center px-5 py-3.5 rounded-[50px] bg-[#ffffff] hover:bg-[#eae5d7] text-[#2c2e2a] text-sm font-medium border border-[#d5d5d4] transition-all cursor-pointer shadow-xs active:scale-95 disabled:opacity-50"
+                  className="h-11 px-5 rounded-xl border-[#d5d5d4] bg-white hover:bg-[#f5f1e4] text-[#2c2e2a]"
                 >
                   <ArrowLeft className="w-4 h-4" />
-                </button>
-                <button
+                </Button>
+                <Button
                   type="button"
                   onClick={handleSubmit}
                   disabled={submitting}
-                  className="group flex-1 inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-[50px] bg-[#ff705d] hover:bg-[#ee6350] disabled:opacity-50 text-[#ffffff] text-sm font-medium transition-all shadow-xs cursor-pointer active:scale-[0.99]"
+                  className="flex-1 h-11 rounded-xl bg-[#ff705d] hover:bg-[#ee6350] text-white text-sm font-semibold shadow-sm"
                 >
                   <span>{submitting ? "Activating..." : "Complete Setup"}</span>
-                  <span className="w-2.5 h-2.5 rounded-full bg-[#ffffff] transition-all duration-300 group-hover:scale-125" />
-                </button>
+                  <Check className="w-4 h-4 ml-2" />
+                </Button>
               </div>
             </motion.div>
           )}
