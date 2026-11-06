@@ -1,0 +1,413 @@
+{
+  "counters": {
+    "u_row": 9,
+    "u_column": 9,
+    "u_content_image": 6,
+    "u_content_heading": 2,
+    "u_content_text": 8,
+    "u_content_divider": 2,
+    "u_content_social": 2
+  },
+  "body": {
+    "id": "u_body",
+    "rows": [
+      {
+        "id": "i65h-_JOXm",
+        "cells": [
+          1
+        ],
+        "columns": [
+          {
+            "id": "gb_kxeewTG",
+            "contents": [
+              {
+                "id": "kYFH9otvKO",
+                "type": "image",
+                "values": {
+                  "containerPadding": "10px",
+                  "anchor": "",
+                  "src": {
+                    "url": "https://assets.unlayer.com/projects/0/1793976790552-GDG%20Header.png",
+                    "width": 1199,
+                    "height": 299,
+                    "filename": "GDG Header.png",
+                    "contentType": "image/png",
+                    "size": 38778,
+                    "dynamic": true
+                  },
+                  "textAlign": "center",
+                  "altText": "",
+                  "action": {
+                    "name": "web",
+                    "values": {
+                      "href": "",
+                      "target": "_blank"
+                    }
+                  },
+                  "hideDesktop": false,
+                  "displayCondition": null,
+                  "_styleGuide": null,
+                  "_meta": {
+                    "htmlID": "u_content_image_5",
+                    "htmlClassNames": "u_content_image"
+                  },
+                  "selectable": true,
+                  "draggable": true,
+                  "duplicatable": true,
+                  "deletable": true,
+                  "hideable": true,
+                  "locked": false,
+                  "pending": false
+                }
+              }
+            ],
+            "values": {
+              "backgroundColor": "",
+              "padding": "0px",
+              "border": {},
+              "borderRadius": "0px",
+              "_meta": {
+                "htmlID": "u_column_9",
+                "htmlClassNames": "u_column"
+              },
+              "deletable": true,
+              "locked": false
+            }
+          }
+        ],
+        "values": {
+          "displayCondition": null,
+          "columns": false,
+          "_styleGuide": null,
+          "backgroundColor": "",
+          "columnsBackgroundColor": "",
+          "backgroundImage": {
+            "url": "",
+            "fullWidth": true,
+            "repeat": "no-repeat",
+            "size": "custom",
+            "position": "center"
+          },
+          "padding": "0px",
+          "anchor": "",
+          "hideDesktop": false,
+          "_meta": {
+            "htmlID": "u_row_9",
+            "htmlClassNames": "u_row"
+          },
+          "selectable": true,
+          "draggable": true,
+          "duplicatable": true,
+          "deletable": true,
+          "hideable": true,
+          "locked": false
+        }
+      },
+      {
+        "id": "u_row_body",
+        "cells": [
+          1
+        ],
+        "columns": [
+          {
+            "id": "u_col_body",
+            "contents": [
+              {
+                "id": "u_content_heading",
+                "type": "heading",
+                "values": {
+                  "containerPadding": "28px 36px 12px 36px",
+                  "anchor": "",
+                  "headingType": "h1",
+                  "fontSize": "22px",
+                  "color": "#1f2937",
+                  "textAlign": "left",
+                  "lineHeight": "140%",
+                  "linkStyle": {
+                    "inherit": true,
+                    "linkColor": "#0000ee",
+                    "linkHoverColor": "#0000ee",
+                    "linkUnderline": true,
+                    "linkHoverUnderline": true
+                  },
+                  "hideDesktop": false,
+                  "displayCondition": null,
+                  "_styleGuide": null,
+                  "_meta": {
+                    "htmlID": "u_content_heading_2",
+                    "htmlClassNames": "u_content_heading"
+                  },
+                  "selectable": true,
+                  "draggable": true,
+                  "duplicatable": true,
+                  "deletable": true,
+                  "hideable": true,
+                  "locked": false,
+                  "text": "Hello {{name}} 👋"
+                }
+              },
+              {
+                "id": "u_content_p1",
+                "type": "text",
+                "values": {
+                  "containerPadding": "8px 36px",
+                  "anchor": "",
+                  "fontSize": "15px",
+                  "color": "#374151",
+                  "textAlign": "left",
+                  "lineHeight": "165%",
+                  "linkStyle": {
+                    "inherit": true,
+                    "linkColor": "#0000ee",
+                    "linkHoverColor": "#0000ee",
+                    "linkUnderline": true,
+                    "linkHoverUnderline": true
+                  },
+                  "hideDesktop": false,
+                  "displayCondition": null,
+                  "_styleGuide": null,
+                  "_meta": {
+                    "htmlID": "u_content_text_5",
+                    "htmlClassNames": "u_content_text"
+                  },
+                  "selectable": true,
+                  "draggable": true,
+                  "duplicatable": true,
+                  "deletable": true,
+                  "hideable": true,
+                  "locked": false,
+                  "text": "<p style=\"margin: 0px 0px 16px; line-height: 165%;\">Thank you for taking the time to apply for the <strong>Google Developer Groups on Campus (GDG AJCE) Core Team</strong>{{team_suffix}}. We truly appreciate your enthusiasm and passion for contributing to our tech community.</p>\n<p style=\"margin: 0px 0px 16px; line-height: 165%;\">We received an overwhelming number of applications from talented students across various departments. Because we have strictly limited spots available for each domain, the selection process was exceptionally challenging, <em><strong>and we regret to inform you that we are unable to offer you a core team role for this term.</strong></em></p>\n<p style=\"margin: 0px; line-height: 165%;\">Please know that this was a difficult decision driven solely by domain quotas and team capacity, and is in no way a reflection of your dedication, skills, or potential.</p>"
+                }
+              },
+              {
+                "id": "u_content_p2",
+                "type": "text",
+                "values": {
+                  "containerPadding": "8px 36px 16px 36px",
+                  "anchor": "",
+                  "fontSize": "15px",
+                  "color": "#374151",
+                  "textAlign": "left",
+                  "lineHeight": "165%",
+                  "linkStyle": {
+                    "inherit": true,
+                    "linkColor": "#0000ee",
+                    "linkHoverColor": "#0000ee",
+                    "linkUnderline": true,
+                    "linkHoverUnderline": true
+                  },
+                  "hideDesktop": false,
+                  "displayCondition": null,
+                  "_styleGuide": null,
+                  "_meta": {
+                    "htmlID": "u_content_text_7",
+                    "htmlClassNames": "u_content_text"
+                  },
+                  "selectable": true,
+                  "draggable": true,
+                  "duplicatable": true,
+                  "deletable": true,
+                  "hideable": true,
+                  "locked": false,
+                  "text": "<p style=\"margin: 0px 0px 16px; line-height: 165%;\">We strongly encourage you to participate in our upcoming events, join our technical sessions, and connect with fellow developers. We will also have upcoming calls for event volunteers and organizing contributors where your skills will be highly valued.</p>\n<p style=\"margin: 0px; line-height: 165%;\">Thank you once again for your support and interest in <strong>GDG AJCE</strong>. We look forward to learning and building together with you!</p>"
+                }
+              }
+            ],
+            "values": {
+              "backgroundColor": "#ffffff",
+              "padding": "0px",
+              "border": {},
+              "borderRadius": "0px",
+              "_meta": {
+                "htmlID": "u_column_6",
+                "htmlClassNames": "u_column"
+              }
+            }
+          }
+        ],
+        "values": {
+          "displayCondition": null,
+          "columns": false,
+          "_styleGuide": null,
+          "backgroundColor": "#f8fafc",
+          "columnsBackgroundColor": "#ffffff",
+          "backgroundImage": {
+            "url": "",
+            "fullWidth": true,
+            "repeat": "no-repeat",
+            "size": "custom",
+            "position": "center"
+          },
+          "padding": "0px",
+          "anchor": "",
+          "hideDesktop": false,
+          "_meta": {
+            "htmlID": "u_row_6",
+            "htmlClassNames": "u_row"
+          },
+          "selectable": true,
+          "draggable": true,
+          "duplicatable": true,
+          "deletable": true,
+          "hideable": true,
+          "locked": false
+        }
+      },
+      {
+        "id": "u_row_social",
+        "cells": [
+          1
+        ],
+        "columns": [
+          {
+            "id": "u_col_social",
+            "contents": [
+              {
+                "id": "UW7cz9zSC-",
+                "type": "image",
+                "values": {
+                  "containerPadding": "10px",
+                  "anchor": "",
+                  "src": {
+                    "url": "https://assets.unlayer.com/projects/0/1793976841302-GDG%20Footer.jpg",
+                    "width": 1199,
+                    "height": 322,
+                    "filename": "GDG Footer.jpg",
+                    "contentType": "image/jpeg",
+                    "size": 32847,
+                    "dynamic": true
+                  },
+                  "textAlign": "center",
+                  "altText": "",
+                  "action": {
+                    "name": "web",
+                    "values": {
+                      "href": "https://gdgajce.vercel.app/",
+                      "target": "_blank"
+                    },
+                    "attrs": {
+                      "href": "{{href}}",
+                      "target": "{{target}}"
+                    }
+                  },
+                  "hideDesktop": false,
+                  "displayCondition": null,
+                  "_styleGuide": null,
+                  "_meta": {
+                    "htmlID": "u_content_image_6",
+                    "htmlClassNames": "u_content_image"
+                  },
+                  "selectable": true,
+                  "draggable": true,
+                  "duplicatable": true,
+                  "deletable": true,
+                  "hideable": true,
+                  "locked": false,
+                  "pending": false
+                }
+              }
+            ],
+            "values": {
+              "backgroundColor": "#f8fafc",
+              "padding": "0px",
+              "border": {},
+              "borderRadius": "0px",
+              "_meta": {
+                "htmlID": "u_column_8",
+                "htmlClassNames": "u_column"
+              }
+            }
+          }
+        ],
+        "values": {
+          "displayCondition": null,
+          "columns": false,
+          "_styleGuide": null,
+          "backgroundColor": "#f8fafc",
+          "columnsBackgroundColor": "#f8fafc",
+          "backgroundImage": {
+            "url": "",
+            "fullWidth": true,
+            "repeat": "no-repeat",
+            "size": "custom",
+            "position": "center"
+          },
+          "padding": "0px",
+          "anchor": "",
+          "hideDesktop": false,
+          "_meta": {
+            "htmlID": "u_row_8",
+            "htmlClassNames": "u_row"
+          },
+          "selectable": true,
+          "draggable": true,
+          "duplicatable": true,
+          "deletable": true,
+          "hideable": true,
+          "locked": false
+        }
+      }
+    ],
+    "headers": [],
+    "footers": [],
+    "values": {
+      "_styleGuide": null,
+      "popupPosition": "center",
+      "popupDisplayDelay": 0,
+      "popupWidth": "600px",
+      "popupHeight": "auto",
+      "borderRadius": "10px",
+      "contentAlign": "center",
+      "contentVerticalAlign": "middle",
+      "contentWidth": "600px",
+      "fontFamily": {
+        "label": "Google Sans",
+        "value": "'Google Sans', Roboto, Helvetica, Arial, sans-serif"
+      },
+      "textColor": "#374151",
+      "popupBackgroundColor": "#FFFFFF",
+      "popupBackgroundImage": {
+        "url": "",
+        "fullWidth": true,
+        "repeat": "no-repeat",
+        "size": "cover",
+        "position": "center"
+      },
+      "popupOverlay_backgroundColor": "rgba(0, 0, 0, 0.1)",
+      "popupCloseButton_position": "top-right",
+      "popupCloseButton_backgroundColor": "#DDDDDD",
+      "popupCloseButton_iconColor": "#000000",
+      "popupCloseButton_borderRadius": "0px",
+      "popupCloseButton_margin": "0px",
+      "popupCloseButton_action": {
+        "name": "close_popup",
+        "attrs": {
+          "onClick": "document.querySelector('.u-popup-container').style.display = 'none';"
+        }
+      },
+      "language": {},
+      "backgroundColor": "#f8fafc",
+      "preheaderText": "",
+      "linkStyle": {
+        "body": true,
+        "linkColor": "#0000ee",
+        "linkHoverColor": "#0000ee",
+        "linkUnderline": true,
+        "linkHoverUnderline": true
+      },
+      "backgroundImage": {
+        "url": "",
+        "fullWidth": true,
+        "repeat": "no-repeat",
+        "size": "custom",
+        "position": "center"
+      },
+      "accessibilityTitle": "",
+      "_meta": {
+        "htmlID": "u_body",
+        "htmlClassNames": "u_body"
+      }
+    }
+  },
+  "schemaVersion": 27
+}

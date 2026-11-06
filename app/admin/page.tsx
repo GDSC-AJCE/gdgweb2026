@@ -26,6 +26,7 @@ import ApplicationsTab from "@/components/admin/tabs/ApplicationsTab";
 import FundsTab from "@/components/admin/tabs/FundsTab";
 import AuditLogsTab from "@/components/admin/tabs/AuditLogsTab";
 import NewsletterTab from "@/components/admin/tabs/NewsletterTab";
+import MailStudioTab from "@/components/admin/tabs/MailStudioTab";
 import WebsiteManagementTab from "@/components/admin/tabs/WebsiteManagementTab";
 import AddExecomMemberModal from "@/components/admin/modals/AddExecomMemberModal";
 import CreateEventModal from "@/components/core/CreateEventModal";
@@ -51,6 +52,10 @@ const TAB_METADATA: Record<AdminTab, { title: string; subtitle: string }> = {
   newsletter: {
     title: "Weekly Tech Newsletter",
     subtitle: "Draft, auto-generate, preview, and broadcast weekly developer updates to all active subscribers.",
+  },
+  mailer: {
+    title: "Mail Studio & Dispatcher",
+    subtitle: "Design templates with visual drag-and-drop editor, import Figma layouts, and broadcast personalized emails via Apps Script Gateway or Gmail SMTP.",
   },
   website: {
     title: "Website Configuration",
@@ -80,7 +85,7 @@ export default function AdminPage() {
     if (typeof window !== "undefined") {
       const params = new URLSearchParams(window.location.search);
       const tabParam = params.get("tab") as AdminTab;
-      if (tabParam && ["overview", "execom", "events", "newsletter", "website", "users", "applications", "funds", "audit"].includes(tabParam)) {
+      if (tabParam && ["overview", "execom", "events", "newsletter", "mailer", "website", "users", "applications", "funds", "audit"].includes(tabParam)) {
         return tabParam;
       }
     }
@@ -105,7 +110,7 @@ export default function AdminPage() {
         setIsDevPreview(true);
       }
       const tabParam = params.get("tab") as AdminTab;
-      if (tabParam && ["overview", "execom", "events", "newsletter", "website", "users", "applications", "funds", "audit"].includes(tabParam)) {
+      if (tabParam && ["overview", "execom", "events", "newsletter", "mailer", "website", "users", "applications", "funds", "audit"].includes(tabParam)) {
         setActiveTab(tabParam);
       }
     }
@@ -603,6 +608,10 @@ export default function AdminPage() {
                     adminEmail={user?.email}
                     adminName={adminName}
                   />
+                )}
+
+                {activeTab === "mailer" && (
+                  <MailStudioTab />
                 )}
 
                 {activeTab === "website" && (

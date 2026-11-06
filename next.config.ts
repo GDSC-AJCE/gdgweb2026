@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  serverExternalPackages: ["emailmd", "mjml"],
+  serverExternalPackages: ["emailmd", "mjml", "googleapis"],
   images: {
     remotePatterns: [
       {

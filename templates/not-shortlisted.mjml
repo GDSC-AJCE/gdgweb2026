@@ -1,0 +1,72 @@
+<mjml>
+  <mj-head>
+    <mj-title>Update on your GDG AJCE Core Team Application</mj-title>
+    <mj-font name="Google Sans" href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&display=swap" />
+    <mj-attributes>
+      <mj-all font-family="'Google Sans', Roboto, Arial, sans-serif" color="#374151" />
+      <mj-text font-size="15px" line-height="1.65" />
+    </mj-attributes>
+  </mj-head>
+  <mj-body background-color="#f8fafc">
+    <!-- Main Card -->
+    <mj-section background-color="#ffffff" padding="32px 36px 24px 36px">
+      <mj-column>
+        <mj-text font-size="22px" font-weight="700" color="#1f2937" padding="0 0 16px 0">
+          Hello {{name}} 👋
+        </mj-text>
+
+        <mj-text padding="0 0 16px 0">
+          Thank you for taking the time to apply for the <strong>Google Developer Groups on Campus (GDG AJCE) Core Team</strong>{{team_suffix}}. We truly appreciate your enthusiasm and passion for contributing to our tech community.
+        </mj-text>
+
+        <mj-text padding="0 0 16px 0">
+          We received an overwhelming number of applications from talented students across various departments. Because we have strictly limited spots available for each domain, the selection process was exceptionally challenging, and we regret to inform you that we are unable to offer you a core team role for this term.
+        </mj-text>
+
+        <mj-text padding="0 0 16px 0">
+          Please know that this was a difficult decision driven solely by domain quotas and team capacity, and is in no way a reflection of your dedication, skills, or potential.
+        </mj-text>
+
+        <!-- Highlight Callout Box -->
+        <mj-section background-color="#f0f7ff" border-left="4px solid #1a73e8" border-radius="6px" padding="16px">
+          <mj-column padding="0">
+            <mj-text font-weight="700" color="#1e3a8a" font-size="15px" padding="0 0 6px 0">
+              💡 You are always an integral part of GDG AJCE
+            </mj-text>
+            <mj-text font-size="14px" color="#1e40af" padding="0" line-height="1.55">
+              Being on the core team is just one of many ways to be involved. GDG is an open developer community, and the heart of our group has always been our active community members. All workshops, hackathons, speaker sessions, and tech study jams are completely open to you.
+            </mj-text>
+          </mj-column>
+        </mj-section>
+
+        <mj-text padding="20px 0 16px 0">
+          We strongly encourage you to participate in our upcoming events, join our technical sessions, and connect with fellow developers. We will also have upcoming calls for event volunteers and organizing contributors where your skills will be highly valued.
+        </mj-text>
+
+        <mj-text padding="0 0 16px 0">
+          Thank you once again for your support and interest in GDG AJCE. We look forward to learning and building together with you!
+        </mj-text>
+
+        <mj-divider border-color="#e5e7eb" border-width="1px" padding="16px 0" />
+
+        <mj-text padding="0" line-height="1.6">
+          Warm regards,<br>
+          <strong>GDG AJCE Team</strong><br>
+          <span style="font-size: 13px; color: #6b7280;">Google Developer Groups on Campus · Amal Jyothi College of Engineering</span>
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+    <!-- Social Links -->
+    <mj-section padding="16px 0">
+      <mj-column>
+        <mj-text align="center" font-size="12px" color="#9ca3af" padding="0">
+          Stay connected: 
+          <a href="https://gdg.community.dev/gdg-ajce/" style="color: #1a73e8; text-decoration: underline;">Community Page</a> · 
+          <a href="https://www.linkedin.com/company/gdg-ajce/" style="color: #1a73e8; text-decoration: underline;">LinkedIn</a> · 
+          <a href="https://instagram.com/gdg_ajce" style="color: #1a73e8; text-decoration: underline;">Instagram</a>
+        </mj-text>
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>

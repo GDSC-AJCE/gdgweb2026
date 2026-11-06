@@ -14,6 +14,7 @@ import {
   Lock,
   Mail,
   Globe,
+  Send,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -22,6 +23,7 @@ export type AdminTab =
   | "execom"
   | "events"
   | "newsletter"
+  | "mailer"
   | "users"
   | "applications"
   | "funds"
@@ -39,6 +41,7 @@ const OPERATIONS_NAV: { id: AdminTab; label: string; icon: React.ElementType }[]
   { id: "overview", label: "Overview", icon: LayoutDashboard },
   { id: "events", label: "Events & Workshops", icon: Calendar },
   { id: "newsletter", label: "Weekly Newsletter", icon: Mail },
+  { id: "mailer", label: "Mail Studio", icon: Send },
   { id: "website", label: "Website Settings", icon: Globe },
   { id: "applications", label: "Applications", icon: FileText },
   { id: "execom", label: "Execom Directory", icon: Users },

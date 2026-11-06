@@ -1,0 +1,447 @@
+{
+  "counters": {
+    "u_row": 6,
+    "u_column": 6,
+    "u_content_image": 4,
+    "u_content_heading": 2,
+    "u_content_text": 6,
+    "u_content_html": 7
+  },
+  "body": {
+    "id": "u_body",
+    "rows": [
+      {
+        "id": "u_row_header",
+        "cells": [
+          1
+        ],
+        "columns": [
+          {
+            "id": "u_col_header",
+            "contents": [
+              {
+                "id": "u_content_header_img",
+                "type": "image",
+                "values": {
+                  "containerPadding": "0px",
+                  "anchor": "",
+                  "src": {
+                    "url": "https://assets.unlayer.com/projects/0/1793981389866-GDG%20Header.png?w=1160px",
+                    "width": 1160,
+                    "height": 290,
+                    "filename": "GDG Header.png",
+                    "dynamic": true
+                  },
+                  "textAlign": "center",
+                  "altText": "GDG Header",
+                  "action": {
+                    "name": "web",
+                    "values": {
+                      "href": "",
+                      "target": "_blank"
+                    }
+                  },
+                  "hideDesktop": false,
+                  "displayCondition": null,
+                  "_styleGuide": null,
+                  "_meta": {
+                    "htmlID": "u_content_image_3",
+                    "htmlClassNames": "u_content_image"
+                  },
+                  "selectable": true,
+                  "draggable": true,
+                  "duplicatable": true,
+                  "deletable": true,
+                  "hideable": true,
+                  "locked": false
+                }
+              }
+            ],
+            "values": {
+              "backgroundColor": "#ffffff",
+              "padding": "0px",
+              "_meta": {
+                "htmlID": "u_column_4",
+                "htmlClassNames": "u_column"
+              },
+              "deletable": true
+            }
+          }
+        ],
+        "values": {
+          "displayCondition": null,
+          "columns": false,
+          "_styleGuide": null,
+          "backgroundColor": "#f1f5f9",
+          "columnsBackgroundColor": "#ffffff",
+          "backgroundImage": {
+            "url": "",
+            "fullWidth": true,
+            "repeat": "no-repeat",
+            "size": "custom",
+            "position": "center"
+          },
+          "padding": "0px",
+          "anchor": "",
+          "hideDesktop": false,
+          "_meta": {
+            "htmlID": "u_row_4",
+            "htmlClassNames": "u_row"
+          },
+          "selectable": true,
+          "draggable": true,
+          "duplicatable": true,
+          "deletable": true,
+          "hideable": true,
+          "locked": false
+        }
+      },
+      {
+        "id": "u_row_main",
+        "cells": [
+          1
+        ],
+        "columns": [
+          {
+            "id": "u_col_main",
+            "contents": [
+              {
+                "id": "u_content_heading",
+                "type": "heading",
+                "values": {
+                  "containerPadding": "14px 36px 12px 36px",
+                  "anchor": "",
+                  "headingType": "h1",
+                  "fontSize": "24px",
+                  "color": "#0f172a",
+                  "textAlign": "left",
+                  "lineHeight": "130%",
+                  "linkStyle": {
+                    "inherit": true,
+                    "linkColor": "#0000ee",
+                    "linkHoverColor": "#0000ee",
+                    "linkUnderline": true,
+                    "linkHoverUnderline": true
+                  },
+                  "hideDesktop": false,
+                  "displayCondition": null,
+                  "_styleGuide": null,
+                  "_meta": {
+                    "htmlID": "u_content_heading_2",
+                    "htmlClassNames": "u_content_heading"
+                  },
+                  "selectable": true,
+                  "draggable": true,
+                  "duplicatable": true,
+                  "deletable": true,
+                  "hideable": true,
+                  "locked": false,
+                  "text": "Congratulations! You have been Shortlisted"
+                }
+              },
+              {
+                "id": "u_content_greeting",
+                "type": "text",
+                "values": {
+                  "containerPadding": "6px 36px 16px 36px",
+                  "anchor": "",
+                  "fontSize": "15px",
+                  "color": "#334155",
+                  "textAlign": "left",
+                  "lineHeight": "165%",
+                  "linkStyle": {
+                    "inherit": true,
+                    "linkColor": "#0000ee",
+                    "linkHoverColor": "#0000ee",
+                    "linkUnderline": true,
+                    "linkHoverUnderline": true
+                  },
+                  "hideDesktop": false,
+                  "displayCondition": null,
+                  "_styleGuide": null,
+                  "_meta": {
+                    "htmlID": "u_content_text_4",
+                    "htmlClassNames": "u_content_text"
+                  },
+                  "selectable": true,
+                  "draggable": true,
+                  "duplicatable": true,
+                  "deletable": true,
+                  "hideable": true,
+                  "locked": false,
+                  "text": "<p style=\"margin:0 0 12px;\">Dear <strong>{{name}}</strong>,</p><p style=\"margin:0 0 12px;\">We are excited to share that after reviewing your application, you have been <strong>officially shortlisted</strong> for the next round of interviews for the <strong>Google Developer Groups on Campus (GDG AJCE) Core Team</strong>{{team_suffix}}!</p><p style=\"margin:0;\">We were thoroughly impressed by your enthusiasm, background, and vision for our tech community. This next round will be a focused interaction to discuss your ideas, interests, and how you can make a meaningful impact with GDG AJCE.</p>"
+                }
+              },
+              {
+                "id": "u_content_schedule_box",
+                "type": "html",
+                "values": {
+                  "html": "<table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" style=\"background-color:#f8fafc; border:1px solid #cbd5e1; border-radius:12px; overflow:hidden;\"><tr><td style=\"padding:18px 20px;\"><div style=\"font-size:12px; font-weight:800; color:#1e293b; text-transform:uppercase; letter-spacing:0.8px; margin-bottom:12px; border-bottom:1px solid #e2e8f0; padding-bottom:8px;\">GDG EXECOM SELECTION &bull; Assigned Slot Details</div><table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\"><tr><td style=\"padding:5px 0; font-size:14px; color:#475569; width:130px; font-weight:600;\">Category:</td><td style=\"padding:5px 0; font-size:14px; color:#0f172a; font-weight:700;\">{{category}}</td></tr><tr><td style=\"padding:5px 0; font-size:14px; color:#475569; width:130px; font-weight:600;\">Date:</td><td style=\"padding:5px 0; font-size:14px; color:#0f172a; font-weight:700;\">{{date}}</td></tr><tr><td style=\"padding:5px 0; font-size:14px; color:#475569; width:130px; font-weight:600;\">Time:</td><td style=\"padding:5px 0; font-size:14px; color:#0b57d0; font-weight:700;\">{{time}}</td></tr><tr><td style=\"padding:5px 0; font-size:14px; color:#475569; width:130px; font-weight:600;\">Time Zone:</td><td style=\"padding:5px 0; font-size:14px; color:#0f172a; font-weight:600;\">Asia/Kolkata (IST)</td></tr><tr><td style=\"padding:5px 0; font-size:14px; color:#475569; width:130px; font-weight:600;\">Platform:</td><td style=\"padding:5px 0; font-size:14px; color:#0f172a; font-weight:600;\">Google Meet (Video Call)</td></tr></table></td></tr></table>",
+                  "hideDesktop": false,
+                  "displayCondition": null,
+                  "_styleGuide": null,
+                  "containerPadding": "10px 36px 18px 36px",
+                  "anchor": "",
+                  "_meta": {
+                    "htmlID": "u_content_html_5",
+                    "htmlClassNames": "u_content_html"
+                  },
+                  "selectable": true,
+                  "draggable": true,
+                  "duplicatable": true,
+                  "deletable": true,
+                  "hideable": true,
+                  "locked": false
+                }
+              },
+              {
+                "id": "u_content_action_buttons",
+                "type": "html",
+                "values": {
+                  "html": "<div style=\"text-align:center;\"><a href=\"{{whatsapp_link}}\" target=\"_blank\" style=\"box-sizing:border-box; display:inline-block; text-decoration:none; background-color:#25D366; color:#ffffff; border-radius:28px; padding:13px 24px; font-size:14px; font-weight:700; margin:6px; box-shadow:0 4px 12px rgba(37,211,102,0.35); text-align:center; border:1px solid #1ebe5d;\"><table role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"display:inline-table; vertical-align:middle;\"><tr><td style=\"vertical-align:middle; padding-right:10px;\"><img src=\"/assets/whatsapp-icon.png\" width=\"22\" height=\"22\" alt=\"WhatsApp\" style=\"display:block; width:22px; height:22px; border:0;\" /></td><td style=\"vertical-align:middle; color:#ffffff; font-size:14px; font-weight:700; line-height:1;\">Join WhatsApp Group</td></tr></table></a><a href=\"{{meet_link}}\" target=\"_blank\" style=\"box-sizing:border-box; display:inline-block; text-decoration:none; background-color:#FF6C61; color:#ffffff; border-radius:28px; padding:13px 24px; font-size:14px; font-weight:700; margin:6px; box-shadow:0 4px 14px rgba(11,87,208,0.35); text-align:center; border:1px solid #FF4738;\"><table role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"display:inline-table; vertical-align:middle;\"><tr><td style=\"vertical-align:middle; padding-right:10px;\"><img src=\"/assets/google-meet-icon.png\" width=\"22\" height=\"22\" alt=\"Google Meet\" style=\"display:block; width:22px; height:22px; border:0;\" /></td><td style=\"vertical-align:middle; color:#ffffff; font-size:14px; font-weight:700; line-height:1;\">Join Google Meet</td></tr></table></a></div>",
+                  "hideDesktop": false,
+                  "displayCondition": null,
+                  "_styleGuide": null,
+                  "containerPadding": "6px 36px 26px 36px",
+                  "anchor": "",
+                  "_meta": {
+                    "htmlID": "u_content_html_7",
+                    "htmlClassNames": "u_content_html"
+                  },
+                  "selectable": true,
+                  "draggable": true,
+                  "duplicatable": true,
+                  "deletable": true,
+                  "hideable": true,
+                  "locked": false
+                }
+              },
+              {
+                "id": "u_content_prep_guidelines",
+                "type": "text",
+                "values": {
+                  "containerPadding": "0px 36px 18px 36px",
+                  "anchor": "",
+                  "fontSize": "13px",
+                  "color": "#64748b",
+                  "textAlign": "left",
+                  "lineHeight": "170%",
+                  "linkStyle": {
+                    "inherit": true,
+                    "linkColor": "#0000ee",
+                    "linkHoverColor": "#0000ee",
+                    "linkUnderline": true,
+                    "linkHoverUnderline": true
+                  },
+                  "hideDesktop": false,
+                  "displayCondition": null,
+                  "_styleGuide": null,
+                  "_meta": {
+                    "htmlID": "u_content_text_5",
+                    "htmlClassNames": "u_content_text"
+                  },
+                  "selectable": true,
+                  "draggable": true,
+                  "duplicatable": true,
+                  "deletable": true,
+                  "hideable": true,
+                  "locked": false,
+                  "text": "<div style=\"border-top:1px solid #f1f5f9; padding-top:18px;\"><strong style=\"color:#334155; font-size:13px;\">Important Preparation Guidelines:</strong><ul style=\"margin:8px 0 0 18px; padding:0;\"><li style=\"line-height:22px;\">Ensure a stable internet connection and test your camera & microphone in advance.</li><li style=\"line-height:22px;\">Join from a quiet environment with proper lighting.</li><li style=\"line-height:22px;\">Be ready with any portfolio, GitHub links, or projects you wish to discuss.</li><li style=\"line-height:22px;\">Join the WhatsApp group immediately for real-time queue notifications and schedule coordination.</li><li style=\"line-height:22px;\">Late arrivals will not be accommodated. (If you are unable to attend your slot, please contact the organizers in advance via the WhatsApp group).</li></ul></div>"
+                },
+                "hasDeprecatedFontControls": true
+              }
+            ],
+            "values": {
+              "backgroundColor": "#ffffff",
+              "padding": "0px",
+              "_meta": {
+                "htmlID": "u_column_5",
+                "htmlClassNames": "u_column"
+              },
+              "deletable": true
+            }
+          }
+        ],
+        "values": {
+          "displayCondition": null,
+          "columns": false,
+          "_styleGuide": null,
+          "backgroundColor": "#f1f5f9",
+          "columnsBackgroundColor": "#ffffff",
+          "backgroundImage": {
+            "url": "",
+            "fullWidth": true,
+            "repeat": "no-repeat",
+            "size": "custom",
+            "position": "center"
+          },
+          "padding": "0px",
+          "anchor": "",
+          "hideDesktop": false,
+          "_meta": {
+            "htmlID": "u_row_5",
+            "htmlClassNames": "u_row"
+          },
+          "selectable": true,
+          "draggable": true,
+          "duplicatable": true,
+          "deletable": true,
+          "hideable": true,
+          "locked": false
+        }
+      },
+      {
+        "id": "u_row_footer",
+        "cells": [
+          1
+        ],
+        "columns": [
+          {
+            "id": "u_col_footer",
+            "contents": [
+              {
+                "id": "u_content_footer_img",
+                "type": "image",
+                "values": {
+                  "containerPadding": "0px",
+                  "anchor": "",
+                  "src": {
+                    "url": "https://assets.unlayer.com/projects/0/1793981396347-GDG%20Footer.jpg?w=1160px",
+                    "width": 1160,
+                    "height": 312,
+                    "filename": "GDG Footer.jpg",
+                    "dynamic": true
+                  },
+                  "textAlign": "center",
+                  "altText": "GDG Footer",
+                  "action": {
+                    "name": "web",
+                    "attrs": {
+                      "href": "{{href}}",
+                      "target": "{{target}}"
+                    },
+                    "values": {
+                      "href": "https://gdgajce.vercel.app/",
+                      "target": "_blank"
+                    }
+                  },
+                  "hideDesktop": false,
+                  "displayCondition": null,
+                  "_styleGuide": null,
+                  "_meta": {
+                    "htmlID": "u_content_image_4",
+                    "htmlClassNames": "u_content_image"
+                  },
+                  "selectable": true,
+                  "draggable": true,
+                  "duplicatable": true,
+                  "deletable": true,
+                  "hideable": true,
+                  "locked": false
+                }
+              }
+            ],
+            "values": {
+              "backgroundColor": "#ffffff",
+              "padding": "0px",
+              "_meta": {
+                "htmlID": "u_column_6",
+                "htmlClassNames": "u_column"
+              },
+              "deletable": true
+            }
+          }
+        ],
+        "values": {
+          "displayCondition": null,
+          "columns": false,
+          "_styleGuide": null,
+          "backgroundColor": "#f1f5f9",
+          "columnsBackgroundColor": "#ffffff",
+          "backgroundImage": {
+            "url": "",
+            "fullWidth": true,
+            "repeat": "no-repeat",
+            "size": "custom",
+            "position": "center"
+          },
+          "padding": "0px",
+          "anchor": "",
+          "hideDesktop": false,
+          "_meta": {
+            "htmlID": "u_row_6",
+            "htmlClassNames": "u_row"
+          },
+          "selectable": true,
+          "draggable": true,
+          "duplicatable": true,
+          "deletable": true,
+          "hideable": true,
+          "locked": false
+        }
+      }
+    ],
+    "headers": [],
+    "footers": [],
+    "values": {
+      "_styleGuide": null,
+      "popupPosition": "center",
+      "popupDisplayDelay": 0,
+      "popupWidth": "600px",
+      "popupHeight": "auto",
+      "borderRadius": "10px",
+      "contentAlign": "center",
+      "contentVerticalAlign": "middle",
+      "contentWidth": "600px",
+      "fontFamily": {
+        "label": "Arial",
+        "value": "arial,helvetica,sans-serif"
+      },
+      "textColor": "#334155",
+      "popupBackgroundColor": "#FFFFFF",
+      "popupBackgroundImage": {
+        "url": "",
+        "fullWidth": true,
+        "repeat": "no-repeat",
+        "size": "cover",
+        "position": "center"
+      },
+      "popupOverlay_backgroundColor": "rgba(0, 0, 0, 0.1)",
+      "popupCloseButton_position": "top-right",
+      "popupCloseButton_backgroundColor": "#DDDDDD",
+      "popupCloseButton_iconColor": "#000000",
+      "popupCloseButton_borderRadius": "0px",
+      "popupCloseButton_margin": "0px",
+      "popupCloseButton_action": {
+        "name": "close_popup",
+        "attrs": {
+          "onClick": "document.querySelector('.u-popup-container').style.display = 'none';"
+        }
+      },
+      "language": {},
+      "backgroundColor": "#f1f5f9",
+      "preheaderText": "",
+      "linkStyle": {
+        "body": true,
+        "linkColor": "#0000ee",
+        "linkHoverColor": "#0000ee",
+        "linkUnderline": true,
+        "linkHoverUnderline": true
+      },
+      "backgroundImage": {
+        "url": "",
+        "fullWidth": true,
+        "repeat": "no-repeat",
+        "size": "custom",
+        "position": "center"
+      },
+      "accessibilityTitle": "",
+      "_meta": {
+        "htmlID": "u_body",
+        "htmlClassNames": "u_body"
+      },
+      "linkColor": "#1a73e8"
+    }
+  },
+  "schemaVersion": 27
+}
