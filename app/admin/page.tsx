@@ -532,6 +532,7 @@ export default function AdminPage() {
         <AdminHeader
           title={TAB_METADATA[activeTab].title}
           subtitle={TAB_METADATA[activeTab].subtitle}
+          activeTab={activeTab}
         />
 
         {/* 2-COLUMN LAYOUT: SIDEBAR (LEFT) + ACTIVE TAB CONTENT (RIGHT) */}
