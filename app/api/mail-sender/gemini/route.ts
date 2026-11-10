@@ -13,7 +13,7 @@ import {
 export async function GET() {
   try {
     const hasEnvKey = Boolean(getGeminiApiKey());
-    let connection = { success: false, message: "No API key configured", model: "" };
+    let connection: { success: boolean; message: string; model?: string } = { success: false, message: "No API key configured", model: "" };
 
     if (hasEnvKey) {
       connection = await testGeminiConnection();
