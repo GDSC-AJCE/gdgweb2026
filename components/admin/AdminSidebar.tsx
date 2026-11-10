@@ -19,6 +19,7 @@ import {
   Sparkles,
   ChevronRight,
   Command,
+  BarChart3,
 } from "lucide-react";
 import Link from "next/link";
 import StatusDot from "@/components/ui/StatusDot";
@@ -26,6 +27,7 @@ import Chip from "@/components/ui/Chip";
 
 export type AdminTab =
   | "overview"
+  | "analytics"
   | "execom"
   | "events"
   | "newsletter"
@@ -67,6 +69,14 @@ const NAV_SECTIONS: NavSection[] = [
         label: "Chapter Cockpit",
         icon: LayoutDashboard,
         description: "Velocity, metrics & triage",
+      },
+      {
+        id: "analytics",
+        label: "Analytics & Telemetry",
+        icon: BarChart3,
+        description: "Charts, growth & demographics",
+        badge: "Live",
+        badgeColor: "blue",
       },
     ],
   },

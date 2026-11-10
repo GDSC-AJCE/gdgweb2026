@@ -13,6 +13,7 @@ import {
   Lock,
   Settings,
   ArrowUpDown,
+  Users,
 } from "lucide-react";
 import { doc, deleteDoc, writeBatch, collection, Timestamp, addDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
@@ -129,25 +130,42 @@ export default function ExecomManagementTab({
   return (
     <div className="space-y-6 select-none">
       {/* TOOLBAR */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-5 rounded-[32px] bg-white border border-[#d5d5d4] shadow-xs">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-5 rounded-[28px] bg-white border border-slate-200/90 shadow-2xs">
         <div>
-          <h3 className="text-base font-bold text-[#2c2e2a]">
-            Chapter Leadership & Execom ({members.length})
-          </h3>
-          <p className="text-xs text-[#80827f]">
-            All changes sync directly with the public <span className="font-mono text-[#2ba0ff]">/about#execom</span> directory.
+          <div className="flex items-center gap-2">
+            <h3 className="text-base font-bold text-slate-900">
+              Chapter Leadership & Execom ({members.length})
+            </h3>
+            <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 font-semibold border border-blue-200/60">
+              Core Roster
+            </span>
+          </div>
+          <p className="text-xs text-slate-500 mt-0.5">
+            All changes sync directly with the public <span className="font-mono text-blue-600 font-medium">/about#execom</span> directory.
           </p>
         </div>
 
         <div className="flex items-center gap-2.5 flex-wrap">
+          {/* PRIMARY: Add Execom Member Button (Always Prominent & Accessible) */}
+          <button
+            onClick={() => {
+              setEditingMember(selectedCohort !== "all" ? ({ year: selectedCohort } as any) : ({ year: "2026" } as any));
+              setIsModalOpen(true);
+            }}
+            className="inline-flex items-center gap-1.5 px-4.5 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold shadow-sm transition active:scale-95 cursor-pointer"
+          >
+            <Plus className="w-3.5 h-3.5" />
+            <span>Add Execom Member</span>
+          </button>
+
           {/* Grid / Table view toggle */}
-          <div className="flex items-center p-1 rounded-full bg-[#f5f1e4] border border-[#d5d5d4]">
+          <div className="flex items-center p-1 rounded-xl bg-slate-100 border border-slate-200/80">
             <button
               onClick={() => setViewMode("grid")}
-              className={`p-1.5 rounded-full text-xs font-semibold transition ${
+              className={`p-1.5 rounded-lg text-xs font-semibold transition cursor-pointer ${
                 viewMode === "grid"
-                  ? "bg-white text-[#2c2e2a] shadow-xs"
-                  : "text-[#80827f] hover:text-[#2c2e2a]"
+                  ? "bg-white text-slate-900 shadow-2xs"
+                  : "text-slate-500 hover:text-slate-900"
               }`}
               title="Google Labs Grid View"
             >
@@ -155,10 +173,10 @@ export default function ExecomManagementTab({
             </button>
             <button
               onClick={() => setViewMode("table")}
-              className={`p-1.5 rounded-full text-xs font-semibold transition ${
+              className={`p-1.5 rounded-lg text-xs font-semibold transition cursor-pointer ${
                 viewMode === "table"
-                  ? "bg-white text-[#2c2e2a] shadow-xs"
-                  : "text-[#80827f] hover:text-[#2c2e2a]"
+                  ? "bg-white text-slate-900 shadow-2xs"
+                  : "text-slate-500 hover:text-slate-900"
               }`}
               title="Table View"
             >
@@ -166,129 +184,132 @@ export default function ExecomManagementTab({
             </button>
           </div>
 
+          {/* Rearrange Order Button */}
+          <button
+            onClick={() => setIsReorderOpen(true)}
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200/80 text-xs font-semibold text-slate-700 transition cursor-pointer"
+            title="Rearrange Execom member display order"
+          >
+            <ArrowUpDown className="w-3.5 h-3.5 text-blue-600" />
+            <span>Rearrange Order</span>
+          </button>
+
+          {/* Upload Past Execom Button */}
+          <button
+            onClick={() => setIsUploadPastOpen(true)}
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200/80 text-xs font-semibold text-slate-700 transition cursor-pointer"
+            title="Upload previous year's Execom roster (CSV, spreadsheet text, or manual)"
+          >
+            <UploadCloud className="w-3.5 h-3.5 text-blue-600" />
+            <span>Upload Past</span>
+          </button>
+
+          {/* Seed 2026 Roster button */}
+          <button
+            onClick={handleSeed}
+            disabled={seeding}
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200/80 text-xs font-medium text-slate-700 transition disabled:opacity-50 cursor-pointer"
+            title="Seed default leads from TeamData"
+          >
+            <UploadCloud className="w-3.5 h-3.5 text-slate-500" />
+            <span>{seeding ? "Seeding..." : "Seed 2026"}</span>
+          </button>
+
           {onOpenDriveSettings && (
             <button
               onClick={onOpenDriveSettings}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white hover:bg-slate-50 border border-slate-200 text-xs font-semibold text-[#0f172a] shadow-2xs transition cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200/80 text-xs font-semibold text-slate-700 transition cursor-pointer"
               title="Configure Application Form & Questions"
             >
-              <Settings className="w-3.5 h-3.5 text-[#2563EB]" />
-              <span>Application Settings</span>
+              <Settings className="w-3.5 h-3.5 text-blue-600" />
+              <span>Drive Settings</span>
             </button>
-          )}
-
-          {isSuperAdmin ? (
-            <>
-              {/* Rearrange Order Button */}
-              <button
-                onClick={() => setIsReorderOpen(true)}
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-[50px] bg-[#f5f1e4] hover:bg-[#eae5d7] border border-[#d5d5d4] text-xs font-semibold text-[#2c2e2a] transition cursor-pointer"
-                title="Rearrange Execom member display order"
-              >
-                <ArrowUpDown className="w-3.5 h-3.5 text-[#2ba0ff]" />
-                <span>Rearrange Order</span>
-              </button>
-
-              {/* Upload Past Execom Button */}
-              <button
-                onClick={() => setIsUploadPastOpen(true)}
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-[50px] bg-[#f5f1e4] hover:bg-[#eae5d7] border border-[#d5d5d4] text-xs font-semibold text-[#2c2e2a] transition cursor-pointer"
-                title="Upload previous year's Execom roster (CSV, spreadsheet text, or manual)"
-              >
-                <UploadCloud className="w-3.5 h-3.5 text-[#2ba0ff]" />
-                <span>Upload Past Execom</span>
-              </button>
-
-              {/* Seed button */}
-              <button
-                onClick={handleSeed}
-                disabled={seeding}
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-[50px] bg-[#f5f1e4] hover:bg-[#eae5d7] border border-[#d5d5d4] text-xs font-medium text-[#2c2e2a] transition disabled:opacity-50"
-                title="Seed default leads from TeamData"
-              >
-                <UploadCloud className="w-3.5 h-3.5 text-[#2ba0ff]" />
-                <span>{seeding ? "Seeding..." : "Seed 2026 Roster"}</span>
-              </button>
-
-              {/* Add Execom Member Button */}
-              <button
-                onClick={() => {
-                  setEditingMember(selectedCohort !== "all" ? ({ year: selectedCohort } as any) : null);
-                  setIsModalOpen(true);
-                }}
-                className="inline-flex items-center gap-1.5 px-5 py-2 rounded-[50px] bg-[#2c2e2a] hover:bg-[#141414] text-white text-xs font-semibold shadow-md transition active:scale-95 cursor-pointer"
-              >
-                <Plus className="w-3.5 h-3.5" />
-                <span>Add Member</span>
-              </button>
-            </>
-          ) : (
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-[50px] bg-[#f5f1e4] border border-[#d5d5d4] text-xs font-mono text-[#80827f]">
-              <Lock className="w-3.5 h-3.5 text-[#80827f]" />
-              <span>Roster edits restricted to Super Admin</span>
-            </div>
           )}
         </div>
       </div>
 
       {/* COHORT / YEAR FILTER PILLS */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
+      <div className="flex items-center justify-between gap-2 overflow-x-auto pb-1 scrollbar-none">
+        <div className="flex items-center gap-2 shrink-0">
+          <button
+            onClick={() => setSelectedCohort("all")}
+            className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition cursor-pointer shrink-0 ${
+              selectedCohort === "all"
+                ? "bg-slate-900 text-white shadow-2xs"
+                : "bg-white text-slate-600 hover:text-slate-900 border border-slate-200"
+            }`}
+          >
+            All Rosters ({members.length})
+          </button>
+          {availableCohorts.map((year) => {
+            const count = members.filter((m) => (m.year || "2026") === year).length;
+            const label =
+              year === "2026"
+                ? "2025-26 (Active)"
+                : year === "2025"
+                ? "2024-25 Alumni"
+                : year === "2024"
+                ? "2023-24 Alumni"
+                : `${year} Cohort`;
+            return (
+              <button
+                key={year}
+                onClick={() => setSelectedCohort(year)}
+                className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition cursor-pointer shrink-0 ${
+                  selectedCohort === year
+                    ? "bg-slate-900 text-white shadow-2xs"
+                    : "bg-white text-slate-600 hover:text-slate-900 border border-slate-200"
+                }`}
+              >
+                {label} ({count})
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Quick Add Button in Filter Bar */}
         <button
-          onClick={() => setSelectedCohort("all")}
-          className={`px-4 py-1.5 rounded-full text-xs font-semibold transition cursor-pointer shrink-0 ${
-            selectedCohort === "all"
-              ? "bg-[#2c2e2a] text-white shadow-xs"
-              : "bg-white text-[#80827f] hover:text-[#2c2e2a] border border-[#d5d5d4]"
-          }`}
+          onClick={() => {
+            setEditingMember(selectedCohort !== "all" ? ({ year: selectedCohort } as any) : ({ year: "2026" } as any));
+            setIsModalOpen(true);
+          }}
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 text-xs font-semibold shrink-0 cursor-pointer transition"
         >
-          All Rosters ({members.length})
+          <Plus className="w-3 h-3" />
+          <span>Add to {selectedCohort !== "all" ? selectedCohort : "2026"}</span>
         </button>
-        {availableCohorts.map((year) => {
-          const count = members.filter((m) => (m.year || "2026") === year).length;
-          const label =
-            year === "2026"
-              ? "2025-26 (Active)"
-              : year === "2025"
-              ? "2024-25 Alumni"
-              : year === "2024"
-              ? "2023-24 Alumni"
-              : `${year} Cohort`;
-          return (
-            <button
-              key={year}
-              onClick={() => setSelectedCohort(year)}
-              className={`px-4 py-1.5 rounded-full text-xs font-semibold transition cursor-pointer shrink-0 ${
-                selectedCohort === year
-                  ? "bg-[#2c2e2a] text-white shadow-xs"
-                  : "bg-white text-[#80827f] hover:text-[#2c2e2a] border border-[#d5d5d4]"
-              }`}
-            >
-              {label} ({count})
-            </button>
-          );
-        })}
       </div>
 
       {displayedMembers.length === 0 ? (
-        <div className="p-12 rounded-[32px] bg-white border border-[#d5d5d4] text-center space-y-3">
-          <div className="w-12 h-12 rounded-full bg-[#f5f1e4] text-[#80827f] flex items-center justify-center mx-auto">
-            <UploadCloud className="w-6 h-6 text-[#2ba0ff]" />
+        <div className="p-12 rounded-[28px] bg-white border border-slate-200 text-center space-y-4">
+          <div className="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center mx-auto">
+            <Users className="w-6 h-6 text-blue-600" />
           </div>
-          <h4 className="text-sm font-bold text-[#2c2e2a]">No members found for this roster</h4>
-          <p className="text-xs text-[#80827f] max-w-sm mx-auto">
-            No executive committee members exist for {selectedCohort !== "all" ? `cohort ${selectedCohort}` : "the selected filter"}. Upload or add members to populate this roster.
-          </p>
-          {isSuperAdmin && (
-            <div className="flex justify-center gap-2 pt-2">
-              <button
-                onClick={() => setIsUploadPastOpen(true)}
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#2c2e2a] text-white text-xs font-semibold hover:bg-black transition cursor-pointer"
-              >
-                <UploadCloud className="w-3.5 h-3.5 text-[#2ba0ff]" />
-                <span>Upload Past Execom</span>
-              </button>
-            </div>
-          )}
+          <div>
+            <h4 className="text-sm font-bold text-slate-900">No members found for this roster</h4>
+            <p className="text-xs text-slate-500 max-w-sm mx-auto mt-1">
+              No executive committee members exist for {selectedCohort !== "all" ? `cohort ${selectedCohort}` : "the selected filter"}. Upload past archives or add members to populate this roster.
+            </p>
+          </div>
+          <div className="flex items-center justify-center gap-2 pt-2">
+            <button
+              onClick={() => {
+                setEditingMember(selectedCohort !== "all" ? ({ year: selectedCohort } as any) : ({ year: "2026" } as any));
+                setIsModalOpen(true);
+              }}
+              className="inline-flex items-center gap-1.5 px-4.5 py-2 rounded-xl bg-blue-600 text-white text-xs font-bold hover:bg-blue-700 transition cursor-pointer shadow-sm"
+            >
+              <Plus className="w-3.5 h-3.5" />
+              <span>Add Execom Member</span>
+            </button>
+            <button
+              onClick={() => setIsUploadPastOpen(true)}
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-slate-100 text-slate-700 text-xs font-semibold hover:bg-slate-200 transition cursor-pointer border border-slate-200"
+            >
+              <UploadCloud className="w-3.5 h-3.5 text-blue-600" />
+              <span>Upload Past Execom</span>
+            </button>
+          </div>
         </div>
       ) : viewMode === "grid" ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">

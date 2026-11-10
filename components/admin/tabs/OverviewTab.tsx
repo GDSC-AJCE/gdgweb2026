@@ -22,6 +22,7 @@ import {
   Database,
   CloudCheck,
   Server,
+  BarChart3,
 } from "lucide-react";
 import { AdminTab } from "../AdminSidebar";
 import StatusDot from "@/components/ui/StatusDot";
@@ -279,7 +280,20 @@ export default function OverviewTab({
           <span className="text-xs text-slate-400 font-mono">Frequently executed actions</span>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-3">
+          <button
+            onClick={() => onNavigateTab("analytics")}
+            className="p-3.5 rounded-2xl bg-blue-50/70 hover:bg-blue-600 hover:text-white border border-blue-200/80 text-left transition-all group flex flex-col justify-between gap-3 cursor-pointer"
+          >
+            <div className="w-8 h-8 rounded-xl bg-white group-hover:bg-white/10 border border-blue-200/60 group-hover:border-transparent flex items-center justify-center text-blue-600 group-hover:text-white transition-colors">
+              <BarChart3 className="w-4 h-4 text-blue-600 group-hover:text-white" />
+            </div>
+            <div>
+              <p className="text-xs font-bold leading-tight">Analytics</p>
+              <p className="text-[10px] text-blue-600/70 group-hover:text-blue-100 mt-0.5">Charts & insights</p>
+            </div>
+          </button>
+
           <button
             onClick={onOpenCreateEvent}
             className="p-3.5 rounded-2xl bg-slate-50 hover:bg-slate-900 hover:text-white border border-slate-200/80 text-left transition-all group flex flex-col justify-between gap-3 cursor-pointer"
@@ -374,6 +388,45 @@ export default function OverviewTab({
               </div>
             </button>
           )}
+        </div>
+      </div>
+
+      {/* CHAPTER ANALYTICS & VELOCITY SNAPSHOT BANNER */}
+      <div
+        onClick={() => onNavigateTab("analytics")}
+        className="group relative overflow-hidden rounded-[28px] bg-gradient-to-r from-blue-900 via-indigo-950 to-slate-900 text-white p-5 sm:p-6 border border-blue-900/50 shadow-sm cursor-pointer hover:border-blue-700/60 transition-all"
+      >
+        <div className="absolute right-0 top-0 bottom-0 w-1/2 opacity-15 pointer-events-none flex items-center justify-end pr-8">
+          <BarChart3 className="w-56 h-56 text-blue-400 group-hover:scale-105 transition-transform duration-500" />
+        </div>
+        <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="space-y-1.5 max-w-xl">
+            <div className="flex items-center gap-2">
+              <span className="p-1 rounded-md bg-blue-500/20 text-blue-400">
+                <BarChart3 className="w-3.5 h-3.5" />
+              </span>
+              <span className="text-[11px] font-mono uppercase tracking-wider text-blue-300 font-bold">
+                Chapter Intelligence Engine
+              </span>
+              <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-mono font-medium">
+                Live Telemetry
+              </span>
+            </div>
+            <h3 className="text-lg sm:text-xl font-bold tracking-tight text-white flex items-center gap-2">
+              <span>Deep-Dive Charts & Analytics</span>
+              <ArrowRight className="w-4 h-4 text-blue-400 group-hover:translate-x-1 transition-transform" />
+            </h3>
+            <p className="text-xs text-slate-300">
+              Interactive visualizations for member signups trajectory, event RSVP-to-capacity fill rates, engineering branch demographics, recruitment funnel, and treasury cashflow.
+            </p>
+          </div>
+
+          <div className="flex items-center gap-3 self-start md:self-auto shrink-0">
+            <button className="h-9 px-4 rounded-xl bg-blue-600 group-hover:bg-blue-500 text-white text-xs font-semibold flex items-center gap-2 transition shadow-xs cursor-pointer">
+              <span>Explore Analytics</span>
+              <ChevronRight className="w-3.5 h-3.5" />
+            </button>
+          </div>
         </div>
       </div>
 

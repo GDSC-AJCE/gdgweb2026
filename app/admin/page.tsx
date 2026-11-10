@@ -19,6 +19,7 @@ import GDGLogoMark from "@/components/ui/GDGLogoMark";
 import AdminSidebar, { AdminTab } from "@/components/admin/AdminSidebar";
 import AdminHeader from "@/components/admin/AdminHeader";
 import OverviewTab from "@/components/admin/tabs/OverviewTab";
+import AnalyticsTab from "@/components/admin/tabs/AnalyticsTab";
 import ExecomManagementTab from "@/components/admin/tabs/ExecomManagementTab";
 import EventsManagementTab from "@/components/admin/tabs/EventsManagementTab";
 import UsersManagementTab from "@/components/admin/tabs/UsersManagementTab";
@@ -40,6 +41,10 @@ const TAB_METADATA: Record<AdminTab, { title: string; subtitle: string }> = {
   overview: {
     title: "Chapter Overview",
     subtitle: "High-level metrics, velocity indicators, and quick administrative actions.",
+  },
+  analytics: {
+    title: "Chapter Analytics & Telemetry",
+    subtitle: "Visual breakdowns of member velocity, workshop RSVPs, treasury cashflow, and department demographics.",
   },
   execom: {
     title: "Execom Leadership",
@@ -85,7 +90,7 @@ export default function AdminPage() {
     if (typeof window !== "undefined") {
       const params = new URLSearchParams(window.location.search);
       const tabParam = params.get("tab") as AdminTab;
-      if (tabParam && ["overview", "execom", "events", "newsletter", "mailer", "website", "users", "applications", "funds", "audit"].includes(tabParam)) {
+      if (tabParam && ["overview", "analytics", "execom", "events", "newsletter", "mailer", "website", "users", "applications", "funds", "audit"].includes(tabParam)) {
         return tabParam;
       }
     }
@@ -110,7 +115,7 @@ export default function AdminPage() {
         setIsDevPreview(true);
       }
       const tabParam = params.get("tab") as AdminTab;
-      if (tabParam && ["overview", "execom", "events", "newsletter", "mailer", "website", "users", "applications", "funds", "audit"].includes(tabParam)) {
+      if (tabParam && ["overview", "analytics", "execom", "events", "newsletter", "mailer", "website", "users", "applications", "funds", "audit"].includes(tabParam)) {
         setActiveTab(tabParam);
       }
     }
@@ -561,7 +566,7 @@ export default function AdminPage() {
                       coreUsers: execomMembers.length,
                       totalEvents: events.length,
                       pendingApplications: pendingCount,
-                      totalFunds: 0,
+                      totalFunds: funds.reduce((acc, f) => acc + ((f.type === "credit" || f.type === "income") ? (Number(f.amount) || 0) : -(Number(f.amount) || 0)), 0),
                     }}
                     onNavigateTab={setActiveTab}
                     onOpenCreateEvent={() => {
@@ -578,12 +583,22 @@ export default function AdminPage() {
                   />
                 )}
 
+                {activeTab === "analytics" && (
+                  <AnalyticsTab
+                    users={usersList}
+                    events={events}
+                    applications={applications}
+                    funds={funds}
+                    onNavigateTab={setActiveTab}
+                  />
+                )}
+
                 {activeTab === "execom" && (
                   <ExecomManagementTab
                     members={execomMembers}
                     onRefresh={fetchExecom}
                     adminName={adminName}
-                    isSuperAdmin={isSuperAdmin}
+                    isSuperAdmin={Boolean(isSuperAdmin || hasAccess)}
                     onOpenDriveSettings={() => setIsDriveSettingsOpen(true)}
                   />
                 )}

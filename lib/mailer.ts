@@ -237,6 +237,40 @@ export async function renderTemplateToHtml(
     html = responsiveStyle + html;
   }
 
+  // When forPreview is true, inject scroll fix CSS and ensure no overflow: hidden on html/body
+  if (forPreview) {
+    html = html.replace(
+      /(<(?:html|body)[^>]*style=["'][^"']*?)overflow(?:-[xy])?\s*:\s*hidden\s*;?/gi,
+      "$1"
+    );
+    html = html.replace(
+      /((?:html|body)[^{]*\{[^}]*?)overflow(?:-[xy])?\s*:\s*hidden\s*;?/gi,
+      "$1"
+    );
+
+    const previewScrollStyle = `
+  <style id="gdg-preview-scroll-fix">
+    html, body {
+      overflow-y: auto !important;
+      overflow-x: hidden !important;
+      height: auto !important;
+      min-height: 100% !important;
+      -webkit-overflow-scrolling: touch !important;
+    }
+    body {
+      padding-bottom: 40px !important;
+    }
+  </style>`;
+
+    if (html.includes("</head>")) {
+      html = html.replace("</head>", `${previewScrollStyle}\n</head>`);
+    } else if (html.includes("<body")) {
+      html = html.replace(/<body([^>]*)>/i, `<body$1>\n${previewScrollStyle}`);
+    } else {
+      html = previewScrollStyle + html;
+    }
+  }
+
   return html;
 }
 

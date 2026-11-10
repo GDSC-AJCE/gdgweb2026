@@ -32,6 +32,7 @@ import {
   Loader2,
   Palette,
   Megaphone,
+  Maximize2,
 } from "lucide-react";
 import * as XLSX from "xlsx";
 
@@ -122,6 +123,7 @@ export default function MailStudioTab() {
   const [previewHtml, setPreviewHtml] = useState("");
   const [previewDevice, setPreviewDevice] = useState<"desktop" | "mobile">("desktop");
   const [refreshingPreview, setRefreshingPreview] = useState(false);
+  const [fullscreenPreviewOpen, setFullscreenPreviewOpen] = useState(false);
 
   // Sending progress
   const [isSending, setIsSending] = useState(false);
@@ -388,6 +390,16 @@ export default function MailStudioTab() {
   useEffect(() => {
     refreshPreview();
   }, [activeTemplate]);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && fullscreenPreviewOpen) {
+        setFullscreenPreviewOpen(false);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [fullscreenPreviewOpen]);
 
   // 8. Send Test Email
   const handleSendTestEmail = async () => {
@@ -1404,26 +1416,39 @@ export default function MailStudioTab() {
                   >
                     <Layout className="w-3 h-3 mr-1" /> Open in Editor
                   </button>
-                  <div className="flex space-x-1 bg-slate-100 p-1 rounded-lg">
+                  <div className="flex items-center space-x-1 bg-slate-100 p-1 rounded-lg">
                     <button
+                      type="button"
+                      title="Desktop view"
                       onClick={() => setPreviewDevice("desktop")}
-                      className={`p-1 rounded ${
+                      className={`p-1 rounded transition-colors ${
                         previewDevice === "desktop"
                           ? "bg-white shadow-2xs text-slate-800"
-                          : "text-slate-500"
+                          : "text-slate-500 hover:text-slate-700"
                       }`}
                     >
                       <Monitor className="w-3.5 h-3.5" />
                     </button>
                     <button
+                      type="button"
+                      title="Mobile view"
                       onClick={() => setPreviewDevice("mobile")}
-                      className={`p-1 rounded ${
+                      className={`p-1 rounded transition-colors ${
                         previewDevice === "mobile"
                           ? "bg-white shadow-2xs text-slate-800"
-                          : "text-slate-500"
+                          : "text-slate-500 hover:text-slate-700"
                       }`}
                     >
                       <Smartphone className="w-3.5 h-3.5" />
+                    </button>
+                    <div className="w-px h-3 bg-slate-300 mx-0.5" />
+                    <button
+                      type="button"
+                      title="Expand / Fullscreen Preview Modal"
+                      onClick={() => setFullscreenPreviewOpen(true)}
+                      className="p-1 rounded text-slate-500 hover:text-slate-800 hover:bg-white transition-colors"
+                    >
+                      <Maximize2 className="w-3.5 h-3.5" />
                     </button>
                   </div>
                 </div>
@@ -1481,27 +1506,46 @@ export default function MailStudioTab() {
               <div className="pt-2 border-t border-slate-100">
                 <div className="flex justify-between items-center mb-2">
                   <span className="text-xs font-semibold text-slate-600">Live Preview</span>
-                  <button
-                    onClick={refreshPreview}
-                    disabled={refreshingPreview}
-                    className="text-xs text-blue-600 hover:underline flex items-center font-semibold"
-                  >
-                    <RotateCw
-                      className={`w-3 h-3 mr-1 ${refreshingPreview ? "animate-spin" : ""}`}
-                    />
-                    Refresh
-                  </button>
+                  <div className="flex items-center space-x-2">
+                    <button
+                      type="button"
+                      onClick={() => setFullscreenPreviewOpen(true)}
+                      className="text-xs text-slate-600 hover:text-blue-600 flex items-center font-semibold transition-colors"
+                      title="Expand / Fullscreen Preview Modal"
+                    >
+                      <Maximize2 className="w-3 h-3 mr-1" />
+                      Expand
+                    </button>
+                    <span className="text-slate-300">|</span>
+                    <button
+                      onClick={refreshPreview}
+                      disabled={refreshingPreview}
+                      className="text-xs text-blue-600 hover:underline flex items-center font-semibold"
+                    >
+                      <RotateCw
+                        className={`w-3 h-3 mr-1 ${refreshingPreview ? "animate-spin" : ""}`}
+                      />
+                      Refresh
+                    </button>
+                  </div>
                 </div>
                 <div
-                  className={`bg-slate-100 rounded-xl overflow-hidden border border-slate-200 transition-all duration-300 mx-auto ${
-                    previewDevice === "mobile" ? "max-w-[340px]" : "w-full"
+                  className={`bg-slate-50 rounded-xl border border-slate-200 transition-all duration-300 mx-auto overflow-hidden relative shadow-inner ${
+                    previewDevice === "mobile" ? "max-w-[360px]" : "w-full"
                   }`}
-                  style={{ height: "480px" }}
+                  style={{ height: "520px", maxHeight: "520px" }}
                 >
                   <iframe
                     title="Live Email Preview"
                     srcDoc={previewHtml}
-                    className="w-full h-full border-0 bg-white"
+                    scrolling="yes"
+                    className="w-full h-full border-0 bg-white block overflow-y-auto"
+                    style={{
+                      height: "100%",
+                      width: "100%",
+                      overflowY: "auto",
+                      WebkitOverflowScrolling: "touch",
+                    }}
                   />
                 </div>
               </div>
@@ -1958,6 +2002,118 @@ await fetch("${gatewayUrl}", {
               >
                 Got It
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ================= MODAL 7: FULLSCREEN EMAIL PREVIEW ================= */}
+      {fullscreenPreviewOpen && (
+        <div
+          className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-2 sm:p-4 md:p-6 z-50 animate-in fade-in duration-150"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              setFullscreenPreviewOpen(false);
+            }
+          }}
+        >
+          <div className="bg-white rounded-2xl max-w-5xl w-full h-[92vh] flex flex-col shadow-2xl border border-slate-200 overflow-hidden">
+            {/* Modal Header */}
+            <div className="flex items-center justify-between px-5 py-3.5 border-b border-slate-200 bg-slate-50 flex-none">
+              <div className="flex items-center space-x-3">
+                <div className="p-1.5 bg-blue-50 text-blue-600 rounded-lg">
+                  <Palette className="w-4 h-4" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-slate-900 text-sm flex items-center">
+                    Email Preview
+                    <span className="ml-2 text-[11px] font-normal text-slate-500 bg-white px-2 py-0.5 rounded-full border border-slate-200">
+                      {templates.find((t) => t.id === activeTemplate)?.name || activeTemplate}
+                    </span>
+                  </h3>
+                  {emailSubject && (
+                    <p className="text-[11px] text-slate-500 truncate max-w-md">
+                      <span className="font-semibold text-slate-600">Subject:</span> {emailSubject}
+                    </p>
+                  )}
+                </div>
+              </div>
+
+              <div className="flex items-center space-x-3">
+                {/* Device Switcher */}
+                <div className="flex items-center space-x-1 bg-white p-1 rounded-lg border border-slate-200 shadow-2xs">
+                  <button
+                    type="button"
+                    onClick={() => setPreviewDevice("desktop")}
+                    className={`flex items-center px-2.5 py-1 rounded text-xs font-medium transition-colors ${
+                      previewDevice === "desktop"
+                        ? "bg-blue-50 text-blue-700 shadow-2xs font-semibold"
+                        : "text-slate-600 hover:text-slate-900"
+                    }`}
+                  >
+                    <Monitor className="w-3.5 h-3.5 mr-1.5" />
+                    Desktop
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setPreviewDevice("mobile")}
+                    className={`flex items-center px-2.5 py-1 rounded text-xs font-medium transition-colors ${
+                      previewDevice === "mobile"
+                        ? "bg-blue-50 text-blue-700 shadow-2xs font-semibold"
+                        : "text-slate-600 hover:text-slate-900"
+                    }`}
+                  >
+                    <Smartphone className="w-3.5 h-3.5 mr-1.5" />
+                    Mobile
+                  </button>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={refreshPreview}
+                  disabled={refreshingPreview}
+                  className="px-2.5 py-1.5 text-xs text-slate-700 hover:text-blue-600 bg-white border border-slate-200 rounded-lg flex items-center font-medium shadow-2xs hover:bg-slate-50 transition-colors"
+                >
+                  <RotateCw
+                    className={`w-3.5 h-3.5 mr-1.5 ${refreshingPreview ? "animate-spin text-blue-600" : ""}`}
+                  />
+                  Refresh
+                </button>
+
+                <div className="h-4 w-px bg-slate-200" />
+
+                <button
+                  type="button"
+                  onClick={() => setFullscreenPreviewOpen(false)}
+                  className="text-slate-400 hover:text-slate-700 p-1.5 rounded-lg hover:bg-slate-200/60 transition-colors"
+                  title="Close preview"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+            </div>
+
+            {/* Modal Body / Scrollable email canvas */}
+            <div className="flex-1 bg-slate-100 p-4 sm:p-6 overflow-y-auto flex justify-center items-start">
+              <div
+                className={`bg-white rounded-xl shadow-md border border-slate-200 overflow-hidden transition-all duration-300 w-full ${
+                  previewDevice === "mobile" ? "max-w-[420px]" : "max-w-[760px]"
+                }`}
+                style={{ height: "calc(92vh - 110px)" }}
+              >
+                <iframe
+                  title="Fullscreen Live Email Preview"
+                  srcDoc={previewHtml}
+                  scrolling="yes"
+                  className="w-full h-full border-0 bg-white block overflow-y-auto"
+                  style={{
+                    height: "100%",
+                    width: "100%",
+                    overflowY: "auto",
+                    WebkitOverflowScrolling: "touch",
+                  }}
+                />
+              </div>
             </div>
           </div>
         </div>
