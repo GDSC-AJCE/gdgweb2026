@@ -324,27 +324,6 @@ export default function OngoingEventsSection() {
     });
   };
 
-  const handleSubscribe = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email || !email.includes("@")) return;
-    setSubscribing(true);
-    try {
-      await fetch("/api/newsletter/subscribe", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, source: "homepage_ongoing_events" }),
-      });
-      setSubscribed(true);
-      setTimeout(() => setSubscribed(false), 5000);
-      setEmail("");
-    } catch {
-      setSubscribed(true);
-      setTimeout(() => setSubscribed(false), 5000);
-    } finally {
-      setSubscribing(false);
-    }
-  };
-
   return (
     <section className="relative w-full bg-transparent py-14 sm:py-20 px-4 sm:px-6 select-none overflow-hidden">
       <div className="max-w-[1240px] mx-auto">
@@ -370,39 +349,24 @@ export default function OngoingEventsSection() {
               </p>
             </div>
 
-            {/* Newsletter / Event Alert Input */}
-            <div className="pt-2 max-w-md">
-              <form onSubmit={handleSubscribe} className="relative">
-                <div className="flex items-center bg-white border border-slate-200 hover:border-slate-300 focus-within:border-[#2563EB] focus-within:ring-2 focus-within:ring-[#2563EB]/15 rounded-[50px] p-1.5 sm:p-2 shadow-xs transition-all">
-                  <div className="pl-3.5 pr-2.5 text-slate-400">
-                    <Mail className="w-4 h-4" />
-                  </div>
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Enter your email address..."
-                    className="w-full bg-transparent text-[14px] sm:text-[15px] text-[#0f172a] placeholder-slate-400 outline-none font-medium pr-2"
-                    required
-                  />
-                  <button
-                    type="submit"
-                    disabled={subscribing}
-                    className="group shrink-0 inline-flex items-center gap-2 px-5 sm:px-6 py-2.5 sm:py-3 rounded-[50px] bg-[#0f172a] hover:bg-slate-800 text-white text-[13px] sm:text-[14px] font-medium transition-all duration-300 active:scale-95 shadow-xs cursor-pointer disabled:opacity-60"
-                  >
-                    <span>
-                      {subscribing ? "Subscribing..." : subscribed ? "Subscribed!" : "Subscribe"}
-                    </span>
-                    {subscribed ? (
-                      <Check className="w-3.5 h-3.5 text-[#10B981]" />
-                    ) : subscribing ? (
-                      <span className="w-2 h-2 rounded-full bg-white animate-ping" />
-                    ) : (
-                      <span className="w-2 h-2 rounded-full bg-[#10B981] transition-all duration-300 group-hover:scale-125" />
-                    )}
-                  </button>
-                </div>
-              </form>
+            {/* Action Buttons */}
+            <div className="pt-2 flex flex-wrap items-center gap-3 max-w-md">
+              <Link
+                href="/programs"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-[50px] bg-[#0f172a] hover:bg-slate-800 text-white text-[14px] font-semibold transition active:scale-95 shadow-xs cursor-pointer"
+              >
+                <span>Explore Workshops & Labs</span>
+                <span className="text-blue-400">→</span>
+              </Link>
+              <a
+                href="https://chat.whatsapp.com/gdgajce"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-[50px] bg-white border border-slate-200 hover:border-slate-300 text-slate-800 text-[14px] font-medium transition active:scale-95 shadow-2xs"
+              >
+                <span>Join Community</span>
+              </a>
+            </div>
 
               {/* Quick Link to Master Programs directory */}
               <div className="pt-5">
@@ -415,7 +379,6 @@ export default function OngoingEventsSection() {
                 </Link>
               </div>
             </div>
-          </div>
 
           {/* ===================== RIGHT COLUMN (CAROUSEL OF CARDS) ===================== */}
           <div className="lg:col-span-7 flex flex-col space-y-4">

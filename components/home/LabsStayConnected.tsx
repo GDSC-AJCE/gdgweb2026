@@ -8,23 +8,6 @@ import { useDialog } from "@/context/DialogContext";
 import { Button } from "@/components/ui/Button";
 
 export default function LabsStayConnected() {
-  const dialog = useDialog();
-  const [newsletterOpen, setNewsletterOpen] = useState(false);
-  const [email, setEmail] = useState("");
-  const [submitted, setSubmitted] = useState(false);
-
-  const handleNewsletter = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email) return;
-    setSubmitted(true);
-    setTimeout(() => {
-      dialog.alert("Thank you for signing up for the Labs newsletter!", "Subscribed");
-      setNewsletterOpen(false);
-      setEmail("");
-      setSubmitted(false);
-    }, 800);
-  };
-
   return (
     <section className="relative bg-[#F3F0E6] text-[#1F1F1F] py-28 px-4 sm:px-8 overflow-hidden select-none">
       {/* Floating Colorful Geometric Shapes (matching video frame 00:14 - 00:18) */}
@@ -71,12 +54,14 @@ export default function LabsStayConnected() {
 
         {/* BUTTON PILLS */}
         <div className="flex flex-wrap items-center justify-center gap-4 pt-2">
-          <button
-            onClick={() => setNewsletterOpen(!newsletterOpen)}
+          <a
+            href="https://chat.whatsapp.com/gdgajce"
+            target="_blank"
+            rel="noopener noreferrer"
             className="px-8 py-3.5 rounded-full bg-white text-black font-semibold text-xs border border-black/10 hover:bg-zinc-100 transition-all shadow-md active:scale-95"
           >
-            Subscribe to Chapter Updates
-          </button>
+            Join WhatsApp Community
+          </a>
           <Link
             href="/execom"
             className="px-8 py-3.5 rounded-full bg-white text-black font-semibold text-xs border border-black/10 hover:bg-zinc-100 transition-all shadow-md active:scale-95"
@@ -84,32 +69,6 @@ export default function LabsStayConnected() {
             Become a Core Organizer
           </Link>
         </div>
-
-        {/* Newsletter Expandable Form */}
-        {newsletterOpen && (
-          <motion.form
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            onSubmit={handleNewsletter}
-            className="max-w-md mx-auto flex items-center gap-2 p-1.5 rounded-full bg-white border border-black/15 shadow-lg"
-          >
-            <input
-              type="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Enter your email..."
-              className="flex-1 px-5 py-2 text-xs text-black bg-transparent outline-none"
-            />
-            <Button
-              type="submit"
-              disabled={submitted}
-              className="h-8 px-5 rounded-full bg-[#1F1F1F] text-white text-xs font-semibold hover:bg-black transition cursor-pointer"
-            >
-              {submitted ? "Subscribed" : "Join"}
-            </Button>
-          </motion.form>
-        )}
 
         {/* SOCIAL PILL BAR: Discord, Reddit, X (exact rounded pill from video 00:14 - 00:15) */}
         <div className="pt-2 flex justify-center">

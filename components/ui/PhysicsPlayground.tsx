@@ -173,7 +173,7 @@ export default function PhysicsPlayground() {
       text: "Follow on Instagram & LinkedIn",
     });
 
-    // Pill 4: "Sign up for the GDG newsletter"
+    // Pill 4: "Join GDG on Campus AJCE"
     const p4 = Bodies.rectangle(width - 140, 150, 240, 50, {
       ...commonProps,
       chamfer: { radius: 25 },
@@ -186,7 +186,7 @@ export default function PhysicsPlayground() {
       size: 50,
       w: 240,
       h: 50,
-      text: "Sign up for the GDG newsletter",
+      text: "Join GDG on Campus AJCE",
     });
 
     // Add all to physics world

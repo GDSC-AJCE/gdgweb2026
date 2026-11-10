@@ -19,7 +19,7 @@ export default function Footer() {
       <div className="max-w-[1440px] mx-auto px-4 sm:px-10 lg:px-16 pt-8 sm:pt-12 pb-6">
         <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-10 sm:gap-12">
           
-          {/* Left Column: Headline & Social / Newsletter Actions */}
+          {/* Left Column: Headline & Community Actions */}
           <div className="max-w-md">
             <h3 className="text-2xl sm:text-[26px] font-normal tracking-[-0.02em] text-[#111111] leading-[1.25]">
               Stay connected for early access to our<br className="hidden sm:inline" /> newest tools and local events
@@ -70,13 +70,15 @@ export default function Footer() {
                 <FaGithub className="w-4 h-4" />
               </a>
 
-              {/* Sign up for our newsletter pill button */}
-              <Link
-                href="/newsletter"
+              {/* Join our community pill button */}
+              <a
+                href="https://chat.whatsapp.com/gdgajce"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="px-5 py-2.5 rounded-full border border-[#111111]/30 hover:border-[#111111] text-[13px] font-medium text-[#111111] hover:bg-[#f5f5f5] transition active:scale-98"
               >
-                Sign up for our newsletter
-              </Link>
+                Join our community
+              </a>
             </div>
           </div>
 
@@ -101,12 +103,6 @@ export default function Footer() {
                 <li>
                   <Link href="/events" className="hover:text-[#111111] transition">
                     Sessions
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/newsletter" className="hover:text-[#111111] transition flex items-center gap-1.5">
-                    <span>Newsletter</span>
-                    <span className="text-[10px] bg-[#4285F4]/15 text-[#4285F4] font-bold px-1.5 py-0.2 rounded-full">New</span>
                   </Link>
                 </li>
                 <li>

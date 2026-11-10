@@ -26,7 +26,6 @@ import UsersManagementTab from "@/components/admin/tabs/UsersManagementTab";
 import ApplicationsTab from "@/components/admin/tabs/ApplicationsTab";
 import FundsTab from "@/components/admin/tabs/FundsTab";
 import AuditLogsTab from "@/components/admin/tabs/AuditLogsTab";
-import NewsletterTab from "@/components/admin/tabs/NewsletterTab";
 import MailStudioTab from "@/components/admin/tabs/MailStudioTab";
 import WebsiteManagementTab from "@/components/admin/tabs/WebsiteManagementTab";
 import AddExecomMemberModal from "@/components/admin/modals/AddExecomMemberModal";
@@ -53,10 +52,6 @@ const TAB_METADATA: Record<AdminTab, { title: string; subtitle: string }> = {
   events: {
     title: "Events & Workshops",
     subtitle: "Create, schedule, publish, and monitor attendee RSVPs for all community sessions.",
-  },
-  newsletter: {
-    title: "Weekly Tech Newsletter",
-    subtitle: "Draft, auto-generate, preview, and broadcast weekly developer updates to all active subscribers.",
   },
   mailer: {
     title: "Mail Studio & Dispatcher",
@@ -90,7 +85,7 @@ export default function AdminPage() {
     if (typeof window !== "undefined") {
       const params = new URLSearchParams(window.location.search);
       const tabParam = params.get("tab") as AdminTab;
-      if (tabParam && ["overview", "analytics", "execom", "events", "newsletter", "mailer", "website", "users", "applications", "funds", "audit"].includes(tabParam)) {
+      if (tabParam && ["overview", "analytics", "execom", "events", "mailer", "website", "users", "applications", "funds", "audit"].includes(tabParam)) {
         return tabParam;
       }
     }
@@ -108,6 +103,30 @@ export default function AdminPage() {
   // Dev preview bypass for local design verification
   const [isDevPreview, setIsDevPreview] = useState(false);
 
+  // Admin-only Theme (Light / Dark)
+  const [adminTheme, setAdminTheme] = useState<"light" | "dark">("light");
+
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem("gdg_admin_theme");
+      if (saved === "dark" || saved === "light") {
+        setAdminTheme(saved);
+      } else if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
+        setAdminTheme("dark");
+      }
+    } catch {}
+  }, []);
+
+  const toggleAdminTheme = useCallback(() => {
+    setAdminTheme((prev) => {
+      const next = prev === "light" ? "dark" : "light";
+      try {
+        localStorage.setItem("gdg_admin_theme", next);
+      } catch {}
+      return next;
+    });
+  }, []);
+
   useEffect(() => {
     if (typeof window !== "undefined") {
       const params = new URLSearchParams(window.location.search);
@@ -115,7 +134,7 @@ export default function AdminPage() {
         setIsDevPreview(true);
       }
       const tabParam = params.get("tab") as AdminTab;
-      if (tabParam && ["overview", "analytics", "execom", "events", "newsletter", "mailer", "website", "users", "applications", "funds", "audit"].includes(tabParam)) {
+      if (tabParam && ["overview", "analytics", "execom", "events", "mailer", "website", "users", "applications", "funds", "audit"].includes(tabParam)) {
         setActiveTab(tabParam);
       }
     }
@@ -531,22 +550,34 @@ export default function AdminPage() {
   const adminName = user?.displayName || user?.email || "Chapter Organizer";
 
   return (
-    <main className="min-h-screen bg-[#f8fafc] text-[#0f172a] select-none p-4 sm:p-8 lg:p-12">
-      <div className="max-w-[1440px] mx-auto space-y-8">
+    <main
+      data-admin-theme={adminTheme}
+      data-theme={adminTheme}
+      className={`min-h-screen select-none p-4 sm:p-6 lg:p-8 transition-colors duration-200 ${
+        adminTheme === "dark"
+          ? "dark bg-[#090d16] text-slate-100"
+          : "bg-[#f8fafc] text-[#0f172a]"
+      }`}
+    >
+      <div className="max-w-[1536px] mx-auto space-y-6">
         {/* TOP ADMIN HEADER */}
         <AdminHeader
           title={TAB_METADATA[activeTab].title}
           subtitle={TAB_METADATA[activeTab].subtitle}
           activeTab={activeTab}
+          theme={adminTheme}
+          onToggleTheme={toggleAdminTheme}
         />
 
         {/* 2-COLUMN LAYOUT: SIDEBAR (LEFT) + ACTIVE TAB CONTENT (RIGHT) */}
-        <div className="flex flex-col lg:flex-row gap-8 items-start">
+        <div className="flex flex-col lg:flex-row gap-6 items-start">
           <AdminSidebar
             activeTab={activeTab}
             onSelectTab={setActiveTab}
             pendingApplicationsCount={pendingCount}
             isSuperAdmin={isSuperAdmin}
+            theme={adminTheme}
+            onToggleTheme={toggleAdminTheme}
           />
 
           {/* MAIN TAB CONTENT CONTAINER */}
@@ -568,6 +599,10 @@ export default function AdminPage() {
                       pendingApplications: pendingCount,
                       totalFunds: funds.reduce((acc, f) => acc + ((f.type === "credit" || f.type === "income") ? (Number(f.amount) || 0) : -(Number(f.amount) || 0)), 0),
                     }}
+                    users={usersList}
+                    events={events}
+                    applications={applications}
+                    funds={funds}
                     onNavigateTab={setActiveTab}
                     onOpenCreateEvent={() => {
                       setEditingEvent(null);
@@ -590,6 +625,7 @@ export default function AdminPage() {
                     applications={applications}
                     funds={funds}
                     onNavigateTab={setActiveTab}
+                    theme={adminTheme}
                   />
                 )}
 
@@ -615,13 +651,6 @@ export default function AdminPage() {
                       setEditingEvent(event);
                       setIsCreateEventOpen(true);
                     }}
-                    adminName={adminName}
-                  />
-                )}
-
-                {activeTab === "newsletter" && (
-                  <NewsletterTab
-                    adminEmail={user?.email}
                     adminName={adminName}
                   />
                 )}

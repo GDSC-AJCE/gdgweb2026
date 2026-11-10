@@ -31,12 +31,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.7,
     },
     {
-      url: `${baseUrl}/newsletter`,
-      lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 0.8,
-    },
-    {
       url: `${baseUrl}/gallery`,
       lastModified: new Date(),
       changeFrequency: "monthly",
@@ -70,7 +64,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   let programRoutes: MetadataRoute.Sitemap = [];
   let teamRoutes: MetadataRoute.Sitemap = [];
-  let newsletterRoutes: MetadataRoute.Sitemap = [];
 
   try {
     const eventsSnap = await getDocs(query(collection(db, "events")));
@@ -106,23 +99,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     console.warn("Could not fetch team profiles for sitemap:", err);
   }
 
-  try {
-    const newslettersSnap = await getDocs(
-      query(collection(db, "newsletters"), where("status", "==", "sent"))
-    );
-    newsletterRoutes = newslettersSnap.docs.map((doc) => {
-      const data = doc.data();
-      const slug = data.slug || doc.id;
-      return {
-        url: `${baseUrl}/newsletter/${slug}`,
-        lastModified: data.sentAt?.toDate?.() || new Date(),
-        changeFrequency: "monthly" as const,
-        priority: 0.6,
-      };
-    });
-  } catch (err) {
-    console.warn("Could not fetch newsletters for sitemap:", err);
-  }
-
-  return [...staticRoutes, ...programRoutes, ...teamRoutes, ...newsletterRoutes];
+  return [...staticRoutes, ...programRoutes, ...teamRoutes];
 }

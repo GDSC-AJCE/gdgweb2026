@@ -50,6 +50,7 @@ interface AnalyticsTabProps {
   applications: any[];
   funds: any[];
   onNavigateTab: (tab: AdminTab) => void;
+  theme?: "light" | "dark";
 }
 
 // Google Brand / GDG Color Palette
@@ -71,9 +72,14 @@ export default function AnalyticsTab({
   applications = [],
   funds = [],
   onNavigateTab,
+  theme = "light",
 }: AnalyticsTabProps) {
   const [timeRange, setTimeRange] = useState<"all" | "2026" | "90d" | "30d">("all");
   const [mounted, setMounted] = useState(false);
+
+  const isDark = theme === "dark";
+  const gridStroke = isDark ? "#1e293b" : "#f1f5f9";
+  const axisStroke = isDark ? "#64748b" : "#94a3b8";
 
   useEffect(() => {
     setMounted(true);
@@ -629,9 +635,9 @@ export default function AnalyticsTab({
                       <stop offset="95%" stopColor="#10b981" stopOpacity={0.0} />
                     </linearGradient>
                   </defs>
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-                  <XAxis dataKey="month" stroke="#94a3b8" fontSize={11} tickLine={false} />
-                  <YAxis stroke="#94a3b8" fontSize={11} tickLine={false} axisLine={false} />
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={gridStroke} />
+                  <XAxis dataKey="month" stroke={axisStroke} fontSize={11} tickLine={false} />
+                  <YAxis stroke={axisStroke} fontSize={11} tickLine={false} axisLine={false} />
                   <Tooltip
                     contentStyle={{
                       backgroundColor: "#0f172a",
@@ -702,9 +708,9 @@ export default function AnalyticsTab({
               ) : (
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={eventTurnoutData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-                    <XAxis dataKey="name" stroke="#94a3b8" fontSize={11} tickLine={false} />
-                    <YAxis stroke="#94a3b8" fontSize={11} tickLine={false} axisLine={false} />
+                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={gridStroke} />
+                    <XAxis dataKey="name" stroke={axisStroke} fontSize={11} tickLine={false} />
+                    <YAxis stroke={axisStroke} fontSize={11} tickLine={false} axisLine={false} />
                     <Tooltip
                       content={({ active, payload }) => {
                         if (active && payload && payload.length) {
@@ -728,7 +734,7 @@ export default function AnalyticsTab({
                       wrapperStyle={{ fontSize: "11px", paddingBottom: "10px" }}
                     />
                     <Bar dataKey="rsvps" name="RSVPs" fill="#3b82f6" radius={[6, 6, 0, 0]} />
-                    <Bar dataKey="capacity" name="Capacity" fill="#e2e8f0" radius={[6, 6, 0, 0]} />
+                    <Bar dataKey="capacity" name="Capacity" fill={isDark ? "#334155" : "#e2e8f0"} radius={[6, 6, 0, 0]} />
                   </BarChart>
                 </ResponsiveContainer>
               )
@@ -847,12 +853,12 @@ export default function AnalyticsTab({
                     data={domainPreferenceData}
                     margin={{ top: 5, right: 15, left: 10, bottom: 5 }}
                   >
-                    <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#f1f5f9" />
-                    <XAxis type="number" stroke="#94a3b8" fontSize={11} tickLine={false} />
+                    <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke={gridStroke} />
+                    <XAxis type="number" stroke={axisStroke} fontSize={11} tickLine={false} />
                     <YAxis
                       dataKey="name"
                       type="category"
-                      stroke="#94a3b8"
+                      stroke={axisStroke}
                       fontSize={11}
                       tickLine={false}
                       width={100}
@@ -872,7 +878,7 @@ export default function AnalyticsTab({
                       iconType="circle"
                       wrapperStyle={{ fontSize: "11px", paddingBottom: "6px" }}
                     />
-                    <Bar dataKey="total" name="Total Applied" fill="#94a3b8" radius={[0, 4, 4, 0]} />
+                    <Bar dataKey="total" name="Total Applied" fill={isDark ? "#475569" : "#94a3b8"} radius={[0, 4, 4, 0]} />
                     <Bar dataKey="accepted" name="Accepted" fill="#10b981" radius={[0, 4, 4, 0]} />
                   </BarChart>
                 </ResponsiveContainer>
@@ -910,9 +916,9 @@ export default function AnalyticsTab({
             {mounted ? (
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={batchData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-                  <XAxis dataKey="year" stroke="#94a3b8" fontSize={10} tickLine={false} />
-                  <YAxis stroke="#94a3b8" fontSize={11} tickLine={false} axisLine={false} />
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={gridStroke} />
+                  <XAxis dataKey="year" stroke={axisStroke} fontSize={10} tickLine={false} />
+                  <YAxis stroke={axisStroke} fontSize={11} tickLine={false} axisLine={false} />
                   <Tooltip
                     contentStyle={{
                       backgroundColor: "#0f172a",
@@ -969,9 +975,9 @@ export default function AnalyticsTab({
               ) : (
                 <ResponsiveContainer width="100%" height="100%">
                   <ComposedChart data={treasuryFlowData} margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
-                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-                    <XAxis dataKey="month" stroke="#94a3b8" fontSize={11} tickLine={false} />
-                    <YAxis stroke="#94a3b8" fontSize={11} tickLine={false} axisLine={false} />
+                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={gridStroke} />
+                    <XAxis dataKey="month" stroke={axisStroke} fontSize={11} tickLine={false} />
+                    <YAxis stroke={axisStroke} fontSize={11} tickLine={false} axisLine={false} />
                     <Tooltip
                       formatter={(val: any) => [`₹${Number(val).toLocaleString()}`, ""]}
                       contentStyle={{
