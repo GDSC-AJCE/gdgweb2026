@@ -7,12 +7,12 @@ import { FaWhatsapp, FaInstagram, FaLinkedinIn, FaGithub } from "react-icons/fa6
 
 export default function Footer() {
   return (
-    <footer className="relative w-full bg-white text-[#111111] select-none overflow-hidden border-t border-[#e5e5e5]">
-      {/* INTERACTIVE PHYSICS BLOCK PLAYGROUND */}
-      <div className="relative w-full bg-white">
+    <footer className="relative w-full bg-[#ffffff] text-[#2c2e2a] select-none overflow-hidden border-t border-[#d5d5d4]">
+      {/* INTERACTIVE PHYSICS BLOCK PLAYGROUND (resting on white surface) */}
+      <div className="relative w-full bg-[#ffffff]">
         <PhysicsPlayground />
         {/* Baseline hairline divider where blocks rest */}
-        <div className="w-full h-px bg-[#e5e5e5]" />
+        <div className="w-full h-px bg-[#d5d5d4]" />
       </div>
 
       {/* SUB-BASELINE SECTION */}
@@ -21,7 +21,7 @@ export default function Footer() {
           
           {/* Left Column: Headline & Community Actions */}
           <div className="max-w-md">
-            <h3 className="text-2xl sm:text-[26px] font-normal tracking-[-0.02em] text-[#111111] leading-[1.25]">
+            <h3 className="text-2xl sm:text-[26px] font-medium tracking-[-0.03em] text-[#2c2e2a] leading-[1.25]">
               Stay connected for early access to our<br className="hidden sm:inline" /> newest tools and local events
             </h3>
 
@@ -32,7 +32,7 @@ export default function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Join WhatsApp Community"
-                className="w-10 h-10 rounded-full border border-[#111111]/30 hover:border-[#111111] flex items-center justify-center text-[#111111] hover:bg-[#f5f5f5] transition active:scale-95"
+                className="w-10 h-10 rounded-full border border-[#d5d5d4] hover:border-[#2c2e2a] flex items-center justify-center text-[#2c2e2a] hover:bg-[#f5f1e4] transition active:scale-95 shadow-xs"
               >
                 <FaWhatsapp className="w-4 h-4" />
               </a>
@@ -43,7 +43,7 @@ export default function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Follow on Instagram"
-                className="w-10 h-10 rounded-full border border-[#111111]/30 hover:border-[#111111] flex items-center justify-center text-[#111111] hover:bg-[#f5f5f5] transition active:scale-95"
+                className="w-10 h-10 rounded-full border border-[#d5d5d4] hover:border-[#2c2e2a] flex items-center justify-center text-[#2c2e2a] hover:bg-[#f5f1e4] transition active:scale-95 shadow-xs"
               >
                 <FaInstagram className="w-4 h-4" />
               </a>
@@ -54,7 +54,7 @@ export default function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Connect on LinkedIn"
-                className="w-10 h-10 rounded-full border border-[#111111]/30 hover:border-[#111111] flex items-center justify-center text-[#111111] hover:bg-[#f5f5f5] transition active:scale-95"
+                className="w-10 h-10 rounded-full border border-[#d5d5d4] hover:border-[#2c2e2a] flex items-center justify-center text-[#2c2e2a] hover:bg-[#f5f1e4] transition active:scale-95 shadow-xs"
               >
                 <FaLinkedinIn className="w-4 h-4" />
               </a>
@@ -65,7 +65,7 @@ export default function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="GitHub Organization"
-                className="w-10 h-10 rounded-full border border-[#111111]/30 hover:border-[#111111] flex items-center justify-center text-[#111111] hover:bg-[#f5f5f5] transition active:scale-95"
+                className="w-10 h-10 rounded-full border border-[#d5d5d4] hover:border-[#2c2e2a] flex items-center justify-center text-[#2c2e2a] hover:bg-[#f5f1e4] transition active:scale-95 shadow-xs"
               >
                 <FaGithub className="w-4 h-4" />
               </a>
@@ -75,7 +75,7 @@ export default function Footer() {
                 href="https://chat.whatsapp.com/gdgajce"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-5 py-2.5 rounded-full border border-[#111111]/30 hover:border-[#111111] text-[13px] font-medium text-[#111111] hover:bg-[#f5f5f5] transition active:scale-98"
+                className="px-5 py-2.5 rounded-[50px] border border-[#d5d5d4] hover:border-[#2c2e2a] text-[13px] font-medium text-[#2c2e2a] hover:bg-[#f5f1e4] transition active:scale-98 shadow-xs"
               >
                 Join our community
               </a>
@@ -86,27 +86,27 @@ export default function Footer() {
           <div className="flex flex-wrap sm:flex-nowrap gap-12 sm:gap-20 lg:gap-28">
             {/* Navigation */}
             <div>
-              <h4 className="text-[13px] font-semibold text-[#111111] mb-3.5">
+              <h4 className="text-[13px] font-semibold text-[#2c2e2a] mb-3.5">
                 Navigation
               </h4>
-              <ul className="space-y-2 text-[13px] text-[#5f6368]">
+              <ul className="space-y-2 text-[13px] text-[#80827f]">
                 <li>
-                  <Link href="/about" className="hover:text-[#111111] transition">
+                  <Link href="/about" className="hover:text-[#2c2e2a] transition">
                     About
                   </Link>
                 </li>
                 <li>
-                  <Link href="/programs" className="hover:text-[#111111] transition">
-                    Experiments
+                  <Link href="/programs" className="hover:text-[#2c2e2a] transition">
+                    Events
                   </Link>
                 </li>
                 <li>
-                  <Link href="/events" className="hover:text-[#111111] transition">
-                    Sessions
+                  <Link href="/programs/ongoing" className="hover:text-[#2c2e2a] transition">
+                    Live & Ongoing
                   </Link>
                 </li>
                 <li>
-                  <Link href="/team" className="hover:text-[#111111] transition">
+                  <Link href="/about#execom" className="hover:text-[#2c2e2a] transition">
                     Community
                   </Link>
                 </li>
@@ -115,16 +115,16 @@ export default function Footer() {
 
             {/* Other teams and product areas */}
             <div>
-              <h4 className="text-[13px] font-semibold text-[#111111] mb-3.5">
+              <h4 className="text-[13px] font-semibold text-[#2c2e2a] mb-3.5">
                 Other teams and product areas
               </h4>
-              <ul className="space-y-2 text-[13px] text-[#5f6368]">
+              <ul className="space-y-2 text-[13px] text-[#80827f]">
                 <li>
                   <a
                     href="https://ai.google"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="hover:text-[#111111] transition"
+                    className="hover:text-[#2c2e2a] transition"
                   >
                     Google AI
                   </a>
@@ -134,7 +134,7 @@ export default function Footer() {
                     href="https://cloud.google.com"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="hover:text-[#111111] transition"
+                    className="hover:text-[#2c2e2a] transition"
                   >
                     Google Cloud
                   </a>
@@ -144,7 +144,7 @@ export default function Footer() {
                     href="https://research.google"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="hover:text-[#111111] transition"
+                    className="hover:text-[#2c2e2a] transition"
                   >
                     Google Research
                   </a>
@@ -154,7 +154,7 @@ export default function Footer() {
                     href="https://deepmind.google"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="hover:text-[#111111] transition"
+                    className="hover:text-[#2c2e2a] transition"
                   >
                     Google DeepMind
                   </a>
@@ -164,9 +164,9 @@ export default function Footer() {
                     href="https://labs.google"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="hover:text-[#111111] transition"
+                    className="hover:text-[#2c2e2a] transition"
                   >
-                    Search Labs
+                    Google Labs
                   </a>
                 </li>
               </ul>
@@ -177,36 +177,36 @@ export default function Footer() {
 
         {/* MONUMENTAL DISPLAY SIGNATURE: GDG AJCE */}
         <div className="pt-14 pb-6 overflow-hidden">
-          <h2 className="font-bold text-[17.5vw] text-[#000000] tracking-[-0.045em] leading-[0.85] m-0 select-none text-left whitespace-nowrap">
+          <h2 className="font-black text-[17.5vw] text-[#2c2e2a] tracking-[-0.045em] leading-[0.85] m-0 select-none text-left whitespace-nowrap">
             GDG AJCE
           </h2>
         </div>
       </div>
 
       {/* BOTTOM LEGAL & BRAND BAR */}
-      <div className="w-full border-t border-[#e5e5e5] py-4 px-4 sm:px-10 lg:px-16 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4 text-[10px] sm:text-[11px] uppercase tracking-wider text-[#5f6368] font-medium">
+      <div className="w-full border-t border-[#d5d5d4] py-4 px-4 sm:px-10 lg:px-16 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4 text-[10px] sm:text-[11px] uppercase tracking-wider text-[#80827f] font-medium">
         <div className="flex flex-wrap items-center gap-4 sm:gap-6 lg:gap-10">
           <Link
             href="/"
-            className="text-[13px] sm:text-[15px] font-semibold text-[#111111] normal-case tracking-normal hover:opacity-80 transition"
+            className="text-[13px] sm:text-[15px] font-semibold text-[#2c2e2a] normal-case tracking-normal hover:opacity-80 transition"
           >
             GDG AJCE
           </Link>
           <Link
             href="/about"
-            className="hover:text-[#111111] transition"
+            className="hover:text-[#2c2e2a] transition"
           >
             ABOUT GDG AJCE
           </Link>
           <Link
             href="/contact"
-            className="hover:text-[#111111] transition"
+            className="hover:text-[#2c2e2a] transition"
           >
             HELP
           </Link>
           <Link
             href="/contact"
-            className="hover:text-[#111111] transition"
+            className="hover:text-[#2c2e2a] transition"
           >
             CONTACT
           </Link>

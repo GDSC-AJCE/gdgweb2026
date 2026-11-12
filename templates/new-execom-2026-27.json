@@ -1,0 +1,199 @@
+{
+  "counters": {
+    "u_row": 2,
+    "u_column": 2,
+    "u_content_text": 5,
+    "u_content_heading": 1,
+    "u_content_button": 1,
+    "u_content_divider": 1
+  },
+  "body": {
+    "id": "u_body",
+    "rows": [
+      {
+        "id": "row_header",
+        "cells": [
+          1
+        ],
+        "columns": [
+          {
+            "id": "col_header",
+            "contents": [
+              {
+                "type": "text",
+                "values": {
+                  "containerPadding": "24px 36px 12px 36px",
+                  "color": "#1e40af",
+                  "fontSize": "12px",
+                  "textAlign": "left",
+                  "lineHeight": "140%",
+                  "text": "<p><strong>GOOGLE DEVELOPER GROUPS ON CAMPUS AJCE</strong> &bull; <span style=\"color: #4285F4\">EVENT ANNOUNCEMENT</span></p>"
+                }
+              },
+              {
+                "type": "heading",
+                "values": {
+                  "containerPadding": "8px 36px 16px 36px",
+                  "headingType": "h1",
+                  "fontSize": "24px",
+                  "color": "#0f172a",
+                  "textAlign": "left",
+                  "lineHeight": "130%",
+                  "text": "Welcome to the GDG AJCE Exicom! Your Tech Journey Starts Here! 🎉"
+                }
+              },
+              {
+                "type": "divider",
+                "values": {
+                  "containerPadding": "0 36px 16px 36px",
+                  "border": {
+                    "borderTopWidth": "1px",
+                    "borderTopStyle": "solid",
+                    "borderTopColor": "#e2e8f0"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "row_body",
+        "cells": [
+          1
+        ],
+        "columns": [
+          {
+            "id": "col_body",
+            "contents": [
+              {
+                "type": "text",
+                "values": {
+                  "containerPadding": "12px 36px 16px 36px",
+                  "color": "#334155",
+                  "fontSize": "16px",
+                  "textAlign": "left",
+                  "lineHeight": "150%",
+                  "text": "<p><em>Congratulations, {{name}}! We're thrilled to officially welcome you to the GDG on Campus AJCE Exicom. Get ready for an incredible journey of tech, community, and innovation, starting with our 'Build with AI' jam session!</em></p>"
+                }
+              },
+              {
+                "type": "text",
+                "values": {
+                  "containerPadding": "8px 36px 12px 36px",
+                  "color": "#374151",
+                  "fontSize": "15px",
+                  "textAlign": "left",
+                  "lineHeight": "160%",
+                  "text": "<p>Hey {{name}},</p>"
+                }
+              },
+              {
+                "type": "text",
+                "values": {
+                  "containerPadding": "8px 36px 12px 36px",
+                  "color": "#374151",
+                  "fontSize": "15px",
+                  "textAlign": "left",
+                  "lineHeight": "160%",
+                  "text": "<p>The moment you've been waiting for is here! We're absolutely thrilled to confirm your selection as a core member of the GDG on Campus AJCE Exicom team. Your passion, talent, and dedication stood out, and we can't wait to see the amazing things we'll build together. This is your chance to lead, innovate, and shape the future of tech on campus!</p>"
+                }
+              },
+              {
+                "type": "text",
+                "values": {
+                  "containerPadding": "8px 36px 12px 36px",
+                  "color": "#374151",
+                  "fontSize": "15px",
+                  "textAlign": "left",
+                  "lineHeight": "160%",
+                  "text": "<p>To get started and connect with your fellow Exicom members, please join our exclusive WhatsApp group right away: {{whatsapp_link}}</p>"
+                }
+              },
+              {
+                "type": "text",
+                "values": {
+                  "containerPadding": "8px 36px 12px 36px",
+                  "color": "#374151",
+                  "fontSize": "15px",
+                  "textAlign": "left",
+                  "lineHeight": "160%",
+                  "text": "<p>As an Exicom member, you'll be at the forefront of all our initiatives. We're kicking off this exciting journey with an unmissable event: 'Build with AI: Gemini & Cloud Jam'! This isn't just another workshop; it's your first opportunity to dive deep into cutting-edge Google technologies, connect with Google Developer Experts & GDG Core Mentors, and start earning those coveted Google Developer Profile Badges. Get ready for hands-on coding, delicious food, and awesome stickers! No matter your {{category}}, there's something incredible waiting for you.</p>"
+                }
+              },
+              {
+                "type": "text",
+                "values": {
+                  "containerPadding": "8px 36px 12px 36px",
+                  "color": "#374151",
+                  "fontSize": "15px",
+                  "textAlign": "left",
+                  "lineHeight": "160%",
+                  "text": "<p>Mark your calendars! The jam is happening on Saturday, November 21, 2026, from 10:00 AM - 1:00 PM IST at the Central Computing Facility (CCF), AJCE. This is a fantastic chance to learn, grow, and network. Don't miss out on shaping your tech future and making a real impact with GDG AJCE.</p>"
+                }
+              },
+              {
+                "type": "text",
+                "values": {
+                  "containerPadding": "12px 36px 16px 36px",
+                  "color": "#1e293b",
+                  "fontSize": "14px",
+                  "textAlign": "left",
+                  "lineHeight": "160%",
+                  "text": "<ul><li>Official Exicom Selection Confirmation! ✅</li><li>Join Your Exclusive Exicom WhatsApp Community! 📱</li><li>Kickstart Your Journey with 'Build with AI: Gemini & Cloud Jam'! 💡</li></ul>"
+                }
+              },
+              {
+                "type": "button",
+                "values": {
+                  "containerPadding": "24px 36px 24px 36px",
+                  "href": {
+                    "name": "web",
+                    "values": {
+                      "href": "https://gdgajce.vercel.app/events/build-with-ai",
+                      "target": "_blank"
+                    }
+                  },
+                  "buttonColors": {
+                    "color": "#FFFFFF",
+                    "backgroundColor": "#4285F4",
+                    "hoverColor": "#FFFFFF",
+                    "hoverBackgroundColor": "#2563eb"
+                  },
+                  "size": {
+                    "autoWidth": false,
+                    "width": "280px"
+                  },
+                  "fontSize": "15px",
+                  "textAlign": "center",
+                  "borderRadius": "8px",
+                  "lineHeight": "120%",
+                  "text": "<strong>RSVP for Build with AI & Let's Jam! →</strong>"
+                }
+              },
+              {
+                "type": "text",
+                "values": {
+                  "containerPadding": "16px 36px 32px 36px",
+                  "color": "#64748b",
+                  "fontSize": "13px",
+                  "textAlign": "left",
+                  "lineHeight": "150%",
+                  "text": "<p>Warm regards,<br/><strong>GDG on Campus AJCE Core Team</strong><br/>Amal Jyothi College of Engineering</p>"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "values": {
+      "backgroundColor": "#f8fafc",
+      "contentWidth": "600px",
+      "fontFamily": {
+        "label": "Google Sans",
+        "value": "'Google Sans', Roboto, Helvetica, Arial, sans-serif"
+      }
+    }
+  }
+}

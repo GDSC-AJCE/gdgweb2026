@@ -41,6 +41,18 @@ export interface MailConfig {
 // Global runtime config store (persists across requests during server lifetime)
 let runtimeConfig: Partial<MailConfig> = {};
 
+// Global batch cancellation state
+let isBatchCancelledState = false;
+export function cancelBatch() {
+  isBatchCancelledState = true;
+}
+export function resetBatchCancellation() {
+  isBatchCancelledState = false;
+}
+export function isBatchCancelled() {
+  return isBatchCancelledState;
+}
+
 export function getMailConfig(): MailConfig {
   return {
     senderEmail:

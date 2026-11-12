@@ -66,6 +66,7 @@ interface OverviewTabProps {
   onOpenAddExecom: () => void;
   recentLogs: any[];
   isSuperAdmin?: boolean;
+  theme?: "light" | "dark";
 }
 
 // Lightweight smooth number count-up hook
@@ -140,7 +141,10 @@ export default function OverviewTab({
   onOpenAddExecom,
   recentLogs = [],
   isSuperAdmin = true,
+  theme = "light",
 }: OverviewTabProps) {
+  const isDark = theme === "dark";
+
   // Chart period state
   const [chartPeriod, setChartPeriod] = useState<"12M" | "30D" | "7D">("12M");
   const [activeAreaMonth, setActiveAreaMonth] = useState<number | null>(null);
@@ -376,6 +380,15 @@ export default function OverviewTab({
             <Plus className="w-4 h-4 text-blue-400" />
             <span>Create Event</span>
           </button>
+          {isSuperAdmin && (
+            <button
+              onClick={onOpenAddExecom}
+              className="h-9.5 px-3.5 rounded-xl bg-purple-50 hover:bg-purple-100 text-purple-700 border border-purple-200/80 text-xs font-semibold inline-flex items-center gap-1.5 transition-all shadow-2xs cursor-pointer active:scale-98"
+            >
+              <Users className="w-3.5 h-3.5 text-purple-600" />
+              <span>Add Execom</span>
+            </button>
+          )}
           <button
             onClick={() => onNavigateTab("mailer")}
             className="h-9.5 px-4 rounded-xl bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold inline-flex items-center gap-2 transition-all shadow-2xs cursor-pointer active:scale-98"
@@ -612,7 +625,9 @@ export default function OverviewTab({
 
             {/* Right: Legend + Period Pills */}
             <div className="flex flex-wrap sm:flex-col sm:items-end gap-3">
-              <div className="flex items-center gap-1 p-1 rounded-xl bg-slate-100 text-[11px] font-semibold">
+              <div className={`flex items-center gap-1 p-1 rounded-xl text-[11px] font-semibold ${
+                isDark ? "bg-[#18181b] border border-zinc-800" : "bg-slate-100"
+              }`}>
                 {(["12M", "30D", "7D"] as const).map((period) => (
                   <button
                     key={period}
@@ -620,7 +635,11 @@ export default function OverviewTab({
                     onClick={() => setChartPeriod(period)}
                     className={`px-2.5 py-0.5 rounded-lg transition-all cursor-pointer ${
                       chartPeriod === period
-                        ? "bg-white text-slate-900 shadow-2xs font-bold"
+                        ? isDark
+                          ? "bg-zinc-800 text-white shadow-2xs font-bold"
+                          : "bg-white text-slate-900 shadow-2xs font-bold"
+                        : isDark
+                        ? "text-zinc-400 hover:text-white"
                         : "text-slate-500 hover:text-slate-800"
                     }`}
                   >
@@ -629,13 +648,13 @@ export default function OverviewTab({
                 ))}
               </div>
 
-              <div className="flex items-center gap-3 text-[11px] text-slate-500">
+              <div className="flex items-center gap-3 text-[11px] text-slate-500 dark:text-zinc-400">
                 <div className="flex items-center gap-1.5">
                   <span className="size-2 rounded-full bg-blue-600" />
                   <span>Current</span>
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <span className="size-2 rounded-full bg-slate-300" />
+                  <span className={`size-2 rounded-full ${isDark ? "bg-zinc-600" : "bg-slate-300"}`} />
                   <span>Previous</span>
                 </div>
               </div>
@@ -658,14 +677,14 @@ export default function OverviewTab({
               >
                 <defs>
                   <linearGradient id="areaGradientBlue" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#2563EB" stopOpacity={0.28} />
+                    <stop offset="0%" stopColor="#2563EB" stopOpacity={isDark ? 0.4 : 0.28} />
                     <stop offset="100%" stopColor="#2563EB" stopOpacity={0.0} />
                   </linearGradient>
                 </defs>
                 <YAxis
                   tickLine={false}
                   axisLine={false}
-                  tick={{ fontSize: 11, fill: "#94a3b8" }}
+                  tick={{ fontSize: 11, fill: isDark ? "#71717a" : "#94a3b8" }}
                   tickFormatter={formatK}
                   domain={[0, "auto"]}
                 />
@@ -674,13 +693,15 @@ export default function OverviewTab({
                   tickLine={false}
                   axisLine={false}
                   tickMargin={8}
-                  tick={{ fontSize: 11, fill: "#94a3b8" }}
+                  tick={{ fontSize: 11, fill: isDark ? "#71717a" : "#94a3b8" }}
                 />
                 <Tooltip
                   content={({ active, payload, label }) => {
                     if (active && payload && payload.length) {
                       return (
-                        <div className="p-2.5 rounded-xl bg-slate-900 text-white shadow-xl text-xs space-y-1 border border-slate-800">
+                        <div className={`p-2.5 rounded-xl shadow-xl text-xs space-y-1 border ${
+                          isDark ? "bg-[#18181b] border-zinc-800 text-white" : "bg-slate-900 border-slate-800 text-white"
+                        }`}>
                           <p className="font-bold text-slate-200">{label}</p>
                           <div className="flex items-center justify-between gap-4">
                             <span className="text-blue-400">Current:</span>
@@ -701,7 +722,7 @@ export default function OverviewTab({
                 <Line
                   type="monotone"
                   dataKey="previous"
-                  stroke="#cbd5e1"
+                  stroke={isDark ? "#3f3f46" : "#cbd5e1"}
                   strokeWidth={2}
                   strokeDasharray="4 4"
                   dot={false}
@@ -709,7 +730,7 @@ export default function OverviewTab({
                 <Area
                   type="monotone"
                   dataKey="current"
-                  stroke="#2563EB"
+                  stroke="#3b82f6"
                   strokeWidth={2.5}
                   fill="url(#areaGradientBlue)"
                 />
@@ -769,7 +790,7 @@ export default function OverviewTab({
                 <YAxis
                   tickLine={false}
                   axisLine={false}
-                  tick={{ fontSize: 11, fill: "#94a3b8" }}
+                  tick={{ fontSize: 11, fill: isDark ? "#71717a" : "#94a3b8" }}
                   tickFormatter={formatK}
                 />
                 <XAxis
@@ -777,13 +798,15 @@ export default function OverviewTab({
                   tickLine={false}
                   axisLine={false}
                   tickMargin={8}
-                  tick={{ fontSize: 11, fill: "#94a3b8" }}
+                  tick={{ fontSize: 11, fill: isDark ? "#71717a" : "#94a3b8" }}
                 />
                 <Tooltip
                   content={({ active, payload, label }) => {
                     if (active && payload && payload.length) {
                       return (
-                        <div className="p-2.5 rounded-xl bg-slate-900 text-white shadow-xl text-xs space-y-1 border border-slate-800">
+                        <div className={`p-2.5 rounded-xl shadow-xl text-xs space-y-1 border ${
+                          isDark ? "bg-[#18181b] border-zinc-800 text-white" : "bg-slate-900 border-slate-800 text-white"
+                        }`}>
                           <p className="font-bold text-slate-200">{label}</p>
                           <div className="flex items-center justify-between gap-4 text-blue-400">
                             <span>RSVPs:</span>
@@ -808,7 +831,7 @@ export default function OverviewTab({
                 />
                 <Bar
                   dataKey="attended"
-                  fill="#cbd5e1"
+                  fill={isDark ? "#27272a" : "#cbd5e1"}
                   radius={[4, 4, 0, 0]}
                 />
               </BarChart>
@@ -845,7 +868,9 @@ export default function OverviewTab({
             </div>
 
             {/* Segmented Filter Pills */}
-            <div className="flex items-center gap-1 p-1 rounded-xl bg-slate-100 text-[11px] font-semibold">
+            <div className={`flex items-center gap-1 p-1 rounded-xl text-[11px] font-semibold ${
+              isDark ? "bg-[#18181b] border border-zinc-800" : "bg-slate-100"
+            }`}>
               {(
                 [
                   { id: "all", label: "All" },
@@ -862,7 +887,11 @@ export default function OverviewTab({
                   }}
                   className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer ${
                     tableFilter === tab.id
-                      ? "bg-white text-slate-900 shadow-2xs font-bold"
+                      ? isDark
+                        ? "bg-zinc-800 text-white shadow-2xs font-bold"
+                        : "bg-white text-slate-900 shadow-2xs font-bold"
+                      : isDark
+                      ? "text-zinc-400 hover:text-white"
                       : "text-slate-500 hover:text-slate-900"
                   }`}
                 >
@@ -1047,14 +1076,20 @@ export default function OverviewTab({
             </div>
 
             {/* Segmented Filter */}
-            <div className="flex items-center gap-1 p-1 rounded-xl bg-slate-100 self-start sm:self-auto">
+            <div className={`flex items-center gap-1 p-1 rounded-xl self-start sm:self-auto ${
+              isDark ? "bg-[#18181b] border border-zinc-800" : "bg-slate-100"
+            }`}>
               {(["all", "events", "execom", "auth"] as const).map((filter) => (
                 <button
                   key={filter}
                   onClick={() => setLogFilter(filter)}
                   className={`px-2.5 py-1 rounded-lg text-xs font-medium capitalize transition cursor-pointer ${
                     logFilter === filter
-                      ? "bg-white text-slate-900 shadow-2xs font-semibold"
+                      ? isDark
+                        ? "bg-zinc-800 text-white shadow-2xs font-semibold"
+                        : "bg-white text-slate-900 shadow-2xs font-semibold"
+                      : isDark
+                      ? "text-zinc-400 hover:text-white"
                       : "text-slate-500 hover:text-slate-800"
                   }`}
                 >
@@ -1185,12 +1220,12 @@ export default function OverviewTab({
                 </button>
               ) : (
                 <button
-                  onClick={() => onNavigateTab("website")}
+                  onClick={() => onNavigateTab("execom")}
                   className="p-3 rounded-xl bg-slate-50 hover:bg-slate-900 hover:text-white border border-slate-200/80 text-left transition group cursor-pointer"
                 >
-                  <Globe className="w-4 h-4 text-slate-600 group-hover:text-slate-300 mb-1.5" />
-                  <p className="text-xs font-bold leading-tight">Website</p>
-                  <p className="text-[10px] text-slate-400 group-hover:text-slate-300 mt-0.5">Controls</p>
+                  <Users className="w-4 h-4 text-emerald-600 group-hover:text-emerald-400 mb-1.5" />
+                  <p className="text-xs font-bold leading-tight">Execom</p>
+                  <p className="text-[10px] text-slate-400 group-hover:text-slate-300 mt-0.5">View roster</p>
                 </button>
               )}
             </div>

@@ -67,7 +67,7 @@ export default function ProgramsClient() {
       {/* Header */}
       <div className="mb-10 text-center max-w-2xl mx-auto space-y-4">
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-[50px] bg-[#ffffff] border border-[#d5d5d4] text-[13px] font-medium text-[#2c2e2a] shadow-xs">
-          <Calendar className="w-3.5 h-3.5 text-[#ff705d]" />
+          <Calendar className="w-3.5 h-3.5 text-[#2ba0ff]" />
           <span>Chapter Initiatives</span>
         </div>
         <h1 className="text-4xl sm:text-6xl font-medium text-[#2c2e2a] tracking-[-0.04em] leading-[1.05]">
@@ -86,11 +86,11 @@ export default function ProgramsClient() {
           <LoadingSpinner />
         </div>
       ) : allPrograms.length === 0 ? (
-        <div className="text-center py-20 bg-[#ffffff] border border-[#d5d5d4] rounded-[36px] p-12 max-w-xl mx-auto shadow-xs">
-          <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-[#f5f1e4] border border-[#d5d5d4] flex items-center justify-center text-[#ff705d]">
+        <div className="text-center py-20 bg-[#ffffff] border border-[#e5e1d5] rounded-[36px] p-12 max-w-xl mx-auto shadow-xs">
+          <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-[#f5f1e4] border border-[#d5d5d4] flex items-center justify-center text-[#2ba0ff]">
             <Sparkles className="w-8 h-8" />
           </div>
-          <h3 className="text-2xl font-medium text-[#2c2e2a] mb-2">No Scheduled Events</h3>
+          <h3 className="text-2xl font-bold text-[#2c2e2a] mb-2">No Scheduled Events</h3>
           <p className="text-sm text-[#80827f]">We are curating upcoming workshops. Check back soon or apply to become an organizer!</p>
         </div>
       ) : hasBoth ? (

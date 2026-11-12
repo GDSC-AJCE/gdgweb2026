@@ -43,11 +43,11 @@ export default function Home() {
   }, []);
 
   return (
-    <div ref={containerRef} className="relative min-h-screen w-full bg-[#f8fafc] overflow-x-hidden">
+    <div ref={containerRef} className="relative min-h-screen w-full bg-[#f5f1e4] text-[#2c2e2a] overflow-x-hidden">
       {/* Scroll-Driven Animated Line starting from the letter 'E' in 'AJCE' */}
       <ScrollDrawnPath containerRef={containerRef} />
 
-      {/* 1. Hero on Modern Slate Canvas (#f8fafc) with Bold Display & Paper-Cut Characters */}
+      {/* 1. Hero on Warm Cream Canvas (#f5f1e4) with Bold Display & Paper-Cut Characters */}
       {config.showHero && (
         <div className="relative z-10">
           <MindMarketHero />

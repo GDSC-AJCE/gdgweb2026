@@ -42,9 +42,9 @@ export default function ProgramCard({ title, description, slug, index, posterUrl
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.05 }}
-                className="h-full flex flex-col bg-[#ffffff] border border-[#d5d5d4] hover:border-[#2c2e2a]/40 rounded-[32px] overflow-hidden hover:-translate-y-1 transition-all group shadow-xs"
+                className="h-full flex flex-col bg-[#ffffff] border border-[#e5e1d5] hover:border-[#d5d5d4] rounded-[36px] overflow-hidden hover:-translate-y-1 transition-all group shadow-xs"
             >
-                {/* Creative Poster (Uploaded image or Landing Page Storybook vector illustration) */}
+                {/* Creative Poster */}
                 <CreativeEventPoster
                     posterUrl={posterUrl}
                     title={title}
@@ -57,13 +57,13 @@ export default function ProgramCard({ title, description, slug, index, posterUrl
                 {/* Content */}
                 <div className="p-6 flex flex-col flex-1">
                     <div className="space-y-2">
-                        <h3 className="font-medium text-xl text-[#2c2e2a] tracking-tight line-clamp-1 group-hover:text-[#ff705d] transition-colors">
+                        <h3 className="font-bold text-xl text-[#2c2e2a] tracking-tight line-clamp-1 group-hover:text-[#2ba0ff] transition-colors">
                             {title}
                         </h3>
 
                         {date && (
                             <div className="flex items-center gap-1.5 text-xs text-[#80827f] font-medium">
-                                <Calendar className="w-3.5 h-3.5 text-[#ff705d]" />
+                                <Calendar className="w-3.5 h-3.5 text-[#2ba0ff]" />
                                 <span>{date}</span>
                             </div>
                         )}
@@ -73,11 +73,11 @@ export default function ProgramCard({ title, description, slug, index, posterUrl
                         </p>
                     </div>
 
-                    <div className="mt-auto pt-6 flex items-center justify-between border-t border-[#f5f1e4]">
-                        <span className="text-xs font-medium text-[#2c2e2a]">
+                    <div className="mt-auto pt-6 flex items-center justify-between border-t border-[#e5e1d5]">
+                        <span className="text-xs font-semibold text-[#2c2e2a]">
                             {closed ? "View Recap" : "Register Now"}
                         </span>
-                        <div className="w-8 h-8 rounded-full bg-[#f5f1e4] group-hover:bg-[#2c2e2a] group-hover:text-[#ffffff] text-[#2c2e2a] flex items-center justify-center transition-all">
+                        <div className="w-8 h-8 rounded-full bg-[#f5f1e4] group-hover:bg-[#ff705d] group-hover:text-white text-[#2c2e2a] flex items-center justify-center transition-all shadow-xs">
                             <ArrowRight className="w-4 h-4" />
                         </div>
                     </div>

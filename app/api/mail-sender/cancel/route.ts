@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { cancelBatch } from "../send-batch/route";
+import { cancelBatch } from "@/lib/mailer";
 
 export async function POST() {
   cancelBatch();

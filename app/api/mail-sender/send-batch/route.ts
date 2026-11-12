@@ -6,14 +6,9 @@ import {
   sendViaAppsScriptGateway,
   getTransporter,
   markEmailAsSent,
+  isBatchCancelled,
+  resetBatchCancellation,
 } from "@/lib/mailer";
-
-// Shared state for cancellation
-let isBatchCancelled = false;
-
-export function cancelBatch() {
-  isBatchCancelled = true;
-}
 
 export async function POST(req: NextRequest) {
   try {
@@ -38,7 +33,7 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    isBatchCancelled = false;
+    resetBatchCancellation();
 
     const activeGatewayUrl = (gatewayUrl || config.gatewayUrl || "").trim();
     const activeGatewayKey = (gatewayApiKey || config.gatewayApiKey || "gdgajce").trim();
@@ -89,7 +84,7 @@ export async function POST(req: NextRequest) {
         });
 
         for (let i = 0; i < recipients.length; i++) {
-          if (isBatchCancelled) {
+          if (isBatchCancelled()) {
             sendEvent("cancelled", { message: "Sending stopped by user." });
             break;
           }

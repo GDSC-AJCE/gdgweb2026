@@ -4,33 +4,39 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl text-sm font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 cursor-pointer active:scale-[0.98]",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-[50px] text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 cursor-pointer active:scale-[0.98]",
   {
     variants: {
       variant: {
         default:
-          "bg-[#0f172a] text-white hover:bg-[#020617] shadow-sm hover:shadow",
+          "bg-[#2c2e2a] text-white hover:bg-[#1f201d] shadow-xs",
+        coral:
+          "bg-[#ff705d] text-white hover:bg-[#ee6350] shadow-xs",
         destructive:
-          "bg-[#EF4444] text-white hover:bg-[#DC2626] shadow-sm hover:shadow",
+          "bg-[#ff705d] text-white hover:bg-[#ee6350] shadow-xs",
         outline:
-          "border border-slate-200 bg-white text-slate-800 hover:bg-slate-50 hover:border-slate-300 shadow-xs",
+          "border border-[#d5d5d4] bg-[#ffffff] text-[#2c2e2a] hover:bg-[#f5f1e4] hover:border-[#2c2e2a]/30 shadow-xs",
         secondary:
-          "bg-slate-100 text-slate-900 hover:bg-slate-200",
+          "bg-[#ffffff] text-[#2c2e2a] border border-[#d5d5d4] hover:bg-[#eae5d7] shadow-xs",
         ghost:
-          "text-slate-700 hover:bg-slate-100 hover:text-slate-900",
+          "text-[#2c2e2a] hover:bg-[#f5f1e4] hover:text-[#2c2e2a]",
         link:
-          "text-[#2563EB] underline-offset-4 hover:underline",
+          "text-[#2ba0ff] underline-offset-4 hover:underline",
+        grass:
+          "bg-[#8ed462] text-[#2c2e2a] hover:bg-[#7ec452] shadow-xs",
+        sky:
+          "bg-[#2ba0ff] text-white hover:bg-[#208be6] shadow-xs",
         google:
-          "bg-[#2563EB] text-white hover:bg-[#1D4ED8] shadow-md hover:shadow-lg",
+          "bg-[#4285F4] text-white hover:bg-[#3367D6] shadow-xs",
         emerald:
-          "bg-[#10B981] text-white hover:bg-[#059669] shadow-sm hover:shadow",
+          "bg-[#8ed462] text-[#2c2e2a] hover:bg-[#7ec452] shadow-xs",
       },
       size: {
-        default: "h-10 px-4 py-2",
-        sm: "h-8 rounded-lg px-3 text-xs",
-        lg: "h-12 rounded-xl px-6 text-base",
-        pill: "h-10 rounded-full px-5 text-sm",
-        icon: "h-10 w-10 rounded-xl",
+        default: "h-10 px-5 py-2",
+        sm: "h-8 rounded-[50px] px-3.5 text-xs",
+        lg: "h-12 rounded-[50px] px-7 text-base",
+        pill: "h-10 rounded-full px-6 text-sm",
+        icon: "h-10 w-10 rounded-full",
       },
     },
     defaultVariants: {

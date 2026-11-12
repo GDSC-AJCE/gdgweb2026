@@ -1,0 +1,51 @@
+name: CodeRabbit Review & Agentic Guardrails
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+  issue_comment:
+    types: [created]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  review:
+    name: CodeRabbit AI Code Review
+    if: |
+      github.event_name == 'pull_request' &&
+      !github.event.pull_request.draft
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: write
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: CodeRabbit AI PR Review
+        uses: coderabbitai/ai-pr-reviewer@latest
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CODERABBIT_API_KEY: ${{ secrets.CODERABBIT_API_KEY }}
+
+  guardrails:
+    name: Architectural & Stack Guardrails
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Verify 100% Google Ecosystem Invariant
+        run: |
+          echo "Scanning for forbidden non-Google database and auth dependencies..."
+          FORBIDDEN="supabase|mongodb|mongoose|@prisma/client|prisma|@aws-sdk|auth0|@clerk|mysql|pg|typeorm"
+          if grep -iE "$FORBIDDEN" package.json; then
+            echo "::error::Violation of Google-Only Architectural Invariant! Third-party backend dependencies detected in package.json."
+            exit 1
+          fi
+          echo "Stack guardrail passed: 100% Google Ecosystem preserved."

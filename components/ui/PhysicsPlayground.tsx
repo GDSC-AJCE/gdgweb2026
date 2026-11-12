@@ -76,7 +76,7 @@ export default function PhysicsPlayground() {
       chamfer: { radius: 26 },
       angle: 0.08,
     });
-    physicsBodies.push({ body: hexBody, type: "yellow_hex", color: "#FCE72D", size: 115 });
+    physicsBodies.push({ body: hexBody, type: "yellow_hex", color: "#ffd600", size: 115 });
 
     // 2. BLUE WAVY STARBURST / SCALLOP (Next to Hexagon)
     const blueX = Math.max(250, step * 1.9);
@@ -85,7 +85,7 @@ export default function PhysicsPlayground() {
       ...commonProps,
       angle: 0.25,
     });
-    physicsBodies.push({ body: blueBody, type: "blue_wavy", color: "#5483F6", size: 115 });
+    physicsBodies.push({ body: blueBody, type: "blue_wavy", color: "#2ba0ff", size: 115 });
 
     // 3. PERIWINKLE DOME (Hanging / Upper center-left)
     const domeX = Math.max(380, step * 2.9);
@@ -94,7 +94,7 @@ export default function PhysicsPlayground() {
       ...commonProps,
       angle: -0.05,
     });
-    physicsBodies.push({ body: domeBody, type: "purple_dome", color: "#95A8FE", size: 100, w: 210, h: 140 });
+    physicsBodies.push({ body: domeBody, type: "purple_dome", color: "#95a8fe", size: 100, w: 210, h: 140 });
 
     // 4. ORANGE ORGANIC 4-LOBED CROSS / CLOVER (Center)
     const orangeX = Math.max(530, step * 4.0);
@@ -103,7 +103,7 @@ export default function PhysicsPlayground() {
       ...commonProps,
       angle: 0.1,
     });
-    physicsBodies.push({ body: orangeBody, type: "orange_clover", color: "#FF7B47", size: 125 });
+    physicsBodies.push({ body: orangeBody, type: "orange_clover", color: "#ff705d", size: 125 });
 
     // 5. PINK SCALLOP CLOUD (Upper center-right)
     const pinkX = Math.max(680, step * 5.1);
@@ -113,7 +113,7 @@ export default function PhysicsPlayground() {
       chamfer: { radius: 40 },
       angle: -0.12,
     });
-    physicsBodies.push({ body: pinkBody, type: "pink_cloud", color: "#FFAFF6", size: 110, w: 230, h: 140 });
+    physicsBodies.push({ body: pinkBody, type: "pink_cloud", color: "#ffaff6", size: 110, w: 230, h: 140 });
 
     // 6. LIME GREEN 4-LEAF CLOVER (Far Right)
     const limeX = Math.max(830, step * 6.2);
@@ -122,7 +122,7 @@ export default function PhysicsPlayground() {
       ...commonProps,
       angle: -0.15,
     });
-    physicsBodies.push({ body: limeBody, type: "lime_clover", color: "#C6EB3D", size: 120 });
+    physicsBodies.push({ body: limeBody, type: "lime_clover", color: "#8ed462", size: 120 });
 
     // 7. GREEN TEXT CAPSULE PILLS (Floating & resting as shown in screenshot)
     // Pill 1: "Join our WhatsApp Community"
@@ -134,7 +134,7 @@ export default function PhysicsPlayground() {
     physicsBodies.push({
       body: p1,
       type: "pill_text",
-      color: "#2BD980",
+      color: "#8ed462",
       size: 50,
       w: 230,
       h: 50,
@@ -150,7 +150,7 @@ export default function PhysicsPlayground() {
     physicsBodies.push({
       body: p2,
       type: "pill_text",
-      color: "#2BD980",
+      color: "#8ed462",
       size: 50,
       w: 210,
       h: 50,
@@ -166,7 +166,7 @@ export default function PhysicsPlayground() {
     physicsBodies.push({
       body: p3,
       type: "pill_text",
-      color: "#2BD980",
+      color: "#8ed462",
       size: 50,
       w: 230,
       h: 50,
@@ -182,7 +182,7 @@ export default function PhysicsPlayground() {
     physicsBodies.push({
       body: p4,
       type: "pill_text",
-      color: "#2BD980",
+      color: "#8ed462",
       size: 50,
       w: 240,
       h: 50,

@@ -17,7 +17,7 @@ export async function POST(req: NextRequest) {
             .replace(/\{\{time\}\}/g, "Friday, October 24 at 4:30 PM")
             .replace(/\{\{link\}\}/g, "https://meet.google.com/abc-defg-hij");
 
-        const { html } = renderEmailWithEmailMd(substituted);
+        const { html } = await renderEmailWithEmailMd(substituted);
 
         return new NextResponse(html, {
             headers: { "Content-Type": "text/html" },

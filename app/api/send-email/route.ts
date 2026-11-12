@@ -50,7 +50,7 @@ export async function POST(req: NextRequest) {
         const results = await Promise.allSettled(
             recipients.map(async (r) => {
                 const personalizedBody = markdownBody.replace(/\{\{name\}\}/g, r.name || "Member");
-                const { html, text } = renderEmailWithEmailMd(personalizedBody);
+                const { html, text } = await renderEmailWithEmailMd(personalizedBody);
                 const personalizedSubject = subject.replace(/\{\{name\}\}/g, r.name || "Member");
 
                 return dispatchResendEmail({

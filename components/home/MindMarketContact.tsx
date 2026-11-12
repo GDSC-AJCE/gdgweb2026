@@ -7,6 +7,7 @@ import confetti from "canvas-confetti";
 import { collection, addDoc, Timestamp } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { useDialog } from "@/context/DialogContext";
+import { useTheme } from "@/context/ThemeContext";
 import TextLoop from "@/components/ui/TextLoop";
 import { Send, Copy, Check, Sparkles } from "lucide-react";
 import { FaGithub, FaLinkedinIn, FaXTwitter, FaDiscord, FaWhatsapp } from "react-icons/fa6";
@@ -14,6 +15,8 @@ import { Button } from "@/components/ui/Button";
 
 export default function MindMarketContact() {
   const dialog = useDialog();
+  const { resolvedTheme } = useTheme();
+  const isDark = resolvedTheme === "dark";
   const [submitting, setSubmitting] = useState(false);
   const [copiedEmail, setCopiedEmail] = useState(false);
   const [mascotSpeech, setMascotSpeech] = useState("Hey! Drop us a note 👋");
@@ -150,16 +153,16 @@ export default function MindMarketContact() {
         >
           <path
             d="M 20 280 C 70 260, 130 300, 180 250 C 220 210, 170 150, 90 170 C 30 185, 35 110, 100 80 C 170 50, 230 110, 290 140"
-            stroke="#95A8FE"
+            stroke="#95a8fe"
             strokeWidth="7"
             strokeLinecap="round"
           />
           <g transform="translate(290, 140) rotate(15)">
-            <ellipse cx="0" cy="0" rx="14" ry="12" fill="#95A8FE" />
-            <circle cx="10" cy="-8" r="6" fill="#95A8FE" />
-            <circle cx="15" cy="0" r="6" fill="#95A8FE" />
-            <circle cx="10" cy="8" r="6" fill="#95A8FE" />
-            <circle cx="1" cy="14" r="5" fill="#95A8FE" />
+            <ellipse cx="0" cy="0" rx="14" ry="12" fill="#95a8fe" />
+            <circle cx="10" cy="-8" r="6" fill="#95a8fe" />
+            <circle cx="15" cy="0" r="6" fill="#95a8fe" />
+            <circle cx="10" cy="8" r="6" fill="#95a8fe" />
+            <circle cx="1" cy="14" r="5" fill="#95a8fe" />
           </g>
         </svg>
       </div>
@@ -178,12 +181,12 @@ export default function MindMarketContact() {
           className="space-y-3.5 max-w-2xl mx-auto"
         >
           {/* Headline */}
-          <h2 className="text-[38px] sm:text-[54px] md:text-[64px] font-bold tracking-[-0.04em] text-[#0f172a] leading-[1.05]">
+          <h2 className="text-[38px] sm:text-[54px] md:text-[64px] font-medium tracking-[-0.04em] text-[#2c2e2a] leading-[1.05]">
             Get in Touch
           </h2>
 
           {/* Subtitle */}
-          <p className="text-sm sm:text-[16px] font-normal text-slate-600 max-w-lg mx-auto leading-relaxed">
+          <p className="text-sm sm:text-[16px] font-normal text-[#80827f] max-w-lg mx-auto leading-relaxed">
             Have inquiries about workshops, speaker invitations, hackathon partnerships, or chapter tracks? Send our organizing crew a direct message.
           </p>
         </motion.div>
@@ -195,14 +198,14 @@ export default function MindMarketContact() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.65, ease: [0.38, 0.005, 0.215, 1.0] }}
-            className="rounded-[32px] sm:rounded-[36px] bg-white border border-slate-200 shadow-md overflow-hidden text-left"
+            className="rounded-[32px] sm:rounded-[36px] bg-[#ffffff] border border-[#e5e1d5] shadow-xs overflow-hidden text-left"
           >
-            <form onSubmit={handleSubmit} className="divide-y divide-slate-100">
+            <form onSubmit={handleSubmit} className="divide-y divide-[#e5e1d5]">
               
               {/* Row 1: Name */}
-              <div className="px-7 py-5 sm:py-5.5 bg-slate-50/40 hover:bg-slate-50/80 transition-colors focus-within:bg-white">
-                <label className="block text-[11px] font-mono uppercase tracking-wider text-slate-500 font-semibold mb-1">
-                  Full Name <span className="text-[#EF4444]">*</span>
+              <div className="px-7 py-5 sm:py-5.5 bg-[#ffffff] hover:bg-[#f5f1e4]/40 transition-colors focus-within:bg-[#ffffff]">
+                <label className="block text-[11px] font-mono uppercase tracking-wider text-[#80827f] font-semibold mb-1">
+                  Full Name <span className="text-[#ff705d]">*</span>
                 </label>
                 <input
                   type="text"
@@ -210,14 +213,14 @@ export default function MindMarketContact() {
                   value={formData.name}
                   onFocus={() => setMascotSpeech("What should we call you? 😊")}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="w-full bg-transparent text-sm sm:text-[16px] text-[#0f172a] placeholder-slate-400 font-medium outline-none"
+                  className="w-full bg-transparent text-sm sm:text-[16px] text-[#2c2e2a] placeholder-[#80827f]/70 font-medium outline-none"
                 />
               </div>
 
               {/* Row 2: Email */}
-              <div className="px-7 py-5 sm:py-5.5 bg-slate-50/40 hover:bg-slate-50/80 transition-colors focus-within:bg-white">
-                <label className="block text-[11px] font-mono uppercase tracking-wider text-slate-500 font-semibold mb-1">
-                  Email Address <span className="text-[#EF4444]">*</span>
+              <div className="px-7 py-5 sm:py-5.5 bg-[#ffffff] hover:bg-[#f5f1e4]/40 transition-colors focus-within:bg-[#ffffff]">
+                <label className="block text-[11px] font-mono uppercase tracking-wider text-[#80827f] font-semibold mb-1">
+                  Email Address <span className="text-[#ff705d]">*</span>
                 </label>
                 <input
                   type="email"
@@ -225,14 +228,14 @@ export default function MindMarketContact() {
                   value={formData.email}
                   onFocus={() => setMascotSpeech("We'll write back here! 📬")}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="w-full bg-transparent text-sm sm:text-[16px] text-[#0f172a] placeholder-slate-400 font-medium outline-none"
+                  className="w-full bg-transparent text-sm sm:text-[16px] text-[#2c2e2a] placeholder-[#80827f]/70 font-medium outline-none"
                 />
               </div>
 
               {/* Row 3: Phone */}
-              <div className="px-7 py-5 sm:py-5.5 bg-slate-50/40 hover:bg-slate-50/80 transition-colors focus-within:bg-white">
-                <label className="block text-[11px] font-mono uppercase tracking-wider text-slate-500 font-semibold mb-1">
-                  Phone Number <span className="text-slate-400 font-sans font-normal">(optional)</span>
+              <div className="px-7 py-5 sm:py-5.5 bg-[#ffffff] hover:bg-[#f5f1e4]/40 transition-colors focus-within:bg-[#ffffff]">
+                <label className="block text-[11px] font-mono uppercase tracking-wider text-[#80827f] font-semibold mb-1">
+                  Phone Number <span className="text-[#80827f] font-sans font-normal">(optional)</span>
                 </label>
                 <input
                   type="tel"
@@ -240,14 +243,14 @@ export default function MindMarketContact() {
                   value={formData.phone}
                   onFocus={() => setMascotSpeech("Optional, but great for quick syncs! 📞")}
                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                  className="w-full bg-transparent text-sm sm:text-[16px] text-[#0f172a] placeholder-slate-400 font-medium outline-none"
+                  className="w-full bg-transparent text-sm sm:text-[16px] text-[#2c2e2a] placeholder-[#80827f]/70 font-medium outline-none"
                 />
               </div>
 
               {/* Row 4: Message */}
-              <div className="px-7 py-5 sm:py-5.5 bg-slate-50/40 hover:bg-slate-50/80 transition-colors focus-within:bg-white">
-                <label className="block text-[11px] font-mono uppercase tracking-wider text-slate-500 font-semibold mb-1">
-                  Message Details <span className="text-[#EF4444]">*</span>
+              <div className="px-7 py-5 sm:py-5.5 bg-[#ffffff] hover:bg-[#f5f1e4]/40 transition-colors focus-within:bg-[#ffffff]">
+                <label className="block text-[11px] font-mono uppercase tracking-wider text-[#80827f] font-semibold mb-1">
+                  Message Details <span className="text-[#ff705d]">*</span>
                 </label>
                 <textarea
                   rows={4}
@@ -255,7 +258,7 @@ export default function MindMarketContact() {
                   value={formData.message}
                   onFocus={() => setMascotSpeech("Tell us everything! ✨")}
                   onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                  className="w-full bg-transparent text-sm sm:text-[16px] text-[#0f172a] placeholder-slate-400 font-medium outline-none resize-none leading-relaxed min-h-[110px]"
+                  className="w-full bg-transparent text-sm sm:text-[16px] text-[#2c2e2a] placeholder-[#80827f]/70 font-medium outline-none resize-none leading-relaxed min-h-[110px]"
                 />
               </div>
 
@@ -264,10 +267,11 @@ export default function MindMarketContact() {
                 <Button
                   type="submit"
                   disabled={submitting}
-                  className="w-full h-14 sm:h-16 bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-bold text-base rounded-none transition-all flex items-center justify-center gap-2.5 disabled:opacity-50 cursor-pointer border-0 shadow-md shadow-blue-500/20"
+                  className="w-full h-14 sm:h-16 bg-[#2c2e2a] hover:bg-[#1f201d] text-white font-medium text-base rounded-none transition-all flex items-center justify-center gap-2.5 disabled:opacity-50 cursor-pointer border-0 shadow-xs group"
                 >
                   <Send className="w-4 h-4 mr-1" />
                   <span>{submitting ? "Submitting inquiry..." : "Send Message"}</span>
+                  <span className="w-2.5 h-2.5 rounded-full bg-[#8ed462] action-dot-expand shadow-xs ml-1" />
                 </Button>
               </div>
             </form>

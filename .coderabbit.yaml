@@ -1,0 +1,90 @@
+# CodeRabbit AI Configuration for GDG on Campus AJCE
+# Schema documentation: https://docs.coderabbit.ai/guides/configure-coderabbit
+
+language: "en-US"
+early_access: true
+
+reviews:
+  profile: "assertive" # Strict quality enforcement and guardrail checks
+  request_changes_workflow: true
+  high_level_summary: true
+  poem: false
+  review_status: true
+  collapse_walkthrough: false
+  
+  auto_review:
+    enabled: true
+    drafts: false
+    base_branches:
+      - "main"
+      - "master"
+      - "dev"
+      - "develop"
+
+  # Path exclusions for review noise reduction
+  path_filters:
+    - "!node_modules/**"
+    - "!.next/**"
+    - "!graphify-out/**"
+    - "!*.lock"
+    - "!pnpm-lock.yaml"
+    - "!package-lock.json"
+    - "!bun.lock"
+    - "!public/fonts/**"
+    - "!public/assets/gallery/**"
+
+  # Path-specific agent review instructions and invariant enforcement
+  path_instructions:
+    - path: "app/**"
+      instructions: |
+        - Enforce Next.js 16 App Router standards with React 19.
+        - Verify client vs server component boundaries ('use client' strictly when interactivity or hooks are required).
+        - Verify design consistency: Backgrounds must anchor to Warm Cream Paper (#f5f1e4). No dark mode or stark digital white backgrounds.
+        - Surfaces must use Pure White cards (#ffffff) with generous radii (36px to 50px) and hairline borders (#d5d5d4 / #e5e1d5).
+        - Core public routes (/programs, /programs/ongoing, /programs/past, /leaderboard, /profile, /verify/[id], /core) must remain backward-compatible.
+
+    - path: "lib/**"
+      instructions: |
+        - STRICT ARCHITECTURAL INVARIANT: 100% Google Ecosystem.
+        - Absolutely reject any imports or integrations of non-Google backend/database/auth services (e.g., Supabase, MongoDB, AWS, Clerk, Auth0).
+        - All database queries must route through Cloud Firestore (lib/firebase.ts).
+        - All AI/LLM operations must route through Google Gemini SDK (@google/genai).
+        - Verify that input validation and safety guardrails (lib/guardrails.ts) are applied before LLM generation and Firestore writes.
+
+    - path: "components/**"
+      instructions: |
+        - Follow design.md tokens:
+          * Geometry: 50px (rounded-full) for action pills and primary CTAs; 36px–50px for bento cards; 28px for inner rows.
+          * Color Accents: Grass Green (#8ed462), Coral Pop (#ff705d), Sky Pop (#2ba0ff), Sunshine Yellow (#ffd600/#f5e211).
+          * Typography: Inter single font family with compressed tracking (-0.065em on headings).
+        - Ensure responsive behavior on mobile and tablet breakpoints.
+
+    - path: "firestore.rules"
+      instructions: |
+        - Critical security review: Never allow open write rules ('allow write: if true;' is strictly forbidden).
+        - Ensure collections 'events', 'registrations', 'users', 'tickets', 'certificates', 'teams', 'execom', 'audit_logs' are protected.
+        - Validate email domain verification (@amaljyothi.ac.in) and role checks for executive endpoints.
+
+  # Integrated agent tools & security analyzers
+  tools:
+    skillspetector:
+      enabled: true # Scans agent actions, skills, and tools for supply chain and script injection vulnerabilities
+    languagetool:
+      enabled: true
+    shellcheck:
+      enabled: true
+
+  # Pre-merge validation checks
+  pre_merge_checks:
+    - name: "Google-Only Stack Check"
+      description: "Ensure no non-Google third-party database or authentication services are introduced"
+      mode: "strict"
+    - name: "Secret & Credential Leak Guard"
+      description: "Prevent accidental commit of API keys, service account JSONs, or environment tokens"
+      mode: "strict"
+    - name: "Graphify Knowledge Graph Sync"
+      description: "Check that graphify knowledge graph constraints are honored on structural refactors"
+      mode: "advisory"
+
+chat:
+  auto_reply: true

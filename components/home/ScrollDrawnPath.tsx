@@ -128,14 +128,14 @@ export default function ScrollDrawnPath({ containerRef }: ScrollDrawnPathProps) 
         </filter>
       </defs>
 
-      {/* Background track (faint dashed trail) */}
+      {/* Background track (faint dashed trail on cream paper) */}
       <path
         d={pathData}
         fill="none"
-        stroke="#cbd5e1"
+        stroke="#d5d5d4"
         strokeWidth={14}
         strokeDasharray="18 24"
-        strokeOpacity={0.45}
+        strokeOpacity={0.6}
         strokeLinecap="round"
       />
 

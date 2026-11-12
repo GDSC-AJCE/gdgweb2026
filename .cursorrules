@@ -1,0 +1,24 @@
+# Cursor AI Rules — GDG on Campus AJCE
+# Master Reference: AGENTS.md, HEAD.md, design.md
+
+# 1. 100% Google Stack Invariant
+- Persistent storage: Cloud Firestore (lib/firebase.ts) exclusively.
+- Authentication: Firebase Auth with Google SSO (@amaljyothi.ac.in).
+- Storage: Firebase Cloud Storage.
+- AI & LLMs: Google Gemini SDK (@google/genai, lib/gemini.ts).
+- Strict Prohibition: NEVER import Supabase, MongoDB, AWS, Clerk, Auth0, or PostgreSQL.
+
+# 2. Design System Tokens (design.md)
+- Canvas: Warm Cream Paper (#f5f1e4). No dark mode. No stark digital white canvas.
+- Cards: Pure White (#ffffff) with rounded-[36px] to rounded-[50px] and hairline borders (#d5d5d4).
+- Brand Accents: Grass Green (#8ed462), Coral Pop (#ff705d), Sky Pop (#2ba0ff), Sunshine Yellow (#ffd600).
+- Buttons & Pills: rounded-full (50px).
+- Typography: Inter with compressed tracking (-0.065em).
+
+# 3. Graphify Knowledge Graph
+- Query graphify-out/ before refactoring (graphify query "<question>").
+- Update graph after code changes (graphify update .).
+
+# 4. Guardrails & Safety
+- Use lib/guardrails.ts for prompt validation, PII redaction, and Gemini safety thresholds.
+- Adhere to .coderabbit.yaml for PR reviews and SkillSpector security checks.

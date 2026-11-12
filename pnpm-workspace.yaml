@@ -1,0 +1,8 @@
+allowBuilds:
+  '@firebase/util': true
+  coderabbit: true
+  protobufjs: true
+  sharp: set this to true or false
+minimumReleaseAgeExclude:
+  - '@google/genai@3.1.0 || 3.2.0'
+  - lucide-react@1.72.0

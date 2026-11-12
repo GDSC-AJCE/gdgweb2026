@@ -28,9 +28,9 @@ export const LEGACY_SMTP_COOKIE_NAME = "gdg_smtp_cfg";
 /**
  * Renders markdown to responsive email HTML and text using emailmd
  */
-export function renderEmailWithEmailMd(markdown: string): { html: string; text: string } {
+export async function renderEmailWithEmailMd(markdown: string): Promise<{ html: string; text: string }> {
   try {
-    const rendered = render(markdown);
+    const rendered = await render(markdown);
     return {
       html: rendered.html,
       text: rendered.text || markdown.replace(/[#*`>_~\[\]]/g, ""),
@@ -121,7 +121,7 @@ export async function dispatchResendEmail(options: SendEmailPayload): Promise<Re
   let text = options.text;
 
   if (options.markdown && !html) {
-    const rendered = renderEmailWithEmailMd(options.markdown);
+    const rendered = await renderEmailWithEmailMd(options.markdown);
     html = rendered.html;
     text = text || rendered.text;
   }

@@ -53,6 +53,10 @@ const TAB_METADATA: Record<AdminTab, { title: string; subtitle: string }> = {
     title: "Events & Workshops",
     subtitle: "Create, schedule, publish, and monitor attendee RSVPs for all community sessions.",
   },
+  newsletter: {
+    title: "Weekly Tech Newsletter",
+    subtitle: "Draft, auto-generate, preview, and broadcast weekly developer updates to all active subscribers.",
+  },
   mailer: {
     title: "Mail Studio & Dispatcher",
     subtitle: "Design templates with visual drag-and-drop editor, import Figma layouts, and broadcast personalized emails via Apps Script Gateway or Gmail SMTP.",
@@ -85,7 +89,7 @@ export default function AdminPage() {
     if (typeof window !== "undefined") {
       const params = new URLSearchParams(window.location.search);
       const tabParam = params.get("tab") as AdminTab;
-      if (tabParam && ["overview", "analytics", "execom", "events", "mailer", "website", "users", "applications", "funds", "audit"].includes(tabParam)) {
+      if (tabParam && ["overview", "analytics", "execom", "events", "newsletter", "mailer", "website", "users", "applications", "funds", "audit"].includes(tabParam)) {
         return tabParam;
       }
     }
@@ -108,7 +112,7 @@ export default function AdminPage() {
 
   useEffect(() => {
     try {
-      const saved = localStorage.getItem("gdg_admin_theme");
+      const saved = localStorage.getItem("gdg_admin_theme") || localStorage.getItem("gdg_theme");
       if (saved === "dark" || saved === "light") {
         setAdminTheme(saved);
       } else if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
@@ -117,11 +121,30 @@ export default function AdminPage() {
     } catch {}
   }, []);
 
+  useEffect(() => {
+    if (adminTheme === "dark") {
+      document.documentElement.classList.add("dark");
+      document.documentElement.setAttribute("data-theme", "dark");
+      document.documentElement.setAttribute("data-admin-theme", "dark");
+      document.body.style.backgroundColor = "#0c0c0e";
+    } else {
+      document.documentElement.classList.remove("dark");
+      document.documentElement.setAttribute("data-theme", "light");
+      document.documentElement.setAttribute("data-admin-theme", "light");
+      document.body.style.backgroundColor = "#f8fafc";
+    }
+    return () => {
+      document.body.style.backgroundColor = "";
+      document.documentElement.removeAttribute("data-admin-theme");
+    };
+  }, [adminTheme]);
+
   const toggleAdminTheme = useCallback(() => {
     setAdminTheme((prev) => {
       const next = prev === "light" ? "dark" : "light";
       try {
         localStorage.setItem("gdg_admin_theme", next);
+        localStorage.setItem("gdg_theme", next);
       } catch {}
       return next;
     });
@@ -134,7 +157,7 @@ export default function AdminPage() {
         setIsDevPreview(true);
       }
       const tabParam = params.get("tab") as AdminTab;
-      if (tabParam && ["overview", "analytics", "execom", "events", "mailer", "website", "users", "applications", "funds", "audit"].includes(tabParam)) {
+      if (tabParam && ["overview", "analytics", "execom", "events", "newsletter", "mailer", "website", "users", "applications", "funds", "audit"].includes(tabParam)) {
         setActiveTab(tabParam);
       }
     }
@@ -463,10 +486,10 @@ export default function AdminPage() {
   // AUTH STATE 1: LOADING
   if (authLoading && !isDevPreview) {
     return (
-      <main className="min-h-screen bg-[#f5f1e4] flex items-center justify-center select-none p-4">
-        <div className="p-8 sm:p-10 rounded-[40px] bg-white border border-[#d5d5d4] shadow-md text-center space-y-4 max-w-sm w-full flex flex-col items-center">
+      <main className="min-h-screen bg-slate-50 dark:bg-[#0c0c0e] flex items-center justify-center select-none p-4 font-sans">
+        <div className="p-8 sm:p-10 rounded-2xl bg-white dark:bg-[#141416] border border-slate-200 dark:border-zinc-800 shadow-xl text-center space-y-4 max-w-sm w-full flex flex-col items-center">
           <LoadingSpinner text="Connecting to Admin Deck..." size="lg" variant="cluster" />
-          <p className="text-[11px] font-mono text-[#80827f] -mt-2">Verifying cryptographic session...</p>
+          <p className="text-[11px] font-mono text-slate-400 dark:text-zinc-500 -mt-2">Verifying organizer session...</p>
         </div>
       </main>
     );
@@ -475,32 +498,33 @@ export default function AdminPage() {
   // AUTH STATE 2: NOT SIGNED IN
   if (!user && !isDevPreview) {
     return (
-      <main className="min-h-screen bg-[#f5f1e4] flex items-center justify-center select-none p-4">
-        <div className="p-8 sm:p-10 rounded-[40px] bg-white border border-[#d5d5d4] shadow-xl text-center space-y-6 max-w-md w-full">
-          <div className="w-16 h-16 rounded-full bg-[#f5f1e4] border border-[#d5d5d4] flex items-center justify-center mx-auto">
-            <Lock className="w-7 h-7 text-[#2c2e2a]" />
+      <main className="min-h-screen bg-slate-50 dark:bg-[#0c0c0e] flex items-center justify-center select-none p-4 font-sans">
+        <div className="p-8 sm:p-10 rounded-2xl bg-white dark:bg-[#141416] border border-slate-200 dark:border-zinc-800 shadow-xl text-center space-y-6 max-w-md w-full">
+          <div className="size-14 rounded-2xl bg-blue-50 dark:bg-blue-500/10 border border-blue-200/80 dark:border-blue-500/20 flex items-center justify-center mx-auto text-blue-600 dark:text-blue-400">
+            <Lock className="w-6 h-6" />
           </div>
 
           <div className="space-y-2">
-            <h2 className="text-2xl font-bold text-[#2c2e2a] tracking-tight">
+            <h2 className="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">
               GDG Chapter Admin
             </h2>
-            <p className="text-xs text-[#80827f] leading-relaxed">
-              Sign in with your Google Account to access the Chapter Organizer console. Admin access is restricted to authorized accounts (<span className="font-mono font-medium text-[#2c2e2a]">dsc@amaljyothi.ac.in</span>, <span className="font-mono font-medium text-[#2c2e2a]">karthiksambhu123@gmail.com</span>).
+            <p className="text-xs text-slate-500 dark:text-zinc-400 leading-relaxed">
+              Sign in with your authorized Google Account to manage events, executive roster, student applications, and chapter telemetry.
             </p>
           </div>
 
           <button
+            type="button"
             onClick={googleSignIn}
-            className="w-full inline-flex items-center justify-center gap-3 px-6 py-3.5 rounded-[50px] bg-[#2c2e2a] hover:bg-[#1a1a1a] text-white text-xs font-semibold shadow-md transition active:scale-95 cursor-pointer"
+            className="w-full inline-flex items-center justify-center gap-2.5 px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold shadow-md transition active:scale-95 cursor-pointer"
           >
-            <Shield className="w-4 h-4 text-[#2ba0ff]" />
-            <span>Sign in with Google</span>
+            <Shield className="w-4 h-4 text-white" />
+            <span>Sign in with Google Account</span>
           </button>
 
           <Link
             href="/"
-            className="inline-flex items-center gap-1.5 text-xs text-[#80827f] hover:text-[#2c2e2a] transition pt-2"
+            className="inline-flex items-center gap-1.5 text-xs text-slate-500 hover:text-slate-900 dark:hover:text-white transition pt-2"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
             <span>Return to Public Website</span>
@@ -513,28 +537,28 @@ export default function AdminPage() {
   // AUTH STATE 3: SIGNED IN BUT UNAUTHORIZED
   if (!hasAccess && !isDevPreview) {
     return (
-      <main className="min-h-screen bg-[#f5f1e4] flex items-center justify-center select-none p-4">
-        <div className="p-8 sm:p-10 rounded-[40px] bg-white border border-[#d5d5d4] shadow-xl text-center space-y-6 max-w-md w-full">
-          <div className="w-16 h-16 rounded-full bg-[#ff705d]/15 text-[#ff705d] flex items-center justify-center mx-auto">
-            <Shield className="w-7 h-7" />
+      <main className="min-h-screen bg-slate-50 dark:bg-[#0c0c0e] flex items-center justify-center select-none p-4 font-sans">
+        <div className="p-8 sm:p-10 rounded-2xl bg-white dark:bg-[#141416] border border-slate-200 dark:border-zinc-800 shadow-xl text-center space-y-6 max-w-md w-full">
+          <div className="size-14 rounded-2xl bg-rose-50 dark:bg-rose-500/10 border border-rose-200/80 dark:border-rose-500/20 text-rose-600 dark:text-rose-400 flex items-center justify-center mx-auto">
+            <Shield className="w-6 h-6" />
           </div>
 
           <div className="space-y-2">
-            <h2 className="text-2xl font-bold text-[#2c2e2a] tracking-tight">
+            <h2 className="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">
               Restricted Area
             </h2>
-            <p className="text-xs text-[#80827f] leading-relaxed">
-              You are signed in as <span className="font-semibold text-[#2c2e2a]">{user?.email}</span>, but your account does not have organizer privileges.
+            <p className="text-xs text-slate-500 dark:text-zinc-400 leading-relaxed">
+              You are signed in as <span className="font-semibold text-slate-800 dark:text-slate-200">{user?.email}</span>, but your account does not have organizer privileges.
             </p>
           </div>
 
-          <div className="p-3 bg-[#f5f1e4] rounded-[20px] text-[11px] text-[#80827f]">
+          <div className="p-3 bg-slate-100 dark:bg-zinc-800/60 rounded-xl text-[11px] text-slate-600 dark:text-zinc-400">
             Request access from the Chapter Lead or faculty advisor to manage events and chapter assets.
           </div>
 
           <Link
             href="/"
-            className="inline-flex items-center justify-center gap-1.5 w-full px-6 py-3 rounded-[50px] bg-[#2c2e2a] text-white text-xs font-semibold hover:bg-[#1a1a1a] transition"
+            className="inline-flex items-center justify-center gap-1.5 w-full px-6 py-2.5 rounded-xl bg-slate-900 dark:bg-zinc-800 text-white text-xs font-semibold hover:bg-slate-800 dark:hover:bg-zinc-700 transition"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
             <span>Return to Homepage</span>
@@ -555,7 +579,7 @@ export default function AdminPage() {
       data-theme={adminTheme}
       className={`min-h-screen select-none p-4 sm:p-6 lg:p-8 transition-colors duration-200 ${
         adminTheme === "dark"
-          ? "dark bg-[#090d16] text-slate-100"
+          ? "dark bg-[#0c0c0e] text-slate-100"
           : "bg-[#f8fafc] text-[#0f172a]"
       }`}
     >
@@ -615,6 +639,7 @@ export default function AdminPage() {
                     }}
                     recentLogs={auditLogs}
                     isSuperAdmin={isSuperAdmin}
+                    theme={adminTheme}
                   />
                 )}
 
@@ -722,6 +747,34 @@ export default function AdminPage() {
                 )}
               </motion.div>
             </AnimatePresence>
+          </div>
+        </div>
+
+        {/* ADMIN PANEL CONSOLE FOOTER BAR */}
+        <div className="pt-6 border-t border-slate-200/80 dark:border-zinc-800/80 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 dark:text-zinc-500">
+          <div className="flex flex-wrap items-center gap-3">
+            <span className="font-semibold text-slate-700 dark:text-zinc-300">
+              GDG on Campus AJCE Console
+            </span>
+            <span className="text-slate-300 dark:text-zinc-700">•</span>
+            <span className="font-mono text-[11px]">Academic Year 2026</span>
+            <span className="text-slate-300 dark:text-zinc-700">•</span>
+            <span className="inline-flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400 font-medium">
+              <span className="size-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              Connected to Cloud Firestore
+            </span>
+          </div>
+
+          <div className="flex items-center gap-4 text-[11px]">
+            <Link href="/" className="hover:text-blue-600 dark:hover:text-blue-400 transition">
+              Live Chapter Portal
+            </Link>
+            <Link href="/about" className="hover:text-blue-600 dark:hover:text-blue-400 transition">
+              About
+            </Link>
+            <Link href="/contact" className="hover:text-blue-600 dark:hover:text-blue-400 transition">
+              Organizer Support
+            </Link>
           </div>
         </div>
       </div>

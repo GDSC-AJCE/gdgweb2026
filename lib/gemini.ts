@@ -61,6 +61,27 @@ export function getGeminiApiKey(explicitKey?: string): string {
 }
 
 /**
+ * Formats raw error messages from Google Generative Language API into clear, actionable advice
+ */
+export function formatGeminiErrorMessage(err: any): string {
+  if (!err) return "Unknown error communicating with Gemini API";
+  const raw = typeof err === "string" ? err : err.message || String(err);
+  try {
+    const parsed = JSON.parse(raw);
+    if (parsed.error && parsed.error.message) {
+      if (parsed.error.message.includes("free tier is not available")) {
+        return "The Gemini API free tier is disabled for this specific Google Cloud project. To fix this, create a new API key at https://aistudio.google.com/ using a personal Google account (click 'Create API key in new project'), or enable billing for this project at https://aistudio.google.com/billing.";
+      }
+      return parsed.error.message;
+    }
+  } catch {}
+  if (raw.includes("free tier is not available")) {
+    return "The Gemini API free tier is disabled for this specific Google Cloud project. To fix this, create a new API key at https://aistudio.google.com/ using a personal Google account (click 'Create API key in new project'), or enable billing for this project at https://aistudio.google.com/billing.";
+  }
+  return raw;
+}
+
+/**
  * Test connectivity with Gemini API
  */
 export async function testGeminiConnection(apiKey?: string): Promise<{ success: boolean; message: string; model?: string }> {
@@ -73,9 +94,9 @@ export async function testGeminiConnection(apiKey?: string): Promise<{ success: 
   }
 
   try {
-    const ai = new GoogleGenAI({ apiKey: key });
+    const ai = new GoogleGenAI({ apiKey: key, apiVersion: "v1beta" });
     const response = await ai.models.generateContent({
-      model: "gemini-3.8-flash",
+      model: "gemini-2.5-flash",
       contents: "Respond with the word 'CONNECTED' if you can read this.",
     });
 
@@ -83,32 +104,32 @@ export async function testGeminiConnection(apiKey?: string): Promise<{ success: 
     if (text.includes("CONNECTED") || text.length > 0) {
       return {
         success: true,
-        message: "Gemini 3.8 Flash is online and ready!",
-        model: "gemini-3.8-flash",
+        message: "Gemini 2.5 Flash is online and ready!",
+        model: "gemini-2.5-flash",
       };
     }
     return {
       success: true,
       message: "Connected to Gemini API.",
-      model: "gemini-3.8-flash",
+      model: "gemini-2.5-flash",
     };
   } catch (err: any) {
-    // Attempt fallback with gemini-2.5-flash if 3.8 is restricted on this key tier
+    // Attempt fallback with gemini-3.8-flash
     try {
-      const ai = new GoogleGenAI({ apiKey: key });
+      const ai = new GoogleGenAI({ apiKey: key, apiVersion: "v1beta" });
       const response = await ai.models.generateContent({
-        model: "gemini-2.5-flash",
+        model: "gemini-3.8-flash",
         contents: "Respond with 'CONNECTED'",
       });
       return {
         success: true,
-        message: "Connected to Gemini (gemini-2.5-flash fallback).",
-        model: "gemini-2.5-flash",
+        message: "Connected to Gemini (gemini-3.8-flash).",
+        model: "gemini-3.8-flash",
       };
     } catch (fallbackErr: any) {
       return {
         success: false,
-        message: err.message || fallbackErr.message || "Failed to authenticate with Gemini API",
+        message: formatGeminiErrorMessage(fallbackErr || err),
       };
     }
   }
@@ -127,7 +148,7 @@ export async function generateEmailWithGemini(
     );
   }
 
-  const ai = new GoogleGenAI({ apiKey: key });
+  const ai = new GoogleGenAI({ apiKey: key, apiVersion: "v1beta" });
 
   const category = params.category || "General Community Announcement";
   const tone = params.tone || "GDG Community Energetic (Friendly, Tech-forward, Welcoming)";
@@ -198,22 +219,9 @@ Return ONLY a JSON object with this exact shape:
 `;
 
   let responseText = "";
-  let modelUsed = "gemini-3.8-flash";
+  let modelUsed = "gemini-2.5-flash";
 
   try {
-    const result = await ai.models.generateContent({
-      model: "gemini-3.8-flash",
-      contents: promptContent,
-      config: {
-        systemInstruction,
-        temperature: 0.7,
-        responseMimeType: "application/json",
-      },
-    });
-    responseText = result.text || "";
-  } catch (err: any) {
-    // Fallback to gemini-2.5-flash
-    modelUsed = "gemini-2.5-flash";
     const result = await ai.models.generateContent({
       model: "gemini-2.5-flash",
       contents: promptContent,
@@ -224,6 +232,23 @@ Return ONLY a JSON object with this exact shape:
       },
     });
     responseText = result.text || "";
+  } catch (err: any) {
+    // Fallback to gemini-3.8-flash
+    try {
+      modelUsed = "gemini-3.8-flash";
+      const result = await ai.models.generateContent({
+        model: "gemini-3.8-flash",
+        contents: promptContent,
+        config: {
+          systemInstruction,
+          temperature: 0.7,
+          responseMimeType: "application/json",
+        },
+      });
+      responseText = result.text || "";
+    } catch (fallbackErr: any) {
+      throw new Error(formatGeminiErrorMessage(fallbackErr || err));
+    }
   }
 
   // Parse JSON output
@@ -296,7 +321,7 @@ export async function generateSubjectLines(
   const key = getGeminiApiKey(apiKey);
   if (!key) throw new Error("Gemini API key is required.");
 
-  const ai = new GoogleGenAI({ apiKey: key });
+  const ai = new GoogleGenAI({ apiKey: key, apiVersion: "v1beta" });
 
   const prompt = `
 You are an expert email marketer specializing in developer communities (GDG / Google Tech).
@@ -316,7 +341,7 @@ Return a JSON array of 5 objects with this structure:
 
   try {
     const res = await ai.models.generateContent({
-      model: "gemini-3.8-flash",
+      model: "gemini-2.5-flash",
       contents: prompt,
       config: { responseMimeType: "application/json", temperature: 0.8 },
     });
@@ -324,7 +349,7 @@ Return a JSON array of 5 objects with this structure:
     return { subjects: Array.isArray(parsed) ? parsed : [] };
   } catch (err: any) {
     const fallbackRes = await ai.models.generateContent({
-      model: "gemini-2.5-flash",
+      model: "gemini-flash-latest",
       contents: prompt,
       config: { responseMimeType: "application/json", temperature: 0.8 },
     });
@@ -345,7 +370,7 @@ export async function polishEmailContent(
   const key = getGeminiApiKey(apiKey);
   if (!key) throw new Error("Gemini API key is required.");
 
-  const ai = new GoogleGenAI({ apiKey: key });
+  const ai = new GoogleGenAI({ apiKey: key, apiVersion: "v1beta" });
 
   const goalDescriptions: Record<string, string> = {
     more_exciting: "Make this email copy punchier, highly engaging, and full of developer community excitement.",
@@ -371,11 +396,20 @@ Return a JSON object:
 }
 `;
 
-  const res = await ai.models.generateContent({
-    model: "gemini-3.8-flash",
-    contents: prompt,
-    config: { responseMimeType: "application/json" },
-  });
+  let res: any;
+  try {
+    res = await ai.models.generateContent({
+      model: "gemini-2.5-flash",
+      contents: prompt,
+      config: { responseMimeType: "application/json" },
+    });
+  } catch (err: any) {
+    res = await ai.models.generateContent({
+      model: "gemini-flash-latest",
+      contents: prompt,
+      config: { responseMimeType: "application/json" },
+    });
+  }
 
   const parsed = JSON.parse(res.text || "{}");
   return {

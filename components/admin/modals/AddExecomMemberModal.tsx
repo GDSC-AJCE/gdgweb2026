@@ -45,8 +45,13 @@ export default function AddExecomMemberModal({
     year: initialData?.year || "2026",
   });
 
+  const [isCustomYear, setIsCustomYear] = useState(false);
+
   React.useEffect(() => {
     if (isOpen) {
+      const yr = initialData?.year || "2026";
+      const isKnown = ["2028", "2027", "2026", "2025", "2024", "2023", "2022"].includes(yr);
+      setIsCustomYear(!isKnown);
       setFormData({
         name: initialData?.name || "",
         role: initialData?.role || "",
@@ -57,7 +62,7 @@ export default function AddExecomMemberModal({
         email: initialData?.email || "",
         linkedin: initialData?.linkedin || "",
         github: initialData?.github || "",
-        year: initialData?.year || "2026",
+        year: yr,
       });
       setError("");
     }
@@ -250,26 +255,44 @@ export default function AddExecomMemberModal({
 
               <div className="space-y-1.5">
                 <Label htmlFor="execom-year" className="text-xs font-semibold text-[#2c2e2a]">
-                  Year
+                  Academic Year / Cohort <span className="text-[#EA4335]">*</span>
                 </Label>
                 <div className="relative">
                   <select
                     id="execom-year"
-                    value={formData.year}
-                    onChange={(e) => setFormData({ ...formData, year: e.target.value })}
+                    value={isCustomYear ? "custom" : formData.year}
+                    onChange={(e) => {
+                      if (e.target.value === "custom") {
+                        setIsCustomYear(true);
+                      } else {
+                        setIsCustomYear(false);
+                        setFormData({ ...formData, year: e.target.value });
+                      }
+                    }}
                     className="flex h-10 w-full rounded-xl border border-[#d5d5d4] bg-white px-3.5 py-2 text-sm text-[#2c2e2a] shadow-xs transition-all duration-200 focus-visible:outline-none focus-visible:border-[#4285F4] focus-visible:ring-3 focus-visible:ring-[#4285F4]/20 hover:border-[#a0a29f] cursor-pointer appearance-none pr-10"
                   >
+                    <option value="2027">2026-27 Cohort (Upcoming / New)</option>
+                    <option value="2028">2027-28 Cohort (Future)</option>
                     <option value="2026">2025-26 Cohort (Active)</option>
                     <option value="2025">2024-25 Alumni</option>
                     <option value="2024">2023-24 Alumni</option>
                     <option value="2023">2022-23 Alumni</option>
-                    <option value="2022">2021-22 Alumni</option>
-                    {formData.year && !["2026", "2025", "2024", "2023", "2022"].includes(formData.year) && (
-                      <option value={formData.year}>{formData.year} Cohort</option>
-                    )}
+                    <option value="2022">2021-22 Founding</option>
+                    <option value="custom">+ Enter New / Custom Year...</option>
                   </select>
                   <ChevronDown className="absolute right-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#80827f] pointer-events-none" />
                 </div>
+
+                {isCustomYear && (
+                  <Input
+                    type="text"
+                    value={formData.year}
+                    onChange={(e) => setFormData({ ...formData, year: e.target.value })}
+                    placeholder="Enter year e.g. 2027 or 2026-27"
+                    className="mt-2 text-xs font-mono"
+                    autoFocus
+                  />
+                )}
               </div>
             </div>
 

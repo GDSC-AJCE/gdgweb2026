@@ -14,6 +14,8 @@ import {
   Settings,
   ArrowUpDown,
   Users,
+  CalendarPlus,
+  X,
 } from "lucide-react";
 import { doc, deleteDoc, writeBatch, collection, Timestamp, addDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
@@ -48,15 +50,27 @@ export default function ExecomManagementTab({
   const [editingMember, setEditingMember] = useState<ExecomMember | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [seeding, setSeeding] = useState(false);
+  const [customCohorts, setCustomCohorts] = useState<string[]>([]);
+  const [isNewYearModalOpen, setIsNewYearModalOpen] = useState(false);
+  const [newYearInput, setNewYearInput] = useState("");
 
-  // Compute available cohorts dynamically from Firestore members
+  // Compute available cohorts dynamically from Firestore members and custom additions
   const availableCohorts = React.useMemo(() => {
-    const set = new Set<string>(["2026", "2025", "2024"]);
+    const set = new Set<string>(["2027", "2026", "2025", "2024", ...customCohorts]);
     members.forEach((m) => {
       if (m.year) set.add(m.year);
     });
     return Array.from(set).sort((a, b) => b.localeCompare(a));
-  }, [members]);
+  }, [members, customCohorts]);
+
+  const handleAddNewYear = (yearToAdd: string) => {
+    const trimmed = yearToAdd.trim();
+    if (!trimmed) return;
+    setCustomCohorts((prev) => Array.from(new Set([trimmed, ...prev])));
+    setSelectedCohort(trimmed);
+    setIsNewYearModalOpen(false);
+    setNewYearInput("");
+  };
 
   // Filter members by cohort
   const displayedMembers = React.useMemo(() => {
@@ -146,7 +160,7 @@ export default function ExecomManagementTab({
         </div>
 
         <div className="flex items-center gap-2.5 flex-wrap">
-          {/* PRIMARY: Add Execom Member Button (Always Prominent & Accessible) */}
+          {/* PRIMARY: Add Execom Member Button */}
           <button
             onClick={() => {
               setEditingMember(selectedCohort !== "all" ? ({ year: selectedCohort } as any) : ({ year: "2026" } as any));
@@ -156,6 +170,19 @@ export default function ExecomManagementTab({
           >
             <Plus className="w-3.5 h-3.5" />
             <span>Add Execom Member</span>
+          </button>
+
+          {/* Add Execom for New Year Button */}
+          <button
+            onClick={() => {
+              setNewYearInput("");
+              setIsNewYearModalOpen(true);
+            }}
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold shadow-sm transition active:scale-95 cursor-pointer"
+            title="Create an Execom roster for a new academic year"
+          >
+            <CalendarPlus className="w-3.5 h-3.5" />
+            <span>+ New Year Execom</span>
           </button>
 
           {/* Grid / Table view toggle */}
@@ -184,38 +211,44 @@ export default function ExecomManagementTab({
             </button>
           </div>
 
-          {/* Rearrange Order Button */}
-          <button
-            onClick={() => setIsReorderOpen(true)}
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200/80 text-xs font-semibold text-slate-700 transition cursor-pointer"
-            title="Rearrange Execom member display order"
-          >
-            <ArrowUpDown className="w-3.5 h-3.5 text-blue-600" />
-            <span>Rearrange Order</span>
-          </button>
+          {/* Rearrange Order Button (Super Admin) */}
+          {isSuperAdmin && (
+            <button
+              onClick={() => setIsReorderOpen(true)}
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200/80 text-xs font-semibold text-slate-700 transition cursor-pointer"
+              title="Rearrange Execom member display order"
+            >
+              <ArrowUpDown className="w-3.5 h-3.5 text-blue-600" />
+              <span>Rearrange Order</span>
+            </button>
+          )}
 
-          {/* Upload Past Execom Button */}
-          <button
-            onClick={() => setIsUploadPastOpen(true)}
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200/80 text-xs font-semibold text-slate-700 transition cursor-pointer"
-            title="Upload previous year's Execom roster (CSV, spreadsheet text, or manual)"
-          >
-            <UploadCloud className="w-3.5 h-3.5 text-blue-600" />
-            <span>Upload Past</span>
-          </button>
+          {/* Upload Past Execom Button (Super Admin) */}
+          {isSuperAdmin && (
+            <button
+              onClick={() => setIsUploadPastOpen(true)}
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200/80 text-xs font-semibold text-slate-700 transition cursor-pointer"
+              title="Upload previous year's Execom roster (CSV, spreadsheet text, or manual)"
+            >
+              <UploadCloud className="w-3.5 h-3.5 text-blue-600" />
+              <span>Upload Past</span>
+            </button>
+          )}
 
-          {/* Seed 2026 Roster button */}
-          <button
-            onClick={handleSeed}
-            disabled={seeding}
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200/80 text-xs font-medium text-slate-700 transition disabled:opacity-50 cursor-pointer"
-            title="Seed default leads from TeamData"
-          >
-            <UploadCloud className="w-3.5 h-3.5 text-slate-500" />
-            <span>{seeding ? "Seeding..." : "Seed 2026"}</span>
-          </button>
+          {/* Seed 2026 Roster button (Super Admin) */}
+          {isSuperAdmin && (
+            <button
+              onClick={handleSeed}
+              disabled={seeding}
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200/80 text-xs font-medium text-slate-700 transition disabled:opacity-50 cursor-pointer"
+              title="Seed default leads from TeamData"
+            >
+              <UploadCloud className="w-3.5 h-3.5 text-slate-500" />
+              <span>{seeding ? "Seeding..." : "Seed 2026"}</span>
+            </button>
+          )}
 
-          {onOpenDriveSettings && (
+          {isSuperAdmin && onOpenDriveSettings && (
             <button
               onClick={onOpenDriveSettings}
               className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200/80 text-xs font-semibold text-slate-700 transition cursor-pointer"
@@ -244,7 +277,11 @@ export default function ExecomManagementTab({
           {availableCohorts.map((year) => {
             const count = members.filter((m) => (m.year || "2026") === year).length;
             const label =
-              year === "2026"
+              year === "2027"
+                ? "2026-27 (Upcoming)"
+                : year === "2028"
+                ? "2027-28 (Future)"
+                : year === "2026"
                 ? "2025-26 (Active)"
                 : year === "2025"
                 ? "2024-25 Alumni"
@@ -265,6 +302,18 @@ export default function ExecomManagementTab({
               </button>
             );
           })}
+
+          {/* Add Cohort Pill Button */}
+          <button
+            onClick={() => {
+              setNewYearInput("");
+              setIsNewYearModalOpen(true);
+            }}
+            className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl border border-dashed border-purple-300 dark:border-purple-600/50 hover:border-purple-500 bg-purple-50/60 dark:bg-purple-500/10 hover:bg-purple-50 text-purple-700 dark:text-purple-300 text-xs font-semibold shrink-0 cursor-pointer transition"
+          >
+            <Plus className="w-3 h-3" />
+            <span>New Year Cohort</span>
+          </button>
         </div>
 
         {/* Quick Add Button in Filter Bar */}
@@ -479,6 +528,97 @@ export default function ExecomManagementTab({
             : `${selectedCohort} Cohort`
         }
       />
+
+      {/* MODAL: ADD EXECOM FOR NEW YEAR */}
+      {isNewYearModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs">
+          <div className="w-full max-w-md rounded-2xl bg-white dark:bg-[#141416] border border-slate-200 dark:border-zinc-800 p-6 shadow-2xl space-y-4">
+            <div className="flex items-center justify-between border-b border-slate-100 dark:border-zinc-800 pb-3">
+              <div className="flex items-center gap-2">
+                <div className="size-8 rounded-lg bg-purple-100 dark:bg-purple-500/20 text-purple-700 dark:text-purple-400 flex items-center justify-center">
+                  <CalendarPlus className="w-4 h-4" />
+                </div>
+                <div>
+                  <h3 className="text-base font-bold text-slate-900 dark:text-white">
+                    Add Execom for New Year
+                  </h3>
+                  <p className="text-xs text-slate-500 dark:text-zinc-400">
+                    Initiate or configure a new organizing committee cohort
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsNewYearModalOpen(false)}
+                className="p-1 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-white cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            <div className="space-y-3">
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 dark:text-zinc-300 mb-1">
+                  Academic Term / Cohort Year
+                </label>
+                <input
+                  type="text"
+                  placeholder="e.g. 2027 (or 2026-27)"
+                  value={newYearInput}
+                  onChange={(e) => setNewYearInput(e.target.value)}
+                  className="w-full h-10 px-3.5 rounded-xl border border-slate-200 dark:border-zinc-700 bg-slate-50 dark:bg-[#18181b] text-sm text-slate-900 dark:text-white outline-none focus:border-purple-500 font-mono"
+                  autoFocus
+                />
+              </div>
+
+              {/* Quick Preset Buttons */}
+              <div>
+                <p className="text-[11px] font-medium text-slate-400 mb-1.5">Quick selections:</p>
+                <div className="flex flex-wrap gap-1.5">
+                  {["2027", "2026-27", "2028", "2027-28"].map((preset) => (
+                    <button
+                      key={preset}
+                      type="button"
+                      onClick={() => setNewYearInput(preset)}
+                      className={`px-2.5 py-1 rounded-lg text-xs font-mono transition cursor-pointer ${
+                        newYearInput === preset
+                          ? "bg-purple-600 text-white font-bold"
+                          : "bg-slate-100 dark:bg-zinc-800 text-slate-700 dark:text-zinc-300 hover:bg-slate-200"
+                      }`}
+                    >
+                      {preset}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="pt-3 border-t border-slate-100 dark:border-zinc-800 flex items-center justify-end gap-2">
+              <button
+                type="button"
+                onClick={() => setIsNewYearModalOpen(false)}
+                className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 dark:text-zinc-400 hover:bg-slate-100 dark:hover:bg-zinc-800 transition cursor-pointer"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                disabled={!newYearInput.trim()}
+                onClick={() => {
+                  const yr = newYearInput.trim();
+                  handleAddNewYear(yr);
+                  setEditingMember({ year: yr } as any);
+                  setIsModalOpen(true);
+                }}
+                className="px-4 py-2 rounded-xl bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold transition shadow-sm disabled:opacity-40 cursor-pointer inline-flex items-center gap-1.5"
+              >
+                <Plus className="w-3.5 h-3.5" />
+                <span>Create & Add Member</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
