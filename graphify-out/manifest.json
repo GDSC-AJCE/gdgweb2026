@@ -1,7 +1,7 @@
 {
   "D:\\DEV\\GDG\\newwebsite\\components.json": {
-    "mtime": 1793986836.0457995,
-    "ast_hash": "ad5ab3c96f123d00742fef9e9e97b2ec",
+    "mtime": 1794592590.8603573,
+    "ast_hash": "ff0049a7ead95be1e42ca87a0f5b7b38",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\firebase.json": {
@@ -60,8 +60,8 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\app\\layout.tsx": {
-    "mtime": 1794451806.3138888,
-    "ast_hash": "fadd8750a8fb588fbc1137617c13dad4",
+    "mtime": 1794592733.61509,
+    "ast_hash": "76fc6700f360bfda7c5be5a1984c34ac",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\app\\loading.tsx": {
@@ -210,8 +210,8 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\app\\design-system\\page.tsx": {
-    "mtime": 1793986836.0406468,
-    "ast_hash": "da80dae9b6aaaac785326f5db82ff3ad",
+    "mtime": 1794592737.2251172,
+    "ast_hash": "8b11240efac96b9951fc759227abb307",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\app\\execom\\page.tsx": {
@@ -240,8 +240,8 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\app\\profile\\certificates\\page.tsx": {
-    "mtime": 1794452232.5751777,
-    "ast_hash": "11feb0ee8b3343872a0cb319c16786ca",
+    "mtime": 1794592602.0375087,
+    "ast_hash": "a35426ab28759d6bb10f8f26aedc7565",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\app\\programs\\page.tsx": {
@@ -290,8 +290,8 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\app\\verify\\[id]\\page.tsx": {
-    "mtime": 1789581415.079894,
-    "ast_hash": "6618bda0fd728cba1865ad3817f39e20",
+    "mtime": 1794592737.130311,
+    "ast_hash": "6ab02fa7c3addf9a51978042ef33f974",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\assets\\gallery\\gallery-manifest.json": {
@@ -420,8 +420,8 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\admin\\AdminSidebar.tsx": {
-    "mtime": 1794592279.6347938,
-    "ast_hash": "dcdd2555e3a346cf1249100047c61219",
+    "mtime": 1794592810.8144083,
+    "ast_hash": "f53189c5855408537ea59b79f350722c",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\admin\\RestrictedAccessCard.tsx": {
@@ -470,8 +470,8 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\admin\\tabs\\EventsManagementTab.tsx": {
-    "mtime": 1794591124.0415442,
-    "ast_hash": "45ff2a6fd21db1f252a6b6d38a1839ee",
+    "mtime": 1794592541.6673026,
+    "ast_hash": "2d2186aab48bf84bb0b2d6a0a5ad9d97",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\admin\\tabs\\ExecomManagementTab.tsx": {
@@ -490,8 +490,8 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\admin\\tabs\\MailStudioTab.tsx": {
-    "mtime": 1794344773.2247052,
-    "ast_hash": "4a42b8631317869911fd499acbcabcf0",
+    "mtime": 1794592650.3326159,
+    "ast_hash": "7cbe3fcd10271853bf99b0d84178dd57",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\admin\\tabs\\OverviewTab.tsx": {
@@ -725,8 +725,8 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\ui\\Badge.tsx": {
-    "mtime": 1793986836.074464,
-    "ast_hash": "1e61aa1c7f1012f4b81178a7a9ee9ff6",
+    "mtime": 1794592662.7508173,
+    "ast_hash": "1e3de0655b69b75eded2a6580b9ca263",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\ui\\Button.tsx": {
@@ -1957,6 +1957,81 @@
   "D:\\DEV\\GDG\\newwebsite\\components\\certificates\\EventMailTab.tsx": {
     "mtime": 1794592069.0118585,
     "ast_hash": "73a4ad53fb81badf779c7dea64021c4e",
+    "semantic_hash": ""
+  },
+  "D:\\DEV\\GDG\\newwebsite\\components\\ui\\accordion.tsx": {
+    "mtime": 1794592547.8337924,
+    "ast_hash": "c95d71c24548681b51ed86eb9888b5a2",
+    "semantic_hash": ""
+  },
+  "D:\\DEV\\GDG\\newwebsite\\components\\ui\\alert-dialog.tsx": {
+    "mtime": 1794592590.9135463,
+    "ast_hash": "f1ec1a5222e9ec0110a0eb329327c11e",
+    "semantic_hash": ""
+  },
+  "D:\\DEV\\GDG\\newwebsite\\components\\ui\\avatar.tsx": {
+    "mtime": 1794592590.9000988,
+    "ast_hash": "2cb85d30bd293c5907e635f167609312",
+    "semantic_hash": ""
+  },
+  "D:\\DEV\\GDG\\newwebsite\\components\\ui\\command.tsx": {
+    "mtime": 1794592622.9443977,
+    "ast_hash": "c3d1a5d8c73d1ab2ba8d5ad02648267f",
+    "semantic_hash": ""
+  },
+  "D:\\DEV\\GDG\\newwebsite\\components\\ui\\index.ts": {
+    "mtime": 1794592718.0568817,
+    "ast_hash": "dc71da34a3bb0b1a92a7dca0d2a8fa80",
+    "semantic_hash": ""
+  },
+  "D:\\DEV\\GDG\\newwebsite\\components\\ui\\input-otp.tsx": {
+    "mtime": 1794592622.9626904,
+    "ast_hash": "c0d9b008e97bd3baf4f6a58c759b21e4",
+    "semantic_hash": ""
+  },
+  "D:\\DEV\\GDG\\newwebsite\\components\\ui\\progress.tsx": {
+    "mtime": 1794592590.8720424,
+    "ast_hash": "90c939acea10c910f2dcc1d34f8c8e6e",
+    "semantic_hash": ""
+  },
+  "D:\\DEV\\GDG\\newwebsite\\components\\ui\\radio-group.tsx": {
+    "mtime": 1794592547.8563468,
+    "ast_hash": "7a55b040af7b54e84644a593ebab5f8f",
+    "semantic_hash": ""
+  },
+  "D:\\DEV\\GDG\\newwebsite\\components\\ui\\scroll-area.tsx": {
+    "mtime": 1794592590.8873448,
+    "ast_hash": "810c35a6e5f0f2ae1faf79af8bc2f354",
+    "semantic_hash": ""
+  },
+  "D:\\DEV\\GDG\\newwebsite\\components\\ui\\sheet.tsx": {
+    "mtime": 1794592547.84451,
+    "ast_hash": "694d9d78775845479a333a5c330b19ec",
+    "semantic_hash": ""
+  },
+  "D:\\DEV\\GDG\\newwebsite\\components\\ui\\skeleton.tsx": {
+    "mtime": 1794592501.3195274,
+    "ast_hash": "4e4f15afb0858cf0faa59d8b3cc0b656",
+    "semantic_hash": ""
+  },
+  "D:\\DEV\\GDG\\newwebsite\\components\\ui\\sonner.tsx": {
+    "mtime": 1794592501.3385544,
+    "ast_hash": "5210c8626bdab43fd83a883395ab11e5",
+    "semantic_hash": ""
+  },
+  "D:\\DEV\\GDG\\newwebsite\\components\\ui\\table.tsx": {
+    "mtime": 1794592501.3284986,
+    "ast_hash": "9b1b513367113340233c6ed2ea664deb",
+    "semantic_hash": ""
+  },
+  "D:\\DEV\\GDG\\newwebsite\\hooks\\use-mobile.ts": {
+    "mtime": 1794592501.358862,
+    "ast_hash": "7cbbc89af0f92111046f6a652e29ff2e",
+    "semantic_hash": ""
+  },
+  "D:\\DEV\\GDG\\newwebsite\\hooks\\use-toast.ts": {
+    "mtime": 1794592501.3493707,
+    "ast_hash": "559f8697275a782d1a44eee739271449",
     "semantic_hash": ""
   }
 }

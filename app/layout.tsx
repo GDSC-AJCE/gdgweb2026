@@ -8,7 +8,6 @@ import GoogleLabsPreloader from "@/components/GoogleLabsPreloader";
 import { AuthProvider } from "@/context/AuthContext";
 import { DialogProvider } from "@/context/DialogContext";
 import { ThemeProvider } from "@/context/ThemeContext";
-import { Toaster } from "@/components/ui/sonner";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -106,7 +105,6 @@ export default function RootLayout({
             </AuthProvider>
           </ThemeProvider>
         </SmoothScrollProvider>
-        <Toaster />
       </body>
     </html>
   );
