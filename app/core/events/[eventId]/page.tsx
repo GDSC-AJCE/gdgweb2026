@@ -40,6 +40,7 @@ import {
     Award as CheckBadgeIcon,
     Calendar as CalendarIcon,
     ClipboardList as ClipboardListIcon,
+    Mail as MailIcon,
 } from "lucide-react";
 import Link from "next/link";
 import LoadingSpinner from "@/components/LoadingSpinner";
@@ -49,6 +50,8 @@ import CertificateTemplateCard from "@/components/certificates/CertificateTempla
 import ParticipantsList from "@/components/certificates/ParticipantsList";
 import IssueCertificateModal from "@/components/certificates/IssueCertificateModal";
 import IssuedCertificatesManager from "@/components/certificates/IssuedCertificatesManager";
+import CertificateGenerator from "@/components/certificates/CertificateGenerator";
+import EventMailTab from "@/components/certificates/EventMailTab";
 import CustomFormBuilder, { FormField, TeamConfig } from "@/components/CustomFormBuilder";
 
 import dynamic from 'next/dynamic';
@@ -60,7 +63,7 @@ const MDEditor = dynamic(
     { ssr: false }
 );
 
-type Tab = "settings" | "features" | "form" | "participants" | "certificates";
+type Tab = "settings" | "features" | "form" | "participants" | "mail" | "certificates";
 
 interface Sponsor {
     name: string;
@@ -197,6 +200,16 @@ export default function EventDashboardPage({
 
         if (eventId) fetchEvent();
     }, [eventId, router]);
+
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+            const params = new URLSearchParams(window.location.search);
+            const tabParam = params.get("tab") as Tab;
+            if (tabParam && ["settings", "features", "form", "participants", "mail", "certificates"].includes(tabParam)) {
+                setActiveTab(tabParam);
+            }
+        }
+    }, []);
 
     const fetchTemplates = async () => {
         try {
@@ -412,6 +425,7 @@ export default function EventDashboardPage({
         { id: "features", label: "Modules", icon: AdjustmentsHorizontalIcon },
         { id: "form", label: "Form & Teams", icon: ClipboardListIcon },
         { id: "participants", label: "Participants", icon: UsersIcon },
+        { id: "mail", label: "Broadcast & Mail", icon: MailIcon },
         { id: "certificates", label: "Certificates", icon: DocumentTextIcon },
     ];
 
@@ -851,54 +865,86 @@ export default function EventDashboardPage({
                         </motion.div>
                     )}
 
+                    {activeTab === "mail" && (
+                        <motion.div
+                            key="mail"
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -10 }}
+                        >
+                            <EventMailTab
+                                eventId={eventId}
+                                eventTitle={event.title}
+                                eventDate={event.date}
+                                participants={participants}
+                                isWriter={isWriter}
+                            />
+                        </motion.div>
+                    )}
+
                     {activeTab === "certificates" && (
                         <motion.div
                             key="certificates"
                             initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -10 }}
-                            className="space-y-6"
+                            className="space-y-8"
                         >
-                            <div className="flex justify-between items-center">
-                                <div>
-                                    <h3 className="text-lg font-bold text-white">Credential Templates</h3>
-                                    <p className="text-xs text-zinc-400">Design certificates with dynamic QR verification tags.</p>
+                            {/* Primary Certificate Studio & Instant Issuance */}
+                            <CertificateGenerator
+                                eventId={eventId}
+                                eventTitle={event.title}
+                                eventDate={event.date}
+                                participants={participants}
+                                onCertificatesUpdated={fetchTemplates}
+                                isWriter={isWriter}
+                            />
+
+                            {/* Secondary Advanced Layout Designer & Issued Registry */}
+                            <div className="pt-8 border-t border-zinc-800 space-y-6">
+                                <div className="flex justify-between items-center">
+                                    <div>
+                                        <h3 className="text-base font-bold text-white">Advanced Layout Designer</h3>
+                                        <p className="text-xs text-zinc-400">Design custom drag-and-drop templates or inspect issued credentials log.</p>
+                                    </div>
+                                    {isWriter && (
+                                        <div className="flex gap-2">
+                                            <button
+                                                onClick={() => {
+                                                    setEditingTemplate(null);
+                                                    setShowBuilder(true);
+                                                }}
+                                                className="flex items-center gap-2 px-4 py-2 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 font-semibold text-xs rounded-full transition border border-zinc-700"
+                                            >
+                                                <PlusIcon className="w-3.5 h-3.5" />
+                                                Create Layout
+                                            </button>
+                                            <button
+                                                onClick={() => setShowIssuedManager(true)}
+                                                className="px-4 py-2 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 font-semibold text-xs rounded-full transition border border-zinc-700"
+                                            >
+                                                Issued Registry
+                                            </button>
+                                        </div>
+                                    )}
                                 </div>
-                                {isWriter && (
-                                    <div className="flex gap-2">
-                                        <button
-                                            onClick={() => {
-                                                setEditingTemplate(null);
-                                                setShowBuilder(true);
-                                            }}
-                                            className="flex items-center gap-2 px-4 py-2 bg-[#4285F4] hover:bg-[#3367d6] text-white font-semibold text-xs rounded-full transition"
-                                        >
-                                            <PlusIcon className="w-3.5 h-3.5" />
-                                            Design Template
-                                        </button>
-                                        <button
-                                            onClick={() => setShowIssuedManager(true)}
-                                            className="px-4 py-2 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 font-semibold text-xs rounded-full transition border border-zinc-700"
-                                        >
-                                            Issued Credentials
-                                        </button>
+
+                                {templates.length > 0 && (
+                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                        {templates.map((template) => (
+                                            <CertificateTemplateCard
+                                                key={template.id}
+                                                template={template}
+                                                onEdit={() => {
+                                                    setEditingTemplate(template);
+                                                    setShowBuilder(true);
+                                                }}
+                                                onDelete={() => handleTemplateDelete(template.id)}
+                                                onIssue={() => setIssuingTemplate(template)}
+                                            />
+                                        ))}
                                     </div>
                                 )}
-                            </div>
-
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                {templates.map((template) => (
-                                    <CertificateTemplateCard
-                                        key={template.id}
-                                        template={template}
-                                        onEdit={() => {
-                                            setEditingTemplate(template);
-                                            setShowBuilder(true);
-                                        }}
-                                        onDelete={() => handleTemplateDelete(template.id)}
-                                        onIssue={() => setIssuingTemplate(template)}
-                                    />
-                                ))}
                             </div>
                         </motion.div>
                     )}

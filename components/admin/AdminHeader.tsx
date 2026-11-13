@@ -13,8 +13,6 @@ import {
   Bell,
   Home,
   ChevronRight,
-  Sun,
-  Moon,
   SlidersHorizontal,
 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
@@ -202,29 +200,6 @@ export default function AdminHeader({
           <ArrowLeft className="w-3.5 h-3.5 text-slate-400" />
           <span>Exit to Site</span>
         </Link>
-
-        {/* Sun / Moon Theme Toggle */}
-        {onToggleTheme && (
-          <button
-            type="button"
-            onClick={onToggleTheme}
-            title={isDark ? "Switch to Light Mode" : "Switch to Dark Mode"}
-            aria-label="Toggle theme"
-            className="h-9 px-3 rounded-xl bg-white dark:bg-[#141416] hover:bg-slate-50 dark:hover:bg-zinc-800 border border-slate-200 dark:border-zinc-800 text-xs font-semibold text-slate-700 dark:text-zinc-200 transition shadow-2xs flex items-center gap-1.5 cursor-pointer active:scale-95"
-          >
-            {isDark ? (
-              <>
-                <Sun className="w-3.5 h-3.5 text-amber-400" />
-                <span className="hidden sm:inline">Light</span>
-              </>
-            ) : (
-              <>
-                <Moon className="w-3.5 h-3.5 text-slate-600" />
-                <span className="hidden sm:inline">Dark</span>
-              </>
-            )}
-          </button>
-        )}
 
         {/* User Card Pill */}
         {user && (

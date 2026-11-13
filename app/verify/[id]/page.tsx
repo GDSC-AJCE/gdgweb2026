@@ -61,18 +61,38 @@ export default function VerifyPage({
     useEffect(() => {
         const fetchCertificate = async () => {
             try {
-                // Fetch certificate from issuedCertificates collectionGroup
-                const q = query(
-                    collectionGroup(db, "issuedCertificates"),
-                    where("certificateId", "==", id)
-                );
-                const snap = await getDocs(q);
+                let certData: CertificateData | null = null;
 
-                if (!snap.empty) {
-                    const certData = snap.docs[0].data() as CertificateData;
+                // 1. Fetch certificate from issuedCertificates collectionGroup
+                try {
+                    const q = query(
+                        collectionGroup(db, "issuedCertificates"),
+                        where("certificateId", "==", id)
+                    );
+                    const snap = await getDocs(q);
+                    if (!snap.empty) {
+                        certData = snap.docs[0].data() as CertificateData;
+                    }
+                } catch (e) {
+                    console.log("CollectionGroup query error:", e);
+                }
+
+                // 2. Fallback to direct /certificates/{id} root collection
+                if (!certData) {
+                    try {
+                        const directDoc = await getDoc(doc(db, "certificates", id));
+                        if (directDoc.exists()) {
+                            certData = directDoc.data() as CertificateData;
+                        }
+                    } catch (e) {
+                        console.log("Direct doc query error:", e);
+                    }
+                }
+
+                if (certData) {
                     setCertificate(certData);
 
-                    // Fetch template
+                    // Fetch or construct template
                     if (certData.templateId && certData.eventId) {
                         const templateDoc = await getDoc(
                             doc(db, "events", certData.eventId, "certificates", certData.templateId)
@@ -81,6 +101,20 @@ export default function VerifyPage({
                             setTemplate(templateDoc.data() as TemplateData);
                         }
                     }
+
+                    // If template was not loaded from subcollection, use certificate's backgroundUrl
+                    setTemplate((prev) => {
+                        if (prev) return prev;
+                        return {
+                            backgroundUrl: (certData as any).backgroundUrl || "/assets/certificates/gdg-certificate-frame.svg",
+                            elements: (certData as any).elements || [
+                                { id: "elem_name", type: "name", x: 50, y: 44, fontSize: 44, color: "#1a73e8", fontWeight: "bold", textAlign: "center" },
+                                { id: "elem_date", type: "date", x: 50, y: 90, fontSize: 13, color: "#80827f", textAlign: "center" },
+                                { id: "elem_id", type: "certificateId", x: 50, y: 92, fontSize: 11, color: "#4285F4", textAlign: "center" },
+                                { id: "elem_qr", type: "qrcode", x: 80, y: 75, fontSize: 90 }
+                            ]
+                        };
+                    });
 
                     // Generate clean QR code
                     const verifyUrl = `${window.location.origin}/verify/${id}`;
@@ -152,8 +186,8 @@ export default function VerifyPage({
             const qrImg = await loadImage(qrDataUrl, false);
 
             for (const el of (template.elements ?? [])) {
-                const leftPx = (el.x / 100) * RENDER_W;
-                const topPx = (el.y / 100) * RENDER_H;
+                const leftPx = el.x > 100 ? (el.x / 1754) * RENDER_W : (el.x / 100) * RENDER_W;
+                const topPx = el.y > 100 ? (el.y / 1240) * RENDER_H : (el.y / 100) * RENDER_H;
                 const sizePx = (el.fontSize / 800) * RENDER_W;
 
                 if (el.type === "qrcode") {
@@ -365,12 +399,14 @@ export default function VerifyPage({
 
                         {/* Elements */}
                         {template.elements?.map((el: any) => {
+                            const leftPercent = el.x > 100 ? (el.x / 1754) * 100 : el.x;
+                            const topPercent = el.y > 100 ? (el.y / 1240) * 100 : el.y;
                             const baseFontSizePercent = (el.fontSize / 800) * 100;
 
                             const style: React.CSSProperties = {
                                 position: "absolute",
-                                left: `${el.x}%`,
-                                top: `${el.y}%`,
+                                left: `${leftPercent}%`,
+                                top: `${topPercent}%`,
                                 fontSize: `${baseFontSizePercent}cqw`,
                                 color: el.color,
                                 fontWeight: el.fontWeight,
@@ -390,8 +426,8 @@ export default function VerifyPage({
                                         className="cert-element qr-element"
                                         style={{
                                             position: "absolute",
-                                            left: `${el.x}%`,
-                                            top: `${el.y}%`,
+                                            left: `${leftPercent}%`,
+                                            top: `${topPercent}%`,
                                             width: `${qrSizePercent}cqw`,
                                             height: `${qrSizePercent}cqw`,
                                             transform: (el.textAlign === "center" ? "translateX(-50%)" : el.textAlign === "right" ? "translateX(-100%)" : "none")

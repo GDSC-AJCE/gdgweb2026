@@ -53,6 +53,7 @@ export default function GeminiMailStudio({
   const [category, setCategory] = useState("Event Announcement");
   const [tone, setTone] = useState("GDG Community Energetic (Friendly, Tech-forward, Welcoming)");
   const [themeColor, setThemeColor] = useState(GDG_COLORS.blue);
+  const [templateFormat, setTemplateFormat] = useState<"shortlisted" | "standard">("shortlisted");
 
   // Accordion details
   const [detailsOpen, setDetailsOpen] = useState(false);
@@ -287,6 +288,7 @@ export default function GeminiMailStudio({
           tone,
           themeColor,
           details,
+          templateFormat,
           apiKey: apiKey.trim() || undefined,
         }),
       });
@@ -497,6 +499,55 @@ export default function GeminiMailStudio({
                 placeholder="e.g. Announce Flutter & Firebase build sprint, mention timing, lab venue, prerequisites, and registration link..."
                 className="w-full text-xs p-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none leading-relaxed resize-y font-normal"
               />
+            </div>
+
+            {/* Template Format Selector (Predefined Shortlisted vs Standard) */}
+            <div>
+              <div className="flex items-center justify-between mb-1.5">
+                <label className="block text-xs font-semibold text-slate-700">
+                  Predefined Template Layout
+                </label>
+                <span className="text-[10px] font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+                  {templateFormat === "shortlisted" ? "⭐ Shortlisted Format Active" : "Standard Layout"}
+                </span>
+              </div>
+              <div className="grid grid-cols-2 gap-2">
+                <button
+                  type="button"
+                  onClick={() => setTemplateFormat("shortlisted")}
+                  className={`p-2.5 rounded-xl border text-left transition flex flex-col justify-between ${
+                    templateFormat === "shortlisted"
+                      ? "border-blue-500 bg-blue-50/70 ring-2 ring-blue-500/20"
+                      : "border-slate-200 hover:border-slate-300 bg-white"
+                  }`}
+                >
+                  <div className="flex items-center space-x-1.5 mb-1">
+                    <span className="text-xs font-bold text-slate-900">⭐ Shortlisted Template</span>
+                    {templateFormat === "shortlisted" && <Check className="w-3.5 h-3.5 text-blue-600 ml-auto" />}
+                  </div>
+                  <p className="text-[10px] text-slate-500 leading-tight">
+                    Predefined shortlisted layout: GDG Header, Title, Details Table, WhatsApp + Meet Buttons, Guidelines & Footer.
+                  </p>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setTemplateFormat("standard")}
+                  className={`p-2.5 rounded-xl border text-left transition flex flex-col justify-between ${
+                    templateFormat === "standard"
+                      ? "border-blue-500 bg-blue-50/70 ring-2 ring-blue-500/20"
+                      : "border-slate-200 hover:border-slate-300 bg-white"
+                  }`}
+                >
+                  <div className="flex items-center space-x-1.5 mb-1">
+                    <span className="text-xs font-bold text-slate-900">Standard Card</span>
+                    {templateFormat === "standard" && <Check className="w-3.5 h-3.5 text-blue-600 ml-auto" />}
+                  </div>
+                  <p className="text-[10px] text-slate-500 leading-tight">
+                    Standard card format with top Google color strip and single call to action.
+                  </p>
+                </button>
+              </div>
             </div>
 
             {/* Category & Tone */}
@@ -773,6 +824,10 @@ export default function GeminiMailStudio({
                     <div className="flex items-center space-x-2">
                       <span className="text-[10px] font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full uppercase tracking-wider">
                         Subject Line
+                      </span>
+                      <span className="text-[10px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200 flex items-center">
+                        <Check className="w-2.5 h-2.5 mr-1 text-emerald-600" />
+                        {generatedData.templateFormat === "standard" ? "Standard Layout" : "Shortlisted Template Format"}
                       </span>
                       {generatedData.detectedVariables.length > 0 && (
                         <span className="text-[10px] font-semibold text-slate-500 flex items-center">

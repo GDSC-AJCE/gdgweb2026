@@ -212,6 +212,21 @@ export default function MailStudioTab() {
 
     loadConfig();
     loadTemplatesList();
+
+    // Check if coming from Event Mailer with pre-populated attendees
+    try {
+      const storedRecipients = localStorage.getItem("gdg_mail_studio_recipients");
+      if (storedRecipients) {
+        const parsed = JSON.parse(storedRecipients);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          setRecipients(parsed);
+        }
+      }
+      const storedEventTitle = localStorage.getItem("gdg_mail_studio_event_title");
+      if (storedEventTitle) {
+        setEmailSubject(`Update regarding ${storedEventTitle} — GDG on Campus AJCE`);
+      }
+    } catch (e) {}
   }, []);
 
   // 2. Fetch live sheet tabs when sheetId changes or on start

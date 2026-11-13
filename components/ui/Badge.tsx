@@ -3,34 +3,39 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const badgeVariants = cva(
-  "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 select-none",
+  "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-[#2c2e2a] focus:ring-offset-2 select-none",
   {
     variants: {
       variant: {
         default:
-          "border-transparent bg-[#0f172a] text-white hover:bg-black shadow-xs",
-        secondary:
-          "border-slate-200 bg-slate-100 text-slate-800 hover:bg-slate-200",
-        destructive:
-          "border-transparent bg-[#EF4444] text-white hover:bg-[#DC2626] shadow-xs",
-        outline:
-          "border-slate-200 bg-white text-slate-800 hover:border-slate-300",
-        google:
-          "border-transparent bg-[#2563EB] text-white shadow-xs",
-        blue:
-          "border-[#2563EB]/30 bg-[#2563EB]/10 text-[#2563EB] font-bold",
-        green:
-          "border-[#10B981]/30 bg-[#10B981]/15 text-[#059669] font-bold",
+          "border-transparent bg-[#2c2e2a] text-white hover:bg-[#2c2e2a]/90 shadow-xs",
+        grass:
+          "border-transparent bg-[#8ed462] text-[#2c2e2a] hover:bg-[#8ed462]/90",
         coral:
-          "border-[#EF4444]/30 bg-[#EF4444]/10 text-[#DC2626] font-bold",
+          "border-[#ff705d]/30 bg-[#ff705d]/15 text-[#ff705d] font-bold",
+        sky:
+          "border-[#2ba0ff]/30 bg-[#2ba0ff]/15 text-[#2ba0ff] font-bold",
         yellow:
-          "border-[#F59E0B]/30 bg-[#F59E0B]/15 text-[#D97706] font-bold",
-        neutral:
-          "border-slate-200 bg-white text-slate-700",
+          "border-[#ffd600]/40 bg-[#ffd600]/15 text-[#80827f] font-bold",
         success:
-          "border-[#10B981]/30 bg-[#10B981]/15 text-[#059669] font-bold",
+          "border-[#8ed462]/30 bg-[#8ed462]/15 text-[#5a9e30] font-bold",
         warning:
-          "border-[#F59E0B]/30 bg-[#F59E0B]/15 text-[#D97706] font-bold",
+          "border-[#ffd600]/40 bg-[#ffd600]/15 text-[#80827f] font-bold",
+        destructive:
+          "border-transparent bg-[#ff705d] text-white hover:bg-[#ff705d]/90 shadow-xs",
+        outline:
+          "border-[#d5d5d4] bg-transparent text-[#2c2e2a] hover:bg-[#f5f1e4]",
+        secondary:
+          "border-[#e5e1d5] bg-[#f5f1e4] text-[#80827f] hover:bg-[#e0dbce]",
+        // Legacy aliases kept for backward compat
+        google:
+          "border-transparent bg-[#2ba0ff] text-white shadow-xs",
+        blue:
+          "border-[#2ba0ff]/30 bg-[#2ba0ff]/15 text-[#2ba0ff] font-bold",
+        green:
+          "border-[#8ed462]/30 bg-[#8ed462]/15 text-[#5a9e30] font-bold",
+        neutral:
+          "border-[#e5e1d5] bg-white text-[#2c2e2a]",
       },
     },
     defaultVariants: {

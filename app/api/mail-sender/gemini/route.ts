@@ -136,6 +136,7 @@ export async function POST(req: NextRequest) {
       details,
       themeColor,
       apiKey,
+      templateFormat = "shortlisted",
     } = body;
 
     if (!prompt || !prompt.trim()) {
@@ -152,6 +153,7 @@ export async function POST(req: NextRequest) {
       details,
       themeColor,
       apiKey,
+      templateFormat,
     });
 
     return NextResponse.json({

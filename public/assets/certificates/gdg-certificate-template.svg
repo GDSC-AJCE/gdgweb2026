@@ -1,0 +1,182 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1754 1240" width="1754" height="1240" style="background:#f9f7f2; font-family:'Inter', -apple-system, sans-serif;">
+  <defs>
+    <!-- Gradients -->
+    <linearGradient id="googleBorder" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4285F4" />
+      <stop offset="25%" stop-color="#EA4335" />
+      <stop offset="50%" stop-color="#FBBC04" />
+      <stop offset="75%" stop-color="#34A853" />
+      <stop offset="100%" stop-color="#4285F4" />
+    </linearGradient>
+
+    <linearGradient id="goldSeal" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFE082" />
+      <stop offset="50%" stop-color="#FFB300" />
+      <stop offset="100%" stop-color="#FF8F00" />
+    </linearGradient>
+
+    <radialGradient id="meshCenter" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="1" />
+      <stop offset="100%" stop-color="#f5f1e4" stop-opacity="0.6" />
+    </radialGradient>
+
+    <filter id="cardShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="16" stdDeviation="24" flood-color="#2c2e2a" flood-opacity="0.08" />
+    </filter>
+  </defs>
+
+  <!-- Outer Background Canvas -->
+  <rect width="1754" height="1240" fill="#f5f1e4" />
+
+  <!-- Background Decorative Dots / Technical Grid -->
+  <g opacity="0.06">
+    <pattern id="dotPattern" x="0" y="0" width="32" height="32" patternUnits="userSpaceOnUse">
+      <circle cx="4" cy="4" r="1.5" fill="#2c2e2a" />
+    </pattern>
+    <rect width="1754" height="1240" fill="url(#dotPattern)" />
+  </g>
+
+  <!-- Inner Elevated Certificate Surface -->
+  <rect x="70" y="60" width="1614" height="1120" rx="36" fill="#ffffff" filter="url(#cardShadow)" stroke="#e5e1d5" stroke-width="2" />
+
+  <!-- Multi-layer Border Frame in Google Colors -->
+  <rect x="90" y="80" width="1574" height="1080" rx="28" fill="none" stroke="url(#googleBorder)" stroke-width="4" stroke-opacity="0.85" />
+  <rect x="104" y="94" width="1546" height="1052" rx="20" fill="none" stroke="#2c2e2a" stroke-width="1" stroke-opacity="0.12" stroke-dasharray="8 6" />
+
+  <!-- Corner Geometric Ornaments (Google Brand Colors) -->
+  <!-- Top-Left -->
+  <path d="M 90 140 L 90 90 L 140 90" fill="none" stroke="#4285F4" stroke-width="8" stroke-linecap="round" />
+  <circle cx="114" cy="114" r="6" fill="#4285F4" />
+
+  <!-- Top-Right -->
+  <path d="M 1614 90 L 1664 90 L 1664 140" fill="none" stroke="#EA4335" stroke-width="8" stroke-linecap="round" />
+  <circle cx="1640" cy="114" r="6" fill="#EA4335" />
+
+  <!-- Bottom-Left -->
+  <path d="M 90 1100 L 90 1150 L 140 1150" fill="none" stroke="#34A853" stroke-width="8" stroke-linecap="round" />
+  <circle cx="114" cy="1126" r="6" fill="#34A853" />
+
+  <!-- Bottom-Right -->
+  <path d="M 1664 1100 L 1664 1150 L 1614 1150" fill="none" stroke="#FBBC04" stroke-width="8" stroke-linecap="round" />
+  <circle cx="1640" cy="1126" r="6" fill="#FBBC04" />
+
+  <!-- HEADER BRANDING -->
+  <g transform="translate(877, 185)" text-anchor="middle">
+    <!-- Google 4-Color Brackets Logo Emblem -->
+    <g transform="translate(-56, -42) scale(1.15)">
+      <!-- Left Bracket (Red & Yellow) -->
+      <path d="M 16 6 L 4 18 L 4 24 L 16 36" fill="none" stroke="#EA4335" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+      <path d="M 4 24 L 16 36" fill="none" stroke="#FBBC04" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+      <!-- Right Bracket (Blue & Green) -->
+      <path d="M 80 6 L 92 18 L 92 24 L 80 36" fill="none" stroke="#4285F4" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+      <path d="M 92 24 L 80 36" fill="none" stroke="#34A853" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+      <!-- Center Slash -->
+      <line x1="56" y1="6" x2="40" y2="36" stroke="#2c2e2a" stroke-width="4.5" stroke-linecap="round" opacity="0.35" />
+    </g>
+
+    <text y="42" font-size="19" font-weight="700" letter-spacing="4" fill="#5f6368" font-family="'Inter', sans-serif">
+      GOOGLE DEVELOPER GROUPS ON CAMPUS
+    </text>
+    <text y="68" font-size="14" font-weight="600" letter-spacing="2" fill="#80827f" font-family="'Inter', sans-serif">
+      AMAL JYOTHI COLLEGE OF ENGINEERING
+    </text>
+  </g>
+
+  <!-- TITLE: CERTIFICATE OF PARTICIPATION -->
+  <g transform="translate(877, 345)" text-anchor="middle">
+    <text y="0" font-size="44" font-weight="900" letter-spacing="3" fill="#202124" font-family="'Inter', sans-serif">
+      CERTIFICATE OF PARTICIPATION
+    </text>
+    <rect x="-140" y="18" width="280" height="3" rx="1.5" fill="url(#googleBorder)" />
+    <text y="64" font-size="14" font-weight="600" letter-spacing="3" fill="#80827f" font-family="'Inter', sans-serif">
+      THIS IS PROUDLY PRESENTED TO
+    </text>
+  </g>
+
+  <!-- RECIPIENT NAME ACCENT LINE & PLACEHOLDER AREA -->
+  <g transform="translate(877, 540)" text-anchor="middle">
+    <!-- Student Name Placeholder Area: (Dynamic Text Placed Here) -->
+    <text y="0" font-size="52" font-weight="800" fill="#1a73e8" letter-spacing="-0.5" font-family="'Inter', sans-serif" opacity="0.15">
+      [STUDENT NAME]
+    </text>
+    <line x1="-380" y1="24" x2="380" y2="24" stroke="#d5d5d4" stroke-width="2" stroke-linecap="round" />
+  </g>
+
+  <!-- CITATION / EVENT DESCRIPTION -->
+  <g transform="translate(877, 630)" text-anchor="middle">
+    <text y="0" font-size="18" font-weight="400" fill="#3c4043" font-family="'Inter', sans-serif">
+      for active participation and successful completion of the technical workshop &amp; hackathon
+    </text>
+    <!-- Event Name Placeholder Area -->
+    <text y="42" font-size="28" font-weight="700" fill="#202124" letter-spacing="0.5" font-family="'Inter', sans-serif">
+      [EVENT TITLE]
+    </text>
+    <text y="85" font-size="16" font-weight="500" fill="#5f6368" font-family="'Inter', sans-serif">
+      hosted by GDG on Campus AJCE to foster hands-on mastery in modern Google technologies.
+    </text>
+  </g>
+
+  <!-- BOTTOM SECTION: SIGNATURES, DATE, SEAL, AND QR CODE -->
+  <g transform="translate(0, 940)">
+    <!-- LEFT: Faculty Advisor Signature Line -->
+    <g transform="translate(240, 0)">
+      <line x1="0" y1="0" x2="260" y2="0" stroke="#2c2e2a" stroke-width="1.5" stroke-opacity="0.4" />
+      <text x="130" y="28" text-anchor="middle" font-size="15" font-weight="700" fill="#202124">Prof. Fr. Rubin Thoppil</text>
+      <text x="130" y="48" text-anchor="middle" font-size="12" font-weight="500" fill="#80827f">Faculty Advisor, GDG AJCE</text>
+    </g>
+
+    <!-- CENTER-LEFT: Lead Organizer Signature Line -->
+    <g transform="translate(580, 0)">
+      <line x1="0" y1="0" x2="260" y2="0" stroke="#2c2e2a" stroke-width="1.5" stroke-opacity="0.4" />
+      <text x="130" y="28" text-anchor="middle" font-size="15" font-weight="700" fill="#202124">Abin Varghese</text>
+      <text x="130" y="48" text-anchor="middle" font-size="12" font-weight="500" fill="#80827f">Organizer &amp; Chapter Lead</text>
+    </g>
+
+    <!-- CENTER: Verified Gold / Google Seal Badge -->
+    <g transform="translate(980, 0)">
+      <circle cx="0" cy="-10" r="52" fill="url(#goldSeal)" filter="url(#cardShadow)" />
+      <circle cx="0" cy="-10" r="44" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-dasharray="4 3" />
+      <circle cx="0" cy="-10" r="38" fill="#ffffff" />
+      <!-- Star Emblem -->
+      <polygon points="0,-28 4,-18 14,-18 6,-11 9,-1 0,-7 -9,-1 -6,-11 -14,-18 -4,-18" fill="#FFB300" />
+      <text x="0" y="6" text-anchor="middle" font-size="8.5" font-weight="800" letter-spacing="1" fill="#202124">VERIFIED</text>
+      <text x="0" y="16" text-anchor="middle" font-size="7" font-weight="700" fill="#5f6368">CREDENTIAL</text>
+    </g>
+
+    <!-- RIGHT: Unique QR Verification Slot -->
+    <g transform="translate(1360, -40)">
+      <!-- QR Frame Placeholder -->
+      <rect x="0" y="0" width="128" height="128" rx="16" fill="#f8f9fa" stroke="#d5d5d4" stroke-width="1.5" />
+      <!-- Visual QR pattern mock -->
+      <g transform="translate(14, 14)">
+        <rect x="0" y="0" width="28" height="28" rx="4" fill="none" stroke="#202124" stroke-width="3" />
+        <rect x="7" y="7" width="14" height="14" fill="#202124" />
+        <rect x="72" y="0" width="28" height="28" rx="4" fill="none" stroke="#202124" stroke-width="3" />
+        <rect x="79" y="7" width="14" height="14" fill="#202124" />
+        <rect x="0" y="72" width="28" height="28" rx="4" fill="none" stroke="#202124" stroke-width="3" />
+        <rect x="7" y="79" width="14" height="14" fill="#202124" />
+        <!-- Micro data dots -->
+        <rect x="36" y="8" width="6" height="6" fill="#4285F4" />
+        <rect x="52" y="8" width="6" height="6" fill="#202124" />
+        <rect x="44" y="24" width="6" height="6" fill="#EA4335" />
+        <rect x="36" y="44" width="8" height="8" fill="#FBBC04" />
+        <rect x="56" y="44" width="8" height="8" fill="#34A853" />
+        <rect x="44" y="64" width="6" height="6" fill="#202124" />
+        <rect x="76" y="40" width="6" height="6" fill="#4285F4" />
+        <rect x="88" y="56" width="6" height="6" fill="#202124" />
+        <rect x="40" y="80" width="6" height="6" fill="#202124" />
+        <rect x="64" y="84" width="6" height="6" fill="#4285F4" />
+      </g>
+      <text x="64" y="148" text-anchor="middle" font-size="10" font-weight="700" letter-spacing="1" fill="#5f6368" font-family="'Inter', sans-serif">
+        SCAN TO VERIFY
+      </text>
+    </g>
+  </g>
+
+  <!-- FOOTER METADATA: CERTIFICATE ID & DATE -->
+  <g transform="translate(877, 1115)" text-anchor="middle">
+    <text y="0" font-size="11.5" font-family="'Courier New', monospace" font-weight="600" fill="#80827f" letter-spacing="1">
+      CREDENTIAL ID: <tspan fill="#4285F4" font-weight="700">[UNIQUE-CERT-ID]</tspan> &bull; ISSUED: <tspan fill="#202124">[DATE]</tspan> &bull; VERIFY AT: <tspan fill="#34A853">gdgajce.com/verify</tspan>
+    </text>
+  </g>
+</svg>

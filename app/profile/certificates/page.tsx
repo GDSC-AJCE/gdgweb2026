@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import { db } from "@/lib/firebase";
-import { collectionGroup, query, where, getDocs, orderBy, doc, getDoc } from "firebase/firestore";
+import { collectionGroup, collection, query, where, getDocs, orderBy, doc, getDoc } from "firebase/firestore";
 import { motion, AnimatePresence } from "framer-motion";
 import {
     ArrowLeft as ArrowLeftIcon,
@@ -43,18 +43,56 @@ export default function MyCertificatesPage() {
 
         const fetchCertificates = async () => {
             try {
-                // Fetch user's certificates from issuedCertificates collectionGroup
-                const q = query(
-                    collectionGroup(db, "issuedCertificates"),
-                    where("userId", "==", user.uid),
-                    orderBy("issuedAt", "desc")
-                );
-                const snap = await getDocs(q);
+                // Fetch user's certificates from issuedCertificates collectionGroup by userId
+                const certsMap = new Map<string, any>();
 
-                const basicCerts = snap.docs.map((d) => ({
-                    id: d.id,
-                    ...d.data()
-                } as any));
+                try {
+                    const qUser = query(
+                        collectionGroup(db, "issuedCertificates"),
+                        where("userId", "==", user.uid)
+                    );
+                    const snapUser = await getDocs(qUser);
+                    snapUser.docs.forEach((d) => {
+                        const data = d.data();
+                        certsMap.set(data.certificateId || d.id, { id: d.id, ...data });
+                    });
+                } catch (err) {
+                    console.log("Query by userId:", err);
+                }
+
+                // Also fetch by recipientEmail (handles registrations before account creation or manual UID)
+                if (user.email) {
+                    try {
+                        const qEmail = query(
+                            collectionGroup(db, "issuedCertificates"),
+                            where("recipientEmail", "==", user.email.toLowerCase())
+                        );
+                        const snapEmail = await getDocs(qEmail);
+                        snapEmail.docs.forEach((d) => {
+                            const data = d.data();
+                            certsMap.set(data.certificateId || d.id, { id: d.id, ...data });
+                        });
+                    } catch (err) {
+                        console.log("Query by email:", err);
+                    }
+                }
+
+                // Also fetch from user document's subcollection directly
+                try {
+                    const snapDirect = await getDocs(collection(db, "users", user.uid, "certificates"));
+                    snapDirect.docs.forEach((d) => {
+                        const data = d.data();
+                        certsMap.set(data.certificateId || d.id, { id: d.id, ...data });
+                    });
+                } catch (err) {
+                    console.log("Query direct user certs:", err);
+                }
+
+                const basicCerts = Array.from(certsMap.values()).sort((a, b) => {
+                    const aTime = a.issuedAt?.seconds || 0;
+                    const bTime = b.issuedAt?.seconds || 0;
+                    return bTime - aTime;
+                });
 
                 // Fetch template background URL for each certificate if needed
                 const fullCerts = await Promise.all(basicCerts.map(async (cert: any) => {

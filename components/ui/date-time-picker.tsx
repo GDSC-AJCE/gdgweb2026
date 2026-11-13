@@ -193,11 +193,11 @@ export function DateTimePicker({
             type="button"
             disabled={disabled}
             className={cn(
-              "flex h-11 w-full items-center justify-between rounded-xl border border-[#d5d5d4] bg-white px-3.5 text-left text-sm text-[#2c2e2a] shadow-xs transition-all duration-200",
-              "hover:border-[#a0a29f]",
+              "flex h-11 w-full items-center justify-between rounded-xl border border-[#d5d5d4] dark:border-zinc-700 bg-white dark:bg-[#18181b] px-3.5 text-left text-sm text-[#2c2e2a] dark:text-zinc-100 shadow-xs transition-all duration-200",
+              "hover:border-[#a0a29f] dark:hover:border-zinc-500",
               "focus:outline-none focus:border-[#4285F4] focus:ring-3 focus:ring-[#4285F4]/20",
-              "disabled:cursor-not-allowed disabled:opacity-50 disabled:bg-[#f5f1e4]/50 cursor-pointer",
-              !displayText && "text-[#80827f]"
+              "disabled:cursor-not-allowed disabled:opacity-50 disabled:bg-[#f5f1e4]/50 dark:disabled:bg-zinc-800/50 cursor-pointer",
+              !displayText && "text-[#80827f] dark:text-zinc-500"
             )}
           >
             <div className="flex items-center gap-2.5 truncate">
@@ -212,14 +212,14 @@ export function DateTimePicker({
                   tabIndex={0}
                   onClick={handleClear}
                   onKeyDown={(e) => e.key === "Enter" && handleClear(e as any)}
-                  className="p-1 rounded-md hover:bg-[#f5f1e4] text-[#80827f] hover:text-[#2c2e2a] transition cursor-pointer"
+                  className="p-1 rounded-md hover:bg-[#f5f1e4] dark:hover:bg-zinc-800 text-[#80827f] dark:text-zinc-400 hover:text-[#2c2e2a] dark:hover:text-zinc-100 transition cursor-pointer"
                   title="Clear"
                 >
                   <X className="h-3.5 w-3.5" />
                 </span>
               )}
               {showTime && (
-                <Clock className="h-3.5 w-3.5 text-[#80827f]" />
+                <Clock className="h-3.5 w-3.5 text-[#80827f] dark:text-zinc-400" />
               )}
             </div>
           </button>
@@ -228,30 +228,30 @@ export function DateTimePicker({
         <PopoverContent
           align="start"
           sideOffset={8}
-          className="w-auto p-0 rounded-2xl border border-[#d5d5d4] shadow-2xl bg-white text-[#2c2e2a] z-[9999] overflow-hidden"
+          className="w-auto p-0 rounded-2xl border border-[#d5d5d4] dark:border-zinc-800 shadow-2xl bg-white dark:bg-[#18181b] text-[#2c2e2a] dark:text-zinc-100 z-[9999] overflow-hidden"
         >
-          <div className="flex flex-col sm:flex-row divide-y sm:divide-y-0 sm:divide-x divide-[#e5e1d5]">
+          <div className="flex flex-col sm:flex-row divide-y sm:divide-y-0 sm:divide-x divide-[#e5e1d5] dark:divide-zinc-800">
             {/* LEFT: CALENDAR PANEL */}
             <div className="p-4 sm:p-5 w-[300px]">
               {/* Month Navigation */}
-              <div className="flex items-center justify-between pb-3 mb-2 border-b border-[#f0eee6]">
+              <div className="flex items-center justify-between pb-3 mb-2 border-b border-[#f0eee6] dark:border-zinc-800">
                 <button
                   type="button"
                   onClick={() => setViewMonth(subMonths(viewMonth, 1))}
-                  className="p-1.5 rounded-lg border border-[#d5d5d4] hover:bg-[#f5f1e4] text-[#2c2e2a] transition cursor-pointer"
+                  className="p-1.5 rounded-lg border border-[#d5d5d4] dark:border-zinc-700 hover:bg-[#f5f1e4] dark:hover:bg-zinc-800 text-[#2c2e2a] dark:text-zinc-200 transition cursor-pointer"
                   title="Previous Month"
                 >
                   <ChevronLeft className="h-4 w-4" />
                 </button>
 
-                <div className="text-sm font-semibold text-[#2c2e2a]">
+                <div className="text-sm font-semibold text-[#2c2e2a] dark:text-zinc-100">
                   {format(viewMonth, "MMMM yyyy")}
                 </div>
 
                 <button
                   type="button"
                   onClick={() => setViewMonth(addMonths(viewMonth, 1))}
-                  className="p-1.5 rounded-lg border border-[#d5d5d4] hover:bg-[#f5f1e4] text-[#2c2e2a] transition cursor-pointer"
+                  className="p-1.5 rounded-lg border border-[#d5d5d4] dark:border-zinc-700 hover:bg-[#f5f1e4] dark:hover:bg-zinc-800 text-[#2c2e2a] dark:text-zinc-200 transition cursor-pointer"
                   title="Next Month"
                 >
                   <ChevronRight className="h-4 w-4" />
@@ -261,7 +261,7 @@ export function DateTimePicker({
               {/* Day of Week Headers */}
               <div className="grid grid-cols-7 gap-1 text-center mb-1">
                 {["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"].map((dayName) => (
-                  <div key={dayName} className="text-[11px] font-semibold text-[#80827f] py-1">
+                  <div key={dayName} className="text-[11px] font-semibold text-[#80827f] dark:text-zinc-400 py-1">
                     {dayName}
                   </div>
                 ))}
@@ -281,8 +281,8 @@ export function DateTimePicker({
                       onClick={() => handleSelectDay(d)}
                       className={cn(
                         "h-8 w-8 mx-auto flex items-center justify-center rounded-xl text-xs font-medium transition cursor-pointer relative",
-                        !isCurrentMonth && "text-[#b0b2af] opacity-40 hover:opacity-80",
-                        isCurrentMonth && !isSelected && "text-[#2c2e2a] hover:bg-[#f5f1e4]",
+                        !isCurrentMonth && "text-[#b0b2af] dark:text-zinc-600 opacity-40 hover:opacity-80",
+                        isCurrentMonth && !isSelected && "text-[#2c2e2a] dark:text-zinc-200 hover:bg-[#f5f1e4] dark:hover:bg-zinc-800",
                         isSelected && "bg-[#4285F4] text-white font-semibold shadow-xs hover:bg-[#3367D6]",
                         isToday && !isSelected && "border border-[#4285F4] text-[#4285F4] font-semibold"
                       )}
@@ -294,25 +294,25 @@ export function DateTimePicker({
               </div>
 
               {/* Quick Preset Buttons */}
-              <div className="flex items-center gap-1.5 pt-3 mt-3 border-t border-[#f0eee6]">
+              <div className="flex items-center gap-1.5 pt-3 mt-3 border-t border-[#f0eee6] dark:border-zinc-800">
                 <button
                   type="button"
                   onClick={() => handlePreset("today")}
-                  className="flex-1 py-1 px-2 rounded-lg bg-[#faf9f6] border border-[#d5d5d4] hover:bg-[#f5f1e4] text-[11px] font-medium text-[#2c2e2a] transition cursor-pointer text-center"
+                  className="flex-1 py-1 px-2 rounded-lg bg-[#faf9f6] dark:bg-zinc-800/80 border border-[#d5d5d4] dark:border-zinc-700 hover:bg-[#f5f1e4] dark:hover:bg-zinc-700 text-[11px] font-medium text-[#2c2e2a] dark:text-zinc-200 transition cursor-pointer text-center"
                 >
                   Today
                 </button>
                 <button
                   type="button"
                   onClick={() => handlePreset("tomorrow")}
-                  className="flex-1 py-1 px-2 rounded-lg bg-[#faf9f6] border border-[#d5d5d4] hover:bg-[#f5f1e4] text-[11px] font-medium text-[#2c2e2a] transition cursor-pointer text-center"
+                  className="flex-1 py-1 px-2 rounded-lg bg-[#faf9f6] dark:bg-zinc-800/80 border border-[#d5d5d4] dark:border-zinc-700 hover:bg-[#f5f1e4] dark:hover:bg-zinc-700 text-[11px] font-medium text-[#2c2e2a] dark:text-zinc-200 transition cursor-pointer text-center"
                 >
                   Tomorrow
                 </button>
                 <button
                   type="button"
                   onClick={() => handlePreset("weekend")}
-                  className="flex-1 py-1 px-2 rounded-lg bg-[#faf9f6] border border-[#d5d5d4] hover:bg-[#f5f1e4] text-[11px] font-medium text-[#2c2e2a] transition cursor-pointer text-center"
+                  className="flex-1 py-1 px-2 rounded-lg bg-[#faf9f6] dark:bg-zinc-800/80 border border-[#d5d5d4] dark:border-zinc-700 hover:bg-[#f5f1e4] dark:hover:bg-zinc-700 text-[11px] font-medium text-[#2c2e2a] dark:text-zinc-200 transition cursor-pointer text-center"
                 >
                   Weekend
                 </button>
@@ -321,17 +321,17 @@ export function DateTimePicker({
 
             {/* RIGHT: TIME PANEL (If showTime is true) */}
             {showTime && (
-              <div className="p-4 sm:p-5 w-[200px] flex flex-col justify-between bg-[#faf9f6]/60">
+              <div className="p-4 sm:p-5 w-[200px] flex flex-col justify-between bg-[#faf9f6]/60 dark:bg-zinc-900/60">
                 <div className="space-y-4">
-                  <div className="flex items-center gap-2 pb-2 border-b border-[#f0eee6]">
+                  <div className="flex items-center gap-2 pb-2 border-b border-[#f0eee6] dark:border-zinc-800">
                     <Clock className="h-4 w-4 text-[#4285F4]" />
-                    <span className="text-xs font-bold text-[#2c2e2a] uppercase tracking-wider">
+                    <span className="text-xs font-bold text-[#2c2e2a] dark:text-zinc-200 uppercase tracking-wider">
                       Event Time
                     </span>
                   </div>
 
                   {/* AM / PM Segmented Control */}
-                  <div className="grid grid-cols-2 p-1 rounded-xl bg-white border border-[#d5d5d4] shadow-2xs">
+                  <div className="grid grid-cols-2 p-1 rounded-xl bg-white dark:bg-zinc-800 border border-[#d5d5d4] dark:border-zinc-700 shadow-2xs">
                     {(["AM", "PM"] as const).map((mer) => (
                       <button
                         key={mer}
@@ -341,7 +341,7 @@ export function DateTimePicker({
                           "py-1 text-xs font-bold rounded-lg transition-all cursor-pointer text-center",
                           ampm === mer
                             ? "bg-[#4285F4] text-white shadow-xs"
-                            : "text-[#80827f] hover:text-[#2c2e2a]"
+                            : "text-[#80827f] dark:text-zinc-400 hover:text-[#2c2e2a] dark:hover:text-zinc-200"
                         )}
                       >
                         {mer}
@@ -353,7 +353,7 @@ export function DateTimePicker({
                   <div className="grid grid-cols-2 gap-2">
                     {/* Hours */}
                     <div className="space-y-1">
-                      <span className="text-[10px] font-bold text-[#80827f] uppercase block">
+                      <span className="text-[10px] font-bold text-[#80827f] dark:text-zinc-400 uppercase block">
                         Hour
                       </span>
                       <div className="relative">
@@ -371,14 +371,14 @@ export function DateTimePicker({
                             const num = Math.min(12, Math.max(1, parseInt(val, 10) || 1));
                             handleTimeChange(num.toString().padStart(2, "0"), minute, ampm);
                           }}
-                          className="w-full h-9 rounded-xl border border-[#d5d5d4] bg-white px-3 text-xs font-semibold text-[#2c2e2a] outline-none focus:border-[#4285F4] text-center"
+                          className="w-full h-9 rounded-xl border border-[#d5d5d4] dark:border-zinc-700 bg-white dark:bg-zinc-800 px-3 text-xs font-semibold text-[#2c2e2a] dark:text-zinc-100 outline-none focus:border-[#4285F4] text-center"
                         />
                       </div>
                     </div>
 
                     {/* Minutes */}
                     <div className="space-y-1">
-                      <span className="text-[10px] font-bold text-[#80827f] uppercase block">
+                      <span className="text-[10px] font-bold text-[#80827f] dark:text-zinc-400 uppercase block">
                         Min
                       </span>
                       <div className="relative">
@@ -397,7 +397,7 @@ export function DateTimePicker({
                             const num = Math.min(59, Math.max(0, parseInt(val, 10) || 0));
                             handleTimeChange(hour12, num.toString().padStart(2, "0"), ampm);
                           }}
-                          className="w-full h-9 rounded-xl border border-[#d5d5d4] bg-white px-3 text-xs font-semibold text-[#2c2e2a] outline-none focus:border-[#4285F4] text-center"
+                          className="w-full h-9 rounded-xl border border-[#d5d5d4] dark:border-zinc-700 bg-white dark:bg-zinc-800 px-3 text-xs font-semibold text-[#2c2e2a] dark:text-zinc-100 outline-none focus:border-[#4285F4] text-center"
                         />
                       </div>
                     </div>
@@ -405,7 +405,7 @@ export function DateTimePicker({
 
                   {/* Quick Time Slots */}
                   <div className="space-y-1.5 pt-1">
-                    <span className="text-[10px] font-bold text-[#80827f] uppercase block">
+                    <span className="text-[10px] font-bold text-[#80827f] dark:text-zinc-400 uppercase block">
                       Common Slots
                     </span>
                     <div className="grid grid-cols-1 gap-1">
@@ -422,7 +422,7 @@ export function DateTimePicker({
                             "w-full text-left px-2.5 py-1.5 rounded-lg text-[11px] font-medium border transition cursor-pointer truncate",
                             hour12 === slot.h && minute === slot.m && ampm === slot.mer
                               ? "bg-[#4285F4]/10 border-[#4285F4] text-[#4285F4]"
-                              : "bg-white border-[#d5d5d4]/60 text-[#2c2e2a] hover:bg-[#f5f1e4]"
+                              : "bg-white dark:bg-zinc-800 border-[#d5d5d4]/60 dark:border-zinc-700/60 text-[#2c2e2a] dark:text-zinc-200 hover:bg-[#f5f1e4] dark:hover:bg-zinc-700"
                           )}
                         >
                           {slot.label}
@@ -433,7 +433,7 @@ export function DateTimePicker({
                 </div>
 
                 {/* Done Button */}
-                <div className="pt-4 border-t border-[#f0eee6]">
+                <div className="pt-4 border-t border-[#f0eee6] dark:border-zinc-800">
                   <Button
                     type="button"
                     variant="google"

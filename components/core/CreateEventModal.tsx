@@ -53,7 +53,7 @@ interface CreateEventModalProps {
     isEdit?: boolean;
 }
 
-type EventCategory = "hackathon" | "workshop" | "studyjam" | "techtalk" | "competition" | "meetup" | "execom_call" | "other";
+type EventCategory = "hackathon" | "workshop" | "studyjam" | "techtalk" | "competition" | "meetup" | "execom_call" | "meeting" | "activity" | "other";
 
 const formatToLocalIso = (d: Date): string => {
     const pad = (n: number) => n.toString().padStart(2, "0");
@@ -482,6 +482,8 @@ export default function CreateEventModal({
                                             <SelectItem value="techtalk">Tech Talk</SelectItem>
                                             <SelectItem value="competition">Competition</SelectItem>
                                             <SelectItem value="meetup">Meetup</SelectItem>
+                                            <SelectItem value="meeting">Meeting / Sync</SelectItem>
+                                            <SelectItem value="activity">Chapter Activity</SelectItem>
                                             <SelectItem value="execom_call">Execom Call</SelectItem>
                                             <SelectItem value="other">Other</SelectItem>
                                         </SelectContent>

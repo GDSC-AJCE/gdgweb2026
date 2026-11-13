@@ -95,8 +95,8 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\app\\admin\\page.tsx": {
-    "mtime": 1794426403.8876917,
-    "ast_hash": "77d043a38ae9982a29f535f98cb804a7",
+    "mtime": 1794591481.2270539,
+    "ast_hash": "0b6171b5586e6dea02f942441a1ce85e",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\app\\admin\\mailer\\page.tsx": {
@@ -135,8 +135,8 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\app\\api\\mail-sender\\gemini\\route.ts": {
-    "mtime": 1794344430.0636022,
-    "ast_hash": "9d66370e407d40c4f413256f63121a66",
+    "mtime": 1794591468.3424802,
+    "ast_hash": "7fee22de3ded5f4a81919ef20ea1f677",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\app\\api\\mail-sender\\preview\\route.ts": {
@@ -205,8 +205,8 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\app\\core\\events\\[eventId]\\page.tsx": {
-    "mtime": 1789227983.5581498,
-    "ast_hash": "60258f82955ddec1c551f4dd82b4d986",
+    "mtime": 1794592407.3020227,
+    "ast_hash": "a012884211c40f177ebdbeb3d43918b3",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\app\\design-system\\page.tsx": {
@@ -415,13 +415,13 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\admin\\AdminHeader.tsx": {
-    "mtime": 1794375284.4442317,
-    "ast_hash": "4a6d10418179c1449f1602b7a86b64cc",
+    "mtime": 1794591529.207234,
+    "ast_hash": "ed080a94c46df29bd68f2aca15553361",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\admin\\AdminSidebar.tsx": {
-    "mtime": 1794375229.5630202,
-    "ast_hash": "be18ae2575daf55e4af03a47356be23c",
+    "mtime": 1794592279.6347938,
+    "ast_hash": "dcdd2555e3a346cf1249100047c61219",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\admin\\RestrictedAccessCard.tsx": {
@@ -470,8 +470,8 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\admin\\tabs\\EventsManagementTab.tsx": {
-    "mtime": 1794376029.9581642,
-    "ast_hash": "57ecde3d996ad2ac7ff719aaa88b1ed2",
+    "mtime": 1794591124.0415442,
+    "ast_hash": "45ff2a6fd21db1f252a6b6d38a1839ee",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\admin\\tabs\\ExecomManagementTab.tsx": {
@@ -485,8 +485,8 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\admin\\tabs\\GeminiMailStudio.tsx": {
-    "mtime": 1794344558.4922554,
-    "ast_hash": "a5ed62b7a55dc2c0e3d7891f2975968f",
+    "mtime": 1794591858.347799,
+    "ast_hash": "a6142f02728d3ddf95c6a29f9d090efe",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\admin\\tabs\\MailStudioTab.tsx": {
@@ -550,8 +550,8 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\core\\CreateEventModal.tsx": {
-    "mtime": 1793986836.060877,
-    "ast_hash": "065656197e276973ab30c04dc4996471",
+    "mtime": 1794590602.2795925,
+    "ast_hash": "105b62b9fe391d345d2c43d03539dda7",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\core\\EditExecomTemplateModal.tsx": {
@@ -735,8 +735,8 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\ui\\calendar.tsx": {
-    "mtime": 1793986836.077252,
-    "ast_hash": "c97fb57224291d442ba5734853e2a1e6",
+    "mtime": 1794584109.1155293,
+    "ast_hash": "302de5d618ef9a37338aae9f27a625c6",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\ui\\card.tsx": {
@@ -765,8 +765,8 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\ui\\date-time-picker.tsx": {
-    "mtime": 1793986836.0784352,
-    "ast_hash": "5b83db2e5d5e31d389518f1ce99167b3",
+    "mtime": 1794584377.2354362,
+    "ast_hash": "5fa1f2849417bec7589e5057c20005ed",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\ui\\dialog.tsx": {
@@ -920,8 +920,8 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\lib\\gemini.ts": {
-    "mtime": 1794368045.9219038,
-    "ast_hash": "c2910b2bfab7f343bef1a373e2fabbd4",
+    "mtime": 1794591433.8125825,
+    "ast_hash": "20ee835e8ff9a310d420ad9ab343174b",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\lib\\guardrails.ts": {
@@ -1937,6 +1937,26 @@
   "D:\\DEV\\GDG\\newwebsite\\public\\mascot.webm": {
     "mtime": 1789487286.1533813,
     "ast_hash": "6889258fcf9eb9bdbc8015fe40f1ba13",
+    "semantic_hash": ""
+  },
+  "D:\\DEV\\GDG\\newwebsite\\public\\assets\\certificates\\gdg-certificate-template.svg": {
+    "mtime": 1794591618.348314,
+    "ast_hash": "69bbff3b34566b3e1c5901ec28791387",
+    "semantic_hash": ""
+  },
+  "D:\\DEV\\GDG\\newwebsite\\components\\certificates\\CertificateGenerator.tsx": {
+    "mtime": 1794591953.3523688,
+    "ast_hash": "df9ef2c3a3e2595e37b9b667c446529b",
+    "semantic_hash": ""
+  },
+  "D:\\DEV\\GDG\\newwebsite\\public\\assets\\certificates\\gdg-certificate-frame.svg": {
+    "mtime": 1794591862.7170072,
+    "ast_hash": "1b2e904fe07ae8b6e9a01de0377d237b",
+    "semantic_hash": ""
+  },
+  "D:\\DEV\\GDG\\newwebsite\\components\\certificates\\EventMailTab.tsx": {
+    "mtime": 1794592069.0118585,
+    "ast_hash": "73a4ad53fb81badf779c7dea64021c4e",
     "semantic_hash": ""
   }
 }

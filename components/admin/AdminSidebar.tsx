@@ -11,7 +11,6 @@ import {
   Shield,
   ArrowUpRight,
   Lock,
-  Mail,
   Globe,
   Send,
   Search,
@@ -25,7 +24,6 @@ import {
   Sun,
   Moon,
   Megaphone,
-  Headphones,
   Settings,
   PanelLeftClose,
   Kanban,
@@ -34,9 +32,7 @@ import {
   User,
   HeartPulse,
 } from "lucide-react";
-import Link from "next/link";
 import StatusDot from "@/components/ui/StatusDot";
-import GDGLogoMark from "@/components/ui/GDGLogoMark";
 import { useAuth } from "@/context/AuthContext";
 
 export type AdminTab =
@@ -131,11 +127,6 @@ export default function AdminSidebar({
       icon: Send,
     },
     {
-      id: "newsletter",
-      label: "Newsletter",
-      icon: Mail,
-    },
-    {
       id: "website",
       label: "Website",
       icon: Globe,
@@ -168,94 +159,73 @@ export default function AdminSidebar({
       } ${isCollapsed ? "w-full lg:w-20 p-2.5" : "w-full lg:w-64 p-3.5"}`}
     >
       <div className="space-y-3.5">
-        {/* ================= 1. TOP USER CARD (MATCHING VIDEO) ================= */}
-        <div
-          className={`flex items-center justify-between rounded-xl p-2 transition ${
-            isDark ? "hover:bg-zinc-800/50" : "hover:bg-slate-50"
-          }`}
-        >
-          <div className="flex items-center gap-2.5 min-w-0">
-            {/* User Avatar */}
-            {user?.photoURL ? (
-              <img
-                src={user.photoURL}
-                alt={userName}
-                className="size-8 rounded-full object-cover border border-zinc-700/60 shrink-0"
+        {/* ================= 1. TOP QUICK SEARCH & COLLAPSE ================= */}
+        {!isCollapsed ? (
+          <div className="flex items-center gap-2">
+            <div className="relative flex-1">
+              <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Quick Search"
+                className={`w-full h-8 pl-8 pr-8 rounded-xl text-xs outline-none transition ${
+                  isDark
+                    ? "bg-[#1a1a1e] border border-zinc-800/80 text-white placeholder:text-zinc-500 focus:border-blue-500"
+                    : "bg-slate-100 border border-slate-200/80 text-slate-900 placeholder:text-slate-400 focus:bg-white focus:border-blue-500"
+                }`}
               />
-            ) : (
-              <div
-                className={`size-8 rounded-full flex items-center justify-center font-bold text-xs shrink-0 ${
-                  isDark ? "bg-zinc-800 text-slate-200" : "bg-slate-200 text-slate-800"
-                }`}
-              >
-                {userInitial}
-              </div>
-            )}
-
-            {!isCollapsed && (
-              <div className="flex items-center gap-1.5 min-w-0">
-                <span className="text-xs font-semibold truncate tracking-tight">
-                  {userName}
+              {searchQuery ? (
+                <button
+                  type="button"
+                  onClick={() => setSearchQuery("")}
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[10px] font-mono text-slate-400 hover:text-slate-200 cursor-pointer"
+                >
+                  ESC
+                </button>
+              ) : (
+                <span
+                  className={`absolute right-2.5 top-1/2 -translate-y-1/2 text-[10px] font-mono flex items-center gap-0.5 px-1 py-0.2 rounded ${
+                    isDark ? "bg-zinc-800 text-zinc-400" : "bg-slate-200 text-slate-600"
+                  }`}
+                >
+                  <Command className="w-2.5 h-2.5" />L
                 </span>
-                <ChevronsUpDown className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-              </div>
-            )}
-          </div>
+              )}
+            </div>
 
-          {/* Sidebar Collapse Button */}
-          <button
-            type="button"
-            onClick={() => setIsCollapsed(!isCollapsed)}
-            title={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
-            className={`hidden lg:flex size-7 rounded-lg items-center justify-center transition cursor-pointer ${
-              isDark
-                ? "text-zinc-400 hover:text-white hover:bg-zinc-800"
-                : "text-slate-400 hover:text-slate-900 hover:bg-slate-100"
-            }`}
-          >
-            <PanelLeftClose
-              className={`w-4 h-4 transition-transform duration-200 ${
-                isCollapsed ? "rotate-180" : ""
-              }`}
-            />
-          </button>
-        </div>
-
-        {/* ================= 2. QUICK SEARCH BAR ================= */}
-        {!isCollapsed && (
-          <div className="relative">
-            <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Quick Search"
-              className={`w-full h-8 pl-8 pr-8 rounded-xl text-xs outline-none transition ${
+            {/* Sidebar Collapse Button */}
+            <button
+              type="button"
+              onClick={() => setIsCollapsed(true)}
+              title="Collapse sidebar"
+              className={`hidden lg:flex size-8 rounded-xl items-center justify-center transition cursor-pointer shrink-0 border ${
                 isDark
-                  ? "bg-[#1a1a1e] border border-zinc-800/80 text-white placeholder:text-zinc-500 focus:border-blue-500"
-                  : "bg-slate-100 border border-slate-200/80 text-slate-900 placeholder:text-slate-400 focus:bg-white focus:border-blue-500"
+                  ? "bg-[#1a1a1e] border-zinc-800/80 text-zinc-400 hover:text-white hover:bg-zinc-800"
+                  : "bg-slate-100 border-slate-200/80 text-slate-400 hover:text-slate-900 hover:bg-slate-200"
               }`}
-            />
-            {searchQuery ? (
-              <button
-                onClick={() => setSearchQuery("")}
-                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[10px] font-mono text-slate-400 hover:text-slate-200"
-              >
-                ESC
-              </button>
-            ) : (
-              <span
-                className={`absolute right-2.5 top-1/2 -translate-y-1/2 text-[10px] font-mono flex items-center gap-0.5 px-1 py-0.2 rounded ${
-                  isDark ? "bg-zinc-800 text-zinc-400" : "bg-slate-200 text-slate-600"
-                }`}
-              >
-                <Command className="w-2.5 h-2.5" />L
-              </span>
-            )}
+            >
+              <PanelLeftClose className="w-4 h-4" />
+            </button>
+          </div>
+        ) : (
+          <div className="hidden lg:flex justify-center pb-1">
+            <button
+              type="button"
+              onClick={() => setIsCollapsed(false)}
+              title="Expand sidebar"
+              className={`size-8 rounded-xl flex items-center justify-center transition cursor-pointer border ${
+                isDark
+                  ? "bg-[#1a1a1e] border-zinc-800/80 text-zinc-400 hover:text-white hover:bg-zinc-800"
+                  : "bg-slate-100 border-slate-200/80 text-slate-400 hover:text-slate-900 hover:bg-slate-200"
+              }`}
+            >
+              <PanelLeftClose className="w-4 h-4 rotate-180" />
+            </button>
           </div>
         )}
 
-        {/* ================= 3. NAVIGATION LIST (MATCHING VIDEO PILL STYLE) ================= */}
+        {/* ================= 2. NAVIGATION LIST ================= */}
         {filteredItems.length === 0 ? (
           <div className="py-6 text-center text-xs space-y-2">
             <p className={isDark ? "text-zinc-500" : "text-slate-400"}>No matching tabs found</p>
@@ -403,21 +373,9 @@ export default function AdminSidebar({
           </div>
         )}
 
-        {/* SUPPORT & SETTINGS ROWS */}
+        {/* SETTINGS ROW */}
         {!isCollapsed && (
           <div className="space-y-0.5">
-            <Link
-              href="/contact"
-              className={`flex items-center gap-3 px-3 py-1.5 rounded-xl text-xs font-medium transition ${
-                isDark
-                  ? "text-zinc-400 hover:text-white hover:bg-zinc-800/60"
-                  : "text-slate-600 hover:text-slate-900 hover:bg-slate-100/80"
-              }`}
-            >
-              <Headphones className="size-4 shrink-0" />
-              <span>Support</span>
-            </Link>
-
             <button
               type="button"
               onClick={() => onSelectTab("website")}
@@ -433,40 +391,64 @@ export default function AdminSidebar({
           </div>
         )}
 
-        {/* CHAPTER WORKSPACE CARD */}
+        {/* CURRENT USER ACCOUNT / LOGOUT CARD */}
         <div
-          className={`rounded-xl p-2 flex items-center justify-between gap-2 transition ${
+          className={`rounded-xl flex items-center gap-2 transition ${
             isDark
               ? "bg-[#18181b] border border-zinc-800/80 hover:border-zinc-700"
               : "bg-slate-50 border border-slate-200 hover:border-slate-300"
-          }`}
+          } ${isCollapsed ? "justify-center p-2" : "justify-between p-2"}`}
         >
           <div className="flex items-center gap-2.5 min-w-0">
-            <div className="size-8 rounded-lg bg-blue-600 text-white flex items-center justify-center font-bold text-sm shrink-0 shadow-xs">
-              <GDGLogoMark className="w-4 h-4" />
-            </div>
+            {/* User Avatar */}
+            {user?.photoURL ? (
+              <img
+                src={user.photoURL}
+                alt={userName}
+                className="size-8 rounded-full object-cover border border-zinc-700/60 shrink-0"
+              />
+            ) : (
+              <div
+                className={`size-8 rounded-full flex items-center justify-center font-bold text-xs shrink-0 ${
+                  isDark ? "bg-zinc-800 text-slate-200" : "bg-slate-200 text-slate-800"
+                }`}
+              >
+                {userInitial}
+              </div>
+            )}
 
             {!isCollapsed && (
               <div className="min-w-0">
-                <p className="text-xs font-bold truncate leading-tight">
-                  GDG AJCE
+                <p className="text-xs font-bold truncate leading-tight text-slate-900 dark:text-white">
+                  {userName}
                 </p>
                 <p className="text-[10px] text-zinc-400 font-mono truncate">
-                  dsc@amaljyothi.ac.in
+                  {user?.email || "Chapter Admin"}
                 </p>
               </div>
             )}
           </div>
 
-          {!isCollapsed && (
+          {!isCollapsed ? (
             <button
               type="button"
               onClick={() => logOut()}
               title="Sign out of console"
-              className={`p-1 rounded-lg transition cursor-pointer ${
+              className={`p-1.5 rounded-lg transition cursor-pointer ${
                 isDark
                   ? "text-zinc-400 hover:text-rose-400 hover:bg-zinc-800"
                   : "text-slate-400 hover:text-rose-600 hover:bg-slate-200"
+              }`}
+            >
+              <LogOut className="w-3.5 h-3.5" />
+            </button>
+          ) : (
+            <button
+              type="button"
+              onClick={() => logOut()}
+              title={`Sign out (${userName})`}
+              className={`hidden ${
+                isDark ? "text-zinc-400 hover:text-rose-400" : "text-slate-400 hover:text-rose-600"
               }`}
             >
               <LogOut className="w-3.5 h-3.5" />

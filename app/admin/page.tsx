@@ -590,7 +590,6 @@ export default function AdminPage() {
           subtitle={TAB_METADATA[activeTab].subtitle}
           activeTab={activeTab}
           theme={adminTheme}
-          onToggleTheme={toggleAdminTheme}
         />
 
         {/* 2-COLUMN LAYOUT: SIDEBAR (LEFT) + ACTIVE TAB CONTENT (RIGHT) */}
@@ -677,6 +676,7 @@ export default function AdminPage() {
                       setIsCreateEventOpen(true);
                     }}
                     adminName={adminName}
+                    theme={adminTheme}
                   />
                 )}
 
