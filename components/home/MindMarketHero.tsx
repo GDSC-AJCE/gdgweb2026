@@ -4,8 +4,15 @@ import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { Sparkles, ArrowRight } from "lucide-react";
+import dynamic from "next/dynamic";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
+import mascotData from "@/public/animations/gdg-mascot.json";
+
+// Dynamic import with SSR disabled for optimal hydration and client-side canvas/svg rendering
+const Lottie = dynamic(() => import("lottie-react").then((mod) => mod.Lottie as any), {
+  ssr: false,
+}) as React.ComponentType<any>;
 
 // =============================================================================
 // GOOGLE LABS ORGANIC SHAPES & KINETIC PILLS (Exact Match to Footer Physics Suite)
@@ -285,29 +292,19 @@ function InteractiveMascotVideo() {
         <Sparkles className="w-3 h-3 text-[#F59E0B]" />
       </motion.button>
 
-      {/* 2D Animated Mascot Video with Robust Poster & Fallback */}
+      {/* 2D Animated Mascot Lottie Animation with Interactive Hover & Tap */}
       <motion.div
         onClick={cycleGreeting}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.96 }}
-        className="relative w-[150px] sm:w-[195px] md:w-[230px] lg:w-[260px] aspect-square cursor-pointer anim-float-2"
+        className="relative w-[150px] sm:w-[195px] md:w-[230px] lg:w-[260px] aspect-square cursor-pointer anim-float-2 filter drop-shadow-[0_8px_16px_rgba(15,23,42,0.12)]"
       >
-        <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          poster="/gdg-mascot.png"
-          className="w-full h-full object-contain pointer-events-none select-none"
-        >
-          <source src="/mascot.webm" type="video/webm; codecs=vp9" />
-          <source src="/mascot.webm" type="video/webm" />
-          <img
-            src="/gdg-mascot.png"
-            alt="GDG AJCE Mascot"
-            className="w-full h-full object-contain pointer-events-none select-none"
-          />
-        </video>
+        <Lottie
+          src={mascotData}
+          loop={true}
+          autoplay={true}
+          style={{ width: "100%", height: "100%" }}
+        />
       </motion.div>
     </div>
   );
