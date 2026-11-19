@@ -77,7 +77,7 @@
 - **Section Title**: `Newsletter`
 - **Graphic Asset**: `assets/img/news.png`
 - **Body Copy**:
-  > "Welcome to our newsletter for tech enthusiasts! Delve into the ever-evolving realm of computer science, where we unravel the latest trends and breakthroughs. Stay ahead with valuable insights into emerging technologies, ensuring you're primed for the future. Whether you're a seasoned coder or just starting out, our curated content has something for everyone. Join us on this exciting journey at the forefront of technology!"
+  > "Welcome to our student tech newsletter. We cover computer science tutorials, Google developer tools, and campus project highlights. Whether writing your first script or deploying full-stack apps, you will find practical tips, project walkthroughs, and upcoming workshop schedules."
 - **Action CTA**:
   - Button text: `Read More`
   - URL: `newsletter.html`

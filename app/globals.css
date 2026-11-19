@@ -1,8 +1,11 @@
 @import "tailwindcss";
+@import "../styles/theme.css";
+@import "../styles/typography.css";
 
 @custom-variant dark (&:where([data-admin-theme=dark], [data-admin-theme=dark] *));
 
 @theme inline {
+  /* Shadcn & Semantic Design Tokens */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -22,15 +25,47 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
+
+  /* GDG Warm Paper & Brand Palette Tokens */
+  --color-cream-paper: var(--cream-paper);
+  --color-pure-white: var(--pure-white);
+  --color-sandstone: var(--sandstone);
+  --color-ink-black: var(--ink-black);
+  --color-stone-gray: var(--stone-gray);
+  --color-hairline-mist: var(--hairline-mist);
+  --color-border-warm: var(--border-warm);
+
+  /* Chromatic & Google Labs Accents */
+  --color-fresh-grass: var(--fresh-grass);
+  --color-coral-pop: var(--coral-pop);
+  --color-sky-pop: var(--sky-pop);
+  --color-sunshine-pop: var(--sunshine-pop);
+  --color-google-blue: var(--google-blue);
+  --color-google-green: var(--google-green);
+  --color-google-red: var(--google-red);
+  --color-google-yellow: var(--google-yellow);
+  --color-periwinkle: var(--periwinkle);
+  --color-pink-scallop: var(--pink-scallop);
+  --color-lime-clover: var(--lime-clover);
+
+  /* Typography */
   --font-sans: var(--font-inter), system-ui, sans-serif;
   --font-inter: var(--font-inter), system-ui, sans-serif;
   --font-mono: var(--font-mono), monospace;
-  --radius-sm: 10px;
-  --radius-md: 16px;
-  --radius-lg: 20px;
-  --radius-xl: 28px;
-  --radius-2xl: 36px;
-  --radius-full: 50px;
+
+  /* Radii Scale */
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+  --radius-card: var(--radius-card);
+  --radius-bento: var(--radius-bento);
+  --radius-hero: var(--radius-hero);
+  --radius-full: var(--radius-full);
+  --radius-pill: var(--radius-full);
+
+  /* Spacing */
+  --spacing-section: 136px;
+  --spacing-hero: 216px;
 }
 
 :root {
@@ -38,29 +73,58 @@
      GDG ON CAMPUS AJCE — WARM PAPER DESIGN SYSTEM (design.md & AGENTS.md)
      Single Source of Truth: Warm Cream Paper canvas with pure white elevated surfaces
      ========================================================================== */
-  --color-cream-paper: #f5f1e4;
-  --color-pure-white: #ffffff;
-  --color-sandstone: #e0dbce;
-  --color-ink-black: #2c2e2a;
-  --color-stone-gray: #80827f;
-  --color-hairline-mist: #d5d5d4;
-  --color-border-warm: #e5e1d5;
-  --color-pure-ink: #000000;
+  --cream-paper: #f5f1e4;
+  --pure-white: #ffffff;
+  --sandstone: #e0dbce;
+  --ink-black: #2c2e2a;
+  --stone-gray: #80827f;
+  --hairline-mist: #d5d5d4;
+  --border-warm: #e5e1d5;
 
   /* Chromatic Accents & Google Labs Palette */
-  --color-fresh-grass: #8ed462;
-  --color-coral-pop: #ff705d;
-  --color-sky-pop: #2ba0ff;
-  --color-sunshine-pop: #ffd600;
-  --color-google-blue: #4285F4;
-  --color-google-green: #34A853;
-  --color-google-red: #EA4335;
-  --color-google-yellow: #FBBC04;
-  --color-periwinkle: #95a8fe;
-  --color-pink-scallop: #ffaff6;
-  --color-lime-clover: #c6eb3d;
+  --fresh-grass: #8ed462;
+  --coral-pop: #ff705d;
+  --sky-pop: #2ba0ff;
+  --sunshine-pop: #ffd600;
+  --google-blue: #4285F4;
+  --google-green: #34A853;
+  --google-red: #EA4335;
+  --google-yellow: #FBBC04;
+  --periwinkle: #95a8fe;
+  --pink-scallop: #ffaff6;
+  --lime-clover: #c6eb3d;
 
-  /* UI PRIMITIVES THEME TOKENS */
+  /* Backward Compatibility Aliases */
+  --color-cream-paper: var(--cream-paper);
+  --color-pure-white: var(--pure-white);
+  --color-sandstone: var(--sandstone);
+  --color-ink-black: var(--ink-black);
+  --color-stone-gray: var(--stone-gray);
+  --color-hairline-mist: var(--hairline-mist);
+  --color-border-warm: var(--border-warm);
+  --color-fresh-grass: var(--fresh-grass);
+  --color-coral-pop: var(--coral-pop);
+  --color-sky-pop: var(--sky-pop);
+  --color-sunshine-pop: var(--sunshine-pop);
+  --color-google-blue: var(--google-blue);
+  --color-google-green: var(--google-green);
+  --color-google-red: var(--google-red);
+  --color-google-yellow: var(--google-yellow);
+  --color-periwinkle: var(--periwinkle);
+  --color-pink-scallop: var(--pink-scallop);
+  --color-lime-clover: var(--lime-clover);
+
+  /* Corner Radii Hierarchy */
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 20px;
+  --radius-card: 28px;
+  --radius-bento: 36px;
+  --radius-hero: 44px;
+  --radius-full: 50px;
+  --radius: 1.5rem;
+
+  /* Semantic UI Tokens (Public Website & Admin Light Mode) */
   --background: #f5f1e4;
   --foreground: #2c2e2a;
   --card: #ffffff;
@@ -80,7 +144,6 @@
   --border: #d5d5d4;
   --input: #d5d5d4;
   --ring: #2ba0ff;
-  --radius: 1.5rem;
 
   /* Typography Scale */
   --text-body-sm: 15px;
@@ -104,20 +167,6 @@
   --leading-display-lg: 0.95;
   --tracking-display-lg: -8.64px;
 
-  /* Spacing */
-  --spacing-4: 4px;
-  --spacing-20: 20px;
-  --spacing-60: 60px;
-  --spacing-136: 136px;
-  --spacing-216: 216px;
-
-  /* Border Radii Hierarchy */
-  --radius-lg: 16px;
-  --radius-2xl: 28px;
-  --radius-bento: 36px;
-  --radius-full: 50px;
-  --radius-full-2: 63.75px;
-
   /* Signature Animation Easing Curves */
   --ease-mindmarket: cubic-bezier(.38, .005, .215, 1);
   --ease-bounce: cubic-bezier(.17, .67, .3, 1.33);
@@ -126,13 +175,13 @@
 }
 
 body {
-  background-color: #f5f1e4;
-  color: #2c2e2a;
+  background-color: var(--background);
+  color: var(--foreground);
   font-family: var(--font-inter), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   overflow-x: hidden;
 }
 
-/* INTER DISPLAY TYPOGRAPHY (Inter at Extreme Scale) */
+/* INTER DISPLAY TYPOGRAPHY */
 .font-display-hero {
   font-family: var(--font-inter), sans-serif;
   font-weight: 900;
@@ -149,15 +198,15 @@ body {
 
 /* Hairline border utilities */
 .border-hairline {
-  border: 1px solid #d5d5d4;
+  border: 1px solid var(--hairline-mist);
 }
 
 .border-warm {
-  border: 1px solid #e5e1d5;
+  border: 1px solid var(--border-warm);
 }
 
 .border-ink {
-  border: 1px solid #2c2e2a;
+  border: 1px solid var(--ink-black);
 }
 
 /* Custom Minimal Scrollbar on Cream */
@@ -167,21 +216,21 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #f5f1e4;
+  background: var(--background);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #e0dbce;
+  background: var(--muted);
   border-radius: 50px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #80827f;
+  background: var(--muted-foreground);
 }
 
 /* Form fields */
 input, textarea, select {
-  color: #2c2e2a;
+  color: var(--foreground);
 }
 
 input:focus, textarea:focus, select:focus {
@@ -211,11 +260,11 @@ html.lenis, html.lenis body {
 
 /* Interactive Easing Classes */
 .transition-mindmarket {
-  transition-timing-function: cubic-bezier(.38, .005, .215, 1);
+  transition-timing-function: var(--ease-mindmarket);
 }
 
 .transition-bounce {
-  transition-timing-function: cubic-bezier(.17, .67, .3, 1.33);
+  transition-timing-function: var(--ease-bounce);
 }
 
 /* Button Dot Expand Affordance on Hover (design.md) */
@@ -253,7 +302,6 @@ html.lenis, html.lenis body {
 
 /* ==========================================================================
    HARDWARE-ACCELERATED COMPOSITOR FLOAT ANIMATIONS
-   Zero JS main thread overhead, executes purely on GPU compositor.
    ========================================================================== */
 @keyframes hero-float-1 {
   0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg); }
@@ -330,13 +378,33 @@ html.lenis, html.lenis body {
    ========================================================================== */
 [data-admin-theme="dark"] {
   color-scheme: dark;
+  --background: #0f172a;
+  --foreground: #f8fafc;
+  --card: #1e293b;
+  --card-foreground: #f8fafc;
+  --popover: #1e293b;
+  --popover-foreground: #f8fafc;
+  --primary: #f8fafc;
+  --primary-foreground: #0f172a;
+  --secondary: #334155;
+  --secondary-foreground: #f8fafc;
+  --muted: #334155;
+  --muted-foreground: #94a3b8;
+  --accent: #334155;
+  --accent-foreground: #f8fafc;
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+  --border: #334155;
+  --input: #334155;
+  --ring: #38bdf8;
 }
 
+/* Backward-compatible legacy class overrides for legacy admin views */
 [data-admin-theme="dark"] aside,
 [data-admin-theme="dark"] header:not(.keep-bg),
 [data-admin-theme="dark"] .bg-white {
-  background-color: #0f172a !important;
-  color: #f8fafc;
+  background-color: var(--card) !important;
+  color: var(--foreground);
 }
 
 [data-admin-theme="dark"] .bg-slate-50,
@@ -344,7 +412,7 @@ html.lenis, html.lenis body {
 [data-admin-theme="dark"] .bg-\[\#f8fafc\],
 [data-admin-theme="dark"] .bg-\[\#f5f1e4\],
 [data-admin-theme="dark"] .bg-zinc-50 {
-  background-color: #1e293b !important;
+  background-color: var(--muted) !important;
 }
 
 [data-admin-theme="dark"] .border-slate-200,
@@ -355,7 +423,7 @@ html.lenis, html.lenis body {
 [data-admin-theme="dark"] .border-slate-100,
 [data-admin-theme="dark"] .border-\[\#d5d5d4\],
 [data-admin-theme="dark"] .border-\[\#e5e5e5\] {
-  border-color: #1e293b !important;
+  border-color: var(--border) !important;
 }
 
 [data-admin-theme="dark"] .text-slate-900,
@@ -366,7 +434,7 @@ html.lenis, html.lenis body {
 [data-admin-theme="dark"] h2,
 [data-admin-theme="dark"] h3,
 [data-admin-theme="dark"] h4 {
-  color: #f8fafc !important;
+  color: var(--foreground) !important;
 }
 
 [data-admin-theme="dark"] .text-slate-700,
@@ -378,15 +446,15 @@ html.lenis, html.lenis body {
 [data-admin-theme="dark"] .text-slate-400,
 [data-admin-theme="dark"] .text-\[\#80827f\],
 [data-admin-theme="dark"] .text-\[\#9a9c98\] {
-  color: #94a3b8 !important;
+  color: var(--muted-foreground) !important;
 }
 
 [data-admin-theme="dark"] input,
 [data-admin-theme="dark"] textarea,
 [data-admin-theme="dark"] select {
-  background-color: #1e293b !important;
-  color: #f8fafc !important;
-  border-color: #334155 !important;
+  background-color: var(--card) !important;
+  color: var(--foreground) !important;
+  border-color: var(--border) !important;
 }
 
 [data-admin-theme="dark"] input::placeholder,
@@ -405,4 +473,99 @@ html.lenis, html.lenis body {
 [data-admin-theme="dark"] .shadow-sm,
 [data-admin-theme="dark"] .shadow-md {
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -2px rgba(0, 0, 0, 0.4) !important;
+}
+
+/* ---------------------------------------------------------------------------
+ * BoardUI Table Primitive (.bui-table)
+ * --------------------------------------------------------------------------- */
+.bui-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: start;
+}
+
+.bui-table th {
+  padding: 0.625rem 0.75rem;
+  text-align: start;
+  vertical-align: middle;
+  font-size: var(--text-body-medium, 0.875rem);
+  color: var(--color-text-tertiary);
+  white-space: nowrap;
+  outline: none;
+  background-color: var(--color-background-secondary-default);
+  border-top: 1px solid var(--color-separator-border);
+  border-bottom: 1px solid var(--color-separator-border);
+  transition: padding 200ms ease, font-size 200ms ease;
+}
+
+.bui-table td {
+  padding: 0.625rem 0.75rem;
+  vertical-align: middle;
+  font-size: var(--text-body-medium, 0.875rem);
+  color: var(--color-text-primary);
+  outline: none;
+  transition: padding 200ms ease, font-size 200ms ease;
+}
+
+.bui-table tbody tr:not(:last-child) {
+  border-bottom: 1px solid var(--color-separator-border);
+}
+
+.bui-table tbody tr {
+  transition: background-color 150ms ease;
+}
+
+.bui-table tbody tr[data-focus-visible] {
+  outline: 2px solid var(--color-border-focus-ring);
+}
+
+.bui-table.bui-table-sm th,
+.bui-table.bui-table-sm td {
+  padding: 0.375rem 0.625rem;
+  font-size: var(--text-body-2-medium, 0.8125rem);
+}
+
+/* BoardUI Skeleton */
+.bui-skeleton {
+  --bui-skeleton-sheen: rgb(255 255 255 / 0.75);
+  overflow: hidden;
+  isolation: isolate;
+  container-type: inline-size;
+}
+
+[data-admin-theme="dark"] .bui-skeleton,
+.dark .bui-skeleton {
+  --bui-skeleton-sheen: rgb(255 255 255 / 0.075);
+}
+
+.bui-skeleton::after {
+  content: "";
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  width: 600px;
+  background: linear-gradient(
+    90deg in oklab,
+    transparent 0%,
+    color-mix(in oklab, var(--bui-skeleton-sheen) 3%, transparent) 10%,
+    color-mix(in oklab, var(--bui-skeleton-sheen) 12%, transparent) 20%,
+    color-mix(in oklab, var(--bui-skeleton-sheen) 30%, transparent) 29%,
+    color-mix(in oklab, var(--bui-skeleton-sheen) 55%, transparent) 37%,
+    color-mix(in oklab, var(--bui-skeleton-sheen) 80%, transparent) 44%,
+    var(--bui-skeleton-sheen) 50%,
+    color-mix(in oklab, var(--bui-skeleton-sheen) 80%, transparent) 56%,
+    color-mix(in oklab, var(--bui-skeleton-sheen) 55%, transparent) 63%,
+    color-mix(in oklab, var(--bui-skeleton-sheen) 30%, transparent) 71%,
+    color-mix(in oklab, var(--bui-skeleton-sheen) 12%, transparent) 80%,
+    color-mix(in oklab, var(--bui-skeleton-sheen) 3%, transparent) 90%,
+    transparent 100%
+  );
+  translate: -600px 0;
+  animation: bui-skeleton-sheen 1.9s linear infinite;
+  will-change: translate;
+}
+
+@keyframes bui-skeleton-sheen {
+  from { translate: -600px 0; }
+  to { translate: max(100cqw, 640px) 0; }
 }

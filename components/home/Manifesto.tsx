@@ -38,7 +38,7 @@ export default function Manifesto() {
                     </div>
                     <h3 className="text-base font-bold text-white tracking-tight">Peer-Led Guilds</h3>
                     <p className="text-xs text-gray-400 leading-relaxed">
-                        No hierarchical barriers. Junior developers pair program with experienced leads, fostering authentic mentorship and reciprocal learning.
+                        No hierarchical barriers. Junior developers pair program with experienced leads, learning together and shipping real code.
                     </p>
                 </div>
 
@@ -48,7 +48,7 @@ export default function Manifesto() {
                     </div>
                     <h3 className="text-base font-bold text-white tracking-tight">Industry Alignment</h3>
                     <p className="text-xs text-gray-400 leading-relaxed">
-                        From Google Cloud certifications to Solution Challenge hackathons, our initiatives match the real standards of modern software engineering.
+                        Through Google Cloud certifications and Solution Challenge hackathons, our initiatives match the real standards of modern software engineering.
                     </p>
                 </div>
             </div>

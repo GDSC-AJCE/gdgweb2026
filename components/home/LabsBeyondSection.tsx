@@ -72,7 +72,7 @@ export default function LabsBeyondSection() {
           </div>
 
           <h2 className="text-3xl sm:text-5xl md:text-6xl font-normal text-[#2c2e2a] tracking-tight leading-[1.15] font-sans">
-            Connect with passionate developers, build real-world software, and accelerate your engineering journey. Learn Google technologies, share knowledge, and turn bold ideas{" "}
+            Connect with active developers, build real-world software, and expand your engineering skills. Learn Google technologies, share knowledge, and turn bold ideas{" "}
             <span className="text-[#8ed462] font-semibold">into impactful applications.</span>
           </h2>
         </div>
@@ -80,7 +80,7 @@ export default function LabsBeyondSection() {
         {/* LIFE AT GDG HEADER */}
         <div className="text-center max-w-2xl mx-auto space-y-3 pt-6">
           <h3 className="text-2xl sm:text-3xl font-bold text-[#2c2e2a] tracking-tight">
-            Life at GDG: The Developer Journey
+            Life at GDG: How We Build
           </h3>
           <p className="text-xs sm:text-sm text-[#80827f] leading-relaxed">
             At GDG, every developer begins with curiosity: How can we build technology that makes a difference? Through hands-on study jams, codelabs, and hackathons, our community brings ideas to life. Members grow from beginners to project leads, open-source contributors, and industry engineers.

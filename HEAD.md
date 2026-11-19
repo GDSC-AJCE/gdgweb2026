@@ -11,7 +11,7 @@
 ## 📌 1. Chapter Identity & Purpose
 
 - **Organization:** GDG AJCE (Google Developer Groups on Campus — Amal Jyothi College of Engineering).
-- **Mission:** Empowering students with cutting-edge Google technologies (AI/ML, Gemini, Cloud, Android, Web, and Open Source).
+- **Mission:** Student developer community building with Google technologies (AI/ML, Gemini, Cloud, Android, Web, and Open Source).
 - **Audience:** Engineering students, developers, designers, and tech enthusiasts across all departments and skill levels.
 - **Platform Objective:** A comprehensive, feature-rich web platform serving as the community hub for discovering programs, registering for events, tracking developer progress, managing attendance, and obtaining verifiable credentials.
 
@@ -21,7 +21,7 @@
 
 > [!IMPORTANT]
 > **NO THIRD-PARTY VENDORS OR PLATFORMS**  
-> Everything must be connected to Google. All database, authentication, storage, and hosting needs must leverage **Google Firebase** and services provided for free within the Google ecosystem.
+> Everything must be connected to Google. All database, authentication, storage, and hosting needs must use **Google Firebase** and services provided for free within the Google ecosystem.
 
 ### Google Tech Stack & Free-Tier Services:
 1. **Authentication:**
@@ -144,7 +144,7 @@
 | **2026-09-12** | Initialized memory brief for chapter (Amal Jyothi College of Engineering). | ✅ Active | Core identity, Google-only invariant, and registration engine requirements established. |
 | **2026-09-12** | Enforced 100% Google ecosystem requirement: Google Firebase & Google free tools exclusively. No 3rd-party services. | ✅ Active | Auth (Google SSO/Firebase Auth), Database (Firestore), Storage (Firebase Storage). |
 | **2026-09-12** | Integrated program registration engine with backend Firestore data flow. | ✅ Active | Students register directly through the site with verification. |
-| **2026-09-13** | **Official Name & Mission Update:** Locked official chapter designation as **GDG AJCE** (Google Developer Groups on Campus — Amal Jyothi College of Engineering) and mission: *Empowering students with cutting-edge Google technologies (AI/ML, Gemini, Cloud, Android, Web, and Open Source).* | ✅ Active | Cleaned phonetic STT text. Official identity locked. |
+| **2026-09-13** | **Official Name & Mission Update:** Locked official chapter designation as **GDG AJCE** (Google Developer Groups on Campus — Amal Jyothi College of Engineering) and mission: *Student developer community building with Google technologies (AI/ML, Gemini, Cloud, Android, Web, and Open Source).* | ✅ Active | Cleaned phonetic STT text. Official identity locked. |
 | **2026-09-13** | **Required Sections & Features Update:** Added Competitions & Seasonal/Monthly Leaderboards (`/leaderboard` + landing page preview), segregated pages for Ongoing Events (`/programs/ongoing`) and Conducted Events (`/programs/past`), plus locked specifications for Landing Page, About (`/about`), and Contact (`/contact`). | ✅ Active | Documented in Head MD as permanent platform requirement. |
 | **2026-09-13** | **Figma Design System Integration (Node 4002:18):** Established official GDG AJCE Design System v1.0 tokens, authentic GDG Logo Mark, standardized UI components (`Button`, `Badge`, `Alert`, `Input`, `GDGFooterAdapter`), and dedicated interactive portal (`/design-system`). | ✅ Active | Derived directly from official Figma handoff file. |
 | **2026-09-13** | **Light & Dark Theme Engine:** Implemented comprehensive dual-theme system (Google Material Surface Gray / Pure White light mode and Google Developer dark mode) with `ThemeContext`, anti-flicker pre-render script, animated `ThemeToggle` button in desktop & mobile navbars, and `localStorage` persistence. | ✅ Active | Fully integrated and active across all pages. |

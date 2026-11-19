@@ -36,7 +36,7 @@ const CAROUSEL_EXPERIMENTS = [
     color: "#34A853",
     linkText: "Explore Track →",
     image: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=600&auto=format&fit=crop&q=80",
-    quoteSnippet: "State management, Material 3 expressiveness, and seamless platform interop.",
+    quoteSnippet: "State management, Material 3 expressiveness, and cross-platform interop.",
     category: "Mobile & Web"
   },
   {

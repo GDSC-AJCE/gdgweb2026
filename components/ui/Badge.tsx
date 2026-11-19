@@ -3,39 +3,38 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const badgeVariants = cva(
-  "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-[#2c2e2a] focus:ring-offset-2 select-none",
+  "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 select-none",
   {
     variants: {
       variant: {
         default:
-          "border-transparent bg-[#2c2e2a] text-white hover:bg-[#2c2e2a]/90 shadow-xs",
+          "border-transparent bg-primary text-primary-foreground hover:bg-primary/90 shadow-xs",
         grass:
-          "border-transparent bg-[#8ed462] text-[#2c2e2a] hover:bg-[#8ed462]/90",
+          "border-transparent bg-fresh-grass text-ink-black hover:brightness-95",
         coral:
-          "border-[#ff705d]/30 bg-[#ff705d]/15 text-[#ff705d] font-bold",
+          "border-coral-pop/30 bg-coral-pop/15 text-coral-pop font-bold",
         sky:
-          "border-[#2ba0ff]/30 bg-[#2ba0ff]/15 text-[#2ba0ff] font-bold",
+          "border-sky-pop/30 bg-sky-pop/15 text-sky-pop font-bold",
         yellow:
-          "border-[#ffd600]/40 bg-[#ffd600]/15 text-[#80827f] font-bold",
+          "border-sunshine-pop/40 bg-sunshine-pop/15 text-stone-gray font-bold",
         success:
-          "border-[#8ed462]/30 bg-[#8ed462]/15 text-[#5a9e30] font-bold",
+          "border-fresh-grass/30 bg-fresh-grass/15 text-fresh-grass font-bold",
         warning:
-          "border-[#ffd600]/40 bg-[#ffd600]/15 text-[#80827f] font-bold",
+          "border-sunshine-pop/40 bg-sunshine-pop/15 text-sunshine-pop font-bold",
         destructive:
-          "border-transparent bg-[#ff705d] text-white hover:bg-[#ff705d]/90 shadow-xs",
+          "border-transparent bg-destructive text-destructive-foreground hover:brightness-95 shadow-xs",
         outline:
-          "border-[#d5d5d4] bg-transparent text-[#2c2e2a] hover:bg-[#f5f1e4]",
+          "border-border bg-transparent text-foreground hover:bg-muted",
         secondary:
-          "border-[#e5e1d5] bg-[#f5f1e4] text-[#80827f] hover:bg-[#e0dbce]",
-        // Legacy aliases kept for backward compat
+          "border-border bg-muted text-muted-foreground hover:brightness-95",
         google:
-          "border-transparent bg-[#2ba0ff] text-white shadow-xs",
+          "border-transparent bg-google-blue text-white shadow-xs",
         blue:
-          "border-[#2ba0ff]/30 bg-[#2ba0ff]/15 text-[#2ba0ff] font-bold",
+          "border-sky-pop/30 bg-sky-pop/15 text-sky-pop font-bold",
         green:
-          "border-[#8ed462]/30 bg-[#8ed462]/15 text-[#5a9e30] font-bold",
+          "border-fresh-grass/30 bg-fresh-grass/15 text-fresh-grass font-bold",
         neutral:
-          "border-[#e5e1d5] bg-white text-[#2c2e2a]",
+          "border-border bg-card text-foreground",
       },
     },
     defaultVariants: {

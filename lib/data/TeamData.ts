@@ -53,7 +53,7 @@ export const EXECOM_CATEGORIES: ExecomCategory[] = [
     id: "web",
     name: "Web Architecture Team",
     shortName: "Web Team",
-    description: "Next.js, modern React paradigms, distributed systems, and cutting-edge web architecture.",
+    description: "Next.js, modern React paradigms, distributed systems, and scalable web architecture.",
     accent: "#34A853",
     badge: "WEB LAB",
   },

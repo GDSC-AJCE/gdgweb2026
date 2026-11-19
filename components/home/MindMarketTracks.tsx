@@ -54,7 +54,7 @@ export default function MindMarketTracks() {
                 </div>
 
                 <h3 className="text-[24px] sm:text-[27px] font-medium text-[#2c2e2a] leading-[1.25] tracking-[-0.03em]">
-                  Building real software alongside peers completely transformed my engineering journey.
+                  Building real software alongside peers gave me the confidence to ship production code.
                 </h3>
               </div>
 

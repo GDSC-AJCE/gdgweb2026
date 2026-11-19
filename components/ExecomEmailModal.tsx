@@ -65,7 +65,7 @@ We are thrilled to welcome you to the **Google Developer Groups (GDG) AJCE Execu
 2. **Community Workspace** – You will be invited to our core management channels and drive.
 3. **Initiatives & Projects** – Prepare to organize flagship developer events, workshops, and study jams!
 
-We were truly impressed by your passion, technical foundation, and drive to foster student innovation.
+We were impressed by your passion, technical foundation, and drive to build student projects.
 
 Welcome aboard! Let's build and inspire together. 🚀
 

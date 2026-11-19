@@ -792,7 +792,7 @@ export default function LeaderboardTable() {
               Climb the Season Leaderboard
             </h3>
             <p className="text-xs text-[#80827f] max-w-xl leading-relaxed">
-              Test how completing Codelabs, Hackathons, and Google Cloud Study Jams will elevate your standing.
+              Test how completing Codelabs, Hackathons, and Google Cloud Study Jams will increase your score.
             </p>
           </div>
 

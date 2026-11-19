@@ -1,129 +1,181 @@
 /**
- * GDG AJCE Unified Design System Tokens v2.0
- * Aligned with the Warm Storybook & Google Labs Editorial System
- * Source of Truth: design.md
+ * GDG AJCE Unified Design System Tokens & Token Store v3.0
+ * Authority: Single Source of Truth for GDG on Campus AJCE Design Language
+ * Standard: Warm Storybook on Cream Paper + Google Labs Organic Geometry
+ * Specifications: design.md & AGENTS.md
  */
 
 export const DESIGN_TOKENS = {
-  version: "2.0.0",
+  version: "3.0.0",
   name: "GDG AJCE Unified Design System",
   paradigm: "Warm Storybook on Cream Paper + Google Labs Organic Geometry",
   college: "Amal Jyothi College of Engineering",
 
-  // Core Surfaces & Neutral Canvas Tokens
+  // Core Surface & Canvas Tokens (Warm Paper Ecosystem)
   surfaces: {
     creamPaper: {
-      name: "Modern Canvas",
-      hex: "#f8fafc",
-      token: "--color-cream-paper",
-      role: "Global base canvas background for all pages",
+      name: "Cream Paper",
+      hex: "#f5f1e4",
+      token: "--cream-paper",
+      role: "Global base canvas background for all public pages",
     },
     pureWhite: {
       name: "Pure White",
       hex: "#ffffff",
-      token: "--color-pure-white",
+      token: "--pure-white",
       role: "Elevated bento cards, floating nav background, storybook clouds",
     },
     sandstone: {
-      name: "Slate Mist",
-      hex: "#f1f5f9",
-      token: "--color-sandstone",
-      role: "Recessed surface, subtle inset containers, hover states",
+      name: "Sandstone",
+      hex: "#e0dbce",
+      token: "--sandstone",
+      role: "Recessed surface, subtle inset containers, hover states, muted chips",
     },
     inkBlack: {
-      name: "Slate Ink",
-      hex: "#0f172a",
-      token: "--color-ink-black",
+      name: "Ink Black",
+      hex: "#2c2e2a",
+      token: "--ink-black",
       role: "Primary typography, dark buttons, dominant hairline borders",
     },
     stoneGray: {
-      name: "Slate Gray",
-      hex: "#64748b",
-      token: "--color-stone-gray",
-      role: "Secondary body text, metadata, deactivated tab labels",
+      name: "Stone Gray",
+      hex: "#80827f",
+      token: "--stone-gray",
+      role: "Secondary body text, metadata, deactivated tab labels, subtitles",
     },
     hairlineMist: {
       name: "Hairline Mist",
-      hex: "#e2e8f0",
-      token: "--color-hairline-mist",
+      hex: "#d5d5d4",
+      token: "--hairline-mist",
       role: "Hairline borders, nav dividers, card outlines",
     },
     borderWarm: {
-      name: "Slate Border",
-      hex: "#e2e8f0",
-      token: "--color-border-warm",
+      name: "Warm Sand Border",
+      hex: "#e5e1d5",
+      token: "--border-warm",
       role: "Bento card boundary borders on pure white cards",
     },
   },
 
-  // Chromatic Accents & Google Labs Geometries
+  // Chromatic Accents & Google Labs Palette
   accents: {
     freshGrass: {
-      name: "Vibrant Emerald",
-      hex: "#10B981",
-      token: "--color-fresh-grass",
-      role: "Primary brand structural accent, active badges, green cards",
+      name: "Fresh Grass Green",
+      hex: "#8ed462",
+      hover: "#7ec452",
+      token: "--fresh-grass",
+      role: "Primary brand structural accent, active badges, green card accents",
     },
     coralPop: {
-      name: "Vibrant Red",
-      hex: "#EF4444",
-      token: "--color-coral-pop",
-      role: "Primary CTA button fill, quote marks, flame accents",
+      name: "Coral Pop",
+      hex: "#ff705d",
+      hover: "#ee6350",
+      token: "--coral-pop",
+      role: "Primary CTA button fill, quote marks, flame accents, urgent alerts",
     },
     skyPop: {
-      name: "Electric Blue",
-      hex: "#2563EB",
-      token: "--color-sky-pop",
-      role: "Action dot indicator, cloud technology highlights",
+      name: "Sky Pop",
+      hex: "#2ba0ff",
+      hover: "#208be6",
+      token: "--sky-pop",
+      role: "Action dot indicator, links, cloud technology highlights",
     },
     sunshinePop: {
-      name: "Luminous Amber",
-      hex: "#F59E0B",
-      token: "--color-sunshine-pop",
+      name: "Sunshine Pop",
+      hex: "#ffd600",
+      hover: "#f5cc00",
+      token: "--sunshine-pop",
       role: "Yellow feature cards, daisy petals, smiling sticker badges",
     },
     periwinkle: {
       name: "Periwinkle",
       hex: "#95a8fe",
-      token: "--color-periwinkle",
+      token: "--periwinkle",
       role: "Google Labs organic dome shape",
     },
     pinkScallop: {
       name: "Pink Scallop",
       hex: "#ffaff6",
-      token: "--color-pink-scallop",
+      token: "--pink-scallop",
       role: "Google Labs organic cloud shape",
     },
     limeClover: {
       name: "Lime Clover",
       hex: "#c6eb3d",
-      token: "--color-lime-clover",
+      token: "--lime-clover",
       role: "Google Labs organic 4-leaf clover shape",
     },
     googleBlue: {
       name: "Google Blue",
       hex: "#4285F4",
-      token: "--color-google-blue",
+      token: "--google-blue",
       role: "GDG code token chevron, technology badge",
     },
     googleGreen: {
       name: "Google Green",
       hex: "#34A853",
-      token: "--color-google-green",
+      token: "--google-green",
       role: "Live indicator dot, verified checkmarks",
     },
     googleYellow: {
       name: "Google Yellow",
       hex: "#FBBC04",
-      token: "--color-google-yellow",
+      token: "--google-yellow",
       role: "Trophy icons, podium badges, daisy flower core",
     },
     googleRed: {
       name: "Google Red",
       hex: "#EA4335",
-      token: "--color-google-red",
+      token: "--google-red",
       role: "Urgent announcements, deadlines",
     },
+  },
+
+  // Admin Dark Theme Tokens
+  adminDark: {
+    background: "#0f172a",
+    foreground: "#f8fafc",
+    card: "#1e293b",
+    cardForeground: "#f8fafc",
+    popover: "#1e293b",
+    popoverForeground: "#f8fafc",
+    muted: "#334155",
+    mutedForeground: "#94a3b8",
+    border: "#334155",
+    input: "#1e293b",
+    ring: "#38bdf8",
+  },
+
+  // Spacing Scale
+  spacing: {
+    0: "0px",
+    1: "4px",
+    2: "8px",
+    3: "12px",
+    4: "16px",
+    5: "20px",
+    6: "24px",
+    7: "28px",
+    8: "32px",
+    10: "40px",
+    12: "48px",
+    16: "64px",
+    20: "80px",
+    24: "96px",
+    32: "128px",
+    section: "136px",
+    hero: "216px",
+  },
+
+  // Corner Radii Hierarchy
+  radii: {
+    sm: "10px",
+    md: "16px",
+    lg: "20px",
+    card: "28px",
+    bento: "36px",
+    hero: "44px",
+    full: "50px",
   },
 
   // Typography Scale (Inter Single-Family System)
@@ -140,7 +192,6 @@ export const DESIGN_TOKENS = {
         lineHeight: "0.82",
         tracking: "-0.065em",
         usage: "Home page hero acronym (GDG AJCE)",
-        sample: "GDG AJCE",
       },
       {
         token: "Headline Display (L)",
@@ -149,7 +200,6 @@ export const DESIGN_TOKENS = {
         lineHeight: "1.05",
         tracking: "-0.04em",
         usage: "Major section titles",
-        sample: "Innovation Pathways",
       },
       {
         token: "Section Title (M)",
@@ -158,7 +208,6 @@ export const DESIGN_TOKENS = {
         lineHeight: "1.15",
         tracking: "-0.035em",
         usage: "Subsection titles, page taglines",
-        sample: "Where Student Innovators Build Real Software",
       },
       {
         token: "Card Heading (S)",
@@ -167,7 +216,6 @@ export const DESIGN_TOKENS = {
         lineHeight: "1.25",
         tracking: "-0.03em",
         usage: "Bento cards, feature blocks",
-        sample: "Changing my thoughts has allowed me to change my life.",
       },
       {
         token: "Subheading",
@@ -176,7 +224,6 @@ export const DESIGN_TOKENS = {
         lineHeight: "1.4",
         tracking: "-0.02em",
         usage: "Lead paragraphs, introductory context",
-        sample: "Thoughtfully organized learning tracks with production-grade curriculum.",
       },
       {
         token: "Body Standard",
@@ -185,7 +232,6 @@ export const DESIGN_TOKENS = {
         lineHeight: "1.5",
         tracking: "normal",
         usage: "Prose, card descriptions, form fields",
-        sample: "Zero prerequisites to join. Whether you wrote your first line of code yesterday or contribute to Linux kernels, GDG welcomes you.",
       },
       {
         token: "Body Small",
@@ -194,7 +240,6 @@ export const DESIGN_TOKENS = {
         lineHeight: "1.5",
         tracking: "normal",
         usage: "Metadata, timestamps, card footnotes",
-        sample: "Davide, GDG AJCE • On using meditation & code",
       },
       {
         token: "Micro / Chip",
@@ -203,18 +248,16 @@ export const DESIGN_TOKENS = {
         lineHeight: "1.2",
         tracking: "0.02em",
         usage: "Pill badges, category chips, rank numbers",
-        sample: "Codelabs Over Lectures",
       },
     ],
   },
 
-  // Corner Radii Tokens
-  radii: {
-    full: "50px (rounded-full)",
-    bento: "36px - 50px (rounded-[36px] / rounded-[50px])",
-    card: "28px - 32px (rounded-[28px])",
-    medium: "16px - 20px (rounded-2xl)",
-    small: "10px - 12px (rounded-xl)",
+  // Easing Curves
+  animation: {
+    mindmarket: "cubic-bezier(.38, .005, .215, 1)",
+    bounce: "cubic-bezier(.17, .67, .3, 1.33)",
+    wave: "cubic-bezier(.455, .03, .515, .955)",
+    snappy: "cubic-bezier(.5, 0, 0, 1)",
   },
 
   // Chapter Coordinates
@@ -232,3 +275,5 @@ export const DESIGN_TOKENS = {
     },
   },
 } as const;
+
+export type DesignTokens = typeof DESIGN_TOKENS;

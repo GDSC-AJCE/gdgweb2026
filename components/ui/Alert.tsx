@@ -2,6 +2,7 @@
 
 import React from "react";
 import { CheckCircle2, AlertCircle, AlertTriangle, Info } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export interface AlertProps {
   title: string;
@@ -19,27 +20,27 @@ export default function Alert({
   const configs = {
     info: {
       icon: Info,
-      border: "border-[#4285F4]/30",
-      bg: "bg-[#4285F4]/10",
-      text: "text-[#4285F4]",
+      border: "border-sky-pop/30",
+      bg: "bg-sky-pop/10",
+      text: "text-sky-pop",
     },
     success: {
       icon: CheckCircle2,
-      border: "border-[#34A853]/30",
-      bg: "bg-[#34A853]/10",
-      text: "text-[#34A853]",
+      border: "border-fresh-grass/30",
+      bg: "bg-fresh-grass/10",
+      text: "text-fresh-grass",
     },
     warning: {
       icon: AlertTriangle,
-      border: "border-[#FBBC04]/30",
-      bg: "bg-[#FBBC04]/10",
-      text: "text-[#FBBC04]",
+      border: "border-sunshine-pop/40",
+      bg: "bg-sunshine-pop/10",
+      text: "text-sunshine-pop",
     },
     error: {
       icon: AlertCircle,
-      border: "border-[#EA4335]/30",
-      bg: "bg-[#EA4335]/10",
-      text: "text-[#EA4335]",
+      border: "border-coral-pop/30",
+      bg: "bg-coral-pop/10",
+      text: "text-coral-pop",
     },
   };
 
@@ -48,14 +49,19 @@ export default function Alert({
 
   return (
     <div
-      className={`flex items-start gap-3.5 p-4 rounded-2xl border ${config.border} ${config.bg} ${className}`}
+      className={cn(
+        "flex items-start gap-3.5 p-4 rounded-2xl border transition-colors",
+        config.border,
+        config.bg,
+        className
+      )}
     >
-      <div className={`p-1 rounded-lg ${config.text} shrink-0`}>
+      <div className={cn("p-1 rounded-lg shrink-0", config.text)}>
         <Icon className="w-5 h-5" />
       </div>
       <div className="space-y-0.5">
-        <h4 className="text-sm font-bold text-[#2c2e2a] tracking-tight">{title}</h4>
-        <p className="text-xs text-[#80827f] leading-relaxed">{description}</p>
+        <h4 className="text-sm font-bold text-foreground tracking-tight">{title}</h4>
+        <p className="text-xs text-muted-foreground leading-relaxed">{description}</p>
       </div>
     </div>
   );

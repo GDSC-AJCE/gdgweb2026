@@ -18,11 +18,16 @@ import {
 import { useAuth } from "@/context/AuthContext";
 import StatusDot from "@/components/ui/StatusDot";
 import Chip from "@/components/ui/Chip";
+import {
+  NotificationCenter,
+  type NotificationCenterItem,
+} from "@/components/application/notification-center/notification-center";
 
 interface AdminHeaderProps {
   title: string;
   subtitle: string;
   activeTab?: string;
+  onNavigateTab?: (tab: any) => void;
   onOpenSearch?: () => void;
   theme?: "light" | "dark";
   onToggleTheme?: () => void;
@@ -32,6 +37,7 @@ export default function AdminHeader({
   title,
   subtitle,
   activeTab,
+  onNavigateTab,
   onOpenSearch,
   theme = "light",
   onToggleTheme,
@@ -51,25 +57,76 @@ export default function AdminHeader({
 
   const userName = user?.displayName || user?.email?.split("@")[0] || "Chapter Lead";
 
-  // Notifications state with dismiss capability
-  const [notifications, setNotifications] = useState([
+  // BoardUI Notification Center items
+  const [notifications, setNotifications] = useState<NotificationCenterItem[]>([
     {
-      id: "1",
+      id: "notif-1",
+      category: "mentions",
+      group: "Recruitment",
       title: "New Execom Candidate",
-      description: "Candidate applied for Executive Committee",
-      time: "10m ago",
+      description: "Alen Philip submitted an application for Web Tech Lead.",
+      timestamp: "10m ago",
       unread: true,
+      avatar: {
+        initials: "AP",
+        alt: "Alen Philip",
+      },
+      actions: [
+        { id: "review-app", label: "Review Candidate", variant: "primary" },
+      ],
     },
     {
-      id: "2",
-      title: "Workshop RSVPs Active",
-      description: "Upcoming lab session reached 92% capacity",
-      time: "1h ago",
+      id: "notif-2",
+      category: "activity",
+      group: "Events & RSVPs",
+      title: "Workshop RSVP Limit Reached",
+      description: "Gemini 2.5 Live Agent Lab reached 92% capacity (46/50 RSVPs).",
+      timestamp: "1h ago",
       unread: true,
+      status: "information",
+      actions: [
+        { id: "view-events", label: "View Rosters", variant: "secondary" },
+      ],
+    },
+    {
+      id: "notif-3",
+      category: "system",
+      group: "Credential Engine",
+      title: "Certificate Verification",
+      description: "Cloud Study Jam badge credentials batch generated & ready to issue.",
+      timestamp: "3h ago",
+      unread: false,
+      status: "success",
+      actions: [
+        { id: "view-certs", label: "Issue Credentials", variant: "secondary" },
+      ],
+    },
+    {
+      id: "notif-4",
+      category: "system",
+      group: "System Health",
+      title: "Firestore Telemetry Synced",
+      description: "Automated integrity check passed for active event rosters and audit logs.",
+      timestamp: "1d ago",
+      unread: false,
+      status: "neutral",
     },
   ]);
 
   const unreadCount = notifications.filter((n) => n.unread).length;
+
+  const handleNotificationAction = (notificationId: string, actionId: string) => {
+    if (actionId === "review-app") {
+      onNavigateTab?.("applications");
+      setShowNotifications(false);
+    } else if (actionId === "view-events") {
+      onNavigateTab?.("events");
+      setShowNotifications(false);
+    } else if (actionId === "view-certs") {
+      onNavigateTab?.("certificates");
+      setShowNotifications(false);
+    }
+  };
 
   return (
     <header className="w-full flex flex-col md:flex-row md:items-center justify-between gap-4 select-none pb-2 font-sans">
@@ -90,9 +147,91 @@ export default function AdminHeader({
             <span>{userName}</span>
           </span>
           <ChevronRight className="w-3 h-3 text-slate-400 dark:text-zinc-600" />
-          <span className="text-blue-500 font-semibold capitalize font-mono text-[11px]">
-            {activeTab || "Overview"}
-          </span>
+          {activeTab === "certificates" ? (
+            <div className="flex items-center gap-1.5">
+              <button
+                type="button"
+                onClick={() => onNavigateTab?.("events")}
+                className="text-slate-500 dark:text-zinc-400 hover:text-blue-500 dark:hover:text-blue-400 transition cursor-pointer font-mono text-[11px]"
+              >
+                Events
+              </button>
+              <ChevronRight className="w-3 h-3 text-slate-400 dark:text-zinc-600" />
+              <span className="text-blue-500 font-semibold font-mono text-[11px]">
+                Certificates
+              </span>
+            </div>
+          ) : activeTab === "calendar" ? (
+            <div className="flex items-center gap-1.5">
+              <button
+                type="button"
+                onClick={() => onNavigateTab?.("events")}
+                className="text-slate-500 dark:text-zinc-400 hover:text-blue-500 dark:hover:text-blue-400 transition cursor-pointer font-mono text-[11px]"
+              >
+                Events
+              </button>
+              <ChevronRight className="w-3 h-3 text-slate-400 dark:text-zinc-600" />
+              <span className="text-blue-500 font-semibold font-mono text-[11px]">
+                Calendar
+              </span>
+            </div>
+          ) : activeTab === "events" ? (
+            <div className="flex items-center gap-1.5">
+              <span className="text-slate-500 dark:text-zinc-400 font-mono text-[11px]">
+                Events
+              </span>
+              <ChevronRight className="w-3 h-3 text-slate-400 dark:text-zinc-600" />
+              <span className="text-blue-500 font-semibold font-mono text-[11px]">
+                Manage Events
+              </span>
+            </div>
+          ) : activeTab === "funds" ? (
+            <div className="flex items-center gap-1.5">
+              <button
+                type="button"
+                onClick={() => onNavigateTab?.("overview")}
+                className="text-slate-500 dark:text-zinc-400 hover:text-blue-500 dark:hover:text-blue-400 transition cursor-pointer font-mono text-[11px]"
+              >
+                Home
+              </button>
+              <ChevronRight className="w-3 h-3 text-slate-400 dark:text-zinc-600" />
+              <span className="text-blue-500 font-semibold font-mono text-[11px]">
+                Finance
+              </span>
+            </div>
+          ) : activeTab === "analytics" ? (
+            <div className="flex items-center gap-1.5">
+              <button
+                type="button"
+                onClick={() => onNavigateTab?.("overview")}
+                className="text-slate-500 dark:text-zinc-400 hover:text-blue-500 dark:hover:text-blue-400 transition cursor-pointer font-mono text-[11px]"
+              >
+                Home
+              </button>
+              <ChevronRight className="w-3 h-3 text-slate-400 dark:text-zinc-600" />
+              <span className="text-blue-500 font-semibold font-mono text-[11px]">
+                Analytics
+              </span>
+            </div>
+          ) : activeTab === "applications" ? (
+            <div className="flex items-center gap-1.5">
+              <button
+                type="button"
+                onClick={() => onNavigateTab?.("execom")}
+                className="text-slate-500 dark:text-zinc-400 hover:text-blue-500 dark:hover:text-blue-400 transition cursor-pointer font-mono text-[11px]"
+              >
+                Execom
+              </button>
+              <ChevronRight className="w-3 h-3 text-slate-400 dark:text-zinc-600" />
+              <span className="text-blue-500 font-semibold font-mono text-[11px]">
+                Applications
+              </span>
+            </div>
+          ) : (
+            <span className="text-blue-500 font-semibold capitalize font-mono text-[11px]">
+              {activeTab === "overview" ? "Home" : activeTab || "Overview"}
+            </span>
+          )}
         </nav>
 
         <div className="flex flex-wrap items-center gap-3">
@@ -151,44 +290,21 @@ export default function AdminHeader({
           </button>
 
           {showNotifications && (
-            <div className="absolute right-0 top-11 z-30 w-72 rounded-2xl bg-white dark:bg-[#18181b] border border-slate-200 dark:border-zinc-800 shadow-xl p-3 text-xs space-y-2">
-              <div className="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-zinc-800">
-                <span className="font-bold text-slate-900 dark:text-white">Notifications</span>
-                {unreadCount > 0 ? (
-                  <button
-                    type="button"
-                    onClick={() => setNotifications((prev) => prev.map((n) => ({ ...n, unread: false })))}
-                    className="text-[10px] font-mono text-blue-500 font-bold hover:underline cursor-pointer"
-                  >
-                    Mark all read
-                  </button>
-                ) : (
-                  <span className="text-[10px] font-mono text-slate-400">All read</span>
-                )}
+            <>
+              {/* Backdrop overlay to dismiss dropdown when clicked outside */}
+              <div
+                className="fixed inset-0 z-40 bg-black/10 dark:bg-black/30 backdrop-blur-[1px]"
+                onClick={() => setShowNotifications(false)}
+              />
+              <div className="absolute right-0 top-11 z-50 w-[380px] sm:w-[430px] max-w-[92vw] shadow-2xl rounded-3xl animate-in fade-in-0 zoom-in-95 duration-150">
+                <NotificationCenter
+                  title="Notifications"
+                  notifications={notifications}
+                  onAction={handleNotificationAction}
+                  className="w-full bg-white dark:bg-[#18181b] border border-slate-200/90 dark:border-zinc-800 shadow-2xl"
+                />
               </div>
-              {notifications.length > 0 ? (
-                <div className="space-y-1.5 max-h-56 overflow-y-auto">
-                  {notifications.map((n) => (
-                    <div
-                      key={n.id}
-                      className={`p-2 rounded-lg text-[11px] transition ${
-                        n.unread
-                          ? "bg-blue-50/70 dark:bg-blue-500/10 border border-blue-100 dark:border-blue-500/20"
-                          : "bg-slate-50 dark:bg-zinc-800/60"
-                      }`}
-                    >
-                      <div className="flex items-center justify-between">
-                        <p className="font-bold text-slate-800 dark:text-slate-200">{n.title}</p>
-                        <span className="text-[10px] font-mono text-slate-400">{n.time}</span>
-                      </div>
-                      <p className="text-slate-500 dark:text-zinc-400 mt-0.5">{n.description}</p>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <p className="py-6 text-center text-slate-400 text-xs">No notifications</p>
-              )}
-            </div>
+            </>
           )}
         </div>
 

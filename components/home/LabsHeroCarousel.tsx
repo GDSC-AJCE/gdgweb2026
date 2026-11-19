@@ -9,7 +9,7 @@ const EXPERIMENTS = [
   {
     id: "gdg-devfest",
     title: "GDG AJCE Tech Summit",
-    tagline: "Official Google Developer Groups on Campus chapter at Amal Jyothi College of Engineering empowering student developers to build the next frontier.",
+    tagline: "Official Google Developer Groups on Campus chapter at Amal Jyothi College of Engineering for student developers building with Google technologies.",
     cta: "Explore Programs",
     link: "/programs",
     cards: [
@@ -34,7 +34,7 @@ const EXPERIMENTS = [
       { tag: "VISION API", title: "Real-time spatial video and OCR inference pipelines", image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=600&auto=format&fit=crop&q=80" },
       { tag: "ON-DEVICE", title: "Edge AI inferencing with Gemini Nano on Android smartphones", image: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=600&auto=format&fit=crop&q=80" },
       { tag: "DEV TOOLS", title: "Chrome DevTools, Firebase App Hosting & Turbopack optimization", image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=600&auto=format&fit=crop&q=80" },
-      { tag: "WORKSHOPS", title: "Deep dive codelabs with certified Google Developer Experts", image: "https://images.unsplash.com/photo-1531482615713-2afd69097998?w=600&auto=format&fit=crop&q=80" },
+      { tag: "WORKSHOPS", title: "Hands-on codelabs with certified Google Developer Experts", image: "https://images.unsplash.com/photo-1531482615713-2afd69097998?w=600&auto=format&fit=crop&q=80" },
       { tag: "KUBERNETES", title: "Microservice orchestration with GKE and Envoy ingress filters", image: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=600&auto=format&fit=crop&q=80" },
       { tag: "TENSORFLOW", title: "High-performance neural network research and JAX acceleration", image: "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=600&auto=format&fit=crop&q=80" },
       { tag: "SDG IMPACT", title: "Solution Challenge 2026: building for global impact", image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=600&auto=format&fit=crop&q=80" },

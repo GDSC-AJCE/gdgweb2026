@@ -1,6 +1,17 @@
 import React from "react";
+import { cn } from "@/lib/utils";
 
-export type ChipColor = "blue" | "green" | "yellow" | "red" | "purple" | "slate";
+export type ChipColor =
+  | "blue"
+  | "green"
+  | "yellow"
+  | "red"
+  | "purple"
+  | "slate"
+  | "grass"
+  | "coral"
+  | "sky"
+  | "sunshine";
 export type ChipVariant = "subtle" | "bold" | "outline";
 
 interface ChipProps extends React.HTMLAttributes<HTMLSpanElement> {
@@ -10,35 +21,55 @@ interface ChipProps extends React.HTMLAttributes<HTMLSpanElement> {
 }
 
 const COLOR_MAP: Record<ChipColor, Record<ChipVariant, string>> = {
+  grass: {
+    subtle: "bg-fresh-grass/15 text-ink-black border-fresh-grass/30",
+    bold: "bg-fresh-grass text-ink-black border-transparent",
+    outline: "bg-transparent text-fresh-grass border-fresh-grass/40",
+  },
+  coral: {
+    subtle: "bg-coral-pop/15 text-coral-pop border-coral-pop/30",
+    bold: "bg-coral-pop text-white border-transparent",
+    outline: "bg-transparent text-coral-pop border-coral-pop/40",
+  },
+  sky: {
+    subtle: "bg-sky-pop/15 text-sky-pop border-sky-pop/30",
+    bold: "bg-sky-pop text-white border-transparent",
+    outline: "bg-transparent text-sky-pop border-sky-pop/40",
+  },
+  sunshine: {
+    subtle: "bg-sunshine-pop/15 text-stone-gray border-sunshine-pop/40",
+    bold: "bg-sunshine-pop text-ink-black border-transparent",
+    outline: "bg-transparent text-sunshine-pop border-sunshine-pop/50",
+  },
   blue: {
-    subtle: "bg-blue-50 text-blue-700 border-blue-200/60",
-    bold: "bg-blue-600 text-white border-transparent",
-    outline: "bg-transparent text-blue-600 border-blue-300",
+    subtle: "bg-sky-pop/15 text-sky-pop border-sky-pop/30",
+    bold: "bg-sky-pop text-white border-transparent",
+    outline: "bg-transparent text-sky-pop border-sky-pop/40",
   },
   green: {
-    subtle: "bg-emerald-50 text-emerald-700 border-emerald-200/60",
-    bold: "bg-emerald-600 text-white border-transparent",
-    outline: "bg-transparent text-emerald-600 border-emerald-300",
+    subtle: "bg-fresh-grass/15 text-ink-black border-fresh-grass/30",
+    bold: "bg-fresh-grass text-ink-black border-transparent",
+    outline: "bg-transparent text-fresh-grass border-fresh-grass/40",
   },
   yellow: {
-    subtle: "bg-amber-50 text-amber-800 border-amber-200/60",
-    bold: "bg-amber-500 text-white border-transparent",
-    outline: "bg-transparent text-amber-700 border-amber-300",
+    subtle: "bg-sunshine-pop/15 text-stone-gray border-sunshine-pop/40",
+    bold: "bg-sunshine-pop text-ink-black border-transparent",
+    outline: "bg-transparent text-sunshine-pop border-sunshine-pop/50",
   },
   red: {
-    subtle: "bg-rose-50 text-rose-700 border-rose-200/60",
-    bold: "bg-rose-600 text-white border-transparent",
-    outline: "bg-transparent text-rose-600 border-rose-300",
+    subtle: "bg-coral-pop/15 text-coral-pop border-coral-pop/30",
+    bold: "bg-coral-pop text-white border-transparent",
+    outline: "bg-transparent text-coral-pop border-coral-pop/40",
   },
   purple: {
-    subtle: "bg-purple-50 text-purple-700 border-purple-200/60",
+    subtle: "bg-purple-500/15 text-purple-700 dark:text-purple-300 border-purple-300/40",
     bold: "bg-purple-600 text-white border-transparent",
     outline: "bg-transparent text-purple-600 border-purple-300",
   },
   slate: {
-    subtle: "bg-slate-100 text-slate-700 border-slate-200/80",
-    bold: "bg-slate-800 text-white border-transparent",
-    outline: "bg-transparent text-slate-700 border-slate-300",
+    subtle: "bg-muted text-muted-foreground border-border",
+    bold: "bg-primary text-primary-foreground border-transparent",
+    outline: "bg-transparent text-foreground border-border",
   },
 };
 
@@ -53,10 +84,16 @@ export default function Chip({
 
   return (
     <span
-      className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium border tracking-tight select-none ${styles} ${className}`}
+      className={cn(
+        "inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium border tracking-tight select-none transition-colors",
+        styles,
+        className
+      )}
       {...props}
     >
       {children}
     </span>
   );
 }
+
+export { Chip };

@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useTheme } from "@/context/ThemeContext";
 import { Sun, Moon } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { cn } from "@/lib/utils";
 
 interface ThemeToggleProps {
   className?: string;
@@ -33,7 +34,11 @@ export default function ThemeToggle({ className = "", size = "md" }: ThemeToggle
   if (!mounted) {
     return (
       <div
-        className={`${sizeClasses} rounded-[50px] bg-slate-100 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700/80 animate-pulse ${className}`}
+        className={cn(
+          sizeClasses,
+          "rounded-full bg-muted border border-border animate-pulse",
+          className
+        )}
       />
     );
   }
@@ -46,11 +51,12 @@ export default function ThemeToggle({ className = "", size = "md" }: ThemeToggle
       onClick={toggleTheme}
       aria-label={isDark ? "Switch to light theme" : "Switch to dark theme"}
       title={isDark ? "Switch to light theme" : "Switch to dark theme"}
-      className={`relative ${sizeClasses} rounded-[50px] flex items-center justify-center transition-all duration-300 cursor-pointer shadow-xs hover:shadow-md hover:scale-105 active:scale-95 border ${
-        isDark
-          ? "bg-[#18181b] text-amber-300 border-zinc-700 hover:bg-zinc-800 hover:border-amber-400/40 hover:text-amber-200"
-          : "bg-white text-slate-700 border-slate-200 hover:bg-slate-50 hover:border-slate-300 hover:text-[#0f172a]"
-      } ${className}`}
+      className={cn(
+        "relative rounded-full flex items-center justify-center transition-all duration-300 cursor-pointer shadow-xs hover:shadow-md hover:scale-105 active:scale-95 border border-border bg-card text-foreground hover:bg-muted",
+        sizeClasses,
+        isDark && "text-sunshine-pop",
+        className
+      )}
     >
       <AnimatePresence mode="wait" initial={false}>
         <motion.div
@@ -62,9 +68,9 @@ export default function ThemeToggle({ className = "", size = "md" }: ThemeToggle
           className="flex items-center justify-center"
         >
           {isDark ? (
-            <Sun className={`${iconSizes} stroke-[2.3]`} />
+            <Sun className={cn(iconSizes, "stroke-[2.3]")} />
           ) : (
-            <Moon className={`${iconSizes} stroke-[2.3]`} />
+            <Moon className={cn(iconSizes, "stroke-[2.3]")} />
           )}
         </motion.div>
       </AnimatePresence>

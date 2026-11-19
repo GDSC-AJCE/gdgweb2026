@@ -1,8 +1,10 @@
 # Gemini CLI Rules — GDG on Campus AJCE
 
-See [AGENTS.md](file:///d:/DEV/GDG/newwebsite/AGENTS.md) for master architecture, brand design system, and constraints.
+See [agents.agents.env](file:///d:/DEV/GDG/newwebsite/agents.agents.env) and [AGENTS.md](file:///d:/DEV/GDG/newwebsite/AGENTS.md) for master architecture, agent execution roles, and brand design system.
 
 ## Core Directives
+- **Orchestration & Subagents:** Main agent announces **"orchestrate"**; new tasks require dedicated subagent creation.
+- **Component Library Usage:** Admin panel must use `@/components/ui` for ALL elements; public sections must use component library for buttons, tables, text boxes, and pop-up boxes/dialogs. Ask user before creating missing components.
 - **100% Google Stack:** Firebase Auth, Cloud Firestore, Firebase Storage, and `@google/genai`. No third-party DB/Auth.
 - **Design System:** Warm Cream Paper `#f5f1e4`, Pure White `#ffffff` bento cards with 36px–50px radii, Inter typography, brand accents `#8ed462`, `#ff705d`, `#2ba0ff`, `#ffd600`.
 - **CodeRabbit Workflow:** Governed by `.coderabbit.yaml` with SkillSpector and pre-merge validation.

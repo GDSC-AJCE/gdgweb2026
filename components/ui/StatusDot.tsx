@@ -1,6 +1,15 @@
 import React from "react";
+import { cn } from "@/lib/utils";
 
-export type StatusDotColor = "green" | "yellow" | "red" | "blue" | "gray";
+export type StatusDotColor =
+  | "green"
+  | "yellow"
+  | "red"
+  | "blue"
+  | "gray"
+  | "grass"
+  | "coral"
+  | "sky";
 
 interface StatusDotProps extends React.HTMLAttributes<HTMLSpanElement> {
   color?: StatusDotColor;
@@ -8,30 +17,45 @@ interface StatusDotProps extends React.HTMLAttributes<HTMLSpanElement> {
 }
 
 const COLOR_CLASSES: Record<StatusDotColor, { halo: string; dot: string; pingColor: string }> = {
+  grass: {
+    halo: "bg-fresh-grass/20",
+    dot: "bg-fresh-grass",
+    pingColor: "bg-fresh-grass",
+  },
+  coral: {
+    halo: "bg-coral-pop/20",
+    dot: "bg-coral-pop",
+    pingColor: "bg-coral-pop",
+  },
+  sky: {
+    halo: "bg-sky-pop/20",
+    dot: "bg-sky-pop",
+    pingColor: "bg-sky-pop",
+  },
   green: {
-    halo: "bg-emerald-500/15",
-    dot: "bg-emerald-500",
-    pingColor: "bg-emerald-400",
+    halo: "bg-fresh-grass/20",
+    dot: "bg-fresh-grass",
+    pingColor: "bg-fresh-grass",
   },
   yellow: {
-    halo: "bg-amber-500/15",
-    dot: "bg-amber-500",
-    pingColor: "bg-amber-400",
+    halo: "bg-sunshine-pop/20",
+    dot: "bg-sunshine-pop",
+    pingColor: "bg-sunshine-pop",
   },
   red: {
-    halo: "bg-rose-500/15",
-    dot: "bg-rose-500",
-    pingColor: "bg-rose-400",
+    halo: "bg-coral-pop/20",
+    dot: "bg-coral-pop",
+    pingColor: "bg-coral-pop",
   },
   blue: {
-    halo: "bg-blue-500/15",
-    dot: "bg-blue-500",
-    pingColor: "bg-blue-400",
+    halo: "bg-sky-pop/20",
+    dot: "bg-sky-pop",
+    pingColor: "bg-sky-pop",
   },
   gray: {
-    halo: "bg-slate-500/15",
-    dot: "bg-slate-400",
-    pingColor: "bg-slate-400",
+    halo: "bg-muted-foreground/15",
+    dot: "bg-muted-foreground",
+    pingColor: "bg-muted-foreground",
   },
 };
 
@@ -45,16 +69,25 @@ export default function StatusDot({
 
   return (
     <span
-      className={`relative inline-flex items-center justify-center size-2.5 shrink-0 rounded-full ${c.halo} ${className}`}
+      className={cn(
+        "relative inline-flex items-center justify-center size-2.5 shrink-0 rounded-full",
+        c.halo,
+        className
+      )}
       aria-hidden="true"
       {...props}
     >
       {ping && (
         <span
-          className={`absolute inline-flex size-full rounded-full ${c.pingColor} opacity-75 animate-ping`}
+          className={cn(
+            "absolute inline-flex size-full rounded-full opacity-75 animate-ping",
+            c.pingColor
+          )}
         />
       )}
-      <span className={`size-1.5 rounded-full ${c.dot}`} />
+      <span className={cn("size-1.5 rounded-full", c.dot)} />
     </span>
   );
 }
+
+export { StatusDot };

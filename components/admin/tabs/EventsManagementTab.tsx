@@ -34,6 +34,7 @@ import { db } from "@/lib/firebase";
 import * as XLSX from "xlsx";
 import Link from "next/link";
 import CreativeEventPoster from "@/components/programs/CreativeEventPoster";
+import EventsDataTable from "../events/EventsDataTable";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { motion, AnimatePresence } from "framer-motion";
@@ -45,6 +46,8 @@ interface EventsManagementTabProps {
   onOpenEditModal: (event: any) => void;
   adminName?: string;
   theme?: "light" | "dark";
+  onNavigateTab?: (tab: any) => void;
+  initialViewMode?: "calendar" | "cards" | "table";
 }
 
 // Color palettes for event badges matching BoardUI reference image
@@ -327,10 +330,18 @@ export default function EventsManagementTab({
   onOpenEditModal,
   adminName = "Admin",
   theme = "light",
+  onNavigateTab,
+  initialViewMode = "calendar",
 }: EventsManagementTabProps) {
   const isDark = theme === "dark";
-  // View mode: month-grid (BoardUI reference) vs cards (detailed list)
-  const [viewMode, setViewMode] = useState<"calendar" | "cards">("calendar");
+  // View mode: calendar (Month Grid) vs cards (Visual Posters) vs table (BoardUI TanStack Data Table)
+  const [viewMode, setViewMode] = useState<"calendar" | "cards" | "table">(initialViewMode);
+
+  useEffect(() => {
+    if (initialViewMode) {
+      setViewMode(initialViewMode);
+    }
+  }, [initialViewMode]);
 
   // Filter & Search
   const [filter, setFilter] = useState<"all" | "upcoming" | "past">("all");
@@ -821,28 +832,17 @@ export default function EventsManagementTab({
               </button>
             </div>
 
-            {/* View Mode Toggle: Calendar vs Cards */}
+            {/* Sub-Tabs: Manage Events (Cards) | Data Table (List) | Calendar | Certificates */}
             <div className={`flex items-center p-1 rounded-xl border ${
               isDark ? "bg-zinc-900 border-zinc-800" : "bg-slate-100 border-slate-200"
             }`}>
               <button
-                onClick={() => setViewMode("calendar")}
-                className={`p-1.5 rounded-lg text-xs transition cursor-pointer ${
-                  viewMode === "calendar"
-                    ? isDark
-                      ? "bg-zinc-800 text-white shadow-xs"
-                      : "bg-white text-slate-900 shadow-xs border border-slate-200/60"
-                    : isDark
-                      ? "text-zinc-400 hover:text-zinc-200"
-                      : "text-slate-500 hover:text-slate-900"
-                }`}
-                title="Month Calendar Grid"
-              >
-                <Grid className="w-3.5 h-3.5" />
-              </button>
-              <button
-                onClick={() => setViewMode("cards")}
-                className={`p-1.5 rounded-lg text-xs transition cursor-pointer ${
+                type="button"
+                onClick={() => {
+                  setViewMode("cards");
+                  onNavigateTab?.("events");
+                }}
+                className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer ${
                   viewMode === "cards"
                     ? isDark
                       ? "bg-zinc-800 text-white shadow-xs"
@@ -851,10 +851,69 @@ export default function EventsManagementTab({
                       ? "text-zinc-400 hover:text-zinc-200"
                       : "text-slate-500 hover:text-slate-900"
                 }`}
-                title="Card List View"
+                title="Manage Events Cards & Posters"
+              >
+                <Grid className="w-3.5 h-3.5" />
+                <span>Cards</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setViewMode("table");
+                  onNavigateTab?.("events-list");
+                }}
+                className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer ${
+                  viewMode === "table"
+                    ? isDark
+                      ? "bg-zinc-800 text-white shadow-xs"
+                      : "bg-white text-slate-900 shadow-xs border border-slate-200/60"
+                    : isDark
+                      ? "text-zinc-400 hover:text-zinc-200"
+                      : "text-slate-500 hover:text-slate-900"
+                }`}
+                title="BoardUI TanStack Data Table"
               >
                 <List className="w-3.5 h-3.5" />
+                <span>Data Table</span>
               </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setViewMode("calendar");
+                  onNavigateTab?.("calendar");
+                }}
+                className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer ${
+                  viewMode === "calendar"
+                    ? isDark
+                      ? "bg-zinc-800 text-white shadow-xs"
+                      : "bg-white text-slate-900 shadow-xs border border-slate-200/60"
+                    : isDark
+                      ? "text-zinc-400 hover:text-zinc-200"
+                      : "text-slate-500 hover:text-slate-900"
+                }`}
+                title="Month Calendar Schedule"
+              >
+                <CalendarIcon className="w-3.5 h-3.5" />
+                <span>Calendar</span>
+              </button>
+
+              {onNavigateTab && (
+                <button
+                  type="button"
+                  onClick={() => onNavigateTab("certificates")}
+                  className={`hidden sm:flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer ${
+                    isDark
+                      ? "text-zinc-400 hover:text-zinc-200"
+                      : "text-slate-500 hover:text-slate-900"
+                  }`}
+                  title="Issue & Manage Certificates"
+                >
+                  <Award className="w-3.5 h-3.5 text-blue-500" />
+                  <span>Certificates</span>
+                </button>
+              )}
             </div>
 
             {/* + New Event Button (BoardUI Blue Accent) */}
@@ -1313,6 +1372,23 @@ export default function EventsManagementTab({
       )}
 
       {/* ======================================================== */}
+      {/* VIEW 3: BOARDUI TANSTACK DATA TABLE (TABLE / LIST VIEW)  */}
+      {/* ======================================================== */}
+      {viewMode === "table" && (
+        <EventsDataTable
+          events={events}
+          onOpenEditModal={onOpenEditModal}
+          onDeleteEvent={(id) => {
+            const ev = events.find((e) => e.id === id);
+            if (ev) handleDelete(ev);
+          }}
+          onExportAttendees={exportAttendees}
+          onNavigateTab={onNavigateTab}
+          theme={theme}
+        />
+      )}
+
+      {/* ======================================================== */}
       {/* MODAL 1: EVENT QUICK VIEW & ACTIONS (BOARDUI STYLE)      */}
       {/* ======================================================== */}
       <AnimatePresence>
@@ -1431,13 +1507,27 @@ export default function EventsManagementTab({
               <div className="space-y-2.5 pt-2">
                 {/* Core Event Operations: Certificates & Mailer */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1 border-t border-zinc-800/40">
-                  <Link
-                    href={`/core/events/${selectedEvent.id}?tab=certificates`}
-                    className="flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl bg-[#4285F4] hover:bg-[#3367d6] text-white text-xs font-semibold shadow-sm transition active:scale-95"
-                  >
-                    <Award className="w-4 h-4" />
-                    <span>Issue Certificates</span>
-                  </Link>
+                  {onNavigateTab ? (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setSelectedEvent(null);
+                        onNavigateTab("certificates");
+                      }}
+                      className="flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl bg-[#4285F4] hover:bg-[#3367d6] text-white text-xs font-semibold shadow-sm transition active:scale-95 cursor-pointer"
+                    >
+                      <Award className="w-4 h-4" />
+                      <span>Issue Certificates</span>
+                    </button>
+                  ) : (
+                    <Link
+                      href={`/core/events/${selectedEvent.id}?tab=certificates`}
+                      className="flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl bg-[#4285F4] hover:bg-[#3367d6] text-white text-xs font-semibold shadow-sm transition active:scale-95"
+                    >
+                      <Award className="w-4 h-4" />
+                      <span>Issue Certificates</span>
+                    </Link>
+                  )}
 
                   <Link
                     href={`/core/events/${selectedEvent.id}?tab=mail`}
@@ -1715,7 +1805,7 @@ export default function EventsManagementTab({
                       Google Calendar Integration
                     </h3>
                     <p className={`text-xs ${isDark ? "text-zinc-400" : "text-slate-500"}`}>
-                      Sync chapter events seamlessly with personal or Google
+                      Sync chapter events directly with personal or Google
                       Workspace calendars.
                     </p>
                   </div>

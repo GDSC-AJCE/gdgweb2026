@@ -27,6 +27,7 @@ import ApplicationsTab from "@/components/admin/tabs/ApplicationsTab";
 import FundsTab from "@/components/admin/tabs/FundsTab";
 import AuditLogsTab from "@/components/admin/tabs/AuditLogsTab";
 import MailStudioTab from "@/components/admin/tabs/MailStudioTab";
+import CertificatesTab from "@/components/admin/tabs/CertificatesTab";
 import WebsiteManagementTab from "@/components/admin/tabs/WebsiteManagementTab";
 import AddExecomMemberModal from "@/components/admin/modals/AddExecomMemberModal";
 import CreateEventModal from "@/components/core/CreateEventModal";
@@ -50,8 +51,20 @@ const TAB_METADATA: Record<AdminTab, { title: string; subtitle: string }> = {
     subtitle: "Manage the official student organizing leads displayed on the public showcase.",
   },
   events: {
-    title: "Events & Workshops",
-    subtitle: "Create, schedule, publish, and monitor attendee RSVPs for all community sessions.",
+    title: "Manage Events & Rosters",
+    subtitle: "Search, filter, inspect attendee registrations, export XLSX rosters, and manage event details.",
+  },
+  "events-list": {
+    title: "Events Data Table",
+    subtitle: "BoardUI TanStack table with multi-select, sorting, capacity bars, category filters, and XLSX roster export.",
+  },
+  calendar: {
+    title: "Events Calendar & Schedule",
+    subtitle: "Month-grid view of all chapter workshops, codelabs, hackathons, and lab meetings.",
+  },
+  certificates: {
+    title: "Event Certificates & Credentials",
+    subtitle: "Upload custom frames, auto-generate student certificates with unique QR codes, and dispatch via email.",
   },
   newsletter: {
     title: "Weekly Tech Newsletter",
@@ -89,7 +102,7 @@ export default function AdminPage() {
     if (typeof window !== "undefined") {
       const params = new URLSearchParams(window.location.search);
       const tabParam = params.get("tab") as AdminTab;
-      if (tabParam && ["overview", "analytics", "execom", "events", "newsletter", "mailer", "website", "users", "applications", "funds", "audit"].includes(tabParam)) {
+      if (tabParam && ["overview", "analytics", "execom", "events", "calendar", "certificates", "newsletter", "mailer", "website", "users", "applications", "funds", "audit"].includes(tabParam)) {
         return tabParam;
       }
     }
@@ -157,7 +170,7 @@ export default function AdminPage() {
         setIsDevPreview(true);
       }
       const tabParam = params.get("tab") as AdminTab;
-      if (tabParam && ["overview", "analytics", "execom", "events", "newsletter", "mailer", "website", "users", "applications", "funds", "audit"].includes(tabParam)) {
+      if (tabParam && ["overview", "analytics", "execom", "events", "certificates", "newsletter", "mailer", "website", "users", "applications", "funds", "audit"].includes(tabParam)) {
         setActiveTab(tabParam);
       }
     }
@@ -590,6 +603,7 @@ export default function AdminPage() {
           subtitle={TAB_METADATA[activeTab].subtitle}
           activeTab={activeTab}
           theme={adminTheme}
+          onNavigateTab={setActiveTab}
         />
 
         {/* 2-COLUMN LAYOUT: SIDEBAR (LEFT) + ACTIVE TAB CONTENT (RIGHT) */}
@@ -663,9 +677,16 @@ export default function AdminPage() {
                   />
                 )}
 
-                {activeTab === "events" && (
+                {(activeTab === "events" || activeTab === "events-list" || activeTab === "calendar") && (
                   <EventsManagementTab
                     events={events}
+                    initialViewMode={
+                      activeTab === "calendar"
+                        ? "calendar"
+                        : activeTab === "events-list"
+                        ? "table"
+                        : "cards"
+                    }
                     onRefresh={fetchEvents}
                     onOpenCreateModal={() => {
                       setEditingEvent(null);
@@ -675,6 +696,15 @@ export default function AdminPage() {
                       setEditingEvent(event);
                       setIsCreateEventOpen(true);
                     }}
+                    adminName={adminName}
+                    theme={adminTheme}
+                    onNavigateTab={setActiveTab}
+                  />
+                )}
+
+                {activeTab === "certificates" && (
+                  <CertificatesTab
+                    events={events}
                     adminName={adminName}
                     theme={adminTheme}
                   />

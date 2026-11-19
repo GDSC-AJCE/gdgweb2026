@@ -54,6 +54,8 @@ import StatusDot from "@/components/ui/StatusDot";
 import Chip from "@/components/ui/Chip";
 import Alert from "@/components/ui/Alert";
 import GDGLogoMark from "@/components/ui/GDGLogoMark";
+import { DataTableExample } from "@/components/application/data-table/data-table";
+import { TreeView, TreeViewItem } from "@/components/base/tree-view/tree-view";
 import {
   Sparkles,
   ArrowRight,
@@ -784,6 +786,50 @@ export default function DesignSystemPage() {
                   <p className="text-xs text-[#80827f] text-center">{r.role}</p>
                 </div>
               ))}
+            </div>
+          </Section>
+
+          {/* ── BOARDUI ADVANCED DATA TABLE ── */}
+          <Section
+            title="BoardUI Advanced Data Table"
+            description="TanStack-powered data table with sorting, multi-row selection, price/product filtering, density toggling, and pagination."
+          >
+            <div className="w-full overflow-hidden rounded-3xl border border-[#d5d5d4] p-6 bg-white shadow-xs">
+              <DataTableExample />
+            </div>
+          </Section>
+
+          {/* ── BOARDUI TREE VIEW ── */}
+          <Section
+            title="BoardUI Tree View"
+            description="Nested folders and structured navigation with expandable branches, selection, guide lines, and keyboard navigation."
+          >
+            <div className="w-full max-w-md overflow-hidden rounded-3xl border border-[#d5d5d4] p-5 bg-white shadow-xs">
+              <TreeView
+                aria-label="Project files tree"
+                defaultExpandedKeys={["src", "components"]}
+                defaultSelectedKeys={["components"]}
+                className="w-full border-0 bg-transparent p-0"
+              >
+                <TreeViewItem id="src" label="src">
+                  <TreeViewItem id="components" label="components">
+                    <TreeViewItem id="button" label="button.tsx" />
+                    <TreeViewItem id="input" label="input.tsx" />
+                    <TreeViewItem id="tree-view-item" label="tree-view.tsx" trailingContent="New" />
+                  </TreeViewItem>
+                  <TreeViewItem id="hooks" label="hooks">
+                    <TreeViewItem id="use-auth" label="use-auth.ts" />
+                    <TreeViewItem id="use-theme" label="use-theme.ts" />
+                  </TreeViewItem>
+                  <TreeViewItem id="page" label="page.tsx" />
+                </TreeViewItem>
+                <TreeViewItem id="public" label="public">
+                  <TreeViewItem id="logo" label="logo.svg" />
+                  <TreeViewItem id="favicon" label="favicon.ico" />
+                </TreeViewItem>
+                <TreeViewItem id="readme" label="README.md" trailingContent="Doc" />
+                <TreeViewItem id="package" label="package.json" />
+              </TreeView>
             </div>
           </Section>
 

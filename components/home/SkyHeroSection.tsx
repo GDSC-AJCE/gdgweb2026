@@ -95,7 +95,7 @@ export default function SkyHeroSection() {
           transition={{ duration: 0.7, delay: 0.2 }}
           className="mt-6 text-sm sm:text-base text-gray-700 max-w-xl mx-auto leading-relaxed font-normal"
         >
-          Empowering student developers to innovate, build real-world software, and master Google AI, Cloud, Android, and Open Source.
+          Student developers building production software and learning Google AI, Cloud, Android, and Open Source.
         </motion.p>
 
         {/* Dual Call to Action Buttons (M3 Buttons: rounded-xl) */}
@@ -181,7 +181,7 @@ export default function SkyHeroSection() {
                 Hands-on Codelabs
               </h4>
               <p className="text-xs sm:text-sm text-gray-600 leading-relaxed pt-1">
-                We believe coding should contribute to real-world capability. Dive deep into Gemini APIs, Firebase App Hosting, Flutter, and Google Cloud.
+                We believe coding should contribute to real-world capability. Build with Gemini APIs, Firebase App Hosting, Flutter, and Google Cloud.
               </p>
             </div>
             <div className="pt-4 mt-4 border-t border-[#DEDACB]/60 flex items-center gap-2 text-xs font-medium text-[#137333]">

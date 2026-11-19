@@ -1,8 +1,9 @@
 "use client";
 
 import React from "react";
-import { ShieldAlert, Lock, ArrowRight, ArrowLeft, KeyRound, Sparkles } from "lucide-react";
+import { ShieldAlert, Lock, ArrowRight, ArrowLeft, Sparkles } from "lucide-react";
 import { AdminTab } from "./AdminSidebar";
+import { Button } from "@/components/ui/Button";
 
 interface RestrictedAccessCardProps {
   tab: AdminTab;
@@ -52,75 +53,79 @@ export default function RestrictedAccessCard({
   };
 
   return (
-    <div className="p-8 sm:p-12 rounded-[32px] bg-white border border-slate-200 shadow-sm space-y-6 select-none max-w-2xl mx-auto my-6 text-center">
+    <div className="p-8 sm:p-12 rounded-bento bg-card border border-border shadow-xs space-y-6 select-none max-w-2xl mx-auto my-6 text-center text-card-foreground">
       {/* Icon Badge */}
-      <div className="relative w-16 h-16 rounded-full bg-red-50 border border-red-100 flex items-center justify-center mx-auto shadow-xs">
-        <ShieldAlert className="w-8 h-8 text-[#EF4444]" />
-        <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-[#0f172a] text-white flex items-center justify-center border-2 border-white">
-          <Lock className="w-3 h-3 text-[#F59E0B]" />
+      <div className="relative w-16 h-16 rounded-full bg-coral-pop/10 border border-coral-pop/20 flex items-center justify-center mx-auto shadow-xs">
+        <ShieldAlert className="w-8 h-8 text-coral-pop" />
+        <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-primary text-primary-foreground flex items-center justify-center border-2 border-card">
+          <Lock className="w-3 h-3 text-sunshine-pop" />
         </div>
       </div>
 
       {/* Title */}
       <div className="space-y-2">
-        <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#0f172a]">
+        <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
           {details.name} Access Restricted
         </h2>
-        <p className="text-sm text-slate-500 max-w-lg mx-auto leading-relaxed">
+        <p className="text-sm text-muted-foreground max-w-lg mx-auto leading-relaxed">
           {details.description}
         </p>
       </div>
 
       {/* Role Comparison Card */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-left p-4 rounded-[20px] bg-slate-50 border border-slate-200">
-        <div className="space-y-1 p-3 rounded-[16px] bg-white border border-slate-200">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-left p-4 rounded-2xl bg-muted border border-border">
+        <div className="space-y-1 p-3 rounded-xl bg-card border border-border">
           <div className="flex items-center gap-2">
-            <div className="w-2 h-2 rounded-full bg-[#10B981]" />
-            <span className="text-xs font-bold text-[#0f172a]">Your Role: Core Member</span>
+            <div className="w-2 h-2 rounded-full bg-fresh-grass" />
+            <span className="text-xs font-bold text-foreground">Your Role: Core Member</span>
           </div>
-          <p className="text-[11px] text-slate-500 leading-normal">
+          <p className="text-[11px] text-muted-foreground leading-normal">
             Access to Events, Execom Directory, and Applications Pipeline.
           </p>
         </div>
 
-        <div className="space-y-1 p-3 rounded-[16px] bg-white border border-slate-200">
+        <div className="space-y-1 p-3 rounded-xl bg-card border border-border">
           <div className="flex items-center gap-2">
-            <div className="w-2 h-2 rounded-full bg-[#EF4444]" />
-            <span className="text-xs font-bold text-[#0f172a]">Required: Super Admin</span>
+            <div className="w-2 h-2 rounded-full bg-coral-pop" />
+            <span className="text-xs font-bold text-foreground">Required: Super Admin</span>
           </div>
-          <p className="text-[11px] text-slate-500 leading-normal">
+          <p className="text-[11px] text-muted-foreground leading-normal">
             User permission delegation, Treasury ledger, and audit trail.
           </p>
         </div>
       </div>
 
       {/* Alternative suggestion */}
-      <p className="text-xs text-[#80827f]">
-        💡 <span className="font-semibold text-[#2c2e2a]">{details.coreAlternative}</span>
+      <p className="text-xs text-muted-foreground">
+        💡 <span className="font-semibold text-foreground">{details.coreAlternative}</span>
       </p>
 
       {/* Navigation Buttons */}
       <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
-        <button
+        <Button
+          variant="outline"
+          size="default"
           onClick={() => onNavigateTab("overview")}
-          className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-[50px] bg-white border border-[#d5d5d4] hover:border-[#2c2e2a] text-xs font-semibold text-[#2c2e2a] transition shadow-xs w-full sm:w-auto"
+          className="w-full sm:w-auto"
         >
-          <ArrowLeft className="w-3.5 h-3.5" />
+          <ArrowLeft className="w-3.5 h-3.5 mr-1" />
           <span>Return to Chapter Overview</span>
-        </button>
+        </Button>
 
-        <button
+        <Button
+          variant="default"
+          size="default"
+          actionDot
           onClick={() => onNavigateTab(details.alternativeTab)}
-          className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-[50px] bg-[#2c2e2a] hover:bg-[#141414] text-white text-xs font-semibold shadow-md transition active:scale-95 w-full sm:w-auto"
+          className="w-full sm:w-auto"
         >
           <span>Open {details.alternativeTab === "events" ? "Events & Workshops" : details.alternativeTab === "applications" ? "Applications" : "Dashboard"}</span>
-          <ArrowRight className="w-3.5 h-3.5 text-[#2ba0ff]" />
-        </button>
+        </Button>
       </div>
 
       {/* Testing mode prompt */}
-      <div className="pt-4 border-t border-[#f5f1e4] text-[11px] font-mono text-[#80827f] flex items-center justify-center gap-1.5">
-        <Sparkles className="w-3.5 h-3.5 text-[#2ba0ff]" />
+      <div className="pt-4 border-t border-border text-[11px] font-mono text-muted-foreground flex items-center justify-center gap-1.5">
+        <Sparkles className="w-3.5 h-3.5 text-sky-pop" />
         <span>Testing mode: Switch to <b>Chapter Admin</b> via the bottom-left dock to view this tab.</span>
       </div>
     </div>

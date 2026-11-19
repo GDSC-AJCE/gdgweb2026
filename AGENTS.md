@@ -2,14 +2,31 @@
 
 > **Authority:** Single Source of Truth for all Autonomous Agents, Reviewers, and Coding Assistants  
 > **Applies to:** Antigravity, CodeRabbit, Cursor, Claude Code, OpenAI Codex, GitHub Copilot  
-> **References:** [HEAD.md](file:///d:/DEV/GDG/newwebsite/HEAD.md) (Master System Brief), [design.md](file:///d:/DEV/GDG/newwebsite/design.md) (Design Tokens & Brand System)
+> **References:** [agents.agents.env](file:///d:/DEV/GDG/newwebsite/agents.agents.env) (Master Agent Rules & Env), [HEAD.md](file:///d:/DEV/GDG/newwebsite/HEAD.md) (Master System Brief), [design.md](file:///d:/DEV/GDG/newwebsite/design.md) (Design Tokens & Brand System)
+
+---
+
+## 🧭 0. Agent Orchestration, Subagent Delegation & Role Protocol
+
+All autonomous agents operating in this repository must comply with the execution roles defined in [agents.agents.env](file:///d:/DEV/GDG/newwebsite/agents.agents.env):
+
+1. **Main Agent Orchestrator ("orchestrate"):**
+   - The primary/main agent runs strictly as the **Orchestrator**.
+   - Upon execution, the main agent must declare: **`orchestrate`**.
+   - The main agent plans, breaks down work, supervises execution, verifies deliverables against guardrails, and aggregates output.
+   - The main agent must not perform monolithic execution of new tasks inline without delegation.
+
+2. **Mandatory Subagent Creation for New Tasks:**
+   - **Whenever a new task is assigned**, a dedicated **new subagent must be created** to accomplish that specific task.
+   - The subagent focuses entirely on executing the assigned work unit within repository boundaries.
+   - The main agent reviews the subagent's output, verifies invariants and design tokens, and integrates the results.
 
 ---
 
 ## 📌 1. Identity & Core Mission
 
 - **Organization:** Google Developer Groups (GDG) on Campus — Amal Jyothi College of Engineering (AJCE).
-- **Core Mission:** Empower students with Google technologies (AI/ML, Gemini, Cloud, Android, Web, and Open Source).
+- **Core Mission:** Support student developers building with Google technologies (AI/ML, Gemini, Cloud, Android, Web, and Open Source).
 - **System Architecture:** Next.js 16 (App Router), React 19, TypeScript strict mode, Tailwind CSS v4, Google Firebase suite, and Google Gen AI (`@google/genai`).
 
 ---
@@ -18,7 +35,7 @@
 
 > [!IMPORTANT]
 > **ABSOLUTE PROHIBITION OF NON-GOOGLE BACKENDS, THIRD-PARTY DATABASES & AUTH**  
-> All persistent storage, compute, authentication, and AI services must leverage Google Cloud and Firebase.
+> All persistent storage, compute, authentication, and AI services must use Google Cloud and Firebase.
 
 1. **Authentication:**
    - Exclusively **Google Identity / Firebase Authentication** (`lib/firebase.ts`).
@@ -61,11 +78,30 @@ All generated components, pages, and UI modifications must adhere strictly to th
 | **Radii: Bento Cards** | `36px` to `50px` | Feature cards, hero cards, leaderboard containers. |
 | **Radii: Nested Items** | `28px` | Inner rows, contributor badges, ticket cards. |
 
+### 🧩 Component Library Rules & Guidelines (`@/components/ui`)
+
+The project provides an extensive shadcn/ui-powered component library styled with Warm Paper tokens at `@/components/ui` (barrel-exported via `@/components/ui/index.ts`):
+
+1. **Admin Panel (`components/admin/`, `/admin`, `/core`, `/execom`):**
+   - **STRICT MANDATE:** Agents MUST use the provided component library for ALL UI elements instead of creating things from scratch.
+   - Text boxes (`Input`), text areas (`Textarea`), buttons (`Button`), tables (`Table`), modals/dialogs (`Dialog`, `AlertDialog`), dropdowns (`DropdownMenu`), select boxes (`Select`), switches (`Switch`), checkboxes (`Checkbox`), badges (`Badge`), tabs (`Tabs`), date-time pickers (`date-time-picker`), and sheets (`Sheet`) must all come from `@/components/ui`.
+   - Never write custom input fields, ad-hoc table structures, or raw unstyled interactive controls.
+
+2. **Public & Other Sections (Hero, Landing, Feature Cards, Tracks):**
+   - Creative canvas layouts, custom paper illustrations, and fluid containers are allowed.
+   - However, standard interactive UI primitives—specifically **buttons, pop-up boxes/dialogs, tables, and text boxes**—**MUST be used from the component library only**.
+
+3. **Mandatory User Permission Before Creating New Components:**
+   - If a required UI element or component is **NOT present** in the component library, agents are **STRICTLY FORBIDDEN from creating a new component from scratch unilaterally**.
+   - **Agents MUST FIRST ASK THE USER** whether it should be created or not:
+     > *"Component `<Name>` is not present in `@/components/ui`. Should this component be created, or would you like to use an existing component/alternative?"*
+   - Only upon explicit user confirmation may the new component be created and added to `@/components/ui`.
+
 ---
 
 ## 🕸️ 4. Graphify Knowledge Graph Constraints
 
-This repository maintains an active knowledge graph in `graphify-out/` (~1,429 nodes, ~2,031 edges).
+This repository maintains an active knowledge graph in `graphify-out/` (~1,899 nodes, ~2,954 edges, 196 communities) installed via `graphify install --platform antigravity`.
 
 - **Mandatory Pre-Investigation:** Before answering codebase architecture questions, refactoring modules, or modifying core routes, run:
   ```powershell
@@ -76,6 +112,16 @@ This repository maintains an active knowledge graph in `graphify-out/` (~1,429 n
   & (Get-Content graphify-out\.graphify_python) -m graphify path "<ModuleA>" "<ModuleB>"
 
   # Explain specific nodes and their neighbors
+  & (Get-Content graphify-out\.graphify_python) -m graphify explain "<NodeName>"
+  ```
+- **Post-Modification Synchronization:** After modifying or creating source files, agents must keep the knowledge graph current:
+  ```powershell
+  & (Get-Content graphify-out\.graphify_python) -m graphify update .
+  ```
+- **Installation Verification:**
+  ```powershell
+  & (Get-Content graphify-out\.graphify_python) -m graphify install --platform antigravity
+  ```
   & (Get-Content graphify-out\.graphify_python) -m graphify explain "<NodeName>"
   ```
 - **Post-Modification Synchronization:** After modifying or creating source files, agents must keep the knowledge graph current:

@@ -149,7 +149,7 @@ export default function AboutPage() {
                 <div className="p-8 sm:p-10 rounded-[36px] bg-[#ffffff] border border-[#e5e1d5] shadow-xs mb-16 max-w-4xl mx-auto text-center space-y-4">
                     <span className="text-xs font-mono text-[#2ba0ff] font-bold uppercase tracking-wider">Who We Are</span>
                     <p className="text-base sm:text-lg text-[#2c2e2a] leading-relaxed">
-                        We are a collection of tech enthusiasts interested in learning about technology, sharing expertise, and collaborating to create something to enhance the future. We hold talks, workshops, and other events on a variety of tech-related topics to help you learn more about technology. With weekly activities that are filled with knowledge that is typically not taught within the four walls of a classroom, we teach computer enthusiasts the fundamental learning skills they need to succeed.
+                        We are a community of student developers interested in learning technology, sharing expertise, and collaborating to build real-world software. We host talks, workshops, and study jams on Google developer technologies to help you build practical skills. Through weekly sessions covering tools not usually taught in college lectures, we help students gain hands-on engineering experience.
                     </p>
                     <div className="pt-2 flex flex-wrap justify-center gap-3">
                         <a
@@ -176,7 +176,7 @@ export default function AboutPage() {
                 <div className="mb-24">
                     <div className="text-center mb-10 space-y-2">
                         <h2 className="text-2xl sm:text-3xl font-medium text-[#2c2e2a] tracking-tight">Our Core Pillars</h2>
-                        <p className="text-sm text-[#80827f]">How we empower developers on campus at Amal Jyothi</p>
+                        <p className="text-sm text-[#80827f]">How student developers build and learn at Amal Jyothi</p>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <div className="p-7 sm:p-8 rounded-[36px] bg-[#ffffff] border border-[#e5e1d5] shadow-xs space-y-3">

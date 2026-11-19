@@ -9,6 +9,9 @@ import {
     X
 } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
+import { Button } from "@/components/ui/Button";
+import { Input } from "@/components/ui/Input";
+import { cn } from "@/lib/utils";
 
 interface CustomDialogProps {
     isOpen: boolean;
@@ -60,26 +63,26 @@ export default function CustomDialog({
     const getIcon = () => {
         switch (type) {
             case "alert":
-                return <Info className="w-6 h-6 text-[#4285F4]" />;
+                return <Info className="w-6 h-6 text-sky-pop" />;
             case "confirm":
-                return <HelpCircle className="w-6 h-6 text-[#FBBC04]" />;
+                return <HelpCircle className="w-6 h-6 text-sunshine-pop" />;
             case "prompt":
-                return <AlertTriangle className="w-6 h-6 text-[#EA4335]" />;
+                return <AlertTriangle className="w-6 h-6 text-coral-pop" />;
             default:
-                return <Info className="w-6 h-6 text-[#4285F4]" />;
+                return <Info className="w-6 h-6 text-sky-pop" />;
         }
     };
 
     const getIconBg = () => {
         switch (type) {
             case "alert":
-                return "bg-[#4285F4]/10 border-[#4285F4]/30";
+                return "bg-sky-pop/10 border-sky-pop/30";
             case "confirm":
-                return "bg-[#FBBC04]/10 border-[#FBBC04]/30";
+                return "bg-sunshine-pop/10 border-sunshine-pop/30";
             case "prompt":
-                return "bg-[#EA4335]/10 border-[#EA4335]/30";
+                return "bg-coral-pop/10 border-coral-pop/30";
             default:
-                return "bg-[#4285F4]/10 border-[#4285F4]/30";
+                return "bg-sky-pop/10 border-sky-pop/30";
         }
     };
 
@@ -100,35 +103,35 @@ export default function CustomDialog({
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.95, y: 15 }}
                         transition={{ type: "spring", damping: 25, stiffness: 320 }}
-                        className="relative w-full max-w-md bg-[#ffffff] border border-[#d5d5d4] rounded-3xl shadow-xs p-7 text-left overflow-hidden"
+                        className="relative w-full max-w-md bg-card border border-border rounded-bento shadow-2xl p-7 text-left overflow-hidden text-card-foreground"
                     >
                         {/* Google top accent line */}
-                        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#4285F4] via-[#EA4335] via-[#FBBC04] to-[#34A853]" />
+                        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-google-blue via-google-red via-google-yellow to-google-green" />
 
                         <div className="flex items-start justify-between mb-5">
-                            <div className={`w-12 h-12 rounded-2xl border flex items-center justify-center ${getIconBg()}`}>
+                            <div className={cn("w-12 h-12 rounded-2xl border flex items-center justify-center", getIconBg())}>
                                 {getIcon()}
                             </div>
                             <button
                                 onClick={handleCancel}
-                                className="p-2 text-[#80827f] hover:text-[#2c2e2a] rounded-full hover:bg-[#f5f1e4] transition cursor-pointer"
+                                className="p-2 text-muted-foreground hover:text-foreground rounded-full hover:bg-muted transition cursor-pointer"
+                                aria-label="Close"
                             >
                                 <X className="w-5 h-5" />
                             </button>
                         </div>
 
-                        <h3 className="text-xl font-bold text-[#2c2e2a] mb-2 tracking-tight">{title}</h3>
-                        <p className="text-[#80827f] text-sm leading-relaxed mb-6">{message}</p>
+                        <h3 className="text-xl font-bold text-foreground mb-2 tracking-tight">{title}</h3>
+                        <p className="text-muted-foreground text-sm leading-relaxed mb-6">{message}</p>
 
                         {type === "prompt" && (
                             <div className="mb-6">
-                                <input
+                                <Input
                                     ref={inputRef}
                                     type="text"
                                     value={inputValue}
                                     onChange={(e) => setInputValue(e.target.value)}
                                     onKeyDown={(e) => e.key === "Enter" && handleConfirm()}
-                                    className="w-full px-4 py-3 rounded-xl bg-[#f5f1e4] border border-[#d5d5d4] text-[#2c2e2a] text-sm focus:outline-none focus:border-[#4285F4] focus:bg-[#ffffff] transition placeholder:text-[#80827f]"
                                     placeholder="Enter value..."
                                 />
                             </div>
@@ -136,19 +139,21 @@ export default function CustomDialog({
 
                         <div className="flex gap-3 justify-end">
                             {(type === "confirm" || type === "prompt") && (
-                                <button
+                                <Button
+                                    variant="outline"
+                                    size="sm"
                                     onClick={handleCancel}
-                                    className="px-5 py-2.5 rounded-[50px] border border-[#d5d5d4] text-[#80827f] font-medium text-sm hover:bg-[#f5f1e4] transition cursor-pointer"
                                 >
                                     Cancel
-                                </button>
+                                </Button>
                             )}
-                            <button
+                            <Button
+                                variant="default"
+                                size="sm"
                                 onClick={handleConfirm}
-                                className="px-6 py-2.5 rounded-[50px] bg-[#2c2e2a] hover:bg-[#1a1a1a] text-white font-medium text-sm shadow-xs transition cursor-pointer"
                             >
                                 {type === "alert" ? "OK" : "Confirm"}
-                            </button>
+                            </Button>
                         </div>
                     </motion.div>
                 </div>

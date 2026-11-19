@@ -177,7 +177,7 @@ No heavy fuzzy drop shadows are used (`shadow-[0_2px_12px_rgba(0,0,0,0.02)]` or 
 - **Do** include the trailing action indicator dot on primary action buttons.
 - **Do** use Inter with tight tracking (`-0.04em` to `-0.065em`) for prominent headlines.
 - **Do** contrast white cards against the cream canvas cleanly with subtle hairline borders (`#d5d5d4` / `#e5e1d5`).
-- **Do** leverage the Google Labs organic shapes suite (Hexagon, Rosette, Clover, Dome, Donut) as playful visual accents.
+- **Do** use the Google Labs organic shapes suite (Hexagon, Rosette, Clover, Dome, Donut) as playful visual accents.
 
 ### Don't:
 - **Don't** introduce dark gray/black backgrounds (`#18191b`, `#0c0c0e`) on public platform pages.

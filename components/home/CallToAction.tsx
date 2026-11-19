@@ -29,7 +29,7 @@ export default function CallToAction({ onApply }: CallToActionProps) {
                 </h2>
 
                 <p className="text-sm sm:text-base text-gray-400 max-w-xl mx-auto leading-relaxed">
-                    Lead tracks, organize hackathons, coordinate speakers, mentor peers, and elevate our developer community to international acclaim.
+                    Lead tracks, organize hackathons, coordinate speakers, mentor peers, and grow our campus developer community.
                 </p>
 
                 <div className="pt-4 flex justify-center">

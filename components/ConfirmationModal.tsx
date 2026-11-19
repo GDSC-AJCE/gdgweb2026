@@ -3,6 +3,8 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useBodyScrollLock } from "@/hooks/useBodyScrollLock";
 import { AlertTriangle, CheckCircle, Info, X } from "lucide-react";
+import { Button } from "@/components/ui/Button";
+import { cn } from "@/lib/utils";
 
 interface ConfirmationModalProps {
     isOpen: boolean;
@@ -33,24 +35,24 @@ export default function ConfirmationModal({
 
     const typeStyles = {
         danger: {
-            iconBg: "bg-[#EA4335]/10 border-[#EA4335]/30",
-            iconColor: "text-[#EA4335]",
-            buttonBg: "bg-[#EA4335] hover:bg-[#D93025] text-white",
+            iconBg: "bg-coral-pop/10 border-coral-pop/30",
+            iconColor: "text-coral-pop",
+            btnVariant: "destructive" as const,
         },
         success: {
-            iconBg: "bg-[#34A853]/10 border-[#34A853]/30",
-            iconColor: "text-[#34A853]",
-            buttonBg: "bg-[#34A853] hover:bg-[#2D9247] text-white",
+            iconBg: "bg-fresh-grass/10 border-fresh-grass/30",
+            iconColor: "text-fresh-grass",
+            btnVariant: "grass" as const,
         },
         warning: {
-            iconBg: "bg-[#FBBC04]/10 border-[#FBBC04]/30",
-            iconColor: "text-[#FBBC04]",
-            buttonBg: "bg-[#FBBC04] hover:bg-[#F29900] text-[#2c2e2a]",
+            iconBg: "bg-sunshine-pop/10 border-sunshine-pop/40",
+            iconColor: "text-sunshine-pop",
+            btnVariant: "default" as const,
         },
         info: {
-            iconBg: "bg-[#4285F4]/10 border-[#4285F4]/30",
-            iconColor: "text-[#4285F4]",
-            buttonBg: "bg-[#2c2e2a] hover:bg-[#1a1a1a] text-white",
+            iconBg: "bg-sky-pop/10 border-sky-pop/30",
+            iconColor: "text-sky-pop",
+            btnVariant: "default" as const,
         }
     };
 
@@ -70,45 +72,48 @@ export default function ConfirmationModal({
                 initial={{ opacity: 0, scale: 0.95, y: 15 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95, y: 15 }}
-                className="relative w-full max-w-md bg-[#ffffff] border border-[#d5d5d4] rounded-3xl shadow-xs p-7 text-left overflow-hidden"
+                className="relative w-full max-w-md bg-card border border-border rounded-bento shadow-2xl p-7 text-left overflow-hidden text-card-foreground"
             >
                 <div className="flex items-start justify-between mb-5">
-                    <div className={`w-12 h-12 rounded-2xl border flex items-center justify-center ${styles.iconBg}`}>
+                    <div className={cn("w-12 h-12 rounded-2xl border flex items-center justify-center", styles.iconBg)}>
                         {type === "success" ? (
-                            <CheckCircle className={`w-6 h-6 ${styles.iconColor}`} />
+                            <CheckCircle className={cn("w-6 h-6", styles.iconColor)} />
                         ) : type === "info" ? (
-                            <Info className={`w-6 h-6 ${styles.iconColor}`} />
+                            <Info className={cn("w-6 h-6", styles.iconColor)} />
                         ) : (
-                            <AlertTriangle className={`w-6 h-6 ${styles.iconColor}`} />
+                            <AlertTriangle className={cn("w-6 h-6", styles.iconColor)} />
                         )}
                     </div>
                     <button
                         onClick={onClose}
                         disabled={loading}
-                        className="p-2 text-[#80827f] hover:text-[#2c2e2a] rounded-full hover:bg-[#f5f1e4] transition disabled:opacity-50 cursor-pointer"
+                        className="p-2 text-muted-foreground hover:text-foreground rounded-full hover:bg-muted transition disabled:opacity-50 cursor-pointer"
+                        aria-label="Close"
                     >
                         <X className="w-5 h-5" />
                     </button>
                 </div>
 
-                <h3 className="text-xl font-bold text-[#2c2e2a] mb-2 tracking-tight">{title}</h3>
-                <p className="text-[#80827f] text-sm leading-relaxed mb-6">{message}</p>
+                <h3 className="text-xl font-bold text-foreground mb-2 tracking-tight">{title}</h3>
+                <p className="text-muted-foreground text-sm leading-relaxed mb-6">{message}</p>
 
                 <div className="flex gap-3 justify-end">
-                    <button
+                    <Button
+                        variant="outline"
+                        size="sm"
                         onClick={onClose}
                         disabled={loading}
-                        className="px-5 py-2.5 rounded-[50px] border border-[#d5d5d4] text-[#80827f] font-medium text-sm hover:bg-[#f5f1e4] transition disabled:opacity-50 cursor-pointer"
                     >
                         {cancelText}
-                    </button>
-                    <button
+                    </Button>
+                    <Button
+                        variant={styles.btnVariant}
+                        size="sm"
                         onClick={onConfirm}
                         disabled={loading}
-                        className={`px-6 py-2.5 rounded-[50px] font-medium text-sm transition shadow-xs disabled:opacity-50 cursor-pointer ${styles.buttonBg}`}
                     >
                         {loading ? "Processing..." : confirmText}
-                    </button>
+                    </Button>
                 </div>
             </motion.div>
         </div>

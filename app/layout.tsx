@@ -8,6 +8,7 @@ import GoogleLabsPreloader from "@/components/GoogleLabsPreloader";
 import { AuthProvider } from "@/context/AuthContext";
 import { DialogProvider } from "@/context/DialogContext";
 import { ThemeProvider } from "@/context/ThemeContext";
+import { Toaster } from "@/components/ui/sonner";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -28,7 +29,7 @@ export const metadata: Metadata = {
     template: "%s | GDG AJCE",
     default: "GDG AJCE | Google Developer Groups on Campus",
   },
-  description: "Official GDG on Campus platform for Amal Jyothi College of Engineering. Empowering students with cutting-edge Google technologies (AI/ML, Gemini, Cloud, Android, Web, and Open Source).",
+  description: "Official GDG on Campus platform for Amal Jyothi College of Engineering. Student developer community building with Google AI, Cloud, Android, Web, and Open Source.",
   keywords: ["GDG AJCE", "GDG on Campus AJCE", "Google Developer Groups", "Amal Jyothi College of Engineering", "Flutter", "Android", "Gemini", "Firebase", "Google Cloud", "Tech Community", "Hackathons"],
   authors: [{ name: "GDG AJCE Core Team" }],
   creator: "GDG AJCE",
@@ -45,7 +46,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: "GDG AJCE — Google Developer Groups on Campus",
-    description: "Empowering students with cutting-edge Google technologies (AI/ML, Gemini, Cloud, Android, Web, and Open Source).",
+    description: "Student developer community building with Google AI, Cloud, Android, Web, and Open Source at Amal Jyothi College of Engineering.",
     url: "https://gdgajce.vercel.app",
     siteName: "GDG AJCE",
     locale: "en_US",
@@ -54,7 +55,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "GDG AJCE — Google Developer Groups on Campus",
-    description: "Empowering students with cutting-edge Google technologies (AI/ML, Gemini, Cloud, Android, Web, and Open Source).",
+    description: "Student developer community building with Google AI, Cloud, Android, Web, and Open Source at Amal Jyothi College of Engineering.",
   },
 };
 
@@ -101,6 +102,7 @@ export default function RootLayout({
                   {children}
                 </main>
                 <Footer />
+                <Toaster position="bottom-right" />
               </DialogProvider>
             </AuthProvider>
           </ThemeProvider>
