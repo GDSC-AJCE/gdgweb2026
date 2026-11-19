@@ -74,6 +74,10 @@ export default function Navbar() {
     { href: "/contact", label: "Contact Desk" },
   ];
 
+  if (pathname?.startsWith("/admin")) {
+    return null;
+  }
+
   return (
     <>
       {/* FLOATING PILL NAVIGATION BAR */}

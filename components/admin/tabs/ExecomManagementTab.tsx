@@ -178,10 +178,10 @@ export default function ExecomManagementTab({
               setNewYearInput("");
               setIsNewYearModalOpen(true);
             }}
-            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold shadow-sm transition active:scale-95 cursor-pointer"
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold shadow-sm transition active:scale-95 cursor-pointer"
             title="Create an Execom roster for a new academic year"
           >
-            <CalendarPlus className="w-3.5 h-3.5" />
+            <CalendarPlus className="w-3.5 h-3.5 text-blue-400" />
             <span>+ New Year Execom</span>
           </button>
 

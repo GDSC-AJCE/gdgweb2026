@@ -136,26 +136,26 @@ export default function AddExecomMemberModal({
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs select-none">
       <div
         data-lenis-prevent
-        className="relative w-full max-w-4xl bg-white border border-[#d5d5d4] rounded-[36px] shadow-2xl overflow-hidden flex flex-col max-h-[90vh]"
+        className="relative w-full max-w-4xl bg-white border border-slate-200 rounded-3xl shadow-xl overflow-hidden flex flex-col max-h-[90vh]"
       >
         {/* HEADER */}
-        <div className="p-6 border-b border-[#d5d5d4] flex items-center justify-between">
+        <div className="p-6 border-b border-slate-200 flex items-center justify-between">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-full bg-[#ff705d]/15 text-[#ff705d] flex items-center justify-center">
+            <div className="w-8 h-8 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center">
               <Sparkles className="w-4 h-4" />
             </div>
             <div>
-              <h3 className="text-lg font-bold text-[#2c2e2a]">
+              <h3 className="text-lg font-bold text-slate-900">
                 {isPromotingUser ? "Promote Member to Execom" : initialData ? "Edit Execom Member" : "Add Execom Member"}
               </h3>
-              <p className="text-xs text-[#80827f]">
-                Updates will instantly reflect on the public <span className="font-mono text-[#2ba0ff]">/about#execom</span> showcase.
+              <p className="text-xs text-slate-500">
+                Updates will instantly reflect on the public <span className="font-mono text-blue-600">/about#execom</span> showcase.
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="w-8 h-8 rounded-full hover:bg-[#f5f1e4] flex items-center justify-center text-[#80827f] hover:text-[#2c2e2a] transition"
+            className="w-8 h-8 rounded-full hover:bg-slate-100 flex items-center justify-center text-slate-400 hover:text-slate-700 transition cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
@@ -170,22 +170,22 @@ export default function AddExecomMemberModal({
           {/* FORM (7 cols) */}
           <form onSubmit={handleSave} className="md:col-span-7 space-y-4">
             {error && (
-              <div className="p-3 rounded-[20px] bg-[#ff705d]/10 border border-[#ff705d]/30 text-xs font-semibold text-[#ff705d]">
+              <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-xs font-semibold text-red-600">
                 {error}
               </div>
             )}
 
             {isPromotingUser && (
-              <div className="p-4 rounded-[24px] bg-[#f5f1e4] border border-[#d5d5d4] flex flex-col space-y-1">
-                <span className="text-[10px] font-bold text-[#80827f] uppercase tracking-wider">Promoting Member</span>
-                <span className="text-sm font-bold text-[#2c2e2a]">{formData.name}</span>
-                <span className="text-xs text-[#80827f]">{formData.email} • {formData.dept}</span>
+              <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 flex flex-col space-y-1">
+                <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Promoting Member</span>
+                <span className="text-sm font-bold text-slate-900">{formData.name}</span>
+                <span className="text-xs text-slate-500">{formData.email} • {formData.dept}</span>
               </div>
             )}
 
             {!isPromotingUser && (
               <div className="space-y-1.5">
-                <Label htmlFor="execom-name" className="text-xs font-semibold text-[#2c2e2a]">
+                <Label htmlFor="execom-name" className="text-xs font-semibold text-slate-800">
                   Full Name <span className="text-[#EA4335]">*</span>
                 </Label>
                 <Input
@@ -201,7 +201,7 @@ export default function AddExecomMemberModal({
 
             <div className={!isPromotingUser ? "grid grid-cols-2 gap-4" : ""}>
               <div className="space-y-1.5">
-                <Label htmlFor="execom-role" className="text-xs font-semibold text-[#2c2e2a]">
+                <Label htmlFor="execom-role" className="text-xs font-semibold text-slate-800">
                   Official Role <span className="text-[#EA4335]">*</span>
                 </Label>
                 <Input
@@ -216,7 +216,7 @@ export default function AddExecomMemberModal({
 
               {!isPromotingUser && (
                 <div className="space-y-1.5">
-                  <Label htmlFor="execom-dept" className="text-xs font-semibold text-[#2c2e2a]">
+                  <Label htmlFor="execom-dept" className="text-xs font-semibold text-slate-800">
                     Department
                   </Label>
                   <div className="relative">
@@ -224,7 +224,7 @@ export default function AddExecomMemberModal({
                       id="execom-dept"
                       value={formData.dept}
                       onChange={(e) => setFormData({ ...formData, dept: e.target.value })}
-                      className="flex h-10 w-full rounded-xl border border-[#d5d5d4] bg-white px-3.5 py-2 text-sm text-[#2c2e2a] shadow-xs transition-all duration-200 focus-visible:outline-none focus-visible:border-[#4285F4] focus-visible:ring-3 focus-visible:ring-[#4285F4]/20 hover:border-[#a0a29f] cursor-pointer appearance-none pr-10"
+                      className="flex h-10 w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-sm text-slate-900 shadow-xs transition-all duration-200 focus-visible:outline-none focus-visible:border-blue-600 focus-visible:ring-2 focus-visible:ring-blue-500/20 hover:border-slate-300 cursor-pointer appearance-none pr-10"
                     >
                       {DEPARTMENTS.map((d) => (
                         <option key={d} value={d}>
@@ -232,7 +232,7 @@ export default function AddExecomMemberModal({
                         </option>
                       ))}
                     </select>
-                    <ChevronDown className="absolute right-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#80827f] pointer-events-none" />
+                    <ChevronDown className="absolute right-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
                   </div>
                 </div>
               )}
@@ -240,7 +240,7 @@ export default function AddExecomMemberModal({
 
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-1.5">
-                <Label htmlFor="execom-track" className="text-xs font-semibold text-[#2c2e2a]">
+                <Label htmlFor="execom-track" className="text-xs font-semibold text-slate-800">
                   Track & Specialty <span className="text-[#EA4335]">*</span>
                 </Label>
                 <Input
@@ -254,7 +254,7 @@ export default function AddExecomMemberModal({
               </div>
 
               <div className="space-y-1.5">
-                <Label htmlFor="execom-year" className="text-xs font-semibold text-[#2c2e2a]">
+                <Label htmlFor="execom-year" className="text-xs font-semibold text-slate-800">
                   Academic Year / Cohort <span className="text-[#EA4335]">*</span>
                 </Label>
                 <div className="relative">
@@ -269,7 +269,7 @@ export default function AddExecomMemberModal({
                         setFormData({ ...formData, year: e.target.value });
                       }
                     }}
-                    className="flex h-10 w-full rounded-xl border border-[#d5d5d4] bg-white px-3.5 py-2 text-sm text-[#2c2e2a] shadow-xs transition-all duration-200 focus-visible:outline-none focus-visible:border-[#4285F4] focus-visible:ring-3 focus-visible:ring-[#4285F4]/20 hover:border-[#a0a29f] cursor-pointer appearance-none pr-10"
+                    className="flex h-10 w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-sm text-slate-900 shadow-xs transition-all duration-200 focus-visible:outline-none focus-visible:border-blue-600 focus-visible:ring-2 focus-visible:ring-blue-500/20 hover:border-slate-300 cursor-pointer appearance-none pr-10"
                   >
                     <option value="2027">2026-27 Cohort (Upcoming / New)</option>
                     <option value="2028">2027-28 Cohort (Future)</option>
@@ -280,7 +280,7 @@ export default function AddExecomMemberModal({
                     <option value="2022">2021-22 Founding</option>
                     <option value="custom">+ Enter New / Custom Year...</option>
                   </select>
-                  <ChevronDown className="absolute right-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#80827f] pointer-events-none" />
+                  <ChevronDown className="absolute right-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
                 </div>
 
                 {isCustomYear && (
@@ -309,7 +309,7 @@ export default function AddExecomMemberModal({
 
             {!isPromotingUser && (
               <div className="space-y-1.5">
-                <Label htmlFor="execom-username" className="text-xs font-semibold text-[#2c2e2a]">
+                <Label htmlFor="execom-username" className="text-xs font-semibold text-slate-800">
                   Profile Username (for /team/[user])
                 </Label>
                 <Input
@@ -325,7 +325,7 @@ export default function AddExecomMemberModal({
 
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-1.5">
-                <Label htmlFor="execom-linkedin" className="text-xs font-semibold text-[#2c2e2a]">
+                <Label htmlFor="execom-linkedin" className="text-xs font-semibold text-slate-800">
                   LinkedIn URL
                 </Label>
                 <Input
@@ -338,7 +338,7 @@ export default function AddExecomMemberModal({
               </div>
 
               <div className="space-y-1.5">
-                <Label htmlFor="execom-github" className="text-xs font-semibold text-[#2c2e2a]">
+                <Label htmlFor="execom-github" className="text-xs font-semibold text-slate-800">
                   GitHub URL
                 </Label>
                 <Input
@@ -351,7 +351,7 @@ export default function AddExecomMemberModal({
               </div>
             </div>
 
-            <div className="pt-4 flex items-center justify-end gap-3 border-t border-[#d5d5d4]">
+            <div className="pt-4 flex items-center justify-end gap-3 border-t border-slate-200">
               <Button
                 type="button"
                 variant="outline"
@@ -363,7 +363,7 @@ export default function AddExecomMemberModal({
                 type="submit"
                 variant="default"
                 disabled={saving}
-                className="gap-2"
+                className="gap-2 bg-blue-600 hover:bg-blue-700 text-white"
               >
                 <Save className="w-4 h-4" />
                 <span>{saving ? "Saving..." : "Save Member"}</span>
@@ -372,10 +372,10 @@ export default function AddExecomMemberModal({
           </form>
 
           {/* PREVIEW (5 cols) */}
-          <div className="md:col-span-5 flex flex-col items-center justify-center p-4 rounded-[32px] bg-[#f5f1e4] border border-[#d5d5d4]">
-            <div className="flex items-center gap-1.5 text-xs font-mono font-semibold text-[#80827f] mb-3">
+          <div className="md:col-span-5 flex flex-col items-center justify-center p-4 rounded-2xl bg-slate-50 border border-slate-200">
+            <div className="flex items-center gap-1.5 text-xs font-mono font-semibold text-slate-500 mb-3">
               <Eye className="w-3.5 h-3.5" />
-              <span>LIVE GOOGLE LABS CARD PREVIEW</span>
+              <span>LIVE CARD PREVIEW</span>
             </div>
             <div className="w-full max-w-[280px]">
               <GoogleLabsMemberCard

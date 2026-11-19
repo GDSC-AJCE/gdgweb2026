@@ -45,13 +45,17 @@ const TAB_METADATA: Record<AdminTab, { title: string; subtitle: string }> = {
     title: "Chapter Analytics & Telemetry",
     subtitle: "Visual breakdowns of member velocity, workshop RSVPs, treasury cashflow, and department demographics.",
   },
-  execom: {
-    title: "Execom Leadership",
-    subtitle: "Manage the official student organizing leads displayed on the public showcase.",
+  calendar: {
+    title: "Calendar & Schedule",
+    subtitle: "Monthly schedule, synchronized meetings, activities, and Google Calendar integration.",
   },
   events: {
     title: "Events & Workshops",
     subtitle: "Create, schedule, publish, and monitor attendee RSVPs for all community sessions.",
+  },
+  execom: {
+    title: "Execom Leadership",
+    subtitle: "Manage the official student organizing leads displayed on the public showcase.",
   },
   newsletter: {
     title: "Weekly Tech Newsletter",
@@ -89,7 +93,7 @@ export default function AdminPage() {
     if (typeof window !== "undefined") {
       const params = new URLSearchParams(window.location.search);
       const tabParam = params.get("tab") as AdminTab;
-      if (tabParam && ["overview", "analytics", "execom", "events", "newsletter", "mailer", "website", "users", "applications", "funds", "audit"].includes(tabParam)) {
+      if (tabParam && ["overview", "analytics", "calendar", "execom", "events", "newsletter", "mailer", "website", "users", "applications", "funds", "audit"].includes(tabParam)) {
         return tabParam;
       }
     }
@@ -157,7 +161,7 @@ export default function AdminPage() {
         setIsDevPreview(true);
       }
       const tabParam = params.get("tab") as AdminTab;
-      if (tabParam && ["overview", "analytics", "execom", "events", "newsletter", "mailer", "website", "users", "applications", "funds", "audit"].includes(tabParam)) {
+      if (tabParam && ["overview", "analytics", "calendar", "execom", "events", "newsletter", "mailer", "website", "users", "applications", "funds", "audit"].includes(tabParam)) {
         setActiveTab(tabParam);
       }
     }
@@ -663,6 +667,24 @@ export default function AdminPage() {
                   />
                 )}
 
+                {activeTab === "calendar" && (
+                  <EventsManagementTab
+                    events={events}
+                    onRefresh={fetchEvents}
+                    onOpenCreateModal={() => {
+                      setEditingEvent(null);
+                      setIsCreateEventOpen(true);
+                    }}
+                    onOpenEditModal={(event) => {
+                      setEditingEvent(event);
+                      setIsCreateEventOpen(true);
+                    }}
+                    adminName={adminName}
+                    theme={adminTheme}
+                    defaultView="calendar"
+                  />
+                )}
+
                 {activeTab === "events" && (
                   <EventsManagementTab
                     events={events}
@@ -677,6 +699,7 @@ export default function AdminPage() {
                     }}
                     adminName={adminName}
                     theme={adminTheme}
+                    defaultView="cards"
                   />
                 )}
 

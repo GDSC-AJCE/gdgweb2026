@@ -38,8 +38,9 @@ import { useAuth } from "@/context/AuthContext";
 export type AdminTab =
   | "overview"
   | "analytics"
-  | "execom"
+  | "calendar"
   | "events"
+  | "execom"
   | "newsletter"
   | "mailer"
   | "users"
@@ -93,9 +94,14 @@ export default function AdminSidebar({
       icon: BarChart3,
     },
     {
-      id: "events",
+      id: "calendar",
       label: "Calendar",
       icon: Calendar,
+    },
+    {
+      id: "events",
+      label: "Events",
+      icon: Kanban,
     },
     {
       id: "funds",
@@ -294,7 +300,7 @@ export default function AdminSidebar({
                       )}
 
                       {item.badge && item.badgeType === "pulse" && (
-                        <span className="text-[10px] font-mono font-bold px-1.5 py-0.2 rounded-full bg-rose-500 text-white animate-pulse">
+                        <span className="text-[10px] font-mono font-bold px-1.5 py-0.2 rounded-full bg-rose-500 text-white">
                           {item.badge}
                         </span>
                       )}

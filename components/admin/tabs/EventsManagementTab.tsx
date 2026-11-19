@@ -45,6 +45,7 @@ interface EventsManagementTabProps {
   onOpenEditModal: (event: any) => void;
   adminName?: string;
   theme?: "light" | "dark";
+  defaultView?: "calendar" | "cards";
 }
 
 // Color palettes for event badges matching BoardUI reference image
@@ -327,10 +328,17 @@ export default function EventsManagementTab({
   onOpenEditModal,
   adminName = "Admin",
   theme = "light",
+  defaultView = "calendar",
 }: EventsManagementTabProps) {
   const isDark = theme === "dark";
-  // View mode: month-grid (BoardUI reference) vs cards (detailed list)
-  const [viewMode, setViewMode] = useState<"calendar" | "cards">("calendar");
+  // View mode: calendar vs cards
+  const [viewMode, setViewMode] = useState<"calendar" | "cards">(defaultView);
+
+  useEffect(() => {
+    if (defaultView) {
+      setViewMode(defaultView);
+    }
+  }, [defaultView]);
 
   // Filter & Search
   const [filter, setFilter] = useState<"all" | "upcoming" | "past">("all");
@@ -351,6 +359,22 @@ export default function EventsManagementTab({
   const [isGCalModalOpen, setIsGCalModalOpen] = useState(false);
   const [isNotificationBellOpen, setIsNotificationBellOpen] = useState(false);
   const [copiedIcsUrl, setCopiedIcsUrl] = useState(false);
+  const bellRef = React.useRef<HTMLDivElement>(null);
+
+  // Close event notification bell on outside click
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (bellRef.current && !bellRef.current.contains(event.target as Node)) {
+        setIsNotificationBellOpen(false);
+      }
+    }
+    if (isNotificationBellOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isNotificationBellOpen]);
 
   // Additional meetings and activities loaded from settings/execomSchedule
   const [scheduledMeetings, setScheduledMeetings] = useState<any[]>([]);
@@ -656,7 +680,7 @@ export default function EventsManagementTab({
           {/* Right: BoardUI Action Bar matching reference image */}
           <div className="flex items-center gap-2.5 flex-wrap">
             {/* Notification Bell with red badge */}
-            <div className="relative">
+            <div className="relative" ref={bellRef}>
               <button
                 onClick={() => setIsNotificationBellOpen(!isNotificationBellOpen)}
                 className={`relative p-2.5 rounded-xl border transition cursor-pointer ${
@@ -668,7 +692,7 @@ export default function EventsManagementTab({
               >
                 <Bell className="w-4 h-4" />
                 {upcomingEventsCount > 0 && (
-                  <span className="absolute -top-1 -right-1 px-1.5 py-0.2 rounded-full bg-red-600 text-white text-[10px] font-bold leading-tight">
+                  <span className="absolute -top-1 -right-1 px-1.5 py-0.2 rounded-full bg-[#EF4444] text-white text-[10px] font-bold leading-tight">
                     {upcomingEventsCount}
                   </span>
                 )}
