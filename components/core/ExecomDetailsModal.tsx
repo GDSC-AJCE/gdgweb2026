@@ -20,6 +20,8 @@ import {
 } from "lucide-react";
 import GoogleBadge from "../GoogleBadge";
 import { resolveName } from "@/lib/utils";
+import { LinkButton } from "@/components/base/buttons/link-button";
+import { RiExternalLinkLine } from "@remixicon/react";
 
 interface SocialLink {
     platform: string;
@@ -236,6 +238,28 @@ export default function ExecomDetailsModal({
                                 </div>
                             )}
 
+                            {/* Resume Document Link */}
+                            {Boolean((application as any).resumeUrl || application.answers?.resume || application.answers?.resumeUrl) && (
+                                <div className="space-y-2">
+                                    <h4 className="text-[10px] font-mono uppercase text-[#80827f] font-bold tracking-wider">
+                                        Candidate Resume
+                                    </h4>
+                                    <div className="p-3.5 rounded-2xl bg-[#faf9f6] border border-[#d5d5d4] flex items-center justify-between">
+                                        <span className="font-semibold text-[#2c2e2a] text-xs">Curriculum Vitae / Resume</span>
+                                        <LinkButton
+                                            href={String((application as any).resumeUrl || application.answers?.resume || application.answers?.resumeUrl)}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            size="xs"
+                                            variant="primary"
+                                            trailingIcon={RiExternalLinkLine}
+                                        >
+                                            Open Resume
+                                        </LinkButton>
+                                    </div>
+                                </div>
+                            )}
+
                             {/* Social & Portfolio Links */}
                             {application.socialLinks && application.socialLinks.length > 0 && (
                                 <div className="space-y-2">
@@ -244,16 +268,22 @@ export default function ExecomDetailsModal({
                                     </h4>
                                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                                         {application.socialLinks.map((s, idx) => (
-                                            <a
+                                            <div
                                                 key={idx}
-                                                href={s.url.startsWith("http") ? s.url : `https://${s.url}`}
-                                                target="_blank"
-                                                rel="noreferrer"
-                                                className="p-3 rounded-2xl bg-[#faf9f6] border border-[#d5d5d4] hover:bg-[#f5f1e4] transition flex items-center justify-between group"
+                                                className="p-3 rounded-2xl bg-[#faf9f6] border border-[#d5d5d4] flex items-center justify-between"
                                             >
                                                 <span className="font-semibold text-[#2c2e2a] capitalize text-xs">{s.platform}</span>
-                                                <ExternalLink className="w-3.5 h-3.5 text-[#80827f] group-hover:text-[#2c2e2a] transition" />
-                                            </a>
+                                                <LinkButton
+                                                    href={s.url.startsWith("http") ? s.url : `https://${s.url}`}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    size="xs"
+                                                    variant="primary"
+                                                    trailingIcon={RiExternalLinkLine}
+                                                >
+                                                    Open {s.platform}
+                                                </LinkButton>
+                                            </div>
                                         ))}
                                     </div>
                                 </div>

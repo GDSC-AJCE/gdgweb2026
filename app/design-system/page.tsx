@@ -56,6 +56,39 @@ import Alert from "@/components/ui/Alert";
 import GDGLogoMark from "@/components/ui/GDGLogoMark";
 import { DataTableExample } from "@/components/application/data-table/data-table";
 import { TreeView, TreeViewItem } from "@/components/base/tree-view/tree-view";
+import { CalendarDate, getLocalTimeZone, today, Time } from "@internationalized/date";
+import { TimeField } from "@/components/base/time-field/time-field";
+import { DatePicker } from "@/components/base/date-picker/date-picker";
+import { DateRangePicker, type DateRangeValue } from "@/components/base/date-picker/date-range-picker";
+import type { Selection } from "react-aria-components";
+import { Tag, TagGroup } from "@/components/base/tag-group/tag-group";
+import {
+  RiImage2Line,
+  RiArticleLine,
+  RiSettings3Line,
+  RiArrowRightLine,
+  RiExternalLinkLine,
+  RiDownloadLine,
+  RiHomeLine,
+  RiDashboardLine,
+  RiFolderLine,
+  RiCompass3Line,
+} from "@remixicon/react";
+import {
+  Breadcrumb as BoardUIBreadcrumb,
+  BreadcrumbItem as BoardUIBreadcrumbItem,
+} from "@/components/base/breadcrumb/breadcrumb";
+import { LinkButton } from "@/components/base/buttons/link-button";
+import {
+  Tab as BoardUITab,
+  TabList as BoardUITabList,
+  TabPanel as BoardUITabPanel,
+  Tabs as BoardUITabs,
+} from "@/components/base/tabs/tabs";
+import {
+  Skeleton as BoardUISkeleton,
+  SkeletonText as BoardUISkeletonText,
+} from "@/components/base/skeleton/skeleton";
 import {
   Sparkles,
   ArrowRight,
@@ -118,6 +151,639 @@ function CodeSnippet({ code }: { code: string }) {
         )}
       </button>
       <pre className="whitespace-pre-wrap">{code}</pre>
+    </div>
+  );
+}
+
+function TimeFieldShowcase() {
+  const [opens, setOpens] = useState<Time | null>(new Time(9, 0));
+  const [closes, setCloses] = useState<Time | null>(new Time(18, 0));
+  const isInvalid = opens != null && closes != null && closes.compare(opens) <= 0;
+
+  return (
+    <div className="space-y-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-lg">
+        <TimeField label="Opens" value={opens} onChange={setOpens} />
+        <TimeField
+          label="Closes"
+          value={closes}
+          onChange={setCloses}
+          isInvalid={isInvalid}
+          hint={isInvalid ? "Must be after opening time." : "Normal operational hours"}
+        />
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-lg pt-2 border-t border-[#e5e1d5]">
+        <TimeField label="24-Hour Cycle" hourCycle={24} defaultValue={new Time(21, 45)} />
+        <TimeField label="Reminder (Disabled)" isDisabled defaultValue={new Time(8, 30)} hint="Reminders are paused." />
+      </div>
+    </div>
+  );
+}
+
+function DatePickerShowcase() {
+  const [singleDate, setSingleDate] = useState<CalendarDate | null>(today(getLocalTimeZone()));
+  const [dateRange, setDateRange] = useState<DateRangeValue | null>(() => {
+    const now = today(getLocalTimeZone());
+    return {
+      start: now.subtract({ days: 7 }),
+      end: now,
+    };
+  });
+
+  return (
+    <div className="space-y-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Single Date Picker */}
+        <div className="space-y-3 p-4 rounded-2xl bg-[#f5f1e4]/50 border border-[#e5e1d5]">
+          <div className="space-y-1">
+            <h4 className="text-sm font-semibold text-[#2c2e2a]">Single Date Picker</h4>
+            <p className="text-xs text-[#80827f]">
+              Direct single date selection with animated editable day chip and month navigation.
+            </p>
+          </div>
+          <div className="flex flex-col gap-2 pt-2">
+            <DatePicker
+              value={singleDate}
+              onChange={setSingleDate}
+              aria-label="Meeting or event date"
+            />
+            <div className="text-[11px] font-mono text-[#80827f] mt-1">
+              Selected: <span className="font-semibold text-[#2c2e2a]">{singleDate ? singleDate.toString() : "None"}</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Date Range Picker with Quick Presets */}
+        <div className="space-y-3 p-4 rounded-2xl bg-[#f5f1e4]/50 border border-[#e5e1d5]">
+          <div className="space-y-1">
+            <h4 className="text-sm font-semibold text-[#2c2e2a]">Date Range Picker with Quick Presets</h4>
+            <p className="text-xs text-[#80827f]">
+              Dual-month view with quick presets (Today, Last week, This month) and range summary.
+            </p>
+          </div>
+          <div className="flex flex-col gap-2 pt-2">
+            <DateRangePicker
+              value={dateRange}
+              onChange={setDateRange}
+              aria-label="Report or filter period"
+            />
+            <div className="text-[11px] font-mono text-[#80827f] mt-1">
+              Range: <span className="font-semibold text-[#2c2e2a]">
+                {dateRange ? `${dateRange.start.toString()} → ${dateRange.end.toString()}` : "None"}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Additional Variants & States */}
+      <div className="p-4 rounded-2xl bg-[#f5f1e4]/30 border border-[#e5e1d5] space-y-3">
+        <h4 className="text-xs font-bold text-[#80827f] uppercase tracking-wider">Additional Variants & States</h4>
+        <div className="flex flex-wrap items-center gap-6">
+          <div className="flex flex-col gap-1.5">
+            <span className="text-xs text-[#4b4e47] font-medium">Disabled Picker</span>
+            <DatePicker isDisabled defaultValue={today(getLocalTimeZone())} aria-label="Disabled date picker" />
+          </div>
+          <div className="flex flex-col gap-1.5">
+            <span className="text-xs text-[#4b4e47] font-medium">Unselected Range</span>
+            <DateRangePicker placeholder="Pick report schedule..." aria-label="Schedule range" />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function TagGroupShowcase() {
+  const [selectedTopics, setSelectedTopics] = useState<Selection>(new Set(["design", "engineering"]));
+  const [skills, setSkills] = useState([
+    { id: "react", name: "React" },
+    { id: "typescript", name: "TypeScript" },
+    { id: "firebase", name: "Firebase" },
+    { id: "gemini", name: "Gemini AI" },
+  ]);
+
+  return (
+    <div className="space-y-6">
+      <div className="space-y-2">
+        <TagGroup
+          label="Selectable Topics"
+          selectionMode="multiple"
+          selectedKeys={selectedTopics}
+          onSelectionChange={setSelectedTopics}
+          hint="Click to toggle topics or use keyboard Space/Enter"
+        >
+          <Tag id="design">Design</Tag>
+          <Tag id="engineering">Engineering</Tag>
+          <Tag id="ai" color="cyan">AI & Machine Learning</Tag>
+          <Tag id="cloud" color="blue">Google Cloud</Tag>
+          <Tag id="mobile" color="lime">Android & Flutter</Tag>
+          <Tag id="web">Web Development</Tag>
+        </TagGroup>
+      </div>
+
+      <div className="space-y-2 pt-3 border-t border-[#e5e1d5]">
+        <TagGroup
+          label="Removable Skills"
+          items={skills}
+          onRemove={(keys) => setSkills((prev) => prev.filter((s) => !keys.has(s.id)))}
+          emptyState="All skills removed. Refresh to reset."
+          hint="Click the × or press Backspace on focused tag"
+        >
+          {(skill) => <Tag color="soft">{skill.name}</Tag>}
+        </TagGroup>
+      </div>
+    </div>
+  );
+}
+
+function BoardUITabsShowcase() {
+  return (
+    <BoardUITabs defaultSelectedKey="banners" className="w-full">
+      <BoardUITabList aria-label="Content types">
+        <BoardUITab id="banners" icon={RiImage2Line} count={152}>
+          Banners
+        </BoardUITab>
+        <BoardUITab id="posts" icon={RiArticleLine} count={32}>
+          Posts
+        </BoardUITab>
+        <BoardUITab id="settings" icon={RiSettings3Line}>
+          Settings
+        </BoardUITab>
+      </BoardUITabList>
+
+      <BoardUITabPanel id="banners" className="p-4 rounded-2xl bg-[#f5f1e4]/60 border border-[#e5e1d5] text-xs text-[#2c2e2a]">
+        <div className="flex items-center gap-3">
+          <div className="p-2.5 rounded-xl bg-white border border-[#d5d5d4] text-[#4285F4]">
+            <RiImage2Line className="size-5" />
+          </div>
+          <div>
+            <div className="font-semibold text-sm text-[#2c2e2a]">Creative Banners & Media</div>
+            <div className="text-[#80827f]">152 active promotional assets ready for deployment across campus channels.</div>
+          </div>
+        </div>
+      </BoardUITabPanel>
+      <BoardUITabPanel id="posts" className="p-4 rounded-2xl bg-[#f5f1e4]/60 border border-[#e5e1d5] text-xs text-[#2c2e2a]">
+        <div className="flex items-center gap-3">
+          <div className="p-2.5 rounded-xl bg-white border border-[#d5d5d4] text-[#10B981]">
+            <RiArticleLine className="size-5" />
+          </div>
+          <div>
+            <div className="font-semibold text-sm text-[#2c2e2a]">Editorial Posts & Articles</div>
+            <div className="text-[#80827f]">32 technical writeups and event recaps published on the community board.</div>
+          </div>
+        </div>
+      </BoardUITabPanel>
+      <BoardUITabPanel id="settings" className="p-4 rounded-2xl bg-[#f5f1e4]/60 border border-[#e5e1d5] text-xs text-[#2c2e2a]">
+        <div className="flex items-center gap-3">
+          <div className="p-2.5 rounded-xl bg-white border border-[#d5d5d4] text-[#64748B]">
+            <RiSettings3Line className="size-5" />
+          </div>
+          <div>
+            <div className="font-semibold text-sm text-[#2c2e2a]">Channel & Feed Configuration</div>
+            <div className="text-[#80827f]">Manage automated content delivery, webhooks, and broadcast thresholds.</div>
+          </div>
+        </div>
+      </BoardUITabPanel>
+    </BoardUITabs>
+  );
+}
+
+function BoardUISkeletonShowcase() {
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  return (
+    <div className="space-y-6">
+      {/* Interactive Controls Bar */}
+      <div className="flex flex-wrap items-center justify-between gap-3 p-4 rounded-2xl bg-[#f5f1e4]/70 border border-[#e5e1d5]">
+        <div className="flex items-center gap-2.5 flex-wrap">
+          <Sparkles className="w-4 h-4 text-[#4285F4]" />
+          <span className="text-xs font-semibold text-[#2c2e2a]">Interactive Skeleton State</span>
+          <span
+            className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-medium font-mono transition-colors ${
+              isLoaded ? "bg-emerald-100 text-emerald-800 border border-emerald-200" : "bg-amber-100 text-amber-800 border border-amber-200"
+            }`}
+          >
+            <span className={`w-1.5 h-1.5 rounded-full ${isLoaded ? "bg-emerald-600" : "bg-amber-600 animate-pulse"}`} />
+            {isLoaded ? "Content Loaded" : "Skeleton Active (Sheen)"}
+          </span>
+        </div>
+        <Button
+          size="sm"
+          variant="outline"
+          onClick={() => setIsLoaded((prev) => !prev)}
+          className="rounded-full text-xs font-semibold gap-1.5 cursor-pointer bg-white hover:bg-slate-50"
+        >
+          <Sparkles className="w-3.5 h-3.5 text-[#4285F4]" />
+          <span>{isLoaded ? "Simulate Loading (Show Skeleton)" : "Reveal Content (isLoaded blur-in)"}</span>
+        </Button>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Docs Example: Standalone Skeleton Card */}
+        <div className="space-y-2">
+          <div className="text-xs font-semibold text-[#80827f] flex items-center justify-between">
+            <span>Docs Example (Static Placeholders)</span>
+            <span className="text-[10px] font-mono text-[#80827f]">aria-busy="true"</span>
+          </div>
+          <div
+            aria-busy="true"
+            className="flex w-full flex-col gap-4 rounded-3xl border border-[#d5d5d4] bg-white p-5 shadow-xs"
+          >
+            <div className="flex items-center gap-3">
+              <BoardUISkeleton shape="circle" className="size-10 shrink-0" />
+              <div className="flex flex-1 flex-col gap-2">
+                <BoardUISkeleton shape="text" className="h-3.5 w-32" />
+                <BoardUISkeleton shape="text" className="h-3 w-20" />
+              </div>
+            </div>
+            <BoardUISkeletonText lines={3} />
+            <BoardUISkeleton className="h-36 w-full rounded-2xl" />
+          </div>
+        </div>
+
+        {/* Live Content Transition Card with isLoaded */}
+        <div className="space-y-2">
+          <div className="text-xs font-semibold text-[#80827f] flex items-center justify-between">
+            <span>Interactive Reveal (isLoaded blur-in)</span>
+            <span className="text-[10px] font-mono text-[#80827f]">isLoaded={isLoaded ? "true" : "false"}</span>
+          </div>
+          <div
+            aria-busy={!isLoaded}
+            className="flex w-full flex-col gap-4 rounded-3xl border border-[#d5d5d4] bg-white p-5 shadow-xs"
+          >
+            <div className="flex items-center gap-3">
+              <BoardUISkeleton shape="circle" isLoaded={isLoaded} className="size-10 shrink-0 rounded-full">
+                <div className="size-10 rounded-full bg-gradient-to-br from-[#4285F4] to-[#34A853] text-white flex items-center justify-center font-bold text-sm shadow-xs">
+                  MC
+                </div>
+              </BoardUISkeleton>
+              <div className="flex flex-1 flex-col gap-1 min-w-0">
+                <BoardUISkeleton shape="text" isLoaded={isLoaded} className="w-fit">
+                  <span className="font-bold text-sm text-[#2c2e2a]">Maya Chen</span>
+                </BoardUISkeleton>
+                <BoardUISkeleton shape="text" isLoaded={isLoaded} className="w-fit">
+                  <span className="text-xs text-[#80827f]">Cloud Architecture Lead • GDG AJCE</span>
+                </BoardUISkeleton>
+              </div>
+            </div>
+
+            <BoardUISkeleton shape="rect" isLoaded={isLoaded} className="w-full">
+              <p className="text-xs text-[#4b4e47] leading-relaxed">
+                Shipped the new onboarding flow for 1,400+ student developers. Spearheading the Google Cloud Study Jam with interactive workshops and automated certification validation.
+              </p>
+            </BoardUISkeleton>
+
+            <BoardUISkeleton shape="rect" isLoaded={isLoaded} className="h-36 w-full rounded-2xl">
+              <div className="h-36 w-full rounded-2xl bg-gradient-to-br from-[#4285F4]/15 via-[#EA4335]/10 to-[#FBBC05]/20 p-4 flex flex-col justify-between border border-[#e5e1d5]">
+                <div className="flex items-center justify-between">
+                  <GDGLogoMark className="w-5 h-5" />
+                  <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-white/90 border border-[#d5d5d4] text-[#2c2e2a]">
+                    STUDY JAM
+                  </span>
+                </div>
+                <div>
+                  <div className="text-xs font-bold text-[#2c2e2a]">Vertex AI & Cloud Run Sprint</div>
+                  <div className="text-[11px] text-[#5f6368]">Hands-on lab featuring Gemini API integration</div>
+                </div>
+              </div>
+            </BoardUISkeleton>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function BoardUILinkButtonShowcase() {
+  const [lastAction, setLastAction] = useState<string | null>(null);
+
+  return (
+    <div className="space-y-6">
+      {/* Interactive feedback bar */}
+      <div className="flex flex-wrap items-center justify-between gap-3 p-4 rounded-2xl bg-[#f5f1e4]/70 border border-[#e5e1d5]">
+        <div className="flex items-center gap-2.5">
+          <Sparkles className="w-4 h-4 text-[#4285F4]" />
+          <span className="text-xs font-semibold text-[#2c2e2a]">Inline Action State</span>
+          <span className="text-xs text-[#80827f] font-mono">
+            {lastAction ? `Last triggered: "${lastAction}"` : "Click any button to test handler"}
+          </span>
+        </div>
+        {lastAction && (
+          <button
+            onClick={() => setLastAction(null)}
+            className="text-[11px] font-semibold text-[#80827f] hover:text-[#2c2e2a] cursor-pointer"
+          >
+            Reset
+          </button>
+        )}
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Card 1: Official Docs / Matrix Showcase */}
+        <div className="p-6 rounded-3xl bg-white border border-[#d5d5d4] shadow-xs space-y-5">
+          <div>
+            <h3 className="text-sm font-bold text-[#2c2e2a]">Official Pattern Showcase</h3>
+            <p className="text-xs text-[#80827f]">
+              Demonstrating variants, sizes, and leading / trailing Remix icons.
+            </p>
+          </div>
+
+          <div className="space-y-4 pt-1">
+            {/* Primary medium with trailing arrow */}
+            <div className="flex items-center justify-between p-3 rounded-2xl bg-[#f5f1e4]/40 border border-[#e5e1d5]">
+              <span className="text-xs text-[#80827f]">Primary Medium (href + Trailing Icon)</span>
+              <LinkButton href="/programs" trailingIcon={RiArrowRightLine}>
+                Learn more
+              </LinkButton>
+            </div>
+
+            {/* Secondary medium dismissal */}
+            <div className="flex items-center justify-between p-3 rounded-2xl bg-[#f5f1e4]/40 border border-[#e5e1d5]">
+              <span className="text-xs text-[#80827f]">Secondary Medium (onClick handler)</span>
+              <LinkButton variant="secondary" onClick={() => setLastAction("Dismissed notification")}>
+                Dismiss
+              </LinkButton>
+            </div>
+
+            {/* External link */}
+            <div className="flex items-center justify-between p-3 rounded-2xl bg-[#f5f1e4]/40 border border-[#e5e1d5]">
+              <span className="text-xs text-[#80827f]">External Link (RiExternalLinkLine)</span>
+              <LinkButton href="/changelog" trailingIcon={RiExternalLinkLine}>
+                View changelog
+              </LinkButton>
+            </div>
+
+            {/* Small size with leading download icon */}
+            <div className="flex items-center justify-between p-3 rounded-2xl bg-[#f5f1e4]/40 border border-[#e5e1d5]">
+              <span className="text-xs text-[#80827f]">Small Size (Leading Download Icon)</span>
+              <LinkButton
+                size="small"
+                leadingIcon={RiDownloadLine}
+                onClick={() => setLastAction("Downloaded chapter report")}
+              >
+                Download report
+              </LinkButton>
+            </div>
+
+            {/* Extra small (xs) secondary with trailing arrow */}
+            <div className="flex items-center justify-between p-3 rounded-2xl bg-[#f5f1e4]/40 border border-[#e5e1d5]">
+              <span className="text-xs text-[#80827f]">Extra Small xs (Caption font scale)</span>
+              <LinkButton
+                size="xs"
+                variant="secondary"
+                trailingIcon={RiArrowRightLine}
+                onClick={() => setLastAction("See all activity")}
+              >
+                See all
+              </LinkButton>
+            </div>
+
+            {/* Disabled state */}
+            <div className="flex items-center justify-between p-3 rounded-2xl bg-[#f5f1e4]/40 border border-[#e5e1d5]">
+              <span className="text-xs text-[#80827f]">Disabled State (Muted & no underline)</span>
+              <LinkButton disabled trailingIcon={RiArrowRightLine}>
+                Action disabled
+              </LinkButton>
+            </div>
+          </div>
+        </div>
+
+        {/* Card 2: Interactive In-Context Demonstration */}
+        <div className="p-6 rounded-3xl bg-white border border-[#d5d5d4] shadow-xs flex flex-col justify-between space-y-5">
+          <div className="space-y-4">
+            <div>
+              <h3 className="text-sm font-bold text-[#2c2e2a]">In-Context Administrative Tile</h3>
+              <p className="text-xs text-[#80827f]">
+                Seamless inline copy actions without the heavy visual footprint of bordered buttons.
+              </p>
+            </div>
+
+            <div className="p-5 rounded-2xl bg-[#faf9f6] border border-[#e5e1d5] space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-semibold text-[#2c2e2a]">Execom Candidate Roster</span>
+                <LinkButton
+                  size="xs"
+                  variant="secondary"
+                  trailingIcon={RiArrowRightLine}
+                  onClick={() => setLastAction("Navigating to candidate roster")}
+                >
+                  View full queue
+                </LinkButton>
+              </div>
+              <p className="text-xs text-[#80827f] leading-relaxed">
+                14 student applications pending review for the Google Cloud & Gemini AI tracks. Download the candidate
+                resumes or inspect submitted portfolios.
+              </p>
+              <div className="pt-2 flex flex-wrap items-center gap-4">
+                <LinkButton
+                  size="small"
+                  variant="primary"
+                  trailingIcon={RiExternalLinkLine}
+                  href="https://developers.google.com"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Developer portal
+                </LinkButton>
+                <LinkButton
+                  size="small"
+                  leadingIcon={RiDownloadLine}
+                  onClick={() => setLastAction("Exported applicant CSV")}
+                >
+                  Export CSV
+                </LinkButton>
+              </div>
+            </div>
+          </div>
+
+          {/* Code preview snippet */}
+          <CodeSnippet
+            code={`import { RiArrowRightLine, RiExternalLinkLine, RiDownloadLine } from "@remixicon/react";\nimport { LinkButton } from "@/components/base/buttons/link-button";\n\n<LinkButton href="/pricing" trailingIcon={RiArrowRightLine}>Learn more</LinkButton>\n<LinkButton variant="secondary" onClick={() => {}}>Dismiss</LinkButton>\n<LinkButton size="small" leadingIcon={RiDownloadLine}>Download report</LinkButton>\n<LinkButton size="xs" variant="secondary" trailingIcon={RiArrowRightLine}>See all</LinkButton>`}
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function BoardUIBreadcrumbShowcase() {
+  const [activeStep, setActiveStep] = useState<string>("recruitment");
+  const [lastClicked, setLastClicked] = useState<string | null>(null);
+
+  return (
+    <div className="space-y-6">
+      {/* Interactive feedback bar */}
+      <div className="flex flex-wrap items-center justify-between gap-3 p-4 rounded-2xl bg-[#f5f1e4]/70 border border-[#e5e1d5]">
+        <div className="flex items-center gap-2.5">
+          <Sparkles className="w-4 h-4 text-[#4285F4]" />
+          <span className="text-xs font-semibold text-[#2c2e2a]">Interactive Navigation State</span>
+          <span className="text-xs text-[#80827f] font-mono">
+            {lastClicked ? `Action triggered: "${lastClicked}"` : "Click breadcrumb links to test handlers"}
+          </span>
+        </div>
+        {lastClicked && (
+          <button
+            onClick={() => setLastClicked(null)}
+            className="text-[11px] font-semibold text-[#80827f] hover:text-[#2c2e2a] cursor-pointer"
+          >
+            Reset
+          </button>
+        )}
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Card 1: Official Documentation Pattern */}
+        <div className="p-6 rounded-3xl bg-white border border-[#d5d5d4] shadow-xs space-y-5">
+          <div>
+            <h3 className="text-sm font-bold text-[#2c2e2a]">Official Pattern Showcase</h3>
+            <p className="text-xs text-[#80827f]">
+              Direct implementation from official documentation with leading Remix icons and automatic chevrons.
+            </p>
+          </div>
+
+          <div className="space-y-4 pt-1">
+            <div className="p-4 rounded-2xl bg-[#f5f1e4]/40 border border-[#e5e1d5]">
+              <span className="text-[11px] font-mono text-[#80827f] block mb-2">Docs Example (Dashboard &gt; Projects &gt; BoardUI)</span>
+              <BoardUIBreadcrumb aria-label="Pages">
+                <BoardUIBreadcrumbItem
+                  href="#dashboard"
+                  onClick={() => setLastClicked("Navigated to Dashboard")}
+                >
+                  Dashboard
+                </BoardUIBreadcrumbItem>
+                <BoardUIBreadcrumbItem
+                  href="#projects"
+                  onClick={() => setLastClicked("Navigated to Projects")}
+                >
+                  Projects
+                </BoardUIBreadcrumbItem>
+                <BoardUIBreadcrumbItem current icon={RiHomeLine}>
+                  BoardUI
+                </BoardUIBreadcrumbItem>
+              </BoardUIBreadcrumb>
+            </div>
+
+            <div className="p-4 rounded-2xl bg-[#f5f1e4]/40 border border-[#e5e1d5]">
+              <span className="text-[11px] font-mono text-[#80827f] block mb-2">Deep Hierarchy (With Leading Section Icons)</span>
+              <BoardUIBreadcrumb aria-label="Documentation trail">
+                <BoardUIBreadcrumbItem
+                  icon={RiDashboardLine}
+                  onClick={() => setLastClicked("Clicked Chapter Console")}
+                >
+                  Console
+                </BoardUIBreadcrumbItem>
+                <BoardUIBreadcrumbItem
+                  icon={RiFolderLine}
+                  onClick={() => setLastClicked("Clicked Workspaces")}
+                >
+                  Workspaces
+                </BoardUIBreadcrumbItem>
+                <BoardUIBreadcrumbItem
+                  onClick={() => setLastClicked("Clicked Projects")}
+                >
+                  GDG Campus
+                </BoardUIBreadcrumbItem>
+                <BoardUIBreadcrumbItem current icon={RiCompass3Line}>
+                  Design System
+                </BoardUIBreadcrumbItem>
+              </BoardUIBreadcrumb>
+            </div>
+          </div>
+        </div>
+
+        {/* Card 2: Interactive In-Context Demonstration */}
+        <div className="p-6 rounded-3xl bg-white border border-[#d5d5d4] shadow-xs flex flex-col justify-between space-y-5">
+          <div className="space-y-4">
+            <div>
+              <h3 className="text-sm font-bold text-[#2c2e2a]">Admin Console Header In-Context</h3>
+              <p className="text-xs text-[#80827f]">
+                Integrated live into the GDG on Campus AJCE Admin Header for instant section orientation.
+              </p>
+            </div>
+
+            <div className="p-5 rounded-2xl bg-[#faf9f6] border border-[#e5e1d5] space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-semibold text-[#2c2e2a]">Simulated Admin Viewport</span>
+                <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200">
+                  LIVE CONSOLE
+                </span>
+              </div>
+
+              {/* Live trail based on activeStep */}
+              <div className="py-2 px-3 rounded-xl bg-white border border-[#d5d5d4]">
+                <BoardUIBreadcrumb aria-label="Dynamic Admin Hierarchy">
+                  <BoardUIBreadcrumbItem
+                    icon={RiHomeLine}
+                    onClick={() => {
+                      setActiveStep("home");
+                      setLastClicked("Clicked GDG Admin");
+                    }}
+                  >
+                    GDG Admin
+                  </BoardUIBreadcrumbItem>
+                  <BoardUIBreadcrumbItem
+                    icon={RiFolderLine}
+                    onClick={() => {
+                      setActiveStep("leadership");
+                      setLastClicked("Clicked Leadership");
+                    }}
+                  >
+                    Leadership
+                  </BoardUIBreadcrumbItem>
+                  <BoardUIBreadcrumbItem
+                    current
+                    icon={RiCompass3Line}
+                  >
+                    {activeStep === "home" ? "Overview" : activeStep === "leadership" ? "Execom Leads" : "Recruitment Pipeline"}
+                  </BoardUIBreadcrumbItem>
+                </BoardUIBreadcrumb>
+              </div>
+
+              <div className="flex flex-wrap gap-2 pt-1">
+                <Button
+                  size="sm"
+                  variant={activeStep === "home" ? "default" : "outline"}
+                  onClick={() => {
+                    setActiveStep("home");
+                    setLastClicked("Switched to Overview tab");
+                  }}
+                  className="text-xs h-7"
+                >
+                  Home Tab
+                </Button>
+                <Button
+                  size="sm"
+                  variant={activeStep === "leadership" ? "default" : "outline"}
+                  onClick={() => {
+                    setActiveStep("leadership");
+                    setLastClicked("Switched to Leadership tab");
+                  }}
+                  className="text-xs h-7"
+                >
+                  Execom Tab
+                </Button>
+                <Button
+                  size="sm"
+                  variant={activeStep === "recruitment" ? "default" : "outline"}
+                  onClick={() => {
+                    setActiveStep("recruitment");
+                    setLastClicked("Switched to Recruitment tab");
+                  }}
+                  className="text-xs h-7"
+                >
+                  Recruitment Tab
+                </Button>
+              </div>
+            </div>
+          </div>
+
+          {/* Code preview snippet */}
+          <CodeSnippet
+            code={`import { RiHomeLine } from "@remixicon/react";\nimport { Breadcrumb, BreadcrumbItem } from "@/components/base/breadcrumb/breadcrumb";\n\n<Breadcrumb aria-label="Pages">\n  <BreadcrumbItem href="/dashboard">Dashboard</BreadcrumbItem>\n  <BreadcrumbItem href="/projects">Projects</BreadcrumbItem>\n  <BreadcrumbItem current icon={RiHomeLine}>\n    BoardUI\n  </BreadcrumbItem>\n</Breadcrumb>`}
+          />
+        </div>
+      </div>
     </div>
   );
 }
@@ -833,6 +1499,76 @@ export default function DesignSystemPage() {
             </div>
           </Section>
 
+          {/* ── BOARDUI DATE PICKER & RANGE PICKER ── */}
+          <Section
+            title="BoardUI Date Picker & Range Picker"
+            description="Figma-faithful date and dual-month range calendars on React Aria with Motion animations, editable day chips, and quick-select presets."
+          >
+            <div className="w-full max-w-4xl overflow-hidden rounded-3xl border border-[#d5d5d4] p-6 bg-white shadow-xs">
+              <DatePickerShowcase />
+            </div>
+          </Section>
+
+          {/* ── BOARDUI TIME FIELD ── */}
+          <Section
+            title="BoardUI Time Field"
+            description="Segment-by-segment typed time input with 12/24 hour cycles, comparison validation, and customizable icons on React Aria."
+          >
+            <div className="w-full max-w-lg overflow-hidden rounded-3xl border border-[#d5d5d4] p-6 bg-white shadow-xs">
+              <TimeFieldShowcase />
+            </div>
+          </Section>
+
+          {/* ── BOARDUI TAG GROUP ── */}
+          <Section
+            title="BoardUI Tag Group"
+            description="Selectable or removable tags in Chip's colors, with keyboard navigation, empty states, and dismiss handles on React Aria's TagGroup."
+          >
+            <div className="w-full max-w-lg overflow-hidden rounded-3xl border border-[#d5d5d4] p-6 bg-white shadow-xs">
+              <TagGroupShowcase />
+            </div>
+          </Section>
+
+          {/* ── BOARDUI TABS ── */}
+          <Section
+            title="BoardUI Tabs"
+            description="Underline and indicator tabs built on React Aria with roving tabindex, automatic keyboard activation, icons, and dynamic count badges."
+          >
+            <div className="w-full max-w-2xl overflow-hidden rounded-3xl border border-[#d5d5d4] p-6 bg-white shadow-xs">
+              <BoardUITabsShowcase />
+            </div>
+          </Section>
+
+          {/* ── BOARDUI SKELETON ── */}
+          <Section
+            title="BoardUI Skeleton"
+            description="Content placeholders with smooth sweeping sheen animations (bui-skeleton), rect/text/circle shapes, SkeletonText multi-line paragraphs, and isLoaded blur-in transitions."
+          >
+            <div className="w-full max-w-4xl overflow-hidden rounded-3xl border border-[#d5d5d4] p-6 bg-white shadow-xs">
+              <BoardUISkeletonShowcase />
+            </div>
+          </Section>
+
+          {/* ── BOARDUI LINK BUTTON ── */}
+          <Section
+            title="BoardUI Link Button"
+            description="Inline text actions styled like a link, sized on the same scale as Button (medium, small, xs) without the container, supporting href navigation or onClick triggers with Remix icons."
+          >
+            <div className="w-full max-w-4xl overflow-hidden rounded-3xl border border-[#d5d5d4] p-6 bg-white shadow-xs">
+              <BoardUILinkButtonShowcase />
+            </div>
+          </Section>
+
+          {/* ── BOARDUI BREADCRUMB ── */}
+          <Section
+            title="BoardUI Breadcrumb"
+            description="Trail of ancestor pages with automatic ChevronRightSmall separators, leading Remix icons, interactive hover pills, and semantic aria-current active page styling."
+          >
+            <div className="w-full max-w-4xl overflow-hidden rounded-3xl border border-[#d5d5d4] p-6 bg-white shadow-xs">
+              <BoardUIBreadcrumbShowcase />
+            </div>
+          </Section>
+
           {/* ── IMPORT GUIDE ── */}
           <Section
             title="Usage Guide"
@@ -871,7 +1607,17 @@ import Chip from "@/components/ui/Chip"              // children, color: "blue"|
 
 // GDG-specific
 import GDGLogoMark from "@/components/ui/GDGLogoMark"
-import GDGFullLogo from "@/components/ui/GDGFullLogo"`}
+import GDGFullLogo from "@/components/ui/GDGFullLogo"
+
+// BoardUI Foundation Components
+import { Breadcrumb, BreadcrumbItem } from "@/components/base/breadcrumb/breadcrumb"
+import { DatePicker } from "@/components/base/date-picker/date-picker"
+import { DateRangePicker } from "@/components/base/date-picker/date-range-picker"
+import { LinkButton } from "@/components/base/buttons/link-button"
+import { Tabs, TabList, Tab, TabPanel } from "@/components/base/tabs/tabs"
+import { TimeField } from "@/components/base/time-field/time-field"
+import { TagGroup, Tag } from "@/components/base/tag-group/tag-group"
+import { Skeleton, SkeletonText } from "@/components/base/skeleton/skeleton"`}
               />
             </div>
           </Section>

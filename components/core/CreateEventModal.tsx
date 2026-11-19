@@ -6,7 +6,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
     X,
     Calendar,
-    Tag,
     Users,
     DollarSign,
     FileText,
@@ -37,6 +36,10 @@ import { Button } from "@/components/ui/Button";
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/Badge";
 import { DateTimePicker } from "@/components/ui/date-time-picker";
+import { CalendarDate, Time } from "@internationalized/date";
+import { DatePicker } from "@/components/base/date-picker/date-picker";
+import { TimeField } from "@/components/base/time-field/time-field";
+import { Tag, TagGroup } from "@/components/base/tag-group/tag-group";
 import {
     Select,
     SelectContent,
@@ -44,6 +47,43 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
+
+function parseTimeToObject(timeStr?: string): Time {
+    if (!timeStr) return new Time(10, 0);
+    try {
+        const isPm = /pm/i.test(timeStr);
+        const isAm = /am/i.test(timeStr);
+        const clean = timeStr.replace(/[^\d:]/g, "");
+        const parts = clean.split(":").map(Number);
+        let h = parts[0] ?? 10;
+        const m = parts[1] ?? 0;
+        if (isPm && h < 12) h += 12;
+        if (isAm && h === 12) h = 0;
+        return new Time(Math.min(23, Math.max(0, h)), Math.min(59, Math.max(0, m)));
+    } catch {
+        return new Time(10, 0);
+    }
+}
+
+function formatTimeToString(time: Time | null): string {
+    if (!time) return "10:00 AM";
+    const h = time.hour;
+    const m = time.minute.toString().padStart(2, "0");
+    const period = h >= 12 ? "PM" : "AM";
+    const displayHour = h % 12 || 12;
+    return `${displayHour}:${m} ${period}`;
+}
+
+function toCalendarDate(dateStr?: string): CalendarDate | null {
+    if (!dateStr) return null;
+    try {
+        const d = new Date(dateStr);
+        if (isNaN(d.getTime())) return null;
+        return new CalendarDate(d.getFullYear(), d.getMonth() + 1, d.getDate());
+    } catch {
+        return null;
+    }
+}
 
 interface CreateEventModalProps {
     onClose: () => void;
@@ -114,11 +154,33 @@ export default function CreateEventModal({
     const [category, setCategory] = useState<EventCategory>(initialData?.category || "workshop");
     const [date, setDate] = useState(formatDateForInput(initialData?.date));
     const [regDate, setRegDate] = useState(formatDateForInput(initialData?.registrationLastDate));
+    const [startTime, setStartTime] = useState<Time | null>(() => {
+        if (initialData?.time) {
+            return parseTimeToObject(initialData.time.split(/–|-/)[0]?.trim());
+        }
+        return new Time(10, 0);
+    });
+    const [endTime, setEndTime] = useState<Time | null>(() => {
+        if (initialData?.time && (initialData.time.includes("–") || initialData.time.includes("-"))) {
+            return parseTimeToObject(initialData.time.split(/–|-/)[1]?.trim());
+        }
+        return new Time(13, 0);
+    });
     const [location, setLocation] = useState(initialData?.location || "GDG Tech Lab & Online");
     const [posterUrl, setPosterUrl] = useState(initialData?.posterUrl || "");
     const [externalRegistrationUrl, setExternalRegistrationUrl] = useState(initialData?.externalRegistrationUrl || "");
     const [whatsappUrl, setWhatsappUrl] = useState(initialData?.whatsappUrl || initialData?.postRegistrationLink || "");
     const [isHidden, setIsHidden] = useState(Boolean(initialData?.isHidden));
+    const [tags, setTags] = useState<{ id: string; name: string }[]>(() => {
+        if (Array.isArray(initialData?.tags)) {
+            return initialData.tags.map((t: string) => ({ id: t.toLowerCase().replace(/\s+/g, "-"), name: t }));
+        }
+        return [
+            { id: "ai", name: "AI/ML" },
+            { id: "cloud", name: "Google Cloud" },
+        ];
+    });
+    const [newTagInput, setNewTagInput] = useState("");
 
     // Markdown Content
     const [description, setDescription] = useState(initialData?.description || "");
@@ -156,11 +218,20 @@ export default function CreateEventModal({
             setCategory(initialData.category || "workshop");
             setDate(formatDateForInput(initialData.date));
             setRegDate(formatDateForInput(initialData.registrationLastDate));
+            if (initialData.time) {
+                setStartTime(parseTimeToObject(initialData.time.split(/–|-/)[0]?.trim()));
+                if (initialData.time.includes("–") || initialData.time.includes("-")) {
+                    setEndTime(parseTimeToObject(initialData.time.split(/–|-/)[1]?.trim()));
+                }
+            }
             setLocation(initialData.location || "GDG Tech Lab & Online");
             setPosterUrl(initialData.posterUrl || "");
             setExternalRegistrationUrl(initialData.externalRegistrationUrl || "");
             setWhatsappUrl(initialData.whatsappUrl || initialData?.postRegistrationLink || "");
             setIsHidden(Boolean(initialData.isHidden));
+            if (Array.isArray(initialData.tags)) {
+                setTags(initialData.tags.map((t: string) => ({ id: t.toLowerCase().replace(/\s+/g, "-"), name: t })));
+            }
             setDescription(initialData.description || "");
             setRules(initialData.rules || "");
             setPrizepool(initialData.prizepool || "");
@@ -263,7 +334,9 @@ export default function CreateEventModal({
         try {
             const rawSlug = slug.trim() || title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)+/g, "");
             const finalSlug = rawSlug || `event-${Date.now().toString(36)}`;
-            const eventTime = extractFormattedTime(date);
+            const eventTime = startTime
+                ? `${formatTimeToString(startTime)}${endTime ? ` – ${formatTimeToString(endTime)}` : ""}`
+                : extractFormattedTime(date);
 
             const rawEventPayload = {
                 title: title.trim(),
@@ -278,6 +351,7 @@ export default function CreateEventModal({
                 externalRegistrationUrl: externalRegistrationUrl.trim(),
                 whatsappUrl: whatsappUrl.trim(),
                 postRegistrationLink: whatsappUrl.trim(),
+                tags: tags.map((t) => t.name),
                 isHidden,
                 description: description.trim(),
                 rules: showRules ? rules.trim() : "",
@@ -530,6 +604,50 @@ export default function CreateEventModal({
                                 </div>
                             </div>
 
+                            {/* BoardUI Date & Time Fields for Event Session */}
+                            <div className="p-3.5 rounded-2xl bg-[#f5f1e4]/70 border border-[#d5d5d4] space-y-3">
+                                <div className="flex items-center justify-between">
+                                    <span className="text-xs font-semibold text-[#2c2e2a]">Event Session Timing & Schedule</span>
+                                    <span className="text-[10px] font-mono text-[#80827f]">BoardUI DatePicker & TimeField</span>
+                                </div>
+                                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                    <div className="space-y-1">
+                                        <span className="text-xs font-semibold text-[#2c2e2a] block">Session Date</span>
+                                        <DatePicker
+                                            value={toCalendarDate(date)}
+                                            onChange={(cDate) => {
+                                                if (cDate) {
+                                                    const cur = date ? new Date(date) : new Date();
+                                                    const h = isNaN(cur.getTime()) ? (startTime ? startTime.hour : 10) : cur.getHours();
+                                                    const m = isNaN(cur.getTime()) ? (startTime ? startTime.minute : 0) : cur.getMinutes();
+                                                    const newD = new Date(cDate.year, cDate.month - 1, cDate.day, h, m);
+                                                    setDate(formatToLocalIso(newD));
+                                                }
+                                            }}
+                                            aria-label="Event session date"
+                                        />
+                                        <p className="text-[10px] text-[#80827f]">Synced with event date</p>
+                                    </div>
+                                    <TimeField
+                                        label="Kickoff Time"
+                                        value={startTime}
+                                        onChange={setStartTime}
+                                        hint="Scheduled start time"
+                                    />
+                                    <TimeField
+                                        label="Conclusion Time"
+                                        value={endTime}
+                                        onChange={setEndTime}
+                                        isInvalid={Boolean(startTime && endTime && endTime.compare(startTime) <= 0)}
+                                        hint={
+                                            startTime && endTime && endTime.compare(startTime) <= 0
+                                                ? "Must be after start time."
+                                                : "Scheduled end time"
+                                        }
+                                    />
+                                </div>
+                            </div>
+
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div className="space-y-1.5">
                                     <Label htmlFor="event-location" className="text-xs font-semibold text-[#2c2e2a]">
@@ -554,6 +672,59 @@ export default function CreateEventModal({
                                         onChange={(e) => setPosterUrl(e.target.value)}
                                         placeholder="https://.../poster.webp"
                                     />
+                                </div>
+                            </div>
+
+                            {/* BoardUI Tag Group for Topics & Technologies */}
+                            <div className="p-3.5 rounded-2xl bg-[#f5f1e4]/70 border border-[#d5d5d4] space-y-2">
+                                <div className="flex items-center justify-between">
+                                    <span className="text-xs font-semibold text-[#2c2e2a]">Topics & Technologies</span>
+                                    <span className="text-[10px] font-mono text-[#80827f]">Removable & searchable</span>
+                                </div>
+                                <TagGroup
+                                    items={tags}
+                                    onRemove={(keys) => setTags((prev) => prev.filter((t) => !keys.has(t.id)))}
+                                    emptyState="No topics added. Type below and press Add."
+                                    size="small"
+                                >
+                                    {(t) => <Tag color="soft">{t.name}</Tag>}
+                                </TagGroup>
+                                <div className="flex items-center gap-2 pt-1">
+                                    <Input
+                                        type="text"
+                                        value={newTagInput}
+                                        onChange={(e) => setNewTagInput(e.target.value)}
+                                        onKeyDown={(e) => {
+                                            if (e.key === "Enter") {
+                                                e.preventDefault();
+                                                if (newTagInput.trim()) {
+                                                    const id = newTagInput.trim().toLowerCase().replace(/\s+/g, "-");
+                                                    if (!tags.some((t) => t.id === id)) {
+                                                        setTags((prev) => [...prev, { id, name: newTagInput.trim() }]);
+                                                    }
+                                                    setNewTagInput("");
+                                                }
+                                            }
+                                        }}
+                                        placeholder="Add a topic (e.g. Gemini, Firebase, Android)..."
+                                        className="h-8 text-xs bg-white"
+                                    />
+                                    <Button
+                                        type="button"
+                                        size="sm"
+                                        onClick={() => {
+                                            if (newTagInput.trim()) {
+                                                const id = newTagInput.trim().toLowerCase().replace(/\s+/g, "-");
+                                                if (!tags.some((t) => t.id === id)) {
+                                                    setTags((prev) => [...prev, { id, name: newTagInput.trim() }]);
+                                                }
+                                                setNewTagInput("");
+                                            }
+                                        }}
+                                        className="h-8 px-3 text-xs bg-[#2c2e2a] text-white hover:bg-[#1a1c18]"
+                                    >
+                                        Add
+                                    </Button>
                                 </div>
                             </div>
 

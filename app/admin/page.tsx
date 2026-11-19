@@ -116,6 +116,8 @@ export default function AdminPage() {
   const [applications, setApplications] = useState<any[]>([]);
   const [funds, setFunds] = useState<any[]>([]);
   const [auditLogs, setAuditLogs] = useState<any[]>([]);
+  const [loadingApplications, setLoadingApplications] = useState(true);
+  const [loadingOverview, setLoadingOverview] = useState(true);
 
   // Dev preview bypass for local design verification
   const [isDevPreview, setIsDevPreview] = useState(false);
@@ -312,6 +314,7 @@ export default function AdminPage() {
 
   // Fetch Applications with hydration from user profiles & answers
   const fetchApplications = useCallback(async () => {
+    setLoadingApplications(true);
     try {
       let snap;
       try {
@@ -455,6 +458,8 @@ export default function AdminPage() {
       setApplications(enrichedApps);
     } catch (e) {
       console.error("Error fetching applications:", e);
+    } finally {
+      setLoadingApplications(false);
     }
   }, []);
 
@@ -481,13 +486,20 @@ export default function AdminPage() {
   }, []);
 
   // Refresh All Data
-  const refreshAll = useCallback(() => {
-    fetchExecom();
-    fetchEvents();
-    fetchUsers();
-    fetchApplications();
-    fetchFunds();
-    fetchAuditLogs();
+  const refreshAll = useCallback(async () => {
+    setLoadingOverview(true);
+    try {
+      await Promise.allSettled([
+        fetchExecom(),
+        fetchEvents(),
+        fetchUsers(),
+        fetchApplications(),
+        fetchFunds(),
+        fetchAuditLogs(),
+      ]);
+    } finally {
+      setLoadingOverview(false);
+    }
   }, [fetchExecom, fetchEvents, fetchUsers, fetchApplications, fetchFunds, fetchAuditLogs]);
 
   useEffect(() => {
@@ -653,6 +665,7 @@ export default function AdminPage() {
                     recentLogs={auditLogs}
                     isSuperAdmin={isSuperAdmin}
                     theme={adminTheme}
+                    loading={loadingOverview}
                   />
                 )}
 
@@ -753,6 +766,7 @@ export default function AdminPage() {
                     onRefresh={fetchApplications}
                     adminName={adminName}
                     onOpenSettings={() => setIsDriveSettingsOpen(true)}
+                    loading={loadingApplications}
                   />
                 )}
 

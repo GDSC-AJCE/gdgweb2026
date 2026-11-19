@@ -12,12 +12,14 @@ import {
   Search,
   Bell,
   Home,
-  ChevronRight,
   SlidersHorizontal,
 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import StatusDot from "@/components/ui/StatusDot";
 import Chip from "@/components/ui/Chip";
+import { Breadcrumb, BreadcrumbItem } from "@/components/base/breadcrumb/breadcrumb";
+import { RiShieldCheckLine } from "@remixicon/react";
+import type { AdminTab } from "@/components/admin/AdminSidebar";
 import {
   NotificationCenter,
   type NotificationCenterItem,
@@ -32,6 +34,65 @@ interface AdminHeaderProps {
   theme?: "light" | "dark";
   onToggleTheme?: () => void;
 }
+
+const TAB_CATEGORY_MAP: Record<string, { category: { label: string; tab?: AdminTab }; current: string }> = {
+  overview: {
+    category: { label: "Home", tab: "overview" },
+    current: "Overview",
+  },
+  funds: {
+    category: { label: "Home", tab: "overview" },
+    current: "Finance & Treasury",
+  },
+  analytics: {
+    category: { label: "Home", tab: "overview" },
+    current: "Analytics & Telemetry",
+  },
+  events: {
+    category: { label: "Events", tab: "events" },
+    current: "Manage Events",
+  },
+  "events-list": {
+    category: { label: "Events", tab: "events" },
+    current: "Events Data Table",
+  },
+  calendar: {
+    category: { label: "Events", tab: "events" },
+    current: "Calendar & Schedule",
+  },
+  certificates: {
+    category: { label: "Events", tab: "events" },
+    current: "Certificates & Credentials",
+  },
+  execom: {
+    category: { label: "Leadership", tab: "execom" },
+    current: "Execom Leads",
+  },
+  applications: {
+    category: { label: "Leadership", tab: "execom" },
+    current: "Recruitment Pipeline",
+  },
+  users: {
+    category: { label: "Directory", tab: "users" },
+    current: "Members & Permissions",
+  },
+  newsletter: {
+    category: { label: "Communications", tab: "mailer" },
+    current: "Tech Newsletter",
+  },
+  mailer: {
+    category: { label: "Communications", tab: "mailer" },
+    current: "Mail Studio",
+  },
+  website: {
+    category: { label: "System", tab: "website" },
+    current: "Website Configuration",
+  },
+  audit: {
+    category: { label: "System", tab: "audit" },
+    current: "Security Audit Trail",
+  },
+};
 
 export default function AdminHeader({
   title,
@@ -128,111 +189,44 @@ export default function AdminHeader({
     }
   };
 
+  const tabCategoryInfo = (activeTab && TAB_CATEGORY_MAP[activeTab]) || {
+    category: { label: "Workspace", tab: "overview" as AdminTab },
+    current: title || activeTab || "Dashboard",
+  };
+
   return (
     <header className="w-full flex flex-col md:flex-row md:items-center justify-between gap-4 select-none pb-2 font-sans">
       {/* Title & BoardUI Breadcrumbs */}
       <div>
-        <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-xs text-slate-400 dark:text-zinc-400 mb-1 font-medium">
-          <span className="flex items-center gap-1.5 text-slate-700 dark:text-zinc-300">
-            <span className="size-4.5 rounded bg-blue-600 text-white flex items-center justify-center text-[10px] font-bold">
-              G
-            </span>
-            <span>GDG AJCE</span>
-          </span>
-          <ChevronRight className="w-3 h-3 text-slate-400 dark:text-zinc-600" />
-          <span className="flex items-center gap-1.5 text-slate-500 dark:text-zinc-400">
-            <span className="size-4 rounded-full bg-zinc-700 text-white flex items-center justify-center text-[9px] font-bold">
-              {userName.charAt(0).toUpperCase()}
-            </span>
-            <span>{userName}</span>
-          </span>
-          <ChevronRight className="w-3 h-3 text-slate-400 dark:text-zinc-600" />
-          {activeTab === "certificates" ? (
-            <div className="flex items-center gap-1.5">
-              <button
-                type="button"
-                onClick={() => onNavigateTab?.("events")}
-                className="text-slate-500 dark:text-zinc-400 hover:text-blue-500 dark:hover:text-blue-400 transition cursor-pointer font-mono text-[11px]"
+        <div className="mb-2">
+          <Breadcrumb aria-label="Admin Navigation">
+            <BreadcrumbItem
+              icon={RiShieldCheckLine}
+              onClick={() => onNavigateTab?.("overview")}
+              className="text-slate-600 dark:text-zinc-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium"
+            >
+              GDG Admin
+            </BreadcrumbItem>
+            {tabCategoryInfo.category && (
+              <BreadcrumbItem
+                onClick={
+                  tabCategoryInfo.category.tab
+                    ? () => onNavigateTab?.(tabCategoryInfo.category.tab)
+                    : undefined
+                }
+                className="text-slate-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 font-medium"
               >
-                Events
-              </button>
-              <ChevronRight className="w-3 h-3 text-slate-400 dark:text-zinc-600" />
-              <span className="text-blue-500 font-semibold font-mono text-[11px]">
-                Certificates
-              </span>
-            </div>
-          ) : activeTab === "calendar" ? (
-            <div className="flex items-center gap-1.5">
-              <button
-                type="button"
-                onClick={() => onNavigateTab?.("events")}
-                className="text-slate-500 dark:text-zinc-400 hover:text-blue-500 dark:hover:text-blue-400 transition cursor-pointer font-mono text-[11px]"
-              >
-                Events
-              </button>
-              <ChevronRight className="w-3 h-3 text-slate-400 dark:text-zinc-600" />
-              <span className="text-blue-500 font-semibold font-mono text-[11px]">
-                Calendar
-              </span>
-            </div>
-          ) : activeTab === "events" ? (
-            <div className="flex items-center gap-1.5">
-              <span className="text-slate-500 dark:text-zinc-400 font-mono text-[11px]">
-                Events
-              </span>
-              <ChevronRight className="w-3 h-3 text-slate-400 dark:text-zinc-600" />
-              <span className="text-blue-500 font-semibold font-mono text-[11px]">
-                Manage Events
-              </span>
-            </div>
-          ) : activeTab === "funds" ? (
-            <div className="flex items-center gap-1.5">
-              <button
-                type="button"
-                onClick={() => onNavigateTab?.("overview")}
-                className="text-slate-500 dark:text-zinc-400 hover:text-blue-500 dark:hover:text-blue-400 transition cursor-pointer font-mono text-[11px]"
-              >
-                Home
-              </button>
-              <ChevronRight className="w-3 h-3 text-slate-400 dark:text-zinc-600" />
-              <span className="text-blue-500 font-semibold font-mono text-[11px]">
-                Finance
-              </span>
-            </div>
-          ) : activeTab === "analytics" ? (
-            <div className="flex items-center gap-1.5">
-              <button
-                type="button"
-                onClick={() => onNavigateTab?.("overview")}
-                className="text-slate-500 dark:text-zinc-400 hover:text-blue-500 dark:hover:text-blue-400 transition cursor-pointer font-mono text-[11px]"
-              >
-                Home
-              </button>
-              <ChevronRight className="w-3 h-3 text-slate-400 dark:text-zinc-600" />
-              <span className="text-blue-500 font-semibold font-mono text-[11px]">
-                Analytics
-              </span>
-            </div>
-          ) : activeTab === "applications" ? (
-            <div className="flex items-center gap-1.5">
-              <button
-                type="button"
-                onClick={() => onNavigateTab?.("execom")}
-                className="text-slate-500 dark:text-zinc-400 hover:text-blue-500 dark:hover:text-blue-400 transition cursor-pointer font-mono text-[11px]"
-              >
-                Execom
-              </button>
-              <ChevronRight className="w-3 h-3 text-slate-400 dark:text-zinc-600" />
-              <span className="text-blue-500 font-semibold font-mono text-[11px]">
-                Applications
-              </span>
-            </div>
-          ) : (
-            <span className="text-blue-500 font-semibold capitalize font-mono text-[11px]">
-              {activeTab === "overview" ? "Home" : activeTab || "Overview"}
-            </span>
-          )}
-        </nav>
+                {tabCategoryInfo.category.label}
+              </BreadcrumbItem>
+            )}
+            <BreadcrumbItem
+              current
+              className="text-blue-600 dark:text-blue-400 font-semibold"
+            >
+              {tabCategoryInfo.current}
+            </BreadcrumbItem>
+          </Breadcrumb>
+        </div>
 
         <div className="flex flex-wrap items-center gap-3">
           <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">

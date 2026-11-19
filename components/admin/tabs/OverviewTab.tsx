@@ -48,6 +48,11 @@ import * as XLSX from "xlsx";
 import { AdminTab } from "../AdminSidebar";
 import StatusDot from "@/components/ui/StatusDot";
 import Chip from "@/components/ui/Chip";
+import { Skeleton, SkeletonText } from "@/components/base/skeleton/skeleton";
+import { LinkButton } from "@/components/base/buttons/link-button";
+import { RiArrowRightLine, RiExternalLinkLine } from "@remixicon/react";
+import { DateRangePicker, type DateRangeValue } from "@/components/base/date-picker/date-range-picker";
+import { getLocalTimeZone } from "@internationalized/date";
 
 interface OverviewTabProps {
   stats: {
@@ -67,6 +72,7 @@ interface OverviewTabProps {
   recentLogs: any[];
   isSuperAdmin?: boolean;
   theme?: "light" | "dark";
+  loading?: boolean;
 }
 
 // Lightweight smooth number count-up hook
@@ -142,6 +148,7 @@ export default function OverviewTab({
   recentLogs = [],
   isSuperAdmin = true,
   theme = "light",
+  loading = false,
 }: OverviewTabProps) {
   const isDark = theme === "dark";
 
@@ -153,6 +160,7 @@ export default function OverviewTab({
   // Table state
   const [tableSearch, setTableSearch] = useState("");
   const [tableFilter, setTableFilter] = useState<"all" | "execom" | "applicants" | "members">("all");
+  const [directoryDateRange, setDirectoryDateRange] = useState<DateRangeValue | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [activeHint, setActiveHint] = useState<string | null>(null);
   const [logFilter, setLogFilter] = useState<"all" | "events" | "execom" | "auth">("all");
@@ -241,6 +249,7 @@ export default function OverviewTab({
     // Add users
     users.forEach((u) => {
       const isLead = u.role === "core" || u.role === "core-manage" || u.is_admin;
+      const rawDate = u.createdAt?.toDate ? u.createdAt.toDate() : u.createdAt?.seconds ? new Date(u.createdAt.seconds * 1000) : null;
       list.push({
         id: u.id,
         name: u.displayName || u.name || "Student Member",
@@ -250,12 +259,14 @@ export default function OverviewTab({
         dept: u.department || u.dept || "CSE",
         avatar: u.photoURL || u.image || null,
         status: isLead ? "lead" : "active",
-        date: u.createdAt?.toDate ? u.createdAt.toDate().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "Recent",
+        date: rawDate ? rawDate.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "Recent",
+        timestamp: rawDate ? rawDate.getTime() : null,
       });
     });
 
     // Add applications if any
     applications.forEach((a) => {
+      const rawDate = a.submittedAt?.toDate ? a.submittedAt.toDate() : a.submittedAt?.seconds ? new Date(a.submittedAt.seconds * 1000) : (a.submittedAt ? new Date(a.submittedAt) : null);
       list.push({
         id: `app-${a.id}`,
         name: a.name || a.fullName || "Candidate Applicant",
@@ -265,21 +276,22 @@ export default function OverviewTab({
         dept: a.department || a.dept || "CSE",
         avatar: a.photoURL || null,
         status: "pending",
-        date: a.submittedAt?.toDate ? a.submittedAt.toDate().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "Pending Review",
+        date: rawDate ? rawDate.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "Pending Review",
+        timestamp: rawDate ? rawDate.getTime() : null,
       });
     });
 
     // Fallback if empty (for fresh demo)
     if (list.length === 0) {
       return [
-        { id: "1", name: "Karthik Sambhu", email: "karthiksambhu123@gmail.com", role: "Chapter Lead", category: "execom", dept: "CSE", status: "lead", date: "Jan 12, 2026" },
-        { id: "2", name: "Alen Joseph", email: "alenjoseph@amaljyothi.ac.in", role: "Technical Head", category: "execom", dept: "ECE", status: "lead", date: "Jan 15, 2026" },
-        { id: "3", name: "Sneha Nair", email: "snehanair@amaljyothi.ac.in", role: "Creative Lead", category: "execom", dept: "IT", status: "lead", date: "Feb 02, 2026" },
-        { id: "4", name: "Rohan Varghese", email: "rohanv@amaljyothi.ac.in", role: "Applicant", category: "applicants", dept: "CSE", status: "pending", date: "Yesterday" },
-        { id: "5", name: "Meera Krishnan", email: "meerak@amaljyothi.ac.in", role: "Member", category: "members", dept: "AI&DS", status: "active", date: "Feb 18, 2026" },
-        { id: "6", name: "Devanand S", email: "devanands@amaljyothi.ac.in", role: "Applicant", category: "applicants", dept: "ME", status: "pending", date: "2 days ago" },
-        { id: "7", name: "Ananya Thomas", email: "ananyat@amaljyothi.ac.in", role: "Member", category: "members", dept: "CSE", status: "active", date: "Feb 22, 2026" },
-        { id: "8", name: "Joel Mathew", email: "joelm@amaljyothi.ac.in", role: "Member", category: "members", dept: "ECE", status: "active", date: "Mar 01, 2026" },
+        { id: "1", name: "Karthik Sambhu", email: "karthiksambhu123@gmail.com", role: "Chapter Lead", category: "execom", dept: "CSE", status: "lead", date: "Jan 12, 2026", timestamp: new Date("2026-01-12").getTime() },
+        { id: "2", name: "Alen Joseph", email: "alenjoseph@amaljyothi.ac.in", role: "Technical Head", category: "execom", dept: "ECE", status: "lead", date: "Jan 15, 2026", timestamp: new Date("2026-01-15").getTime() },
+        { id: "3", name: "Sneha Nair", email: "snehanair@amaljyothi.ac.in", role: "Creative Lead", category: "execom", dept: "IT", status: "lead", date: "Feb 02, 2026", timestamp: new Date("2026-02-02").getTime() },
+        { id: "4", name: "Rohan Varghese", email: "rohanv@amaljyothi.ac.in", role: "Applicant", category: "applicants", dept: "CSE", status: "pending", date: "Yesterday", timestamp: Date.now() - 86400000 },
+        { id: "5", name: "Meera Krishnan", email: "meerak@amaljyothi.ac.in", role: "Member", category: "members", dept: "AI&DS", status: "active", date: "Feb 18, 2026", timestamp: new Date("2026-02-18").getTime() },
+        { id: "6", name: "Devanand S", email: "devanands@amaljyothi.ac.in", role: "Applicant", category: "applicants", dept: "ME", status: "pending", date: "2 days ago", timestamp: Date.now() - 172800000 },
+        { id: "7", name: "Ananya Thomas", email: "ananyat@amaljyothi.ac.in", role: "Member", category: "members", dept: "CSE", status: "active", date: "Feb 22, 2026", timestamp: new Date("2026-02-22").getTime() },
+        { id: "8", name: "Joel Mathew", email: "joelm@amaljyothi.ac.in", role: "Member", category: "members", dept: "ECE", status: "active", date: "Mar 01, 2026", timestamp: new Date("2026-03-01").getTime() },
       ];
     }
 
@@ -294,6 +306,17 @@ export default function OverviewTab({
       if (tableFilter === "applicants" && item.category !== "applicants") return false;
       if (tableFilter === "members" && item.category !== "members") return false;
 
+      // Date range filter
+      if (directoryDateRange?.start && directoryDateRange?.end) {
+        const startMs = directoryDateRange.start.toDate(getLocalTimeZone()).getTime();
+        const endObj = directoryDateRange.end.toDate(getLocalTimeZone());
+        endObj.setHours(23, 59, 59, 999);
+        const endMs = endObj.getTime();
+        if (item.timestamp && (item.timestamp < startMs || item.timestamp > endMs)) {
+          return false;
+        }
+      }
+
       // Text search
       if (tableSearch.trim()) {
         const q = tableSearch.toLowerCase().trim();
@@ -305,7 +328,7 @@ export default function OverviewTab({
       }
       return true;
     });
-  }, [combinedDirectory, tableFilter, tableSearch]);
+  }, [combinedDirectory, tableFilter, tableSearch, directoryDateRange]);
 
   const totalPages = Math.ceil(filteredDirectory.length / pageSize) || 1;
   const paginatedDirectory = useMemo(() => {
@@ -400,7 +423,27 @@ export default function OverviewTab({
       </div>
 
       {/* 2. BOARDUI FOOTER STAT CARDS ROW (4 CARDS) */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      {loading ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" aria-busy="true">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <div key={i} className="flex flex-col justify-between rounded-2xl bg-white border border-slate-200/90 shadow-2xs p-4 space-y-4">
+              <div className="flex items-start justify-between gap-2.5">
+                <Skeleton shape="rect" className="size-10 rounded-xl" />
+                <Skeleton shape="circle" className="size-4" />
+              </div>
+              <div className="space-y-1.5">
+                <Skeleton shape="text" className="h-3 w-28" />
+                <Skeleton shape="text" className="h-8 w-20" />
+              </div>
+              <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
+                <Skeleton shape="rect" className="h-4 w-24 rounded-full" />
+                <Skeleton shape="circle" className="size-3.5" />
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* CARD 1: COMMUNITY MEMBERS */}
         <div
           onClick={() => onNavigateTab("users")}
@@ -598,9 +641,34 @@ export default function OverviewTab({
           </div>
         </div>
       </div>
+      )}
 
       {/* 3. BOARDUI DOUBLE INTERACTIVE CHARTS ROW (REVENUE + ORDERS PATTERN) */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      {loading ? (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6" aria-busy="true">
+          <div className="rounded-2xl bg-white border border-slate-200/90 shadow-2xs p-5 sm:p-6 min-h-[380px] flex flex-col justify-between space-y-4">
+            <div className="flex items-center justify-between">
+              <div className="space-y-1.5">
+                <Skeleton shape="text" className="h-3.5 w-36" />
+                <Skeleton shape="text" className="h-7 w-20" />
+              </div>
+              <Skeleton shape="rect" className="h-7 w-28 rounded-full" />
+            </div>
+            <Skeleton className="h-64 w-full rounded-xl" />
+          </div>
+          <div className="rounded-2xl bg-white border border-slate-200/90 shadow-2xs p-5 sm:p-6 min-h-[380px] flex flex-col justify-between space-y-4">
+            <div className="flex items-center justify-between">
+              <div className="space-y-1.5">
+                <Skeleton shape="text" className="h-3.5 w-36" />
+                <Skeleton shape="text" className="h-7 w-20" />
+              </div>
+              <Skeleton shape="rect" className="h-7 w-28 rounded-full" />
+            </div>
+            <Skeleton className="h-64 w-full rounded-xl" />
+          </div>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* CHART 1: CHAPTER VELOCITY & SIGNUPS (AREA CHART) */}
         <section className="flex flex-col justify-between rounded-2xl bg-white border border-slate-200/90 shadow-2xs p-5 sm:p-6 min-h-[380px]">
           {/* Header */}
@@ -839,10 +907,39 @@ export default function OverviewTab({
           </div>
         </section>
       </div>
+      )}
 
       {/* 4. BOARDUI DATA TABLE (CHAPTER DIRECTORY & SIGNUPS) */}
       <section className="rounded-2xl bg-white border border-slate-200/90 shadow-2xs overflow-hidden">
-        {/* Table Controls Header */}
+        {loading ? (
+          <div className="p-5 space-y-4" aria-busy="true">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div className="space-y-1">
+                <Skeleton shape="text" className="h-4 w-52" />
+                <Skeleton shape="text" className="h-3 w-80" />
+              </div>
+              <Skeleton shape="rect" className="h-8 w-44 rounded-full" />
+            </div>
+            <div className="divide-y divide-slate-100 pt-3">
+              {Array.from({ length: 6 }).map((_, i) => (
+                <div key={i} className="flex items-center justify-between py-3.5 gap-4">
+                  <div className="flex items-center gap-3">
+                    <Skeleton shape="circle" className="size-8.5 shrink-0" />
+                    <div className="space-y-1.5">
+                      <Skeleton shape="text" className="h-3.5 w-36" />
+                      <Skeleton shape="text" className="h-2.5 w-48" />
+                    </div>
+                  </div>
+                  <Skeleton shape="rect" className="h-6 w-24 rounded-full hidden sm:block" />
+                  <Skeleton shape="rect" className="h-6 w-20 rounded-full" />
+                  <Skeleton shape="rect" className="h-7 w-16 rounded-full" />
+                </div>
+              ))}
+            </div>
+          </div>
+        ) : (
+          <>
+            {/* Table Controls Header */}
         <div className="p-4 sm:p-5 border-b border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="space-y-1">
             <h3 className="text-base font-bold text-slate-900">Chapter Directory & Member Register</h3>
@@ -898,6 +995,32 @@ export default function OverviewTab({
                   {tab.label}
                 </button>
               ))}
+            </div>
+
+            {/* Date Range Filter */}
+            <div className="flex items-center gap-1.5">
+              <DateRangePicker
+                value={directoryDateRange}
+                onChange={(range) => {
+                  setDirectoryDateRange(range);
+                  setCurrentPage(1);
+                }}
+                aria-label="Filter chapter directory by registration date"
+                placeholder="Registration date"
+                className={isDark ? "h-8.5 text-xs rounded-xl bg-zinc-900 border-zinc-700 text-zinc-100" : "h-8.5 text-xs rounded-xl"}
+              />
+              {directoryDateRange && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setDirectoryDateRange(null);
+                    setCurrentPage(1);
+                  }}
+                  className="h-8.5 px-2 text-xs font-semibold text-rose-500 hover:text-rose-600 transition cursor-pointer"
+                >
+                  Clear
+                </button>
+              )}
             </div>
 
             {/* Export Button */}
@@ -996,26 +1119,32 @@ export default function OverviewTab({
                     {/* Actions Column */}
                     <td className="py-3.5 px-4 text-right">
                       {item.category === "applicants" ? (
-                        <button
+                        <LinkButton
+                          size="xs"
+                          variant="primary"
+                          trailingIcon={RiArrowRightLine}
                           onClick={() => onNavigateTab("applications")}
-                          className="px-2.5 py-1 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-700 font-semibold text-[11px] transition cursor-pointer"
                         >
                           Review
-                        </button>
+                        </LinkButton>
                       ) : item.category === "execom" ? (
-                        <button
+                        <LinkButton
+                          size="xs"
+                          variant="secondary"
+                          trailingIcon={RiArrowRightLine}
                           onClick={() => onNavigateTab("execom")}
-                          className="px-2.5 py-1 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-semibold text-[11px] transition cursor-pointer"
                         >
                           Roster
-                        </button>
+                        </LinkButton>
                       ) : (
-                        <button
+                        <LinkButton
+                          size="xs"
+                          variant="secondary"
+                          trailingIcon={RiArrowRightLine}
                           onClick={() => onNavigateTab("users")}
-                          className="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-[11px] transition cursor-pointer"
                         >
                           Manage
-                        </button>
+                        </LinkButton>
                       )}
                     </td>
                   </tr>
@@ -1063,6 +1192,8 @@ export default function OverviewTab({
             </button>
           </div>
         </div>
+          </>
+        )}
       </section>
 
       {/* 5. BOARDUI SPLIT SECTION (ACTIVITY STREAM & QUICK ACTIONS HUB) */}
@@ -1162,13 +1293,14 @@ export default function OverviewTab({
           </div>
 
           <div className="pt-2 text-right">
-            <button
+            <LinkButton
+              size="xs"
+              variant="primary"
+              trailingIcon={RiArrowRightLine}
               onClick={() => onNavigateTab("audit")}
-              className="text-xs font-semibold text-blue-600 hover:text-blue-700 inline-flex items-center gap-1 cursor-pointer"
             >
-              <span>View full security audit trail</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </button>
+              View full security audit trail
+            </LinkButton>
           </div>
         </div>
 

@@ -4,6 +4,12 @@
 // Primitives
 export { Button, buttonVariants } from "./Button";
 export type { ButtonProps } from "./Button";
+export { LinkButton, linkButtonStyles } from "@/components/base/buttons/link-button";
+export type {
+  LinkButtonProps,
+  LinkButtonAnchorProps,
+  LinkButtonButtonProps,
+} from "@/components/base/buttons/link-button";
 export { Input } from "./Input";
 export type { InputProps } from "./Input";
 export { Textarea } from "./textarea";
@@ -37,6 +43,8 @@ export { ScrollArea, ScrollBar } from "./scroll-area";
 
 // Navigation & Structure
 export { Tabs, TabsList, TabsTrigger, TabsContent } from "./tabs";
+export { Breadcrumb, BreadcrumbItem } from "@/components/base/breadcrumb/breadcrumb";
+export type { BreadcrumbProps, BreadcrumbItemProps } from "@/components/base/breadcrumb/breadcrumb";
 export {
   Accordion,
   AccordionItem,

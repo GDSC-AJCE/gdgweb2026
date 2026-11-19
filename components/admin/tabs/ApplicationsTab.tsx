@@ -30,12 +30,27 @@ import ExecomDetailsModal from "@/components/core/ExecomDetailsModal";
 import { resolveName } from "@/lib/utils";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
+import { Tabs, TabList, Tab, TabPanel } from "@/components/base/tabs/tabs";
+import { Skeleton, SkeletonText } from "@/components/base/skeleton/skeleton";
+import { LinkButton } from "@/components/base/buttons/link-button";
+import { DateRangePicker, type DateRangeValue } from "@/components/base/date-picker/date-range-picker";
+import { getLocalTimeZone } from "@internationalized/date";
+import {
+  RiUserSearchLine,
+  RiTimeLine,
+  RiCheckboxCircleLine,
+  RiCloseCircleLine,
+  RiArrowRightLine,
+  RiExternalLinkLine,
+  RiEyeLine,
+} from "@remixicon/react";
 
 interface ApplicationsTabProps {
   applications: any[];
   onRefresh: () => void;
   adminName?: string;
   onOpenSettings: () => void;
+  loading?: boolean;
 }
 
 export default function ApplicationsTab({
@@ -43,10 +58,12 @@ export default function ApplicationsTab({
   onRefresh,
   adminName = "Admin",
   onOpenSettings,
+  loading = false,
 }: ApplicationsTabProps) {
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [filter, setFilter] = useState<"all" | "pending" | "accepted" | "rejected">("all");
   const [searchQuery, setSearchQuery] = useState("");
+  const [submissionDateRange, setSubmissionDateRange] = useState<DateRangeValue | null>(null);
   const [selectedApp, setSelectedApp] = useState<any | null>(null);
   const [processingId, setProcessingId] = useState<string | null>(null);
 
@@ -61,6 +78,24 @@ export default function ApplicationsTab({
   const filteredApps = applications.filter((app) => {
     const status = app.status || "pending";
     if (filter !== "all" && status !== filter) return false;
+
+    // Date range filter
+    if (submissionDateRange?.start && submissionDateRange?.end) {
+      const startMs = submissionDateRange.start.toDate(getLocalTimeZone()).getTime();
+      const endObj = submissionDateRange.end.toDate(getLocalTimeZone());
+      endObj.setHours(23, 59, 59, 999);
+      const endMs = endObj.getTime();
+      const appDateMs = app.submittedAt?.toDate
+        ? app.submittedAt.toDate().getTime()
+        : app.submittedAt?.seconds
+        ? app.submittedAt.seconds * 1000
+        : app.submittedAt
+        ? new Date(app.submittedAt).getTime()
+        : null;
+      if (appDateMs && (appDateMs < startMs || appDateMs > endMs)) {
+        return false;
+      }
+    }
 
     if (!searchQuery.trim()) return true;
     const q = searchQuery.toLowerCase().trim();
@@ -134,145 +169,280 @@ export default function ApplicationsTab({
   return (
     <div className="space-y-6">
       {/* STATS OVERVIEW CARDS */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5">
-        <div
-          onClick={() => setFilter("all")}
-          className={`p-4 rounded-[28px] border transition-all cursor-pointer ${
-            filter === "all"
-              ? "bg-white border-[#2c2e2a] shadow-xs"
-              : "bg-white/80 border-[#d5d5d4] hover:border-[#a0a29f]"
-          }`}
-        >
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-[#80827f]">Total Submissions</span>
-            <Layers className="w-4 h-4 text-[#4285F4]" />
-          </div>
-          <div className="text-2xl font-bold text-[#0f172a] mt-2 font-mono">{counts.all}</div>
+      {loading ? (
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5" aria-busy="true">
+          {Array.from({ length: 4 }).map((_, idx) => (
+            <div key={idx} className="p-4 rounded-[28px] border border-[#d5d5d4] bg-white shadow-2xs space-y-2">
+              <div className="flex items-center justify-between">
+                <Skeleton shape="text" className="h-3.5 w-24" />
+                <Skeleton shape="circle" className="size-4 shrink-0" />
+              </div>
+              <Skeleton shape="text" className="h-7 w-12 mt-2" />
+            </div>
+          ))}
         </div>
-
-        <div
-          onClick={() => setFilter("pending")}
-          className={`p-4 rounded-[28px] border transition-all cursor-pointer ${
-            filter === "pending"
-              ? "bg-[#F59E0B]/10 border-[#F59E0B] shadow-sm"
-              : "bg-white border-slate-200 hover:border-slate-300"
-          }`}
-        >
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-slate-500">Under Review</span>
-            <Clock className="w-4 h-4 text-[#F59E0B]" />
-          </div>
-          <div className="text-2xl font-bold text-[#D97706] mt-2 font-mono">{counts.pending}</div>
-        </div>
-
-        <div
-          onClick={() => setFilter("accepted")}
-          className={`p-4 rounded-[28px] border transition-all cursor-pointer ${
-            filter === "accepted"
-              ? "bg-[#10B981]/10 border-[#10B981] shadow-sm"
-              : "bg-white border-slate-200 hover:border-slate-300"
-          }`}
-        >
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-slate-500">Accepted</span>
-            <CheckCircle className="w-4 h-4 text-[#10B981]" />
-          </div>
-          <div className="text-2xl font-bold text-[#059669] mt-2 font-mono">{counts.accepted}</div>
-        </div>
-
-        <div
-          onClick={() => setFilter("rejected")}
-          className={`p-4 rounded-[28px] border transition-all cursor-pointer ${
-            filter === "rejected"
-              ? "bg-[#EF4444]/10 border-[#EF4444] shadow-sm"
-              : "bg-white border-slate-200 hover:border-slate-300"
-          }`}
-        >
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-slate-500">Rejected</span>
-            <XCircle className="w-4 h-4 text-[#EF4444]" />
-          </div>
-          <div className="text-2xl font-bold text-[#DC2626] mt-2 font-mono">{counts.rejected}</div>
-        </div>
-      </div>
-
-      {/* TOOLBAR */}
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 p-5 rounded-[32px] bg-white border border-[#d5d5d4] shadow-xs">
-        <div className="space-y-1">
-          <div className="flex items-center gap-2">
-            <h3 className="text-base font-bold text-[#2c2e2a]">
-              Execom Applications ({filteredApps.length})
-            </h3>
-            <Badge label="EXECOM DRIVE" variant="blue" dot={true} />
-          </div>
-          <p className="text-xs text-[#80827f]">
-            Candidate submissions from students applying for chapter leadership and track teams.
-          </p>
-        </div>
-
-        <div className="flex items-center gap-2.5 flex-wrap">
-          {/* Search Box */}
-          <div className="relative min-w-[200px] sm:min-w-[240px]">
-            <Search className="w-4 h-4 text-[#80827f] absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
-            <input
-              type="text"
-              placeholder="Search candidate, email, dept..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full h-9 pl-9 pr-3 rounded-full bg-[#f5f1e4] border border-[#d5d5d4] text-xs text-[#2c2e2a] placeholder-[#80827f] outline-none focus:border-[#4285F4]"
-            />
-            {searchQuery && (
-              <button
-                type="button"
-                onClick={() => setSearchQuery("")}
-                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#80827f] hover:text-[#2c2e2a] text-xs"
-              >
-                &times;
-              </button>
-            )}
-          </div>
-
-          {/* View Mode Toggle: Grid vs List */}
-          <div className="flex items-center p-1 rounded-full bg-[#f5f1e4] border border-[#d5d5d4]">
-            <button
-              type="button"
-              onClick={() => setViewMode("grid")}
-              className={`p-1.5 rounded-full text-xs font-semibold transition cursor-pointer ${
-                viewMode === "grid"
-                  ? "bg-white text-[#2c2e2a] shadow-xs"
-                  : "text-[#80827f] hover:text-[#2c2e2a]"
-              }`}
-              title="Card Grid View"
-            >
-              <LayoutGrid className="w-3.5 h-3.5" />
-            </button>
-            <button
-              type="button"
-              onClick={() => setViewMode("list")}
-              className={`p-1.5 rounded-full text-xs font-semibold transition cursor-pointer ${
-                viewMode === "list"
-                  ? "bg-white text-[#2c2e2a] shadow-xs"
-                  : "text-[#80827f] hover:text-[#2c2e2a]"
-              }`}
-              title="Table View"
-            >
-              <List className="w-3.5 h-3.5" />
-            </button>
-          </div>
-
-          {/* Drive Settings Button */}
-          <button
-            onClick={onOpenSettings}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#0f172a] hover:bg-slate-800 text-white text-xs font-semibold shadow-xs transition cursor-pointer"
+      ) : (
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5">
+          <div
+            onClick={() => setFilter("all")}
+            className={`p-4 rounded-[28px] border transition-all cursor-pointer ${
+              filter === "all"
+                ? "bg-white border-[#2c2e2a] shadow-xs"
+                : "bg-white/80 border-[#d5d5d4] hover:border-[#a0a29f]"
+            }`}
           >
-            <Settings className="w-3.5 h-3.5" />
-            <span>Form & Deadline Settings</span>
-          </button>
-        </div>
-      </div>
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-semibold text-[#80827f]">Total Submissions</span>
+              <Layers className="w-4 h-4 text-[#4285F4]" />
+            </div>
+            <div className="text-2xl font-bold text-[#0f172a] mt-2 font-mono">{counts.all}</div>
+          </div>
 
-      {/* APPLICATIONS CONTENT */}
-      {filteredApps.length === 0 ? (
+          <div
+            onClick={() => setFilter("pending")}
+            className={`p-4 rounded-[28px] border transition-all cursor-pointer ${
+              filter === "pending"
+                ? "bg-[#F59E0B]/10 border-[#F59E0B] shadow-sm"
+                : "bg-white border-slate-200 hover:border-slate-300"
+            }`}
+          >
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-semibold text-slate-500">Under Review</span>
+              <Clock className="w-4 h-4 text-[#F59E0B]" />
+            </div>
+            <div className="text-2xl font-bold text-[#D97706] mt-2 font-mono">{counts.pending}</div>
+          </div>
+
+          <div
+            onClick={() => setFilter("accepted")}
+            className={`p-4 rounded-[28px] border transition-all cursor-pointer ${
+              filter === "accepted"
+                ? "bg-[#10B981]/10 border-[#10B981] shadow-sm"
+                : "bg-white border-slate-200 hover:border-slate-300"
+            }`}
+          >
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-semibold text-slate-500">Accepted</span>
+              <CheckCircle className="w-4 h-4 text-[#10B981]" />
+            </div>
+            <div className="text-2xl font-bold text-[#059669] mt-2 font-mono">{counts.accepted}</div>
+          </div>
+
+          <div
+            onClick={() => setFilter("rejected")}
+            className={`p-4 rounded-[28px] border transition-all cursor-pointer ${
+              filter === "rejected"
+                ? "bg-[#EF4444]/10 border-[#EF4444] shadow-sm"
+                : "bg-white border-slate-200 hover:border-slate-300"
+            }`}
+          >
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-semibold text-slate-500">Rejected</span>
+              <XCircle className="w-4 h-4 text-[#EF4444]" />
+            </div>
+            <div className="text-2xl font-bold text-[#DC2626] mt-2 font-mono">{counts.rejected}</div>
+          </div>
+        </div>
+      )}
+
+      {/* TABS CONTAINER & CONTENT */}
+      <Tabs
+        selectedKey={filter}
+        onSelectionChange={(key) => setFilter(key as "all" | "pending" | "accepted" | "rejected")}
+        className="w-full space-y-6"
+      >
+        {/* TOOLBAR WITH BOARDUI TABS */}
+        <div className="flex flex-col gap-4 p-5 rounded-[32px] bg-white border border-[#d5d5d4] shadow-xs">
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+            <div className="space-y-1">
+              <div className="flex items-center gap-2">
+                <h3 className="text-base font-bold text-[#2c2e2a]">
+                  Execom Applications ({filteredApps.length})
+                </h3>
+                <Badge label="EXECOM DRIVE" variant="blue" dot={true} />
+              </div>
+              <p className="text-xs text-[#80827f]">
+                Candidate submissions from students applying for chapter leadership and track teams.
+              </p>
+            </div>
+
+            <div className="flex items-center gap-2.5 flex-wrap">
+              {/* Search Box */}
+              <div className="relative min-w-[200px] sm:min-w-[240px]">
+                <Search className="w-4 h-4 text-[#80827f] absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                <input
+                  type="text"
+                  placeholder="Search candidate, email, dept..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full h-9 pl-9 pr-3 rounded-full bg-[#f5f1e4] border border-[#d5d5d4] text-xs text-[#2c2e2a] placeholder-[#80827f] outline-none focus:border-[#4285F4]"
+                />
+                {searchQuery && (
+                  <button
+                    type="button"
+                    onClick={() => setSearchQuery("")}
+                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#80827f] hover:text-[#2c2e2a] text-xs"
+                  >
+                    &times;
+                  </button>
+                )}
+              </div>
+
+              {/* Submission Date Range Filter */}
+              <div className="flex items-center gap-1.5">
+                <DateRangePicker
+                  value={submissionDateRange}
+                  onChange={setSubmissionDateRange}
+                  aria-label="Filter applications by submission date range"
+                  placeholder="Submission date"
+                  className="h-9 rounded-full bg-[#f5f1e4] border-[#d5d5d4] text-xs"
+                />
+                {submissionDateRange && (
+                  <button
+                    type="button"
+                    onClick={() => setSubmissionDateRange(null)}
+                    className="h-9 px-2 text-xs font-semibold text-[#EA4335] hover:underline cursor-pointer"
+                  >
+                    Clear
+                  </button>
+                )}
+              </div>
+
+              {/* View Mode Toggle: Grid vs List */}
+              <div className="flex items-center p-1 rounded-full bg-[#f5f1e4] border border-[#d5d5d4]">
+                <button
+                  type="button"
+                  onClick={() => setViewMode("grid")}
+                  className={`p-1.5 rounded-full text-xs font-semibold transition cursor-pointer ${
+                    viewMode === "grid"
+                      ? "bg-white text-[#2c2e2a] shadow-xs"
+                      : "text-[#80827f] hover:text-[#2c2e2a]"
+                  }`}
+                  title="Card Grid View"
+                >
+                  <LayoutGrid className="w-3.5 h-3.5" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setViewMode("list")}
+                  className={`p-1.5 rounded-full text-xs font-semibold transition cursor-pointer ${
+                    viewMode === "list"
+                      ? "bg-white text-[#2c2e2a] shadow-xs"
+                      : "text-[#80827f] hover:text-[#2c2e2a]"
+                  }`}
+                  title="Table View"
+                >
+                  <List className="w-3.5 h-3.5" />
+                </button>
+              </div>
+
+              {/* Drive Settings Button */}
+              <button
+                onClick={onOpenSettings}
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#0f172a] hover:bg-slate-800 text-white text-xs font-semibold shadow-xs transition cursor-pointer"
+              >
+                <Settings className="w-3.5 h-3.5" />
+                <span>Form & Deadline Settings</span>
+              </button>
+            </div>
+          </div>
+
+          {/* BoardUI Status Tabs */}
+          <div className="pt-2 border-t border-[#e5e1d5] dark:border-neutral-800">
+            <TabList aria-label="Filter applications by status" className="overflow-x-auto pb-0.5">
+              <Tab id="all" icon={RiUserSearchLine} count={counts.all}>
+                All Submissions
+              </Tab>
+              <Tab id="pending" icon={RiTimeLine} count={counts.pending}>
+                Under Review
+              </Tab>
+              <Tab id="accepted" icon={RiCheckboxCircleLine} count={counts.accepted}>
+                Accepted
+              </Tab>
+              <Tab id="rejected" icon={RiCloseCircleLine} count={counts.rejected}>
+                Rejected
+              </Tab>
+            </TabList>
+          </div>
+        </div>
+
+        {/* APPLICATIONS CONTENT */}
+        <TabPanel id={filter} className="focus:outline-none">
+          {loading ? (
+            viewMode === "grid" ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5" aria-busy="true">
+                {Array.from({ length: 6 }).map((_, i) => (
+                  <div
+                    key={i}
+                    className="p-6 rounded-[28px] bg-white border border-slate-200/90 shadow-xs flex flex-col justify-between space-y-5"
+                  >
+                    <div className="space-y-4">
+                      {/* Top Badges */}
+                      <div className="flex items-center justify-between gap-2">
+                        <Skeleton shape="rect" className="h-7 w-24 rounded-full" />
+                        <Skeleton shape="rect" className="h-7 w-20 rounded-full" />
+                      </div>
+
+                      {/* Candidate Profile Avatar & Header */}
+                      <div className="flex items-center gap-3.5">
+                        <Skeleton shape="rect" className="w-12 h-12 rounded-2xl shrink-0" />
+                        <div className="flex-1 space-y-2">
+                          <Skeleton shape="text" className="h-4 w-36" />
+                          <Skeleton shape="text" className="h-3 w-48" />
+                        </div>
+                      </div>
+
+                      {/* Tracks / Chips */}
+                      <div className="flex items-center gap-1.5 flex-wrap">
+                        <Skeleton shape="rect" className="h-6 w-20 rounded-full" />
+                        <Skeleton shape="rect" className="h-6 w-16 rounded-full" />
+                        <Skeleton shape="rect" className="h-6 w-24 rounded-full" />
+                      </div>
+
+                      {/* Reason / Statement Skeleton */}
+                      <SkeletonText lines={2} lineClassName="h-3" />
+                    </div>
+
+                    {/* Action Buttons */}
+                    <div className="pt-4 border-t border-slate-100 flex items-center justify-between gap-2">
+                      <Skeleton shape="rect" className="h-8 w-24 rounded-full" />
+                      <div className="flex items-center gap-1.5">
+                        <Skeleton shape="circle" className="size-8" />
+                        <Skeleton shape="circle" className="size-8" />
+                        <Skeleton shape="circle" className="size-8" />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="rounded-[32px] bg-white border border-[#d5d5d4] shadow-xs overflow-hidden" aria-busy="true">
+                <div className="p-4 border-b border-[#d5d5d4] bg-[#f5f1e4]/60 flex items-center justify-between">
+                  <Skeleton shape="text" className="h-4 w-32" />
+                  <Skeleton shape="text" className="h-4 w-20" />
+                </div>
+                <div className="divide-y divide-[#f5f1e4] p-4 space-y-4">
+                  {Array.from({ length: 5 }).map((_, i) => (
+                    <div key={i} className="flex items-center justify-between gap-4 py-2">
+                      <div className="flex items-center gap-3 min-w-0">
+                        <Skeleton shape="circle" className="size-9 shrink-0" />
+                        <div className="space-y-1.5">
+                          <Skeleton shape="text" className="h-3.5 w-36" />
+                          <Skeleton shape="text" className="h-3 w-48" />
+                        </div>
+                      </div>
+                      <Skeleton shape="rect" className="h-6 w-24 rounded-full hidden sm:block" />
+                      <Skeleton shape="rect" className="h-6 w-16 rounded-full" />
+                      <div className="flex items-center gap-1.5">
+                        <Skeleton shape="circle" className="size-7" />
+                        <Skeleton shape="circle" className="size-7" />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )
+          ) : filteredApps.length === 0 ? (
         <div className="p-16 text-center rounded-[32px] bg-white border border-[#d5d5d4] text-xs text-[#80827f] space-y-2">
           <User className="w-8 h-8 text-[#80827f] mx-auto opacity-40" />
           <p className="font-semibold text-sm text-[#2c2e2a]">No applications found</p>
@@ -388,23 +558,54 @@ export default function ApplicationsTab({
                     </div>
                   )}
 
-                  {/* Submission Timestamp */}
-                  <div className="flex items-center gap-1.5 text-xs text-slate-400">
-                    <Clock className="w-3.5 h-3.5 text-slate-400" />
-                    <span>Applied on {formattedDate}</span>
+                  {/* Submission Timestamp & Quick Portfolio/Resume Links */}
+                  <div className="flex items-center justify-between gap-2 flex-wrap text-xs text-slate-400">
+                    <div className="flex items-center gap-1.5">
+                      <Clock className="w-3.5 h-3.5 text-slate-400" />
+                      <span>Applied on {formattedDate}</span>
+                    </div>
+
+                    {(app.resumeUrl || app.answers?.resume || app.answers?.resumeUrl || app.answers?.portfolio || app.answers?.linkedin) && (
+                      <div className="flex items-center gap-2">
+                        {(app.resumeUrl || app.answers?.resume || app.answers?.resumeUrl) && (
+                          <LinkButton
+                            size="xs"
+                            variant="primary"
+                            trailingIcon={RiExternalLinkLine}
+                            href={String(app.resumeUrl || app.answers?.resume || app.answers?.resumeUrl)}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            Resume
+                          </LinkButton>
+                        )}
+                        {(app.answers?.portfolio || app.answers?.linkedin) && (
+                          <LinkButton
+                            size="xs"
+                            variant="secondary"
+                            trailingIcon={RiExternalLinkLine}
+                            href={String(app.answers?.portfolio || app.answers?.linkedin)}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            Profile
+                          </LinkButton>
+                        )}
+                      </div>
+                    )}
                   </div>
                 </div>
 
                 {/* Card Action Controls: Accept / Reject / View / Delete */}
                 <div className="pt-4 border-t border-slate-100 flex items-center justify-between gap-2">
-                  <button
-                    type="button"
+                  <LinkButton
+                    size="small"
+                    variant="primary"
+                    trailingIcon={RiArrowRightLine}
                     onClick={() => setSelectedApp(app)}
-                    className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-slate-100 hover:bg-slate-200 text-xs font-semibold text-[#0f172a] transition cursor-pointer"
                   >
-                    <Eye className="w-3.5 h-3.5 text-[#2563EB]" />
-                    <span>View Application</span>
-                  </button>
+                    View application
+                  </LinkButton>
 
                   <div className="flex items-center gap-1">
                     {/* Accept Button */}
@@ -554,15 +755,15 @@ export default function ApplicationsTab({
                         </span>
                       </td>
                       <td className="px-6 py-4 text-right">
-                        <div className="flex items-center justify-end gap-1.5">
-                          <button
-                            type="button"
+                        <div className="flex items-center justify-end gap-2">
+                          <LinkButton
+                            size="xs"
+                            variant="secondary"
+                            trailingIcon={RiArrowRightLine}
                             onClick={() => setSelectedApp(app)}
-                            className="inline-flex items-center gap-1 px-3 py-1.5 rounded-[50px] bg-[#f5f1e4] hover:bg-[#eae5d7] text-xs font-semibold text-[#2c2e2a] transition cursor-pointer"
                           >
-                            <Eye className="w-3.5 h-3.5" />
-                            <span>View</span>
-                          </button>
+                            View
+                          </LinkButton>
 
                           {/* Accept */}
                           <button
@@ -614,6 +815,8 @@ export default function ApplicationsTab({
           </div>
         </div>
       )}
+        </TabPanel>
+      </Tabs>
 
       {/* DETAILS MODAL */}
       <ExecomDetailsModal

@@ -35,6 +35,7 @@ import * as XLSX from "xlsx";
 import Link from "next/link";
 import CreativeEventPoster from "@/components/programs/CreativeEventPoster";
 import EventsDataTable from "../events/EventsDataTable";
+import { Tag, TagGroup } from "@/components/base/tag-group/tag-group";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { motion, AnimatePresence } from "framer-motion";
@@ -950,23 +951,21 @@ export default function EventsManagementTab({
             </div>
 
             <div className="flex items-center gap-1.5 w-full sm:w-auto">
-              {(["all", "upcoming", "past"] as const).map((f) => (
-                <button
-                  key={f}
-                  onClick={() => setFilter(f)}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-semibold capitalize transition cursor-pointer ${
-                    filter === f
-                      ? isDark
-                        ? "bg-zinc-800 text-white border border-zinc-700/60"
-                        : "bg-slate-900 text-white border border-slate-800 shadow-xs"
-                      : isDark
-                        ? "text-zinc-400 hover:text-zinc-200"
-                        : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
-                  }`}
-                >
-                  {f}
-                </button>
-              ))}
+              <TagGroup
+                aria-label="Filter events by status"
+                selectionMode="single"
+                selectedKeys={new Set([filter])}
+                onSelectionChange={(keys) => {
+                  const next = Array.from(keys)[0] as "all" | "upcoming" | "past" | undefined;
+                  if (next) setFilter(next);
+                }}
+                disallowEmptySelection
+                size="small"
+              >
+                <Tag id="all" color="neutral">All Events</Tag>
+                <Tag id="upcoming" color="lime">Upcoming</Tag>
+                <Tag id="past" color="soft">Concluded</Tag>
+              </TagGroup>
             </div>
           </div>
         )}
