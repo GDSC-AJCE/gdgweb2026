@@ -461,35 +461,33 @@ export default function MindMarketHero() {
           A high-energy student community where developers build with Google AI, Cloud, Android, and Open Source. Zero chaos, pure hands-on codelabs.
         </p>
 
-        {/* ACTION BUTTON GROUP (Explore Events & About Us & Apply for Execom) */}
+        {/* ACTION BUTTON GROUP (Clean, refined modern white tech buttons) */}
         <div className="mt-8 flex flex-wrap items-center justify-center gap-3.5 z-10">
           {driveOpen && (
             <Link
               href="/execom"
-              className="group inline-flex items-center gap-2.5 px-6 sm:px-7 py-3 rounded-[50px] bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-[15px] font-bold transition-all duration-300 hover:-translate-y-[1px] active:scale-95 shadow-md shadow-blue-500/20"
+              className="group inline-flex items-center gap-2 px-6 sm:px-7 py-3 rounded-full bg-[#0f172a] hover:bg-[#1e293b] text-white text-[14px] sm:text-[15px] font-semibold transition-all duration-200 hover:-translate-y-[1px] active:scale-95 shadow-sm"
             >
-              <Sparkles className="w-4 h-4 text-[#FDE047]" />
-              <span>Join Community / Apply for Execom</span>
-              <span className="w-2.5 h-2.5 rounded-full bg-[#10B981] action-dot-expand shadow-xs" />
+              <Sparkles className="w-4 h-4 text-[#F59E0B]" />
+              <span>Apply for Execom</span>
             </Link>
           )}
 
           {/* Explore Events Button */}
           <Link
             href="/programs"
-            className="group inline-flex items-center gap-2.5 px-6 sm:px-7 py-3 rounded-[50px] bg-[#EF4444] hover:bg-[#DC2626] text-white text-[15px] font-semibold transition-all duration-300 hover:-translate-y-[1px] active:scale-95 shadow-md shadow-red-500/20"
+            className="group inline-flex items-center gap-2 px-6 sm:px-7 py-3 rounded-full bg-[#2563EB] hover:bg-[#1d4ed8] text-white text-[14px] sm:text-[15px] font-semibold transition-all duration-200 hover:-translate-y-[1px] active:scale-95 shadow-sm shadow-blue-500/25"
           >
             <span>Explore Events</span>
-            <span className="w-2.5 h-2.5 rounded-full bg-white action-dot-expand shadow-xs" />
+            <span className="w-1.5 h-1.5 rounded-full bg-white/80 group-hover:bg-white transition-colors" />
           </Link>
 
           {/* About Us Button */}
           <Link
             href="/about"
-            className="group inline-flex items-center gap-2.5 px-6 sm:px-7 py-3 rounded-[50px] bg-white hover:bg-slate-50 text-[#0f172a] text-[15px] font-semibold border border-slate-200 hover:border-slate-300 transition-all duration-300 hover:-translate-y-[1px] active:scale-95 shadow-sm"
+            className="group inline-flex items-center gap-2 px-6 sm:px-7 py-3 rounded-full bg-white hover:bg-slate-50 text-[#0f172a] text-[14px] sm:text-[15px] font-semibold border border-slate-200 hover:border-slate-300 transition-all duration-200 hover:-translate-y-[1px] active:scale-95 shadow-xs"
           >
             <span>About Us</span>
-            <span className="w-2.5 h-2.5 rounded-full bg-[#2563EB] action-dot-expand shadow-xs" />
           </Link>
         </div>
 

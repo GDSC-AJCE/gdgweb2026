@@ -17,7 +17,7 @@ const EXPERIMENTS = [
       { tag: "CLOUD RUN", title: "Zero-ops autoscaling microservices on Google Cloud Platform", image: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=600&auto=format&fit=crop&q=80" },
       { tag: "FLUTTER 3.X", title: "Multiplatform native mobile & desktop application engineering", image: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=600&auto=format&fit=crop&q=80" },
       { tag: "KOTLIN DEV", title: "Declarative Android architectures with Jetpack Compose", image: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=600&auto=format&fit=crop&q=80" },
-      { tag: "GENKIT AI", title: "Production-ready AI workflows & telemetry orchestration", image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=600&auto=format&fit=crop&q=80" },
+      { tag: "GENKIT AI", title: "Production-ready AI workflows & application logic", image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=600&auto=format&fit=crop&q=80" },
       { tag: "DEV SUMMIT", title: "Annual keynote sessions and code labs with industry GDEs", image: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=600&auto=format&fit=crop&q=80" },
       { tag: "OPEN SOURCE", title: "Collaborative code sprints and public repository showcases", image: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=600&auto=format&fit=crop&q=80" },
       { tag: "STUDY JAMS", title: "Hands-on skill badges and cloud architect certifications", image: "https://images.unsplash.com/photo-1517048676732-d65bc937f952?w=600&auto=format&fit=crop&q=80" },

@@ -240,7 +240,7 @@ export default function MindMarketCommunity() {
                 <span className="w-2 h-2 rounded-full bg-[#10B981] action-dot-expand" />
               </Link>
               <span className="text-xs font-mono text-slate-400 font-semibold">
-                Live Sync via Firestore
+                Live Community Standings
               </span>
             </div>
           </motion.div>
