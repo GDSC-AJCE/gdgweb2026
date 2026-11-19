@@ -381,7 +381,7 @@ export default function AdminSidebar({
           </div>
         )}
 
-        {/* ================= 2. NAVIGATION LIST ================= */}
+        {/* ================= 2. NAVIGATION: BOARDUI TREE VIEW ================= */}
         {filteredItems.length === 0 ? (
           <div className="py-6 text-center text-xs space-y-2">
             <p className={isDark ? "text-zinc-500" : "text-slate-400"}>No matching tabs found</p>
@@ -393,231 +393,185 @@ export default function AdminSidebar({
               Clear search
             </button>
           </div>
-        ) : (
-          <nav className="space-y-1 pt-1">
+        ) : isCollapsed ? (
+          /* Collapsed Narrow Icon Rail */
+          <nav className="space-y-1.5 pt-1">
             {filteredItems.map((item) => {
               const Icon = item.icon;
-              const hasChildren = Boolean(item.children && item.children.length > 0);
-              const isTreeOpen = Boolean(expandedTrees[item.id]);
               const isDirectActive = activeTab === item.id;
               const isChildActive = Boolean(item.children?.some((c) => c.id === activeTab));
-              const isParentActive = isDirectActive || isChildActive;
+              const isItemActive = isDirectActive || isChildActive;
               const isLocked = item.adminOnly && !isSuperAdmin;
 
-              const toggleTree = (e?: React.MouseEvent) => {
-                if (e) e.stopPropagation();
-                setExpandedTrees((prev) => ({ ...prev, [item.id]: !prev[item.id] }));
-              };
-
-              const handleParentClick = () => {
-                if (isLocked) return;
-                if (hasChildren) {
-                  // If neither parent nor child is active, select the parent tab and expand
-                  if (!isParentActive) {
-                    onSelectTab(item.id);
-                    setExpandedTrees((prev) => ({ ...prev, [item.id]: true }));
-                  } else {
-                    // Toggle expand/collapse when already active
-                    toggleTree();
-                  }
-                } else {
-                  onSelectTab(item.id);
-                }
-              };
-
               return (
-                <div key={item.id} className="space-y-0.5">
-                  <div
-                    onClick={handleParentClick}
-                    title={isCollapsed ? (isLocked ? `${item.label} (Admin Only)` : item.label) : undefined}
-                    className={`group w-full flex items-center justify-between rounded-xl text-xs font-medium transition-all text-left cursor-pointer ${
-                      isCollapsed ? "p-2.5 justify-center" : "px-3 py-2"
-                    } ${
-                      // Single item active: full blue highlight
-                      !hasChildren && isDirectActive
-                        ? "bg-[#2563eb] text-white font-semibold shadow-xs"
-                        // Subtree parent with child or itself active: refined tree container header highlight
-                        : hasChildren && isParentActive
-                        ? isDark
-                          ? "bg-zinc-800/90 text-blue-400 font-semibold border border-blue-500/30 shadow-xs"
-                          : "bg-blue-50/90 text-blue-700 font-semibold border border-blue-200/80 shadow-xs"
-                        : isLocked
-                        ? isDark
-                          ? "text-zinc-600 hover:bg-zinc-800/30"
-                          : "text-slate-400 hover:bg-slate-50"
-                        : isDark
-                        ? "text-zinc-400 hover:text-white hover:bg-zinc-800/60"
-                        : "text-slate-600 hover:text-slate-900 hover:bg-slate-100/80"
-                    }`}
-                  >
-                    <div className="flex items-center gap-3 min-w-0">
-                      <Icon
-                        className={`size-4 shrink-0 transition-colors ${
-                          !hasChildren && isDirectActive
-                            ? "text-white"
-                            : hasChildren && isParentActive
-                            ? "text-blue-600 dark:text-blue-400"
-                            : isLocked
-                            ? isDark
-                              ? "text-zinc-600"
-                              : "text-slate-400"
-                            : isDark
-                            ? "text-zinc-400 group-hover:text-white"
-                            : "text-slate-500 group-hover:text-slate-900"
-                        }`}
-                      />
-                      {!isCollapsed && (
-                        <div className="flex items-center gap-1.5 min-w-0">
-                          <span className="truncate">{item.label}</span>
-                        </div>
-                      )}
-                    </div>
+                <button
+                  key={item.id}
+                  type="button"
+                  onClick={() => !isLocked && onSelectTab(item.id)}
+                  title={isLocked ? `${item.label} (Admin Only)` : item.label}
+                  className={`w-full flex items-center justify-center p-2.5 rounded-xl transition cursor-pointer ${
+                    isItemActive
+                      ? "bg-blue-600 text-white shadow-xs"
+                      : isDark
+                      ? "text-zinc-400 hover:text-white hover:bg-zinc-800/60"
+                      : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
+                  }`}
+                >
+                  <Icon className="size-4 shrink-0" />
+                </button>
+              );
+            })}
+          </nav>
+        ) : (
+          /* Expanded: BoardUI Tree View with animated branches & connected guide lines */
+          <nav className="pt-1">
+            <TreeView
+              aria-label="Admin Navigation Tree"
+              size="sm"
+              showGuides={true}
+              selectionMode="single"
+              selectedKeys={new Set<Key>([activeTab])}
+              onSelectionChange={(keys) => {
+                if (keys === "all") return;
+                const selectedKey = Array.from(keys)[0] as string | undefined;
+                if (!selectedKey) return;
 
-                    {/* Right side controls, badges, and subtree expand/collapse caret */}
-                    {!isCollapsed && (
-                      <div className="flex items-center gap-1.5 shrink-0 ml-2">
-                        {item.badge && item.badgeType === "count" && !isParentActive && (
+                if (selectedKey === "branch-overview") {
+                  onSelectTab("overview");
+                } else if (selectedKey === "branch-events") {
+                  onSelectTab("events");
+                } else if (selectedKey === "branch-execom") {
+                  onSelectTab("execom");
+                } else {
+                  onSelectTab(selectedKey as AdminTab);
+                }
+              }}
+              expandedKeys={expandedKeys}
+              onExpandedChange={(keys) => setExpandedKeys(keys as Set<Key>)}
+              className="w-full bg-transparent border-0 p-0 shadow-none gap-0.5"
+            >
+              {filteredItems.map((item) => {
+                const Icon = item.icon;
+                const hasChildren = Boolean(item.children && item.children.length > 0);
+                const isLocked = item.adminOnly && !isSuperAdmin;
+
+                if (hasChildren) {
+                  return (
+                    <TreeViewItem
+                      key={item.id}
+                      id={`branch-${item.id}`}
+                      label={item.label}
+                      icon={Icon as any}
+                      trailingContent={
+                        item.badge ? (
                           <span
-                            className={`text-[10px] font-mono font-bold px-1.5 py-0.2 rounded-md ${
-                              isDark ? "bg-zinc-800/90 text-zinc-400" : "bg-slate-100 text-slate-600"
-                            }`}
+                            className={cx(
+                              "text-[10px] font-mono font-bold px-1.5 py-0.2 rounded-full",
+                              item.badgeType === "pulse"
+                                ? "bg-rose-500 text-white animate-pulse"
+                                : isDark
+                                ? "bg-zinc-800 text-zinc-400"
+                                : "bg-slate-100 text-slate-600",
+                            )}
                           >
                             {item.badge}
                           </span>
-                        )}
-
-                        {item.badge && item.badgeType === "pulse" && (
-                          <span className="text-[10px] font-mono font-bold px-1.5 py-0.2 rounded-full bg-rose-500 text-white animate-pulse">
-                            {item.badge}
-                          </span>
-                        )}
-
-                        {isLocked && (
-                          <span className="inline-flex items-center gap-1 text-[9px] font-mono font-bold px-1.5 py-0.5 rounded bg-zinc-800/70 text-zinc-400 border border-zinc-700/60">
+                        ) : isLocked ? (
+                          <span className="inline-flex items-center gap-0.5 text-[9px] font-mono px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-400">
                             <Lock className="w-2.5 h-2.5" />
                             <span>Admin</span>
                           </span>
-                        )}
-
-                        {/* Subtree toggle chevron button */}
-                        {hasChildren && (
-                          <button
-                            type="button"
-                            onClick={toggleTree}
-                            title={isTreeOpen ? "Collapse Subtree" : "Expand Subtree"}
-                            className={`size-5 rounded-md flex items-center justify-center transition cursor-pointer ${
-                              isParentActive
-                                ? isDark
-                                  ? "text-blue-400 hover:bg-zinc-700/50"
-                                  : "text-blue-600 hover:bg-blue-100/60"
-                                : isDark
-                                ? "text-zinc-400 hover:text-white hover:bg-zinc-700/50"
-                                : "text-slate-400 hover:text-slate-700 hover:bg-slate-200/60"
-                            }`}
-                          >
-                            {isTreeOpen ? (
-                              <ChevronDown className="w-3.5 h-3.5" />
-                            ) : (
-                              <ChevronRight className="w-3.5 h-3.5" />
-                            )}
-                          </button>
-                        )}
-                      </div>
-                    )}
-                  </div>
-
-                  {/* ================= SUBTREE UI CONTAINER ================= */}
-                  {hasChildren && isTreeOpen && !isCollapsed && (
-                    <div className="relative mt-1 ml-4 pl-3.5 py-0.5 space-y-1 border-l-2 border-slate-200 dark:border-zinc-800 transition-all">
+                        ) : null
+                      }
+                      className={(state) =>
+                        cx(
+                          "rounded-xl text-xs font-medium cursor-pointer transition select-none my-0.5",
+                          isDark ? "hover:bg-zinc-800/60 text-zinc-300" : "hover:bg-slate-100/80 text-slate-700",
+                          (state.isSelected || activeTab === item.id) &&
+                            "!bg-blue-600 !text-white font-semibold shadow-xs [&_svg]:!text-white [&_bdi]:!text-white",
+                        )
+                      }
+                    >
                       {item.children!.map((child) => {
                         const ChildIcon = child.icon;
-                        const isChildActive = activeTab === child.id;
                         const isChildLocked = child.adminOnly && !isSuperAdmin;
+
                         return (
-                          <button
+                          <TreeViewItem
                             key={child.id}
-                            type="button"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              onSelectTab(child.id);
-                            }}
-                            className={`group/child relative w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs font-medium transition-all text-left cursor-pointer ${
-                              isChildActive
-                                ? "bg-[#2563eb] text-white font-semibold shadow-xs"
-                                : isDark
-                                ? "text-zinc-400 hover:text-white hover:bg-zinc-800/60"
-                                : "text-slate-600 hover:text-slate-900 hover:bg-slate-100/80"
-                            }`}
-                          >
-                            {/* Horizontal tree branch connector */}
-                            <span
-                              className={`absolute -left-[16px] top-1/2 w-3 h-px transition-colors ${
-                                isChildActive
-                                  ? "bg-[#2563eb]"
-                                  : isDark
-                                  ? "bg-zinc-700"
-                                  : "bg-slate-300"
-                              }`}
-                            />
-
-                            <div className="flex items-center gap-2.5 min-w-0">
-                              <ChildIcon
-                                className={`size-3.5 shrink-0 transition-colors ${
-                                  isChildActive
-                                    ? "text-white"
-                                    : isDark
-                                    ? "text-zinc-500 group-hover/child:text-zinc-300"
-                                    : "text-slate-400 group-hover/child:text-slate-700"
-                                }`}
-                              />
-                              <span className="truncate">{child.label}</span>
-                            </div>
-
-                            <div className="flex items-center gap-1.5 shrink-0 ml-2">
-                              {child.badge && (
-                                <span
-                                  className={`text-[9px] font-mono font-bold px-1.5 py-0.2 rounded ${
-                                    isChildActive
-                                      ? "bg-white/20 text-white"
-                                      : isDark
-                                      ? "bg-zinc-800 text-zinc-400"
-                                      : "bg-slate-100 text-slate-600"
-                                  }`}
-                                >
+                            id={child.id}
+                            label={child.label}
+                            icon={ChildIcon as any}
+                            isDisabled={isChildLocked}
+                            trailingContent={
+                              child.badge ? (
+                                <span className="text-[10px] font-mono font-bold px-1.5 py-0.2 rounded-full bg-rose-500 text-white animate-pulse">
                                   {child.badge}
                                 </span>
-                              )}
-
-                              {isChildLocked && (
-                                <span
-                                  title="Admin Only"
-                                  className={`inline-flex items-center gap-0.5 text-[8px] font-mono px-1 py-0.2 rounded ${
-                                    isChildActive
-                                      ? "bg-white/20 text-white"
-                                      : isDark
-                                      ? "bg-zinc-800/80 text-zinc-400 border border-zinc-700/60"
-                                      : "bg-slate-200/80 text-slate-600 border border-slate-300/60"
-                                  }`}
-                                >
-                                  <Lock className="w-2 h-2" />
+                              ) : isChildLocked ? (
+                                <span className="inline-flex items-center gap-0.5 text-[9px] font-mono px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-400">
+                                  <Lock className="w-2.5 h-2.5" />
+                                  <span>Admin</span>
                                 </span>
-                              )}
-                            </div>
-                          </button>
+                              ) : null
+                            }
+                            className={(state) =>
+                              cx(
+                                "rounded-xl text-xs font-medium cursor-pointer transition select-none my-0.5",
+                                isDark
+                                  ? "hover:bg-zinc-800/60 text-zinc-400 hover:text-white"
+                                  : "hover:bg-slate-100/80 text-slate-600 hover:text-slate-900",
+                                state.isSelected &&
+                                  "!bg-blue-600 !text-white font-semibold shadow-xs [&_svg]:!text-white [&_bdi]:!text-white",
+                              )
+                            }
+                          />
                         );
                       })}
-                    </div>
-                  )}
+                    </TreeViewItem>
+                  );
+                }
 
-                  {/* Active indicator dot when sidebar is collapsed */}
-                  {hasChildren && isCollapsed && isParentActive && (
-                    <div className="hidden lg:flex justify-center pt-0.5">
-                      <span className="size-1.5 rounded-full bg-blue-500" />
-                    </div>
-                  )}
-                </div>
-              );
-            })}
+                return (
+                  <TreeViewItem
+                    key={item.id}
+                    id={item.id}
+                    label={item.label}
+                    icon={Icon as any}
+                    isDisabled={isLocked}
+                    trailingContent={
+                      item.badge ? (
+                        <span
+                          className={cx(
+                            "text-[10px] font-mono font-bold px-1.5 py-0.2 rounded-full",
+                            item.badgeType === "pulse"
+                              ? "bg-rose-500 text-white animate-pulse"
+                              : isDark
+                              ? "bg-zinc-800 text-zinc-400"
+                              : "bg-slate-100 text-slate-600",
+                          )}
+                        >
+                          {item.badge}
+                        </span>
+                      ) : isLocked ? (
+                        <span className="inline-flex items-center gap-0.5 text-[9px] font-mono px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-400">
+                          <Lock className="w-2.5 h-2.5" />
+                          <span>Admin</span>
+                        </span>
+                      ) : null
+                    }
+                    className={(state) =>
+                      cx(
+                        "rounded-xl text-xs font-medium cursor-pointer transition select-none my-0.5",
+                        isDark ? "hover:bg-zinc-800/60 text-zinc-400 hover:text-white" : "hover:bg-slate-100/80 text-slate-600 hover:text-slate-900",
+                        state.isSelected &&
+                          "!bg-blue-600 !text-white font-semibold shadow-xs [&_svg]:!text-white [&_bdi]:!text-white",
+                      )
+                    }
+                  />
+                );
+              })}
+            </TreeView>
           </nav>
         )}
       </div>
