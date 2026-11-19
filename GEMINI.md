@@ -4,7 +4,7 @@ See [AGENTS.md](file:///d:/DEV/GDG/newwebsite/AGENTS.md) for master architecture
 
 ## Core Directives
 - **100% Google Stack:** Firebase Auth, Cloud Firestore, Firebase Storage, and `@google/genai`. No third-party DB/Auth.
-- **Design System:** Warm Cream Paper `#f5f1e4`, Pure White `#ffffff` bento cards with 36px–50px radii, Inter typography, brand accents `#8ed462`, `#ff705d`, `#2ba0ff`, `#ffd600`.
+- **Design System:** Crisp Modern Slate/White `#f8fafc`, Pure White `#ffffff` bento cards, Urbanist typography, brand accents `#10B981`, `#2563EB`, `#EF4444`, `#F59E0B`.
 - **CodeRabbit Workflow:** Governed by `.coderabbit.yaml` with SkillSpector and pre-merge validation.
 - **Runtime Guardrails:** `lib/guardrails.ts` for prompt injection filtering, PII masking, and Gemini safety thresholds.
 

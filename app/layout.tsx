@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Roboto_Mono } from "next/font/google";
+import { Urbanist, Roboto_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -8,11 +8,12 @@ import GoogleLabsPreloader from "@/components/GoogleLabsPreloader";
 import { AuthProvider } from "@/context/AuthContext";
 import { DialogProvider } from "@/context/DialogContext";
 import { ThemeProvider } from "@/context/ThemeContext";
+import CustomDialog from "@/components/CustomDialog";
 
-const inter = Inter({
+const urbanist = Urbanist({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700", "800", "900"],
-  variable: "--font-inter",
+  variable: "--font-urbanist",
   display: "swap",
 });
 
@@ -76,21 +77,11 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <script
           dangerouslySetInnerHTML={{
-            __html: `try {
-              var adminStored = localStorage.getItem('gdg_admin_theme');
-              if (adminStored === 'dark') {
-                document.documentElement.setAttribute('data-admin-theme', 'dark');
-              } else {
-                document.documentElement.setAttribute('data-admin-theme', 'light');
-              }
-              document.documentElement.classList.remove('dark');
-              document.documentElement.classList.add('light');
-              document.documentElement.setAttribute('data-theme', 'light');
-            } catch(e) {}`,
+            __html: `try { localStorage.removeItem('gdg_theme'); document.documentElement.classList.remove('dark'); document.documentElement.classList.add('light'); document.documentElement.setAttribute('data-theme', 'light'); } catch(e) {}`,
           }}
         />
       </head>
-      <body className={`${inter.className} ${inter.variable} ${robotoMono.variable} bg-[#f5f1e4] text-[#2c2e2a] antialiased min-h-screen flex flex-col selection:bg-[#8ed462]/35 selection:text-[#2c2e2a]`}>
+      <body className={`${urbanist.className} ${urbanist.variable} ${robotoMono.variable} bg-[#f8fafc] text-[#0f172a] antialiased min-h-screen flex flex-col selection:bg-[#2563EB]/20 selection:text-[#0f172a]`}>
         <SmoothScrollProvider>
           <GoogleLabsPreloader />
           <ThemeProvider>

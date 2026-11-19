@@ -41,25 +41,20 @@
    - **Firebase Hosting** / **Google Cloud Run**.
 5. **Backend & Compute:**
    - Next.js API routes with Firebase Admin SDK / Cloud Functions for Firebase.
-6. **Design & Brand System (Single Source of Truth: `design.md`):**
-    - **Canvas Foundation:** Warm Cream Paper (`#f5f1e4`) across all public pages, eliminating dark mode and stark sterile digital white.
-    - **Elevated Surfaces:** Pure White (`#ffffff`) bento and feature cards with generous radii (`36px`–`50px`) and hairline borders (`#d5d5d4` / `#e5e1d5`).
+6. **Design & Brand System (Modern White Tech):**
+    - **Canvas Foundation:** Crisp Modern Slate/White (`#f8fafc`) across all public pages, providing a clean, bright, modern aesthetic.
+    - **Elevated Surfaces:** Pure White (`#ffffff`) bento and feature cards with clean hairline borders (`#e2e8f0` / `#cbd5e1`).
     - **Color Anchors:**
-      - Fresh Grass Green: `#8ed462` (Chapter brand accent)
-      - Coral Pop: `#ff705d` (Primary CTA actions)
-      - Sky Pop: `#2ba0ff` (Action dots & technical highlights)
-      - Sunshine Yellow: `#ffd600` / `#f5e211` / `#fbbc04`
-      - Text: Ink Black (`#2c2e2a`) and Stone Gray (`#80827f`)
-    - **Generous Sticker-Soft Geometry:**
-      - `50px` (`rounded-full`): Floating nav pill, primary CTA buttons with expanding action dots (`action-dot-expand`), status chips.
-      - `36px`–`50px`: Bento cards, story cards, hero panels.
-      - `28px`: Nested leaderboard and contributor rows.
-    - **Google Labs Suite & Storybook Integration:**
-      - Kinetic organic SVG suite (Hexagon, Rosette, Dome, Clover, Donut, Daisy).
-      - Interactive Physics Playground in footer.
-      - Paper-cut floating clouds and 2D mascot with interactive speech bubbles.
-    - **Typography:** Single-family `Inter` system from 9px micro-labels to 215px display headlines with compressed tracking (`-0.065em`).
-    - **Authoritative Reference:** See [design.md](file:///d:/DEV/GDG/newwebsite/design.md) for full token table and component specs.
+      - Emerald Green: `#10B981` (Chapter brand accent and positive states)
+      - Electric Blue: `#2563EB` (Primary links and tech chips)
+      - Crimson / Coral: `#EF4444` (Primary high-contrast CTA buttons)
+      - Sunshine Gold: `#F59E0B`
+      - Text: Deep Slate Ink (`#0f172a`) and Clean Slate (`#64748b`)
+    - **Geometry:**
+      - `50px` (`rounded-full`): Floating nav pill, primary CTA buttons with expanding action dots, status chips.
+      - `24px`–`36px`: Bento cards, story cards, hero panels.
+      - `16px`–`20px`: Nested leaderboard and contributor rows.
+    - **Typography:** Primary font family `Urbanist` with modern geometric sans tracking and hierarchy.
 
 ---
 

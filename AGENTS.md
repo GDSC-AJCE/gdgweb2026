@@ -45,21 +45,22 @@
 
 ## 🎨 3. Design System Constraints & Brand Tokens (`design.md`)
 
-All generated components, pages, and UI modifications must adhere strictly to the **GDG AJCE Warm Paper** design system:
+All generated components, pages, and UI modifications must adhere strictly to the **GDG AJCE Modern White Tech** design system:
 
 | Token | Value / Spec | Role & Usage |
 | :--- | :--- | :--- |
-| **Foundation Canvas** | `#f5f1e4` (`Warm Cream Paper`) | Default body & page canvas across all public routes. **No dark mode. No stark digital white canvas.** |
-| **Elevated Surfaces** | `#ffffff` (`Pure White`) | Bento cards, modal dialogs, and feature panels. |
-| **Hairline Borders** | `#d5d5d4` / `#e5e1d5` | 1px clean separation borders on cards and sections. |
-| **Fresh Grass Green** | `#8ed462` | Chapter primary brand accent and positive status highlights. |
-| **Coral Pop** | `#ff705d` | Primary CTA buttons, attention dots, and urgent alerts. |
-| **Sky Pop** | `#2ba0ff` | Secondary action highlights, tech chips, and badge dots. |
-| **Sunshine Yellow** | `#ffd600` / `#f5e211` / `#fbbc04` | Event highlights, trophies, and celebration badges. |
-| **Typography** | `Inter` (Single font family) | Micro-labels (9px) to hero display (215px) with compressed tracking (`-0.065em`). |
+| **Foundation Canvas** | `#f8fafc` (`Modern White / Crisp Slate`) | Default clean, luminous canvas across all public routes. |
+| **Elevated Surfaces** | `#ffffff` (`Pure White`) | Bento cards, modal dialogs, and feature panels with clean subtle borders (`#e2e8f0`). |
+| **Hairline Borders** | `#e2e8f0` / `#cbd5e1` | Crisp 1px borders on cards, buttons, and sections. |
+| **Primary Text / Ink** | `#0f172a` (`Razor-Sharp Slate Ink`) | Primary typography and headings. Secondary text: `#64748b`. |
+| **Emerald Green** | `#10B981` | Positive status highlights, community badges, accent pills. |
+| **Electric Google Blue** | `#2563EB` | Primary interactive highlights, action chips, and links. |
+| **Crimson / Coral** | `#EF4444` | High-visibility CTA buttons, urgent alerts, and notifications. |
+| **Gold / Sunshine** | `#F59E0B` | Event highlights, trophies, and awards. |
+| **Typography** | `Urbanist` (Primary font family) | High-clarity geometric sans with modern tracking. |
 | **Radii: Pills / Buttons**| `50px` (`rounded-full`) | Floating navigation pill, primary action buttons, status chips. |
-| **Radii: Bento Cards** | `36px` to `50px` | Feature cards, hero cards, leaderboard containers. |
-| **Radii: Nested Items** | `28px` | Inner rows, contributor badges, ticket cards. |
+| **Radii: Bento Cards** | `24px` to `36px` | Feature cards, hero cards, leaderboard containers. |
+| **Radii: Nested Items** | `16px` to `20px` | Inner rows, contributor badges, ticket cards. |
 
 ---
 
