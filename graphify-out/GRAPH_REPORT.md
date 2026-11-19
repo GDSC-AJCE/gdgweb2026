@@ -1,16 +1,16 @@
 # Graph Report - newwebsite  (2026-11-20)
 
 ## Corpus Check
-- 261 files · ~838,466 words
+- 261 files · ~838,403 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1916 nodes · 2982 edges · 193 communities (168 shown, 25 thin omitted)
+- 1916 nodes · 2987 edges · 196 communities (172 shown, 24 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 3 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `adcdd6f8`
+- Built from commit: `489fd1bd`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -185,15 +185,18 @@
 - [[_COMMUNITY_Community 183|Community 183]]
 - [[_COMMUNITY_Community 184|Community 184]]
 - [[_COMMUNITY_Community 187|Community 187]]
+- [[_COMMUNITY_Community 188|Community 188]]
 - [[_COMMUNITY_Community 189|Community 189]]
 - [[_COMMUNITY_Community 190|Community 190]]
 - [[_COMMUNITY_Community 191|Community 191]]
 - [[_COMMUNITY_Community 192|Community 192]]
+- [[_COMMUNITY_Community 193|Community 193]]
+- [[_COMMUNITY_Community 194|Community 194]]
 - [[_COMMUNITY_Community 195|Community 195]]
 
 ## God Nodes (most connected - your core abstractions)
 1. `glyphs` - 62 edges
-2. `cx` - 59 edges
+2. `cx` - 60 edges
 3. `cn()` - 55 edges
 4. `db` - 54 edges
 5. `useBodyScrollLock()` - 29 edges
@@ -215,7 +218,7 @@
 - `AdminSidebar()` --calls--> `useAuth()`  [EXTRACTED]
   components/admin/AdminSidebar.tsx → context/AuthContext.tsx
 
-## Communities (193 total, 25 thin omitted)
+## Communities (196 total, 24 thin omitted)
 
 ### Community 0 - "Community 0"
 Cohesion: 0.09
@@ -350,8 +353,8 @@ Cohesion: 0.07
 Nodes (27): 1. Design Philosophy & Visual Tenets, 1. Floating Pill Navigation Bar, 2. Action Buttons with Expanding Action Dots, 2. Color System & Tokens, 3. Chapter Pill Badges & Chips, 3. Typography Scale & Specifications, 4. Bento & Story Cards, 4. Spacing, Shapes & Corner Radii (+19 more)
 
 ### Community 34 - "Community 34"
-Cohesion: 0.08
-Nodes (20): DESIGN_TOKENS, DesignTokens, Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle (+12 more)
+Cohesion: 0.10
+Nodes (13): DESIGN_TOKENS, DesignTokens, Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle (+5 more)
 
 ### Community 35 - "Community 35"
 Cohesion: 0.20
@@ -366,8 +369,8 @@ Cohesion: 0.08
 Nodes (25): 1. General Organization & Contact Details, 2. Navigation Architecture, 3.1 Hero Section, 3.2 About Us Section, 3.3 Newsletter Teaser Section, 3.4 Gallery Section, 3.5 Frequently Asked Questions (FAQ), 3.6 Contact Section (+17 more)
 
 ### Community 38 - "Community 38"
-Cohesion: 0.07
-Nodes (37): AccordionContent, AccordionItem, AccordionTrigger, AlertProps, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription (+29 more)
+Cohesion: 0.08
+Nodes (33): AlertProps, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter(), AlertDialogHeader(), AlertDialogOverlay (+25 more)
 
 ### Community 39 - "Community 39"
 Cohesion: 0.12
@@ -406,8 +409,8 @@ Cohesion: 0.25
 Nodes (8): counters, u_column, u_content_divider, u_content_heading, u_content_image, u_content_social, u_content_text, u_row
 
 ### Community 49 - "Community 49"
-Cohesion: 0.09
-Nodes (21): AdminSidebar(), AdminSidebarProps, AdminTab, NavItem, SubtreeChild, RestrictedAccessCardProps, AnalyticsTabProps, GDG_COLORS (+13 more)
+Cohesion: 0.11
+Nodes (16): AdminSidebar(), AdminSidebarProps, AdminTab, NavItem, SubtreeChild, RestrictedAccessCardProps, AnalyticsTabProps, GDG_COLORS (+8 more)
 
 ### Community 50 - "Community 50"
 Cohesion: 0.29
@@ -431,7 +434,7 @@ Nodes (7): GuardrailCheckResult, maskSensitiveData(), PROMPT_INJECTION_PATTERNS,
 
 ### Community 56 - "Community 56"
 Cohesion: 0.22
-Nodes (8): Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, TableRow
+Nodes (8): SheetContent, SheetContentProps, SheetDescription, SheetFooter(), SheetHeader(), SheetOverlay, SheetTitle, sheetVariants
 
 ### Community 57 - "Community 57"
 Cohesion: 0.50
@@ -730,8 +733,8 @@ Cohesion: 0.13
 Nodes (17): Button(), ButtonLink(), ButtonLinkProps, ButtonProps, ButtonSize, ButtonVariant, IconComponent, styles (+9 more)
 
 ### Community 135 - "Community 135"
-Cohesion: 0.13
-Nodes (23): Dropdown(), DropdownContext, DropdownContextValue, DropdownDivider(), DropdownGroup(), DropdownGroupProps, DropdownItem(), DropdownItemProps (+15 more)
+Cohesion: 0.12
+Nodes (23): DropdownContext, DropdownContextValue, DropdownDivider(), DropdownGroup(), DropdownGroupProps, DropdownItem(), DropdownItemProps, DropdownPopover() (+15 more)
 
 ### Community 136 - "Community 136"
 Cohesion: 0.50
@@ -794,12 +797,16 @@ Cohesion: 0.40
 Nodes (4): CertificateTemplate, IssueCertificateModal(), IssueCertificateModalProps, Participant
 
 ### Community 184 - "Community 184"
-Cohesion: 0.12
-Nodes (16): MENU_ITEM, MENU_POPOVER_SURFACE, ChevronDownSmall(), ChevronRightSmall(), ChevronSortDown(), IconProps, ScrollFade(), ScrollFadeProps (+8 more)
+Cohesion: 0.15
+Nodes (16): Dropdown(), MENU_ITEM, MENU_POPOVER_SURFACE, ScrollFade(), ScrollFadeProps, useScrollFade(), Select(), SelectItem() (+8 more)
 
 ### Community 187 - "Community 187"
 Cohesion: 0.11
 Nodes (17): HintText(), hintTextClassName(), HintTextProps, IconComponent, InputBase(), InputBaseProps, inputFieldClassName(), InputFieldState (+9 more)
+
+### Community 188 - "Community 188"
+Cohesion: 0.25
+Nodes (7): SelectContent, SelectItem, SelectLabel, SelectScrollDownButton, SelectScrollUpButton, SelectSeparator, SelectTrigger
 
 ### Community 189 - "Community 189"
 Cohesion: 0.10
@@ -817,20 +824,32 @@ Nodes (6): Checkbox(), CheckboxProps, CheckboxGlyph(), CheckboxGlyphState, Check
 Cohesion: 0.40
 Nodes (4): EMPTY_FORM, Participant, ParticipantsList(), ParticipantsListProps
 
+### Community 193 - "Community 193"
+Cohesion: 0.33
+Nodes (5): Chip(), ChipColor, ChipProps, ChipVariant, COLOR_MAP
+
+### Community 194 - "Community 194"
+Cohesion: 0.50
+Nodes (3): AccordionContent, AccordionItem, AccordionTrigger
+
+### Community 195 - "Community 195"
+Cohesion: 0.50
+Nodes (3): Avatar, AvatarFallback, AvatarImage
+
 ## Knowledge Gaps
 - **965 isolated node(s):** `$schema`, `style`, `rsc`, `tsx`, `config` (+960 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **25 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **24 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `db` connect `Community 28` to `Community 0`, `Community 192`, `Community 2`, `Community 3`, `Community 36`, `Community 4`, `Community 7`, `Community 10`, `Community 45`, `Community 13`, `Community 177`, `Community 178`, `Community 19`, `Community 182`, `Community 24`, `Community 26`, `Community 27`, `Community 189`?**
-  _High betweenness centrality (0.046) - this node is a cross-community bridge._
+  _High betweenness centrality (0.044) - this node is a cross-community bridge._
 - **Why does `glyphs` connect `Community 59` to `Community 128`, `Community 129`, `Community 73`, `Community 74`, `Community 75`, `Community 76`, `Community 77`, `Community 78`, `Community 79`, `Community 80`, `Community 81`, `Community 82`, `Community 83`, `Community 84`, `Community 85`, `Community 86`, `Community 87`, `Community 88`, `Community 89`, `Community 90`, `Community 91`, `Community 92`, `Community 93`, `Community 94`, `Community 95`, `Community 96`, `Community 97`, `Community 98`, `Community 99`, `Community 100`, `Community 101`, `Community 102`, `Community 103`, `Community 104`, `Community 105`, `Community 106`, `Community 107`, `Community 108`, `Community 109`, `Community 110`, `Community 111`, `Community 112`, `Community 113`, `Community 114`, `Community 115`, `Community 116`, `Community 117`, `Community 118`, `Community 119`, `Community 120`, `Community 121`, `Community 122`, `Community 123`, `Community 124`, `Community 125`, `Community 126`, `Community 127`?**
   _High betweenness centrality (0.030) - this node is a cross-community bridge._
-- **Why does `cx` connect `Community 135` to `Community 131`, `Community 72`, `Community 15`, `Community 17`, `Community 184`, `Community 187`, `Community 31`, `Community 191`?**
-  _High betweenness centrality (0.013) - this node is a cross-community bridge._
+- **Why does `cx` connect `Community 135` to `Community 191`, `Community 131`, `Community 72`, `Community 15`, `Community 49`, `Community 17`, `Community 184`, `Community 187`, `Community 31`?**
+  _High betweenness centrality (0.022) - this node is a cross-community bridge._
 - **What connects `$schema`, `style`, `rsc` to the rest of the system?**
   _965 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Community 0` be split into smaller, more focused modules?**
