@@ -1,13 +1,12 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import {
   ArrowLeft,
   LogOut,
   ExternalLink,
   Shield,
-  Sparkles,
   Command,
   Search,
   Bell,
@@ -105,6 +104,22 @@ export default function AdminHeader({
 }: AdminHeaderProps) {
   const { user, userData, isAdmin, logOut } = useAuth();
   const [showNotifications, setShowNotifications] = useState(false);
+  const notifRef = useRef<HTMLDivElement>(null);
+
+  // Close notifications dropdown on outside click
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (notifRef.current && !notifRef.current.contains(event.target as Node)) {
+        setShowNotifications(false);
+      }
+    }
+    if (showNotifications) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showNotifications]);
 
   const isDark = theme === "dark";
 
@@ -233,18 +248,18 @@ export default function AdminHeader({
             {title}
           </h1>
           {isAdmin ? (
-            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-purple-50 dark:bg-purple-500/15 text-purple-700 dark:text-purple-300 border border-purple-200/60 dark:border-purple-500/20 text-[11px] font-mono font-bold">
-              <Shield className="w-3 h-3 text-purple-600 dark:text-purple-400" />
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-zinc-800/80 text-slate-700 dark:text-zinc-200 border border-slate-200 dark:border-zinc-700/80 text-[11px] font-medium tracking-wide">
+              <Shield className="w-3.5 h-3.5 text-blue-500" />
               <span>Super Admin</span>
             </span>
           ) : userData?.role === "core-manage" ? (
-            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-blue-50 dark:bg-blue-500/15 text-blue-700 dark:text-blue-300 border border-blue-200/60 dark:border-blue-500/20 text-[11px] font-mono font-bold">
-              <Shield className="w-3 h-3 text-blue-600 dark:text-blue-400" />
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-zinc-800/80 text-slate-700 dark:text-zinc-200 border border-slate-200 dark:border-zinc-700/80 text-[11px] font-medium tracking-wide">
+              <Shield className="w-3.5 h-3.5 text-blue-500" />
               <span>Core Manager</span>
             </span>
           ) : userData?.role === "core" ? (
-            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border border-emerald-200/60 dark:border-emerald-500/20 text-[11px] font-mono font-bold">
-              <Shield className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-zinc-800/80 text-slate-700 dark:text-zinc-200 border border-slate-200 dark:border-zinc-700/80 text-[11px] font-medium tracking-wide">
+              <Shield className="w-3.5 h-3.5 text-emerald-500" />
               <span>Core Lead</span>
             </span>
           ) : null}
@@ -252,32 +267,19 @@ export default function AdminHeader({
         <p className="text-xs sm:text-sm text-slate-500 dark:text-zinc-400 mt-0.5 max-w-2xl">{subtitle}</p>
       </div>
 
-      {/* Right Action Controls (matching video header: Notification, Filters, Exit, Profile) */}
+      {/* Right Action Controls */}
       <div className="flex flex-wrap items-center gap-2.5 self-start md:self-auto">
-        {/* System Health Indicators */}
-        <div className="hidden xl:flex items-center gap-3 px-3 py-1.5 rounded-xl bg-white dark:bg-[#141416] border border-slate-200/80 dark:border-zinc-800 shadow-2xs">
-          <div className="flex items-center gap-1.5">
-            <StatusDot color="green" />
-            <span className="text-[11px] font-mono text-slate-600 dark:text-zinc-300 font-medium">Firestore</span>
-          </div>
-          <span className="text-slate-300 dark:text-zinc-700">•</span>
-          <div className="flex items-center gap-1.5">
-            <StatusDot color="blue" />
-            <span className="text-[11px] font-mono text-slate-600 dark:text-zinc-300 font-medium">Mail Gateway</span>
-          </div>
-        </div>
-
         {/* Notification Bell with Badge */}
-        <div className="relative">
+        <div className="relative" ref={notifRef}>
           <button
             type="button"
             onClick={() => setShowNotifications(!showNotifications)}
             title="Notifications"
-            className="size-9 rounded-xl bg-white dark:bg-[#141416] hover:bg-slate-50 dark:hover:bg-zinc-800 border border-slate-200/90 dark:border-zinc-800 text-slate-600 dark:text-zinc-300 flex items-center justify-center transition shadow-2xs cursor-pointer"
+            className="size-9 rounded-xl bg-white dark:bg-[#141416] hover:bg-slate-50 dark:hover:bg-zinc-800 border border-slate-200 dark:border-zinc-800 text-slate-600 dark:text-zinc-300 flex items-center justify-center transition cursor-pointer"
           >
             <Bell className="w-4 h-4" />
             {unreadCount > 0 && (
-              <span className="absolute -top-1 -right-1 size-4 rounded-full bg-red-500 text-white text-[10px] font-bold flex items-center justify-center ring-2 ring-white dark:ring-zinc-950 animate-pulse">
+              <span className="absolute -top-1 -right-1 size-4 rounded-full bg-[#EF4444] text-white text-[10px] font-bold flex items-center justify-center ring-2 ring-white dark:ring-zinc-950">
                 {unreadCount}
               </span>
             )}

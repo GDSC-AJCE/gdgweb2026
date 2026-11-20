@@ -324,6 +324,27 @@ export default function OngoingEventsSection() {
     });
   };
 
+  const handleSubscribe = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email || !email.includes("@")) return;
+    setSubscribing(true);
+    try {
+      await fetch("/api/newsletter/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, source: "homepage_ongoing_events" }),
+      });
+      setSubscribed(true);
+      setTimeout(() => setSubscribed(false), 5000);
+      setEmail("");
+    } catch {
+      setSubscribed(true);
+      setTimeout(() => setSubscribed(false), 5000);
+    } finally {
+      setSubscribing(false);
+    }
+  };
+
   return (
     <section className="relative w-full bg-transparent py-14 sm:py-20 px-4 sm:px-6 select-none overflow-hidden">
       <div className="max-w-[1240px] mx-auto">
@@ -336,57 +357,72 @@ export default function OngoingEventsSection() {
 
 
               {/* 3-Line Inter Display Headline */}
-              <h2 className="text-[44px] sm:text-[54px] md:text-[62px] font-bold text-[#2c2e2a] leading-[1.02] tracking-[-0.04em]">
+              <h2 className="text-[44px] sm:text-[54px] md:text-[62px] font-bold text-[#0f172a] leading-[1.02] tracking-[-0.04em]">
                 Build Bold.<br />
                 Code Free.<br />
                 Ship Hard.
               </h2>
 
               {/* Descriptive Paragraph */}
-              <p className="text-[15px] sm:text-[16px] font-normal text-[#80827f] leading-relaxed max-w-md">
+              <p className="text-[15px] sm:text-[16px] font-normal text-slate-600 leading-relaxed max-w-md">
                 A community where student developers discover tech through building, sprints, and teamwork. 
                 Our clubs help members grow stronger, more confident, and launch real projects in a collaborative environment.
               </p>
             </div>
 
-            {/* Action Buttons */}
-            <div className="pt-2 flex flex-wrap items-center gap-3 max-w-md">
-              <Link
-                href="/programs"
-                className="group inline-flex items-center gap-2.5 px-6 py-3 rounded-[50px] bg-[#2c2e2a] hover:bg-[#1f201d] text-white text-[14px] font-medium transition active:scale-95 shadow-xs cursor-pointer"
-              >
-                <span>Explore Workshops & Labs</span>
-                <span className="w-2.5 h-2.5 rounded-full bg-[#8ed462] action-dot-expand shadow-xs" />
-              </Link>
-              <a
-                href="https://chat.whatsapp.com/gdgajce"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group inline-flex items-center gap-2.5 px-6 py-3 rounded-[50px] bg-[#ffffff] hover:bg-[#eae5d7] border border-[#d5d5d4] text-[#2c2e2a] text-[14px] font-medium transition active:scale-95 shadow-xs"
-              >
-                <span>Join Community</span>
-                <span className="w-2.5 h-2.5 rounded-full bg-[#2ba0ff] action-dot-expand shadow-xs" />
-              </a>
-            </div>
+            {/* Newsletter / Event Alert Input */}
+            <div className="pt-2 max-w-md">
+              <form onSubmit={handleSubscribe} className="relative">
+                <div className="flex items-center bg-white border border-slate-200 hover:border-slate-300 focus-within:border-[#2563EB] focus-within:ring-2 focus-within:ring-[#2563EB]/15 rounded-[50px] p-1.5 sm:p-2 shadow-xs transition-all">
+                  <div className="pl-3.5 pr-2.5 text-slate-400">
+                    <Mail className="w-4 h-4" />
+                  </div>
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Enter your email address..."
+                    className="w-full bg-transparent text-[14px] sm:text-[15px] text-[#0f172a] placeholder-slate-400 outline-none font-medium pr-2"
+                    required
+                  />
+                  <button
+                    type="submit"
+                    disabled={subscribing}
+                    className="group shrink-0 inline-flex items-center gap-2 px-5 sm:px-6 py-2.5 sm:py-3 rounded-[50px] bg-[#0f172a] hover:bg-slate-800 text-white text-[13px] sm:text-[14px] font-medium transition-all duration-300 active:scale-95 shadow-xs cursor-pointer disabled:opacity-60"
+                  >
+                    <span>
+                      {subscribing ? "Subscribing..." : subscribed ? "Subscribed!" : "Subscribe"}
+                    </span>
+                    {subscribed ? (
+                      <Check className="w-3.5 h-3.5 text-[#10B981]" />
+                    ) : subscribing ? (
+                      <span className="w-2 h-2 rounded-full bg-white animate-ping" />
+                    ) : (
+                      <span className="w-2 h-2 rounded-full bg-[#10B981] transition-all duration-300 group-hover:scale-125" />
+                    )}
+                  </button>
+                </div>
+              </form>
 
               {/* Quick Link to Master Programs directory */}
               <div className="pt-5">
                 <Link
                   href="/programs"
-                  className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#2c2e2a] hover:text-[#2ba0ff] transition-colors group"
+                  className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#0f172a] hover:text-[#2563EB] transition-colors group"
                 >
                   <span>Explore all active & ongoing sessions</span>
                   <span className="group-hover:translate-x-1 transition-transform">→</span>
                 </Link>
               </div>
             </div>
+          </div>
 
           {/* ===================== RIGHT COLUMN (CAROUSEL OF CARDS) ===================== */}
           <div className="lg:col-span-7 flex flex-col space-y-4">
             
             {/* Navigational Controls Header */}
             <div className="flex items-center justify-between px-1 pb-1">
-              <span className="text-xs font-mono text-[#80827f] uppercase tracking-wider font-semibold">
+              <span className="text-xs font-mono text-slate-500 uppercase tracking-wider font-semibold">
                 {events.length} Live Opportunities
               </span>
 
@@ -396,7 +432,7 @@ export default function OngoingEventsSection() {
                   type="button"
                   onClick={() => handleScroll("left")}
                   aria-label="Previous events"
-                  className="w-9 h-9 rounded-full bg-[#ffffff] border border-[#d5d5d4] hover:bg-[#f5f1e4] text-[#2c2e2a] flex items-center justify-center transition-all hover:scale-105 active:scale-95 shadow-xs cursor-pointer"
+                  className="w-9 h-9 rounded-full bg-white border border-slate-200 hover:border-slate-300 text-[#0f172a] flex items-center justify-center transition-all hover:scale-105 active:scale-95 shadow-xs cursor-pointer"
                 >
                   <ChevronLeft className="w-4 h-4" />
                 </button>
@@ -404,7 +440,7 @@ export default function OngoingEventsSection() {
                   type="button"
                   onClick={() => handleScroll("right")}
                   aria-label="Next events"
-                  className="w-9 h-9 rounded-full bg-[#ffffff] border border-[#d5d5d4] hover:bg-[#f5f1e4] text-[#2c2e2a] flex items-center justify-center transition-all hover:scale-105 active:scale-95 shadow-xs cursor-pointer"
+                  className="w-9 h-9 rounded-full bg-white border border-slate-200 hover:border-slate-300 text-[#0f172a] flex items-center justify-center transition-all hover:scale-105 active:scale-95 shadow-xs cursor-pointer"
                 >
                   <ChevronRight className="w-4 h-4" />
                 </button>
@@ -425,39 +461,39 @@ export default function OngoingEventsSection() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.5, delay: idx * 0.1 }}
-                    className="snap-start flex-shrink-0 w-[260px] sm:w-[325px] rounded-[36px] bg-[#ffffff] border border-[#e5e1d5] p-5 sm:p-6 flex flex-col justify-between shadow-xs hover:border-[#d5d5d4] transition-all duration-300 group"
+                    className="snap-start flex-shrink-0 w-[260px] sm:w-[325px] rounded-[32px] bg-white border border-slate-200 p-5 sm:p-6 flex flex-col justify-between shadow-sm hover:border-slate-300 hover:shadow-md transition-all duration-300 group"
                   >
                     <div>
                       {/* Top Row: Pill Chip + Round Arrow Link Button */}
                       <div className="flex items-center justify-between gap-2">
-                        <span className="inline-flex items-center px-3 py-1 rounded-[50px] bg-[#f5f1e4] border border-[#d5d5d4] text-[11px] font-semibold text-[#2c2e2a] tracking-tight">
+                        <span className="inline-flex items-center px-3 py-1 rounded-[50px] bg-slate-100 border border-slate-200 text-[11px] font-semibold text-[#0f172a] tracking-tight">
                           {event.tag}
                         </span>
 
                         <Link
                           href={`/programs/${event.slug}`}
                           aria-label={`View ${event.title}`}
-                          className="w-8 h-8 rounded-full border border-[#d5d5d4] bg-[#ffffff] text-[#2c2e2a] group-hover:bg-[#2c2e2a] group-hover:text-white group-hover:border-[#2c2e2a] flex items-center justify-center transition-all duration-200"
+                          className="w-8 h-8 rounded-full border border-slate-200 bg-white text-[#0f172a] group-hover:bg-[#0f172a] group-hover:text-white group-hover:border-[#0f172a] flex items-center justify-center transition-all duration-200"
                         >
                           <ArrowUpRight className="w-4 h-4" />
                         </Link>
                       </div>
 
                       {/* Card Title */}
-                      <h3 className="text-[22px] sm:text-[24px] font-bold text-[#2c2e2a] leading-tight tracking-[-0.03em] mt-3.5 mb-2">
+                      <h3 className="text-[22px] sm:text-[24px] font-bold text-[#0f172a] leading-tight tracking-[-0.03em] mt-3.5 mb-2">
                         <Link href={`/programs/${event.slug}`} className="hover:underline">
                           {event.title}
                         </Link>
                       </h3>
 
                       {/* Card Description */}
-                      <p className="text-[13px] text-[#80827f] line-clamp-2 leading-relaxed mb-5">
+                      <p className="text-[13px] text-slate-600 line-clamp-2 leading-relaxed mb-5">
                         {event.description}
                       </p>
                     </div>
 
                     {/* Bottom Poster / Illustration Block */}
-                    <div className="w-full h-[205px] sm:h-[220px] rounded-[24px] overflow-hidden border border-[#d5d5d4]/80 relative">
+                    <div className="w-full h-[205px] sm:h-[220px] rounded-[24px] overflow-hidden border border-slate-200/80 relative">
                       <CreativeEventPoster
                         posterUrl={event.posterUrl}
                         title={event.title}

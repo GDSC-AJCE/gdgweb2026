@@ -17,6 +17,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           "focus-visible:border-foreground focus-visible:ring-2 focus-visible:ring-ring/20",
           "hover:border-foreground/30",
           "disabled:cursor-not-allowed disabled:opacity-50 disabled:bg-muted/50",
+          "file:border-0 file:bg-transparent file:text-sm file:font-semibold file:text-foreground",
           error && "border-destructive focus-visible:border-destructive focus-visible:ring-destructive/20",
           className
         )}

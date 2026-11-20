@@ -46,10 +46,6 @@ const TAB_METADATA: Record<AdminTab, { title: string; subtitle: string }> = {
     title: "Chapter Analytics & Telemetry",
     subtitle: "Visual breakdowns of member velocity, workshop RSVPs, treasury cashflow, and department demographics.",
   },
-  execom: {
-    title: "Execom Leadership",
-    subtitle: "Manage the official student organizing leads displayed on the public showcase.",
-  },
   events: {
     title: "Manage Events & Rosters",
     subtitle: "Search, filter, inspect attendee registrations, export XLSX rosters, and manage event details.",
@@ -65,6 +61,10 @@ const TAB_METADATA: Record<AdminTab, { title: string; subtitle: string }> = {
   certificates: {
     title: "Event Certificates & Credentials",
     subtitle: "Upload custom frames, auto-generate student certificates with unique QR codes, and dispatch via email.",
+  },
+  execom: {
+    title: "Execom Leadership",
+    subtitle: "Manage the official student organizing leads displayed on the public showcase.",
   },
   newsletter: {
     title: "Weekly Tech Newsletter",
@@ -102,7 +102,7 @@ export default function AdminPage() {
     if (typeof window !== "undefined") {
       const params = new URLSearchParams(window.location.search);
       const tabParam = params.get("tab") as AdminTab;
-      if (tabParam && ["overview", "analytics", "execom", "events", "calendar", "certificates", "newsletter", "mailer", "website", "users", "applications", "funds", "audit"].includes(tabParam)) {
+      if (tabParam && ["overview", "analytics", "execom", "events", "events-list", "calendar", "certificates", "newsletter", "mailer", "website", "users", "applications", "funds", "audit"].includes(tabParam)) {
         return tabParam;
       }
     }
@@ -172,7 +172,7 @@ export default function AdminPage() {
         setIsDevPreview(true);
       }
       const tabParam = params.get("tab") as AdminTab;
-      if (tabParam && ["overview", "analytics", "execom", "events", "certificates", "newsletter", "mailer", "website", "users", "applications", "funds", "audit"].includes(tabParam)) {
+      if (tabParam && ["overview", "analytics", "execom", "events", "events-list", "calendar", "certificates", "newsletter", "mailer", "website", "users", "applications", "funds", "audit"].includes(tabParam)) {
         setActiveTab(tabParam);
       }
     }

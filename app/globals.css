@@ -2,10 +2,9 @@
 @import "../styles/theme.css";
 @import "../styles/typography.css";
 
-@custom-variant dark (&:where([data-admin-theme=dark], [data-admin-theme=dark] *));
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *, [data-admin-theme=dark], [data-admin-theme=dark] *, .dark, .dark *));
 
 @theme inline {
-  /* Shadcn & Semantic Design Tokens */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -25,125 +24,55 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
-
-  /* GDG Warm Paper & Brand Palette Tokens */
-  --color-cream-paper: var(--cream-paper);
-  --color-pure-white: var(--pure-white);
-  --color-sandstone: var(--sandstone);
-  --color-ink-black: var(--ink-black);
-  --color-stone-gray: var(--stone-gray);
-  --color-hairline-mist: var(--hairline-mist);
-  --color-border-warm: var(--border-warm);
-
-  /* Chromatic & Google Labs Accents */
-  --color-fresh-grass: var(--fresh-grass);
-  --color-coral-pop: var(--coral-pop);
-  --color-sky-pop: var(--sky-pop);
-  --color-sunshine-pop: var(--sunshine-pop);
-  --color-google-blue: var(--google-blue);
-  --color-google-green: var(--google-green);
-  --color-google-red: var(--google-red);
-  --color-google-yellow: var(--google-yellow);
-  --color-periwinkle: var(--periwinkle);
-  --color-pink-scallop: var(--pink-scallop);
-  --color-lime-clover: var(--lime-clover);
-
-  /* Typography */
-  --font-sans: var(--font-inter), system-ui, sans-serif;
-  --font-inter: var(--font-inter), system-ui, sans-serif;
+  --font-sans: var(--font-urbanist), system-ui, sans-serif;
+  --font-urbanist: var(--font-urbanist), system-ui, sans-serif;
   --font-mono: var(--font-mono), monospace;
-
-  /* Radii Scale */
-  --radius-sm: var(--radius-sm);
-  --radius-md: var(--radius-md);
-  --radius-lg: var(--radius-lg);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
   --radius-card: var(--radius-card);
   --radius-bento: var(--radius-bento);
   --radius-hero: var(--radius-hero);
   --radius-full: var(--radius-full);
   --radius-pill: var(--radius-full);
-
-  /* Spacing */
-  --spacing-section: 136px;
-  --spacing-hero: 216px;
 }
 
 :root {
-  /* ==========================================================================
-     GDG ON CAMPUS AJCE — WARM PAPER DESIGN SYSTEM (design.md & AGENTS.md)
-     Single Source of Truth: Warm Cream Paper canvas with pure white elevated surfaces
-     ========================================================================== */
-  --cream-paper: #f5f1e4;
-  --pure-white: #ffffff;
-  --sandstone: #e0dbce;
-  --ink-black: #2c2e2a;
-  --stone-gray: #80827f;
-  --hairline-mist: #d5d5d4;
-  --border-warm: #e5e1d5;
+  /* VIBRANT MODERN COLOR PALETTE */
+  --color-fresh-grass: #10B981;     /* Saturated Emerald Green (replaces murky #8ed462) */
+  --color-cream-paper: #f8fafc;     /* Crisp, clean, luminous modern canvas (replaces dirty #f5f1e4) */
+  --color-ink-black: #0f172a;       /* Razor-sharp deep slate ink (replaces brownish #2c2e2a) */
+  --color-pure-white: #ffffff;
+  --color-sandstone: #f1f5f9;       /* Crisp light slate recess (replaces muddy #e0dbce) */
+  --color-stone-gray: #64748b;      /* Clean slate-500 text (replaces dull #80827f) */
+  --color-hairline-mist: #e2e8f0;   /* Clean slate-200 border (replaces murky #d5d5d4) */
+  --color-pure-ink: #000000;
+  --color-sky-pop: #2563EB;         /* Vibrant Electric Google Blue (replaces faded #2ba0ff) */
+  --color-coral-pop: #EF4444;       /* Punchy Saturated Crimson/Coral (replaces washed #ff705d) */
+  --color-sunshine-pop: #F59E0B;     /* Rich Luminous Gold/Amber (replaces pale #f5e211) */
 
-  /* Chromatic Accents & Google Labs Palette */
-  --fresh-grass: #8ed462;
-  --coral-pop: #ff705d;
-  --sky-pop: #2ba0ff;
-  --sunshine-pop: #ffd600;
-  --google-blue: #4285F4;
-  --google-green: #34A853;
-  --google-red: #EA4335;
-  --google-yellow: #FBBC04;
-  --periwinkle: #95a8fe;
-  --pink-scallop: #ffaff6;
-  --lime-clover: #c6eb3d;
-
-  /* Backward Compatibility Aliases */
-  --color-cream-paper: var(--cream-paper);
-  --color-pure-white: var(--pure-white);
-  --color-sandstone: var(--sandstone);
-  --color-ink-black: var(--ink-black);
-  --color-stone-gray: var(--stone-gray);
-  --color-hairline-mist: var(--hairline-mist);
-  --color-border-warm: var(--border-warm);
-  --color-fresh-grass: var(--fresh-grass);
-  --color-coral-pop: var(--coral-pop);
-  --color-sky-pop: var(--sky-pop);
-  --color-sunshine-pop: var(--sunshine-pop);
-  --color-google-blue: var(--google-blue);
-  --color-google-green: var(--google-green);
-  --color-google-red: var(--google-red);
-  --color-google-yellow: var(--google-yellow);
-  --color-periwinkle: var(--periwinkle);
-  --color-pink-scallop: var(--pink-scallop);
-  --color-lime-clover: var(--lime-clover);
-
-  /* Corner Radii Hierarchy */
-  --radius-sm: 10px;
-  --radius-md: 16px;
-  --radius-lg: 20px;
-  --radius-card: 28px;
-  --radius-bento: 36px;
-  --radius-hero: 44px;
-  --radius-full: 50px;
-  --radius: 1.5rem;
-
-  /* Semantic UI Tokens (Public Website & Admin Light Mode) */
-  --background: #f5f1e4;
-  --foreground: #2c2e2a;
+  /* SHADCN THEME TOKENS */
+  --background: #f8fafc;
+  --foreground: #0f172a;
   --card: #ffffff;
-  --card-foreground: #2c2e2a;
+  --card-foreground: #0f172a;
   --popover: #ffffff;
-  --popover-foreground: #2c2e2a;
-  --primary: #2c2e2a;
+  --popover-foreground: #0f172a;
+  --primary: #0f172a;
   --primary-foreground: #ffffff;
-  --secondary: #f5f1e4;
-  --secondary-foreground: #2c2e2a;
-  --muted: #e0dbce;
-  --muted-foreground: #80827f;
-  --accent: #f5f1e4;
-  --accent-foreground: #2c2e2a;
-  --destructive: #ff705d;
+  --secondary: #f1f5f9;
+  --secondary-foreground: #0f172a;
+  --muted: #f1f5f9;
+  --muted-foreground: #64748b;
+  --accent: #f1f5f9;
+  --accent-foreground: #0f172a;
+  --destructive: #EF4444;
   --destructive-foreground: #ffffff;
-  --border: #d5d5d4;
-  --input: #d5d5d4;
-  --ring: #2ba0ff;
+  --border: #e2e8f0;
+  --input: #e2e8f0;
+  --ring: #2563EB;
+  --radius: 0.75rem;
 
   /* Typography Scale */
   --text-body-sm: 15px;
@@ -167,74 +96,196 @@
   --leading-display-lg: 0.95;
   --tracking-display-lg: -8.64px;
 
-  /* Signature Animation Easing Curves */
-  --ease-mindmarket: cubic-bezier(.38, .005, .215, 1);
-  --ease-bounce: cubic-bezier(.17, .67, .3, 1.33);
-  --ease-wave: cubic-bezier(.455, .03, .515, .955);
-  --ease-snappy: cubic-bezier(.5, 0, 0, 1);
+  /* Spacing */
+  --spacing-4: 4px;
+  --spacing-20: 20px;
+  --spacing-60: 60px;
+  --spacing-136: 136px;
+  --spacing-216: 216px;
+
+  /* Border Radii */
+  --radius-lg: 12px;
+  --radius-2xl: 20px;
+  --radius-full: 50px;
+  --radius-full-2: 63.75px;
 }
 
-body {
-  background-color: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-inter), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  overflow-x: hidden;
+.dark, [data-theme="dark"] {
+  --background: #090d16;
+  --foreground: #f8fafc;
+  --card: #111827;
+  --card-foreground: #f8fafc;
+  --popover: #111827;
+  --popover-foreground: #f8fafc;
+  --primary: #f8fafc;
+  --primary-foreground: #090d16;
+  --secondary: #1e293b;
+  --secondary-foreground: #f8fafc;
+  --muted: #1e293b;
+  --muted-foreground: #94a3b8;
+  --accent: #1e293b;
+  --accent-foreground: #f8fafc;
+  --destructive: #EF4444;
+  --destructive-foreground: #ffffff;
+  --border: #1e293b;
+  --input: #1e293b;
+  --ring: #3B82F6;
 }
 
-/* INTER DISPLAY TYPOGRAPHY */
-.font-display-hero {
-  font-family: var(--font-inter), sans-serif;
-  font-weight: 900;
-  line-height: 0.82;
-  letter-spacing: -0.065em;
-}
-
-.font-heading-lg {
-  font-family: var(--font-inter), sans-serif;
-  font-weight: 500;
-  line-height: 1.05;
-  letter-spacing: -0.04em;
-}
-
-/* Hairline border utilities */
+/* Hairline border utility */
 .border-hairline {
-  border: 1px solid var(--hairline-mist);
-}
-
-.border-warm {
-  border: 1px solid var(--border-warm);
+  border: 1px solid #e2e8f0;
 }
 
 .border-ink {
-  border: 1px solid var(--ink-black);
+  border: 1px solid #0f172a;
 }
 
-/* Custom Minimal Scrollbar on Cream */
+/* Clean Minimal Scrollbar on Crisp Slate */
 ::-webkit-scrollbar {
   width: 7px;
   height: 7px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--background);
+  background: #f8fafc;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--muted);
+  background: #cbd5e1;
   border-radius: 50px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--muted-foreground);
+  background: #94a3b8;
 }
 
-/* Form fields */
+/* Form fields — clean crisp contrast */
 input, textarea, select {
-  color: var(--foreground);
+  color: #0f172a;
 }
 
 input:focus, textarea:focus, select:focus {
   outline: none;
+}
+
+/* ==========================================================================
+   GLOBAL MAPPINGS: PURGE PALE DIRTY YELLOWS & WASHED GREENS IN FAVOR OF VIBRANT TECH PALETTE
+   ========================================================================== */
+
+/* Replace muddy dirty-yellow #f5f1e4 with modern crisp slate/white */
+.bg-\[\#f5f1e4\],
+.bg-\[\#f5f1e4\]\/90,
+.bg-\[\#f5f1e4\]\/80 {
+  background-color: #f8fafc !important;
+}
+
+.bg-\[\#f5f1e4\]\/70,
+.bg-\[\#f5f1e4\]\/60 {
+  background-color: rgba(248, 250, 252, 0.75) !important;
+}
+
+.bg-\[\#f5f1e4\]\/50,
+.bg-\[\#f5f1e4\]\/40,
+.bg-\[\#f5f1e4\]\/30 {
+  background-color: rgba(241, 245, 249, 0.6) !important;
+}
+
+.hover\:bg-\[\#f5f1e4\]:hover,
+.hover\:bg-\[\#eae5d7\]:hover,
+.hover\:bg-\[\#e0dbce\]:hover {
+  background-color: #f1f5f9 !important;
+}
+
+.border-\[\#f5f1e4\],
+.border-\[\#e0dbce\],
+.border-\[\#e5e1d5\],
+.border-\[\#d5d5d4\] {
+  border-color: #e2e8f0 !important;
+}
+
+.hover\:border-\[\#d5d5d4\]:hover {
+  border-color: #cbd5e1 !important;
+}
+
+/* Deep razor-sharp slate ink */
+.text-\[\#2c2e2a\] {
+  color: #0f172a !important;
+}
+
+.text-\[\#80827f\],
+.text-\[\#9a9c98\] {
+  color: #64748b !important;
+}
+
+.bg-\[\#e0dbce\],
+.bg-\[\#eadecd\],
+.bg-\[\#ebe7dc\] {
+  background-color: #f1f5f9 !important;
+}
+
+/* Replace pale murky green (#8ed462) with vibrant saturated Emerald (#10B981) */
+.bg-\[\#8ed462\] {
+  background-color: #10B981 !important;
+  color: #ffffff !important;
+}
+
+.text-\[\#8ed462\] {
+  color: #10B981 !important;
+}
+
+.border-\[\#8ed462\],
+.border-\[\#8ed462\]\/40 {
+  border-color: #10B981 !important;
+}
+
+.hover\:bg-\[\#7ec452\]:hover {
+  background-color: #059669 !important;
+}
+
+/* Replace washed coral (#ff705d) with vibrant Google Red (#EF4444) */
+.bg-\[\#ff705d\] {
+  background-color: #EF4444 !important;
+  color: #ffffff !important;
+}
+
+.text-\[\#ff705d\] {
+  color: #EF4444 !important;
+}
+
+.border-\[\#ff705d\] {
+  border-color: #EF4444 !important;
+}
+
+.hover\:bg-\[\#ee6350\]:hover {
+  background-color: #DC2626 !important;
+}
+
+/* Replace pale sky blue (#2ba0ff) with vibrant electric blue (#2563EB) */
+.bg-\[\#2ba0ff\] {
+  background-color: #2563EB !important;
+  color: #ffffff !important;
+}
+
+.text-\[\#2ba0ff\] {
+  color: #2563EB !important;
+}
+
+/* Replace dirty yellow (#f5e211) with rich warm gold (#F59E0B) */
+.bg-\[\#f5e211\],
+.bg-\[\#ffd600\] {
+  background-color: #F59E0B !important;
+}
+
+/* ==========================================================================
+   MINDMARKET ANIMATION ENGINE & EASING TOKENS
+   ========================================================================== */
+
+:root {
+  --ease-mindmarket: cubic-bezier(.38, .005, .215, 1);
+  --ease-bounce: cubic-bezier(.17, .67, .3, 1.33);
+  --ease-wave: cubic-bezier(.455, .03, .515, .955);
+  --ease-snappy: cubic-bezier(.5, 0, 0, 1);
 }
 
 /* Lenis Smooth Scroll Rules */
@@ -258,16 +309,16 @@ html.lenis, html.lenis body {
   pointer-events: none;
 }
 
-/* Interactive Easing Classes */
+/* MindMarket Interactive Physics Classes */
 .transition-mindmarket {
-  transition-timing-function: var(--ease-mindmarket);
+  transition-timing-function: cubic-bezier(.38, .005, .215, 1);
 }
 
 .transition-bounce {
-  transition-timing-function: var(--ease-bounce);
+  transition-timing-function: cubic-bezier(.17, .67, .3, 1.33);
 }
 
-/* Button Dot Expand Affordance on Hover (design.md) */
+/* Button Dot Expand Affordance on Hover */
 .group:hover .action-dot-expand {
   transform: scale(1.6);
   transition: transform 0.28s cubic-bezier(.17, .67, .3, 1.33);
@@ -302,6 +353,7 @@ html.lenis, html.lenis body {
 
 /* ==========================================================================
    HARDWARE-ACCELERATED COMPOSITOR FLOAT ANIMATIONS
+   Zero JS main thread overhead, executes purely on GPU compositor.
    ========================================================================== */
 @keyframes hero-float-1 {
   0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg); }
@@ -378,41 +430,20 @@ html.lenis, html.lenis body {
    ========================================================================== */
 [data-admin-theme="dark"] {
   color-scheme: dark;
-  --background: #0f172a;
-  --foreground: #f8fafc;
-  --card: #1e293b;
-  --card-foreground: #f8fafc;
-  --popover: #1e293b;
-  --popover-foreground: #f8fafc;
-  --primary: #f8fafc;
-  --primary-foreground: #0f172a;
-  --secondary: #334155;
-  --secondary-foreground: #f8fafc;
-  --muted: #334155;
-  --muted-foreground: #94a3b8;
-  --accent: #334155;
-  --accent-foreground: #f8fafc;
-  --destructive: #ef4444;
-  --destructive-foreground: #ffffff;
-  --border: #334155;
-  --input: #334155;
-  --ring: #38bdf8;
 }
 
-/* Backward-compatible legacy class overrides for legacy admin views */
 [data-admin-theme="dark"] aside,
 [data-admin-theme="dark"] header:not(.keep-bg),
 [data-admin-theme="dark"] .bg-white {
-  background-color: var(--card) !important;
-  color: var(--foreground);
+  background-color: #111827 !important;
+  color: #f8fafc;
 }
 
 [data-admin-theme="dark"] .bg-slate-50,
 [data-admin-theme="dark"] .bg-slate-100,
 [data-admin-theme="dark"] .bg-\[\#f8fafc\],
-[data-admin-theme="dark"] .bg-\[\#f5f1e4\],
 [data-admin-theme="dark"] .bg-zinc-50 {
-  background-color: var(--muted) !important;
+  background-color: #1f2937 !important;
 }
 
 [data-admin-theme="dark"] .border-slate-200,
@@ -420,21 +451,18 @@ html.lenis, html.lenis body {
 [data-admin-theme="dark"] .border-slate-200\/80,
 [data-admin-theme="dark"] .border-slate-200\/60,
 [data-admin-theme="dark"] .border-slate-200\/70,
-[data-admin-theme="dark"] .border-slate-100,
-[data-admin-theme="dark"] .border-\[\#d5d5d4\],
-[data-admin-theme="dark"] .border-\[\#e5e5e5\] {
-  border-color: var(--border) !important;
+[data-admin-theme="dark"] .border-slate-100 {
+  border-color: #374151 !important;
 }
 
 [data-admin-theme="dark"] .text-slate-900,
-[data-admin-theme="dark"] .text-\[\#2c2e2a\],
 [data-admin-theme="dark"] .text-\[\#0f172a\],
 [data-admin-theme="dark"] .text-slate-800,
 [data-admin-theme="dark"] h1,
 [data-admin-theme="dark"] h2,
 [data-admin-theme="dark"] h3,
 [data-admin-theme="dark"] h4 {
-  color: var(--foreground) !important;
+  color: #f8fafc !important;
 }
 
 [data-admin-theme="dark"] .text-slate-700,
@@ -443,29 +471,27 @@ html.lenis, html.lenis body {
 }
 
 [data-admin-theme="dark"] .text-slate-500,
-[data-admin-theme="dark"] .text-slate-400,
-[data-admin-theme="dark"] .text-\[\#80827f\],
-[data-admin-theme="dark"] .text-\[\#9a9c98\] {
-  color: var(--muted-foreground) !important;
+[data-admin-theme="dark"] .text-slate-400 {
+  color: #94a3b8 !important;
 }
 
 [data-admin-theme="dark"] input,
 [data-admin-theme="dark"] textarea,
 [data-admin-theme="dark"] select {
-  background-color: var(--card) !important;
-  color: var(--foreground) !important;
-  border-color: var(--border) !important;
+  background-color: #1f2937 !important;
+  color: #f8fafc !important;
+  border-color: #374151 !important;
 }
 
 [data-admin-theme="dark"] input::placeholder,
 [data-admin-theme="dark"] textarea::placeholder {
-  color: #64748b !important;
+  color: #6b7280 !important;
 }
 
 [data-admin-theme="dark"] .hover\:bg-slate-50:hover,
 [data-admin-theme="dark"] .hover\:bg-slate-100:hover,
 [data-admin-theme="dark"] .hover\:bg-slate-100\/70:hover {
-  background-color: #334155 !important;
+  background-color: #374151 !important;
 }
 
 [data-admin-theme="dark"] .shadow-2xs,
@@ -474,6 +500,8 @@ html.lenis, html.lenis body {
 [data-admin-theme="dark"] .shadow-md {
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -2px rgba(0, 0, 0, 0.4) !important;
 }
+
+
 
 /* ---------------------------------------------------------------------------
  * BoardUI Table Primitive (.bui-table)
