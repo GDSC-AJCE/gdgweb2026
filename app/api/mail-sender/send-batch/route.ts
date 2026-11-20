@@ -1,7 +1,6 @@
 import { NextRequest } from "next/server";
 import {
   getMailConfig,
-  getTemplateSource,
   renderTemplateToHtml,
   sendViaAppsScriptGateway,
   getTransporter,
@@ -9,8 +8,7 @@ import {
   isBatchCancelled,
   resetBatchCancellation,
 } from "@/lib/mailer";
-import { doc, getDoc } from "firebase/firestore";
-import { db } from "@/lib/firebase";
+import { resolveTemplateSource } from "@/lib/mail-template-source";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -48,34 +46,14 @@ export async function POST(req: NextRequest) {
     const sEmail = config.senderEmail;
     const emailSubject = subject || config.defaultSubject;
 
-    let rawSource =
-      typeof templateContent === "string" && templateContent.trim().length > 0
-        ? templateContent
-        : null;
-
-    if (!rawSource && templateName) {
-      try {
-        const docSnap = await getDoc(doc(db, "mail_templates", templateName));
-        if (docSnap.exists() && docSnap.data().content) {
-          rawSource = docSnap.data().content;
-        }
-      } catch (fsErr) {
-        console.warn("Firestore template lookup failed in send-batch:", fsErr);
-      }
+    const resolved = await resolveTemplateSource({ templateContent, templateName });
+    if (!resolved.ok) {
+      return new Response(JSON.stringify({ error: resolved.error }), {
+        status: 400,
+        headers: { "Content-Type": "application/json" },
+      });
     }
-
-    if (!rawSource && templateName) {
-      rawSource = getTemplateSource(templateName);
-    }
-
-    if (!rawSource) {
-      rawSource = `
-        <div style="font-family: sans-serif; padding: 24px; color: #1e293b;">
-          <h2>Hello {{name}},</h2>
-          <p>Update regarding your application for {{team}} domain at GDG on Campus AJCE.</p>
-        </div>
-      `;
-    }
+    const rawSource = resolved.source;
 
     let transporter: any = null;
     if (!activeGatewayUrl) {
@@ -206,7 +184,7 @@ export async function POST(req: NextRequest) {
             });
           }
 
-          if (i < recipients.length - 1 && !isBatchCancelled) {
+          if (i < recipients.length - 1 && !isBatchCancelled()) {
             await new Promise((resolve) => setTimeout(resolve, delay));
           }
         }

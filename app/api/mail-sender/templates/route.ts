@@ -57,7 +57,12 @@ export async function GET() {
       templateMap.delete(deletedId);
     });
 
-    const templates = Array.from(templateMap.values());
+    // Flag ids that ship a starter file so the UI can offer "Restore original".
+    const starterIds = new Set(diskTemplates.map((t) => t.id));
+    const templates = Array.from(templateMap.values()).map((t) => ({
+      ...t,
+      hasStarter: starterIds.has(t.id),
+    }));
 
     return NextResponse.json(
       { success: true, templates },

@@ -24,6 +24,35 @@ export async function GET(
       .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
       .join(" ");
     let foundInFirestore = false;
+    // ?source=starter returns only the repo's starter file (used by "Restore original").
+    const starterOnly = req.nextUrl.searchParams.get("source") === "starter";
+
+    if (starterOnly) {
+      const starterContent = getTemplateSource(templateName);
+      if (!starterContent) {
+        return NextResponse.json(
+          { success: false, error: `No starter file for '${templateName}'.` },
+          { status: 404 }
+        );
+      }
+      let starterDesign: unknown = null;
+      try {
+        if (fs.existsSync(jsonPath)) starterDesign = JSON.parse(fs.readFileSync(jsonPath, "utf8"));
+      } catch {
+        starterDesign = null;
+      }
+      return NextResponse.json(
+        {
+          success: true,
+          id: templateName,
+          name: displayName,
+          content: starterContent,
+          design: starterDesign,
+          hasDesign: Boolean(starterDesign),
+        },
+        { headers: { "Cache-Control": "no-store, no-cache, must-revalidate" } }
+      );
+    }
 
     // 1. Check Firestore first
     try {
@@ -140,6 +169,22 @@ export async function POST(
       }
     } catch (diskErr: any) {
       console.warn("Disk write skipped or failed (expected in read-only serverless environment):", diskErr?.message);
+    }
+
+    // Firestore writes from the server are unauthenticated and are rejected by
+    // firestore.rules in production; Mail Studio saves from the signed-in
+    // client via lib/mail-templates.ts. Never report success that didn't happen.
+    if (!firestoreSaved && !diskSaved) {
+      return NextResponse.json(
+        {
+          success: false,
+          error:
+            "Template could not be persisted from the server. Save it from Mail Studio while signed in.",
+          firestoreSaved,
+          diskSaved,
+        },
+        { status: 502 }
+      );
     }
 
     return NextResponse.json(

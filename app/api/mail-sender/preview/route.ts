@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getTemplateSource, renderTemplateToHtml } from "@/lib/mailer";
-import { doc, getDoc } from "firebase/firestore";
-import { db } from "@/lib/firebase";
+import { renderTemplateToHtml } from "@/lib/mailer";
+import { resolveTemplateSource } from "@/lib/mail-template-source";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -17,44 +16,11 @@ export async function POST(req: NextRequest) {
       whatsapp_link: bodyWhatsappLinkSnake,
     } = body;
 
-    let isDeleted = false;
-    if (templateName) {
-      try {
-        const docSnap = await getDoc(doc(db, "mail_templates", templateName));
-        if (docSnap.exists() && docSnap.data().deleted === true) {
-          isDeleted = true;
-        }
-      } catch (fsErr) {}
+    const resolved = await resolveTemplateSource({ templateContent, templateName });
+    if (!resolved.ok) {
+      return NextResponse.json({ success: false, error: resolved.error }, { status: 404 });
     }
-
-    let source: string | null =
-      typeof templateContent === "string" && templateContent.trim().length > 0
-        ? templateContent
-        : null;
-
-    if (!source && templateName && !isDeleted) {
-      try {
-        const docSnap = await getDoc(doc(db, "mail_templates", templateName));
-        if (docSnap.exists() && docSnap.data().content) {
-          source = docSnap.data().content;
-        }
-      } catch (fsErr) {
-        console.warn("Firestore template lookup failed in preview:", fsErr);
-      }
-    }
-
-    if (!source && templateName && !isDeleted) {
-      source = getTemplateSource(templateName);
-    }
-
-    if (!source) {
-      source = `
-        <div style="font-family: sans-serif; padding: 20px; color: #333;">
-          <h2>Hello {{name}}!</h2>
-          <p>This is a preview of your email for the {{team}} domain.</p>
-        </div>
-      `;
-    }
+    const source = resolved.source;
 
     const rawWhatsapp =
       recipient.whatsapp_link ||

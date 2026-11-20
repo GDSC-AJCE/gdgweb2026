@@ -1,13 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import {
   getMailConfig,
-  getTemplateSource,
   renderTemplateToHtml,
   sendViaAppsScriptGateway,
   getTransporter,
 } from "@/lib/mailer";
-import { doc, getDoc } from "firebase/firestore";
-import { db } from "@/lib/firebase";
+import { resolveTemplateSource } from "@/lib/mail-template-source";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -65,34 +63,11 @@ export async function POST(req: NextRequest) {
       meet_link: "https://meet.google.com/gdg-ajce-demo",
     };
 
-    let source: string | null =
-      typeof templateContent === "string" && templateContent.trim().length > 0
-        ? templateContent
-        : null;
-
-    if (!source && templateName) {
-      try {
-        const docSnap = await getDoc(doc(db, "mail_templates", templateName));
-        if (docSnap.exists() && docSnap.data().content) {
-          source = docSnap.data().content;
-        }
-      } catch (fsErr) {
-        console.warn("Firestore template lookup failed in test-email:", fsErr);
-      }
+    const resolved = await resolveTemplateSource({ templateContent, templateName });
+    if (!resolved.ok) {
+      return NextResponse.json({ success: false, error: resolved.error }, { status: 400 });
     }
-
-    if (!source && templateName) {
-      source = getTemplateSource(templateName);
-    }
-
-    if (!source) {
-      source = `
-        <div style="font-family: sans-serif; padding: 24px; color: #1e293b;">
-          <h2>Hello {{name}},</h2>
-          <p>This is a test email dispatched from GDG AJCE Mail Studio.</p>
-        </div>
-      `;
-    }
+    const source = resolved.source;
 
     // If Gateway is configured, dispatch via Apps Script Web App
     if (activeGatewayUrl) {
