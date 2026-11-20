@@ -95,6 +95,9 @@ interface EventData {
     customFields?: FormField[];
     participationType?: "solo" | "team";
     teamConfig?: TeamConfig;
+    whatsappUrl?: string;
+    whatsappLink?: string;
+    whatsappGroup?: string;
     postRegistrationLink?: string;
     postRegistrationMessage?: string;
     isHidden?: boolean;
@@ -336,7 +339,9 @@ export default function EventDashboardPage({
                         options: m.options || []
                     }))
                 } : null,
-                postRegistrationLink: event.postRegistrationLink || "",
+                whatsappUrl: event.whatsappUrl || event.whatsappLink || event.postRegistrationLink || "",
+                whatsappLink: event.whatsappLink || event.whatsappUrl || event.postRegistrationLink || "",
+                postRegistrationLink: event.postRegistrationLink || event.whatsappUrl || event.whatsappLink || "",
                 postRegistrationMessage: event.postRegistrationMessage || "",
                 category: event.category || "hackathon",
                 isHidden: event.isHidden || false,
@@ -632,6 +637,34 @@ export default function EventDashboardPage({
                                     </div>
                                 </div>
 
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label className="text-[11px] font-mono text-zinc-500 uppercase block mb-1">WhatsApp Group URL (On Registration)</label>
+                                        <input
+                                            type="url"
+                                            value={event.whatsappUrl || event.whatsappLink || event.postRegistrationLink || ""}
+                                            onChange={(e) => setEvent({
+                                                ...event,
+                                                whatsappUrl: e.target.value,
+                                                whatsappLink: e.target.value,
+                                                postRegistrationLink: e.target.value
+                                            })}
+                                            placeholder="https://chat.whatsapp.com/..."
+                                            className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-4 py-2.5 text-sm text-white focus:border-[#4285F4] outline-none"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="text-[11px] font-mono text-zinc-500 uppercase block mb-1">Post-Registration Button Text</label>
+                                        <input
+                                            type="text"
+                                            value={event.postRegistrationMessage || ""}
+                                            onChange={(e) => setEvent({ ...event, postRegistrationMessage: e.target.value })}
+                                            placeholder="Join Event WhatsApp Group"
+                                            className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-4 py-2.5 text-sm text-white focus:border-[#4285F4] outline-none"
+                                        />
+                                    </div>
+                                </div>
+
                                 {/* Paid entry configuration */}
                                 <div className="bg-[#1e1f20]/50 border border-zinc-800 rounded-3xl p-6 space-y-4">
                                     <div className="flex items-center justify-between">
@@ -827,6 +860,7 @@ export default function EventDashboardPage({
                                 eventDate={event.date}
                                 participants={participants}
                                 isWriter={isWriter}
+                                whatsappLink={event.whatsappUrl || event.whatsappLink || event.postRegistrationLink || ""}
                             />
                         </motion.div>
                     )}

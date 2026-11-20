@@ -9,7 +9,13 @@ export const revalidate = 0;
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { templateContent, templateName, recipient = {} } = body;
+    const {
+      templateContent,
+      templateName,
+      recipient = {},
+      whatsappLink: bodyWhatsappLink,
+      whatsapp_link: bodyWhatsappLinkSnake,
+    } = body;
 
     let isDeleted = false;
     if (templateName) {
@@ -24,17 +30,21 @@ export async function POST(req: NextRequest) {
     let source: string | null =
       typeof templateContent === "string" && templateContent.trim().length > 0
         ? templateContent
-        : (!isDeleted && templateName ? getTemplateSource(templateName) : null);
+        : null;
 
     if (!source && templateName && !isDeleted) {
       try {
         const docSnap = await getDoc(doc(db, "mail_templates", templateName));
-        if (docSnap.exists()) {
-          source = docSnap.data().content || null;
+        if (docSnap.exists() && docSnap.data().content) {
+          source = docSnap.data().content;
         }
       } catch (fsErr) {
         console.warn("Firestore template lookup failed in preview:", fsErr);
       }
+    }
+
+    if (!source && templateName && !isDeleted) {
+      source = getTemplateSource(templateName);
     }
 
     if (!source) {
@@ -46,7 +56,31 @@ export async function POST(req: NextRequest) {
       `;
     }
 
+    const rawWhatsapp =
+      recipient.whatsapp_link ||
+      recipient.WHATSAPP_LINK ||
+      recipient.whatsappLink ||
+      recipient.whatsappUrl ||
+      recipient.whatsappGroup ||
+      recipient.whatsapp_group ||
+      recipient.postRegistrationLink ||
+      recipient.post_registration_link ||
+      recipient.groupLink ||
+      recipient.group_link ||
+      recipient.eventWhatsapp ||
+      recipient.event_whatsapp ||
+      recipient.whatsapp ||
+      recipient.WhatsApp ||
+      bodyWhatsappLink ||
+      bodyWhatsappLinkSnake ||
+      "";
+    const resolvedWhatsapp =
+      rawWhatsapp && typeof rawWhatsapp === "string" && rawWhatsapp.trim().length > 0
+        ? rawWhatsapp.trim()
+        : "https://chat.whatsapp.com/gdgajce";
+
     const sample = {
+      ...recipient,
       NAME: recipient.name || recipient.NAME || "Rahul Sharma",
       MAIL: recipient.email || recipient.MAIL || "rahul@amaljyothi.ac.in",
       CATEGORY:
@@ -74,10 +108,7 @@ export async function POST(req: NextRequest) {
         recipient.time_slot ||
         recipient.TIME_SLOT ||
         "6:00 PM - 6:10 PM",
-      WHATSAPP_LINK:
-        recipient.whatsapp_link ||
-        recipient.WHATSAPP_LINK ||
-        "https://chat.whatsapp.com/Ftflnf70DRrAXIhwWJQ2Bo?s=cl&p=a&mlu=4&ilr=4&iam=2",
+      WHATSAPP_LINK: resolvedWhatsapp,
       MEET_LINK:
         recipient.meet_link ||
         recipient.MEET_LINK ||
@@ -109,15 +140,11 @@ export async function POST(req: NextRequest) {
         recipient.time_slot ||
         recipient.TIME_SLOT ||
         "6:00 PM - 6:10 PM",
-      whatsapp_link:
-        recipient.whatsapp_link ||
-        recipient.WHATSAPP_LINK ||
-        "https://chat.whatsapp.com/Ftflnf70DRrAXIhwWJQ2Bo?s=cl&p=a&mlu=4&ilr=4&iam=2",
+      whatsapp_link: resolvedWhatsapp,
       meet_link:
         recipient.meet_link ||
         recipient.MEET_LINK ||
         "https://meet.google.com/djf-bgpu-stt",
-      ...recipient,
     };
 
     const previewHtml = await renderTemplateToHtml(source, sample, true);

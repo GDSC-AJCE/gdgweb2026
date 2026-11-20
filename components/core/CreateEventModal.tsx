@@ -350,6 +350,7 @@ export default function CreateEventModal({
                 posterUrl: posterUrl.trim(),
                 externalRegistrationUrl: externalRegistrationUrl.trim(),
                 whatsappUrl: whatsappUrl.trim(),
+                whatsappLink: whatsappUrl.trim(),
                 postRegistrationLink: whatsappUrl.trim(),
                 tags: tags.map((t) => t.name),
                 isHidden,

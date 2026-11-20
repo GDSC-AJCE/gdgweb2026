@@ -160,7 +160,7 @@ export default function GeminiMailStudio({
     venue: "Central Computing Facility (CCF), AJCE",
     rsvpLink: "https://gdgajce.vercel.app/events/build-with-ai",
     meetLink: "https://meet.google.com/djf-bgpu-stt",
-    whatsappLink: "https://chat.whatsapp.com/Ftflnf70DRrAXIhwWJQ2Bo",
+    whatsappLink: "https://chat.whatsapp.com/gdgajce",
     speaker: "Google Developer Experts & GDG Core Mentors",
     perks: "Hands-on Code, Google Developer Profile Badges, Food & Stickers",
     targetAudience: "All AJCE students across B.Tech, MCA & BCA",

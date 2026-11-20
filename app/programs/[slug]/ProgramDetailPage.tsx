@@ -131,8 +131,8 @@ export default function ProgramDetailPage({ params }: { params: Promise<{ slug: 
                         customFields: ed.customFields || [],
                         participationType: ed.participationType || "solo",
                         teamConfig: ed.teamConfig || null,
-                        postRegistrationLink: ed.postRegistrationLink || "",
-                        postRegistrationMessage: ed.postRegistrationMessage || "",
+                        postRegistrationLink: ed.postRegistrationLink || ed.whatsappUrl || ed.whatsappLink || ed.whatsappGroup || "",
+                        postRegistrationMessage: ed.postRegistrationMessage || (ed.whatsappUrl || ed.whatsappLink || ed.whatsappGroup ? "Join Event WhatsApp Group" : ""),
                         externalRegistrationUrl: ed.externalRegistrationUrl || "",
                         isHidden: ed.isHidden || false,
                         coordinators: ed.coordinators || [],
@@ -167,8 +167,8 @@ export default function ProgramDetailPage({ params }: { params: Promise<{ slug: 
                             customFields: ed.customFields || [],
                             participationType: ed.participationType || "solo",
                             teamConfig: ed.teamConfig || null,
-                            postRegistrationLink: ed.postRegistrationLink || "",
-                            postRegistrationMessage: ed.postRegistrationMessage || "",
+                            postRegistrationLink: ed.postRegistrationLink || ed.whatsappUrl || ed.whatsappLink || ed.whatsappGroup || "",
+                            postRegistrationMessage: ed.postRegistrationMessage || (ed.whatsappUrl || ed.whatsappLink || ed.whatsappGroup ? "Join Event WhatsApp Group" : ""),
                             externalRegistrationUrl: ed.externalRegistrationUrl || "",
                             isHidden: ed.isHidden || false,
                             coordinators: ed.coordinators || [],
@@ -520,7 +520,7 @@ export default function ProgramDetailPage({ params }: { params: Promise<{ slug: 
                                             className="w-full py-2.5 px-4 bg-[#2c2e2a] hover:bg-[#1a1a1a] text-white font-semibold rounded-[50px] text-center flex items-center justify-center gap-2 text-xs transition-colors shadow-xs"
                                         >
                                             <ShareIcon className="w-3.5 h-3.5" />
-                                            {data.postRegistrationMessage || "Join Chapter Discord / Slack"}
+                                            {data.postRegistrationMessage || "Join Event Updates / WhatsApp Group"}
                                         </a>
                                     )}
                                 </div>

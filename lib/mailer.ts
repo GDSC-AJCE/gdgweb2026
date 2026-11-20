@@ -149,12 +149,27 @@ export function injectVariables(content: string, recipient: any = {}): string {
     recipient.time_slot ||
     recipient.slot ||
     "6:00 PM – 8:30 PM IST (Asia/Kolkata)";
-  const whatsappLink =
+  const rawWhatsapp =
     recipient.WHATSAPP_LINK ||
     recipient.whatsapp_link ||
+    recipient.whatsappLink ||
+    recipient.whatsappUrl ||
+    recipient.whatsappGroup ||
+    recipient.whatsapp_group ||
+    recipient.postRegistrationLink ||
+    recipient.post_registration_link ||
+    recipient.groupLink ||
+    recipient.group_link ||
+    recipient.eventWhatsapp ||
+    recipient.event_whatsapp ||
+    recipient.event_whatsapp_link ||
     recipient.whatsapp ||
     recipient.WhatsApp ||
-    "https://chat.whatsapp.com/Ftflnf70DRrAXIhwWJQ2Bo?s=cl&p=a&mlu=4&ilr=4&iam=2";
+    "";
+  const whatsappLink =
+    rawWhatsapp && typeof rawWhatsapp === "string" && rawWhatsapp.trim().length > 0
+      ? rawWhatsapp.trim()
+      : "https://chat.whatsapp.com/gdgajce";
   const meetLink =
     recipient.MEET_LINK ||
     recipient.meet_link ||
@@ -173,7 +188,10 @@ export function injectVariables(content: string, recipient: any = {}): string {
     .replace(/\{\{\s*time\s*\}\}/gi, time)
     .replace(/\{\{\s*time_slot\s*\}\}/gi, time)
     .replace(/\{\{\s*whatsapp_link\s*\}\}/gi, whatsappLink)
-    .replace(/\{\{\s*meet_link\s*\}\}/gi, meetLink);
+    .replace(/\{\{\s*WHATSAPP_LINK\s*\}\}/g, whatsappLink)
+    .replace(/https:\/\/chat\.whatsapp\.com\/Ftflnf70DRrAXIhwWJQ2Bo[^\s"'<>"]*/gi, whatsappLink)
+    .replace(/\{\{\s*meet_link\s*\}\}/gi, meetLink)
+    .replace(/\{\{\s*MEET_LINK\s*\}\}/g, meetLink);
 }
 
 // Render Template (MJML or HTML) to final responsive email HTML

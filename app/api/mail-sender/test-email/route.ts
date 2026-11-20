@@ -20,10 +20,13 @@ export async function POST(req: NextRequest) {
       toEmail,
       templateContent,
       templateName,
+      subject,
       senderName,
       appPassword,
       gatewayUrl,
       gatewayApiKey,
+      whatsappLink: testWhatsappLink,
+      whatsapp_link: testWhatsappLinkSnake,
     } = body;
 
     if (!toEmail) {
@@ -36,25 +39,52 @@ export async function POST(req: NextRequest) {
     const activeGatewayUrl = (gatewayUrl || config.gatewayUrl || "").trim();
     const activeGatewayKey = (gatewayApiKey || config.gatewayApiKey || "gdgajce").trim();
     const sName = senderName || config.senderName || "GDG on Campus AJCE";
-    const sSubj = "[TEST] Update on your GDG on Campus AJCE Core Team Application";
+    const sSubj = subject ? `[TEST] ${subject}` : "[TEST] Update on your GDG on Campus AJCE Application";
+
+    const resolvedTestWhatsapp =
+      (testWhatsappLink || testWhatsappLinkSnake || "").trim() || "https://chat.whatsapp.com/gdgajce";
 
     const recipient = {
       NAME: "Test Recipient",
+      name: "Test Recipient",
       MAIL: toEmail,
-      TEAM: "Sample Domain",
+      email: toEmail,
+      TEAM: "Web Team",
+      team: "Web Team",
+      CATEGORY: "Web Team",
+      category: "Web Team",
+      DATE: new Date().toLocaleDateString("en-US", { weekday: "long", year: "numeric", month: "long", day: "numeric" }),
+      date: new Date().toLocaleDateString("en-US", { weekday: "long", year: "numeric", month: "long", day: "numeric" }),
+      TIME: "6:00 PM IST",
+      time: "6:00 PM IST",
+      TIME_SLOT: "6:00 PM IST",
+      time_slot: "6:00 PM IST",
+      WHATSAPP_LINK: resolvedTestWhatsapp,
+      whatsapp_link: resolvedTestWhatsapp,
+      MEET_LINK: "https://meet.google.com/gdg-ajce-demo",
+      meet_link: "https://meet.google.com/gdg-ajce-demo",
     };
 
-    let source = templateContent || (templateName ? getTemplateSource(templateName) : null);
+    let source: string | null =
+      typeof templateContent === "string" && templateContent.trim().length > 0
+        ? templateContent
+        : null;
+
     if (!source && templateName) {
       try {
         const docSnap = await getDoc(doc(db, "mail_templates", templateName));
-        if (docSnap.exists()) {
-          source = docSnap.data().content || null;
+        if (docSnap.exists() && docSnap.data().content) {
+          source = docSnap.data().content;
         }
       } catch (fsErr) {
         console.warn("Firestore template lookup failed in test-email:", fsErr);
       }
     }
+
+    if (!source && templateName) {
+      source = getTemplateSource(templateName);
+    }
+
     if (!source) {
       source = `
         <div style="font-family: sans-serif; padding: 24px; color: #1e293b;">

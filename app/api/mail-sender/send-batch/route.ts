@@ -29,6 +29,8 @@ export async function POST(req: NextRequest) {
       senderName,
       gatewayUrl,
       gatewayApiKey,
+      whatsappLink: batchWhatsappLink,
+      whatsapp_link: batchWhatsappLinkSnake,
     } = body;
 
     if (!recipients.length) {
@@ -46,17 +48,26 @@ export async function POST(req: NextRequest) {
     const sEmail = config.senderEmail;
     const emailSubject = subject || config.defaultSubject;
 
-    let rawSource = templateContent || (templateName ? getTemplateSource(templateName) : null);
+    let rawSource =
+      typeof templateContent === "string" && templateContent.trim().length > 0
+        ? templateContent
+        : null;
+
     if (!rawSource && templateName) {
       try {
         const docSnap = await getDoc(doc(db, "mail_templates", templateName));
-        if (docSnap.exists()) {
-          rawSource = docSnap.data().content || null;
+        if (docSnap.exists() && docSnap.data().content) {
+          rawSource = docSnap.data().content;
         }
       } catch (fsErr) {
         console.warn("Firestore template lookup failed in send-batch:", fsErr);
       }
     }
+
+    if (!rawSource && templateName) {
+      rawSource = getTemplateSource(templateName);
+    }
+
     if (!rawSource) {
       rawSource = `
         <div style="font-family: sans-serif; padding: 24px; color: #1e293b;">
@@ -105,16 +116,45 @@ export async function POST(req: NextRequest) {
           }
 
           const r = recipients[i];
+          const recipientWhatsapp =
+            r.whatsapp_link ||
+            r.WHATSAPP_LINK ||
+            r.whatsappLink ||
+            r.whatsappUrl ||
+            r.whatsappGroup ||
+            r.whatsapp_group ||
+            r.postRegistrationLink ||
+            r.post_registration_link ||
+            r.groupLink ||
+            r.group_link ||
+            r.eventWhatsapp ||
+            r.event_whatsapp ||
+            r.whatsapp ||
+            r.WhatsApp ||
+            batchWhatsappLink ||
+            batchWhatsappLinkSnake ||
+            "";
+
           const recipientData = {
-            NAME: r.name,
-            MAIL: r.email,
-            CATEGORY: r.category || r.team,
-            TEAM: r.category || r.team,
-            DATE: r.date,
-            TIME: r.time || r.time_slot,
-            TIME_SLOT: r.time || r.time_slot,
-            MEET_LINK: r.meet_link,
-            WHATSAPP_LINK: r.whatsapp_link,
+            ...r,
+            NAME: r.name || r.NAME || "Applicant",
+            name: r.name || r.NAME || "Applicant",
+            MAIL: r.email || r.MAIL || "",
+            email: r.email || r.MAIL || "",
+            CATEGORY: r.category || r.team || r.CATEGORY || r.TEAM || "",
+            category: r.category || r.team || r.CATEGORY || r.TEAM || "",
+            TEAM: r.category || r.team || r.CATEGORY || r.TEAM || "",
+            team: r.category || r.team || r.CATEGORY || r.TEAM || "",
+            DATE: r.date || r.DATE || "November 9, 2026",
+            date: r.date || r.DATE || "November 9, 2026",
+            TIME: r.time || r.time_slot || r.TIME || r.TIME_SLOT || "6:00 PM",
+            time: r.time || r.time_slot || r.TIME || r.TIME_SLOT || "6:00 PM",
+            TIME_SLOT: r.time || r.time_slot || r.TIME || r.TIME_SLOT || "6:00 PM",
+            time_slot: r.time || r.time_slot || r.TIME || r.TIME_SLOT || "6:00 PM",
+            MEET_LINK: r.meet_link || r.MEET_LINK || r.meetLink || "",
+            meet_link: r.meet_link || r.MEET_LINK || r.meetLink || "",
+            WHATSAPP_LINK: recipientWhatsapp || undefined,
+            whatsapp_link: recipientWhatsapp || undefined,
           };
 
           try {

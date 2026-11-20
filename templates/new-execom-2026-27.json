@@ -107,7 +107,7 @@
                   "fontSize": "15px",
                   "textAlign": "left",
                   "lineHeight": "160%",
-                  "text": "<p>To get started and connect with your fellow Exicom members, please join our exclusive WhatsApp group right away: {{whatsapp_link}}</p>"
+                  "text": "<p>To get started and connect with your fellow Execom members, please join our exclusive WhatsApp group right away: <a href=\"{{whatsapp_link}}\" target=\"_blank\" style=\"color: #25D366; font-weight: 700; text-decoration: underline;\">Join WhatsApp Group</a></p>"
                 }
               },
               {

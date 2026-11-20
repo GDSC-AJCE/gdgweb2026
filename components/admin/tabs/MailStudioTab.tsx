@@ -36,6 +36,7 @@ import {
   Maximize2,
   Wand2,
   ChevronDown,
+  MessageCircle,
 } from "lucide-react";
 import * as XLSX from "xlsx";
 import GeminiMailStudio from "./GeminiMailStudio";
@@ -130,6 +131,7 @@ interface StoredCustomTemplate {
   type: string;
   updatedAt: string;
   subject?: string;
+  whatsappLink?: string;
 }
 
 const CUSTOM_TEMPLATES_STORAGE_KEY = "gdg_mail_custom_templates";
@@ -249,6 +251,7 @@ export default function MailStudioTab() {
   // Recipients
   const [recipients, setRecipients] = useState<Recipient[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const [eventWhatsappLink, setEventWhatsappLink] = useState<string>("");
 
   // Templates
   const [templates, setTemplates] = useState<TemplateMeta[]>([]);
@@ -471,15 +474,64 @@ export default function MailStudioTab() {
     // Check if coming from Event Mailer with pre-populated attendees
     try {
       const storedRecipients = localStorage.getItem("gdg_mail_studio_recipients");
-      if (storedRecipients) {
-        const parsed = JSON.parse(storedRecipients);
-        if (Array.isArray(parsed) && parsed.length > 0) {
-          setRecipients(parsed);
-        }
+      const storedWhatsapp = localStorage.getItem("gdg_mail_studio_whatsapp_link");
+      if (storedWhatsapp) {
+        setEventWhatsappLink(storedWhatsapp);
       }
+
       const storedEventTitle = localStorage.getItem("gdg_mail_studio_event_title");
       if (storedEventTitle) {
         setEmailSubject(`Update regarding ${storedEventTitle} — GDG on Campus AJCE`);
+      }
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const eventIdParam = urlParams.get("eventId");
+
+      const applyRecipients = (rawRecipients: any[], waLink: string) => {
+        const enriched = rawRecipients.map((r: any) => ({
+          ...r,
+          whatsapp_link: r.whatsapp_link || r.whatsappLink || r.whatsappUrl || (waLink ? waLink : undefined),
+        }));
+        setRecipients(enriched);
+      };
+
+      if (eventIdParam) {
+        getDoc(doc(db, "events", eventIdParam))
+          .then((snap) => {
+            if (snap.exists()) {
+              const d = snap.data();
+              const wa = (d.whatsappUrl || d.whatsappLink || d.whatsappGroup || d.postRegistrationLink || "").trim();
+              if (wa) {
+                setEventWhatsappLink(wa);
+                if (storedRecipients) {
+                  const parsed = JSON.parse(storedRecipients);
+                  if (Array.isArray(parsed) && parsed.length > 0) {
+                    applyRecipients(parsed, wa);
+                    return;
+                  }
+                }
+              }
+            }
+            if (storedRecipients) {
+              const parsed = JSON.parse(storedRecipients);
+              if (Array.isArray(parsed) && parsed.length > 0) {
+                applyRecipients(parsed, storedWhatsapp || "");
+              }
+            }
+          })
+          .catch(() => {
+            if (storedRecipients) {
+              const parsed = JSON.parse(storedRecipients);
+              if (Array.isArray(parsed) && parsed.length > 0) {
+                applyRecipients(parsed, storedWhatsapp || "");
+              }
+            }
+          });
+      } else if (storedRecipients) {
+        const parsed = JSON.parse(storedRecipients);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          applyRecipients(parsed, storedWhatsapp || "");
+        }
       }
     } catch (e) {}
   }, []);
@@ -641,13 +693,21 @@ export default function MailStudioTab() {
   const refreshPreview = async (overrideContent?: string | React.MouseEvent | any) => {
     setRefreshingPreview(true);
     try {
-      const sampleRecipient = recipients.find((r) => r.selected) ||
-        recipients[0] || {
-          name: "Rahul Sharma",
-          email: "rahul@amaljyothi.ac.in",
-          category: "Web Team",
-          team: "Web Team",
-        };
+      const foundRecipient = recipients.find((r) => r.selected) || recipients[0];
+      const sampleRecipient = foundRecipient
+        ? {
+            ...foundRecipient,
+            whatsapp_link: foundRecipient.whatsapp_link || eventWhatsappLink || undefined,
+            WHATSAPP_LINK: foundRecipient.whatsapp_link || eventWhatsappLink || undefined,
+          }
+        : {
+            name: "Rahul Sharma",
+            email: "rahul@amaljyothi.ac.in",
+            category: "Web Team",
+            team: "Web Team",
+            whatsapp_link: eventWhatsappLink || undefined,
+            WHATSAPP_LINK: eventWhatsappLink || undefined,
+          };
 
       let contentToPreview = typeof overrideContent === "string" ? overrideContent : undefined;
 
@@ -689,6 +749,8 @@ export default function MailStudioTab() {
           templateName: activeTemplate,
           templateContent: contentToPreview || undefined,
           recipient: sampleRecipient,
+          whatsappLink: eventWhatsappLink || undefined,
+          whatsapp_link: eventWhatsappLink || undefined,
         }),
       });
       const data = await res.json();
@@ -708,18 +770,25 @@ export default function MailStudioTab() {
         const savedSubj = localStorage.getItem(`gdg_mail_template_subject_${activeTemplate}`);
         if (savedSubj) {
           setEmailSubject(savedSubj);
-          return;
+        }
+        const savedWa = localStorage.getItem(`gdg_mail_template_whatsapp_${activeTemplate}`);
+        if (savedWa !== null && savedWa.length > 0) {
+          setEventWhatsappLink(savedWa);
         }
       }
       const stored = getStoredCustomTemplates();
       if (stored[activeTemplate]?.subject) {
         setEmailSubject(stored[activeTemplate].subject!);
-        return;
+      }
+      if (stored[activeTemplate]?.whatsappLink) {
+        setEventWhatsappLink(stored[activeTemplate].whatsappLink!);
       }
       getDoc(doc(db, "mail_templates", activeTemplate))
         .then((snap) => {
-          if (snap.exists() && snap.data().subject) {
-            setEmailSubject(snap.data().subject);
+          if (snap.exists()) {
+            const d = snap.data();
+            if (d.subject) setEmailSubject(d.subject);
+            if (d.whatsappLink) setEventWhatsappLink(d.whatsappLink);
           }
         })
         .catch(() => {});
@@ -744,6 +813,7 @@ export default function MailStudioTab() {
           docRef,
           {
             subject: emailSubject,
+            whatsappLink: eventWhatsappLink,
             updatedAt: new Date().toISOString(),
           },
           { merge: true }
@@ -756,14 +826,17 @@ export default function MailStudioTab() {
       const stored = getStoredCustomTemplates();
       if (stored[activeTemplate]) {
         stored[activeTemplate].subject = emailSubject;
+        stored[activeTemplate].whatsappLink = eventWhatsappLink;
         stored[activeTemplate].updatedAt = new Date().toISOString();
         saveCustomTemplateToStorage(stored[activeTemplate]);
       }
 
-      // 3. Persist subject & active template in dedicated localStorage keys
+      // 3. Persist subject, WhatsApp link & active template in dedicated localStorage keys
       if (typeof window !== "undefined") {
         localStorage.setItem("gdg_mail_active_template", activeTemplate);
         localStorage.setItem(`gdg_mail_template_subject_${activeTemplate}`, emailSubject);
+        localStorage.setItem(`gdg_mail_template_whatsapp_${activeTemplate}`, eventWhatsappLink);
+        localStorage.setItem("gdg_mail_studio_whatsapp_link", eventWhatsappLink);
       }
 
       toast.success("Template settings saved successfully!");
@@ -791,16 +864,23 @@ export default function MailStudioTab() {
     setSendingTest(true);
     setTestResult(null);
     try {
+      const stored = getStoredCustomTemplates();
+      const currentContent = stored[activeTemplate]?.content || undefined;
+
       const res = await fetch("/api/mail-sender/test-email", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           toEmail: testEmail.trim(),
           templateName: activeTemplate,
+          templateContent: currentContent,
+          subject: emailSubject,
           senderName,
           gatewayUrl,
           gatewayApiKey,
           appPassword,
+          whatsappLink: eventWhatsappLink || undefined,
+          whatsapp_link: eventWhatsappLink || undefined,
         }),
       });
       const data = await res.json();
@@ -842,18 +922,28 @@ export default function MailStudioTab() {
     });
 
     try {
+      const stored = getStoredCustomTemplates();
+      const currentContent = stored[activeTemplate]?.content || undefined;
+
       const response = await fetch("/api/mail-sender/send-batch", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          recipients: selectedRecipients,
+          recipients: selectedRecipients.map((r) => ({
+            ...r,
+            whatsapp_link: r.whatsapp_link || eventWhatsappLink || undefined,
+            WHATSAPP_LINK: r.whatsapp_link || eventWhatsappLink || undefined,
+          })),
           templateName: activeTemplate,
+          templateContent: currentContent,
           subject: emailSubject,
           delay: 800,
           senderName,
           gatewayUrl,
           gatewayApiKey,
           appPassword,
+          whatsappLink: eventWhatsappLink || undefined,
+          whatsapp_link: eventWhatsappLink || undefined,
         }),
       });
 
@@ -1237,6 +1327,29 @@ export default function MailStudioTab() {
                       color: "#374151",
                     },
                   },
+                  {
+                    type: "button",
+                    values: {
+                      href: {
+                        name: "web",
+                        values: {
+                          href: "{{whatsapp_link}}",
+                          target: "_blank",
+                        },
+                      },
+                      buttonColors: {
+                        color: "#FFFFFF",
+                        backgroundColor: "#25D366",
+                        hoverColor: "#FFFFFF",
+                        hoverBackgroundColor: "#1ebc5d",
+                      },
+                      fontSize: "14px",
+                      textAlign: "center",
+                      borderRadius: "24px",
+                      lineHeight: "120%",
+                      text: "<strong>Join WhatsApp Group</strong>",
+                    },
+                  },
                 ],
               },
             ],
@@ -1250,7 +1363,7 @@ export default function MailStudioTab() {
       },
     };
 
-    const initialContent = `<h1>${newTemplateName.trim()}</h1><p>Dear {{name}}, Welcome to Google Developer Groups on Campus AJCE!</p>`;
+    const initialContent = `<div style="font-family: 'Google Sans', Roboto, sans-serif; max-width: 600px; margin: 0 auto; background: #ffffff; padding: 32px; border-radius: 16px; border: 1px solid #e2e8f0;"><h1 style="color: #1A73E8; text-align: center;">${newTemplateName.trim()}</h1><p style="color: #374151; font-size: 15px; line-height: 1.6;">Dear {{name}},</p><p style="color: #374151; font-size: 15px; line-height: 1.6;">Welcome to Google Developer Groups on Campus AJCE!</p><div style="text-align: center; margin: 24px 0;"><a href="{{whatsapp_link}}" target="_blank" style="display: inline-block; padding: 12px 28px; background-color: #25D366; color: #ffffff; font-weight: 700; font-size: 14px; text-decoration: none; border-radius: 28px; box-shadow: 0 4px 12px rgba(37, 211, 102, 0.35);">Join WhatsApp Group</a></div></div>`;
 
     try {
       const templateData: StoredCustomTemplate = {
@@ -2449,6 +2562,34 @@ export default function MailStudioTab() {
                     type="text"
                     value={emailSubject}
                     onChange={(e) => setEmailSubject(e.target.value)}
+                    className="text-xs h-9"
+                  />
+                </div>
+
+                <div className="space-y-1.5">
+                  <div className="flex justify-between items-center">
+                    <Label htmlFor="email-whatsapp-input" className="text-xs font-semibold text-slate-700 flex items-center gap-1.5">
+                      <MessageCircle className="w-3.5 h-3.5 text-emerald-600" />
+                      WhatsApp Group Link
+                      <span className="text-[10px] text-slate-400 font-mono">{"{{whatsapp_link}}"}</span>
+                    </Label>
+                    <span className="text-[10px] text-slate-400">Campaign / Event Group URL</span>
+                  </div>
+                  <Input
+                    id="email-whatsapp-input"
+                    type="url"
+                    value={eventWhatsappLink}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      setEventWhatsappLink(val);
+                      if (typeof window !== "undefined") {
+                        localStorage.setItem("gdg_mail_studio_whatsapp_link", val);
+                        if (activeTemplate) {
+                          localStorage.setItem(`gdg_mail_template_whatsapp_${activeTemplate}`, val);
+                        }
+                      }
+                    }}
+                    placeholder="https://chat.whatsapp.com/..."
                     className="text-xs h-9"
                   />
                 </div>

@@ -8,6 +8,9 @@ import {
 interface Recipient {
     name: string;
     email: string;
+    whatsapp_link?: string;
+    whatsappLink?: string;
+    whatsappUrl?: string;
 }
 
 interface SendEmailBody {
@@ -16,6 +19,8 @@ interface SendEmailBody {
     markdownBody: string;
     apiKey?: string;
     from?: string;
+    whatsappLink?: string;
+    whatsapp_link?: string;
 }
 
 export async function POST(req: NextRequest) {
@@ -49,9 +54,20 @@ export async function POST(req: NextRequest) {
 
         const results = await Promise.allSettled(
             recipients.map(async (r) => {
-                const personalizedBody = markdownBody.replace(/\{\{name\}\}/g, r.name || "Member");
+                const effectiveWhatsapp =
+                    r.whatsapp_link ||
+                    r.whatsappLink ||
+                    r.whatsappUrl ||
+                    body.whatsappLink ||
+                    body.whatsapp_link ||
+                    "https://chat.whatsapp.com/gdgajce";
+
+                let personalizedBody = markdownBody
+                    .replace(/\{\{\s*name\s*\}\}/gi, r.name || "Member")
+                    .replace(/\{\{\s*whatsapp_link\s*\}\}/gi, effectiveWhatsapp);
+
                 const { html, text } = await renderEmailWithEmailMd(personalizedBody);
-                const personalizedSubject = subject.replace(/\{\{name\}\}/g, r.name || "Member");
+                const personalizedSubject = subject.replace(/\{\{\s*name\s*\}\}/gi, r.name || "Member");
 
                 return dispatchResendEmail({
                     apiKey: activeApiKey,

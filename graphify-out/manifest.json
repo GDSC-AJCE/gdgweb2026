@@ -110,8 +110,8 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\app\\api\\events\\notify-core\\route.ts": {
-    "mtime": 1794376135.4420228,
-    "ast_hash": "7cc715ee7cc11c2df2d6bedf7185bb47",
+    "mtime": 1795194185.1819606,
+    "ast_hash": "fd6dd343d2562de7565d36b44d9137cf",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\app\\api\\mail-sender\\cancel\\route.ts": {
@@ -140,8 +140,8 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\app\\api\\mail-sender\\preview\\route.ts": {
-    "mtime": 1795180947.8026676,
-    "ast_hash": "17fde9333196f66501a2316c546b1a31",
+    "mtime": 1795195405.9918756,
+    "ast_hash": "1197be0910f1b9ca99fac24715d8f9b8",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\app\\api\\mail-sender\\recipients\\route.ts": {
@@ -150,8 +150,8 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\app\\api\\mail-sender\\send-batch\\route.ts": {
-    "mtime": 1795160539.179678,
-    "ast_hash": "2d033cb9e559aa95f80ddf6f88d486ac",
+    "mtime": 1795195436.3842978,
+    "ast_hash": "63f77a732789e853c9115f4003d33ad4",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\app\\api\\mail-sender\\sheet\\tabs\\route.ts": {
@@ -170,8 +170,8 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\app\\api\\mail-sender\\test-email\\route.ts": {
-    "mtime": 1795160539.180975,
-    "ast_hash": "770e56f320707e50176597f3b6df1177",
+    "mtime": 1795195462.0630586,
+    "ast_hash": "a2b35eeadda04a5711772f44fb7c5968",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\app\\api\\og\\[slug]\\route.ts": {
@@ -185,8 +185,8 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\app\\api\\send-email\\route.ts": {
-    "mtime": 1794426176.518736,
-    "ast_hash": "6c449459d00acab1fd91426493199562",
+    "mtime": 1795193678.2770681,
+    "ast_hash": "09bd4b73f958efa280a3b3d9bfe3fc3e",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\app\\api\\smtp-config\\route.ts": {
@@ -205,8 +205,8 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\app\\core\\events\\[eventId]\\page.tsx": {
-    "mtime": 1795175163.5703104,
-    "ast_hash": "00c18969819d32b83720e50151967cd6",
+    "mtime": 1795193899.602878,
+    "ast_hash": "8b429ca7c72a7ce930a9b7282465f2b0",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\app\\design-system\\page.tsx": {
@@ -270,8 +270,8 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\app\\programs\\[slug]\\ProgramDetailPage.tsx": {
-    "mtime": 1794452206.434346,
-    "ast_hash": "34b7ad6b3e3770ac52b21926c2926d24",
+    "mtime": 1795194224.8088124,
+    "ast_hash": "830137cb2c1131ae72f0d43ceb99820e",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\app\\team\\[username]\\page.tsx": {
@@ -485,13 +485,13 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\admin\\tabs\\GeminiMailStudio.tsx": {
-    "mtime": 1795181803.3041906,
-    "ast_hash": "3c5d049c959332c7cf0aa7832b0859b3",
+    "mtime": 1795194137.2431364,
+    "ast_hash": "47003935d7f56a94497217b94d11263d",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\admin\\tabs\\MailStudioTab.tsx": {
-    "mtime": 1795181803.3051896,
-    "ast_hash": "363e67ae19186c5a102b27e58aa6f06c",
+    "mtime": 1795195651.2798095,
+    "ast_hash": "32d5f2591ee05ec5270d1ac4df6468c4",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\admin\\tabs\\OverviewTab.tsx": {
@@ -550,8 +550,8 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\core\\CreateEventModal.tsx": {
-    "mtime": 1795160539.2114835,
-    "ast_hash": "2508feae413a8111230be024f5e16999",
+    "mtime": 1795194236.9217994,
+    "ast_hash": "f6af0011063b5e7c5fe9a0bf2fd98792",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\core\\EditExecomTemplateModal.tsx": {
@@ -935,8 +935,8 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\lib\\mailer.ts": {
-    "mtime": 1795175163.5949094,
-    "ast_hash": "15e381786b25389f341ab3592492f9ea",
+    "mtime": 1795195386.415936,
+    "ast_hash": "fee8a117eb2751e99855b3c8a9740e38",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\lib\\resend.ts": {
@@ -1945,13 +1945,13 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\certificates\\EventMailTab.tsx": {
-    "mtime": 1794592069.0118585,
-    "ast_hash": "73a4ad53fb81badf779c7dea64021c4e",
+    "mtime": 1795193790.8797414,
+    "ast_hash": "ee0fa8668e5bb66c030f0e5b1fefd0d5",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\admin\\tabs\\CertificatesTab.tsx": {
-    "mtime": 1795160539.1923478,
-    "ast_hash": "a7b6036a997ff4f04288693b9ce9f80c",
+    "mtime": 1795193923.4301615,
+    "ast_hash": "a54914e6f973c09aa3f4c22af2d1f536",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\ui\\kbd.tsx": {
@@ -2265,23 +2265,23 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\templates\\execom-invitation-2026-27.json": {
-    "mtime": 1795167299.7090635,
-    "ast_hash": "0ca6dfd8ecb488c5b39cc2a6dc91ed0f",
+    "mtime": 1795195699.0678706,
+    "ast_hash": "4a7aca4ced93d8189d74238ea0aaa465",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\templates\\execom-invitation-2026-27.html": {
-    "mtime": 1795167299.707646,
-    "ast_hash": "1779791acab114a0e063aa0524065776",
+    "mtime": 1795195688.5766804,
+    "ast_hash": "eaf85468580562fcacc13fa909d2600d",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\templates\\new-execom-2026-27.json": {
-    "mtime": 1795175054.7200496,
-    "ast_hash": "f4547a89c644cd52078aa93493f4eaca",
+    "mtime": 1795195668.765258,
+    "ast_hash": "33377d77c1f1c6b7f0e968348f9e593d",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\templates\\new-execom-2026-27.html": {
-    "mtime": 1795175054.7190013,
-    "ast_hash": "bbee0e34f6ffe3ab8e09c0cf17d0d687",
+    "mtime": 1795195661.8525374,
+    "ast_hash": "53b6879c7797c2f421d59085c8733020",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\certificates\\CertificateStudio.tsx": {

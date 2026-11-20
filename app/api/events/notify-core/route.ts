@@ -99,6 +99,7 @@ export async function POST(req: NextRequest) {
     }
 
     const gcalUrl = createGoogleCalendarUrl(event);
+    const eventWhatsapp = event.whatsappUrl || event.whatsappLink || event.whatsappGroup || event.postRegistrationLink;
     const dateFormatted = event.date ? new Date(event.date).toLocaleDateString("en-US", { weekday: "long", year: "numeric", month: "long", day: "numeric" }) : "Date TBA";
     const timeFormatted = event.time || "10:00 AM IST";
     const locationFormatted = event.location || "Auditorium / Online Meet";
@@ -181,6 +182,12 @@ export async function POST(req: NextRequest) {
         <a href="${gcalUrl}" target="_blank" style="display: inline-block; background-color: #2563eb; color: #ffffff; text-decoration: none; font-weight: 700; font-size: 14px; padding: 12px 24px; border-radius: 10px; margin-right: 12px; box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);">
           📅 Add to Google Calendar
         </a>
+
+        ${eventWhatsapp ? `
+        <a href="${eventWhatsapp}" target="_blank" style="display: inline-block; background-color: #25D366; color: #ffffff; text-decoration: none; font-weight: 700; font-size: 14px; padding: 12px 20px; border-radius: 10px; margin-right: 12px; box-shadow: 0 2px 8px rgba(37, 211, 102, 0.25);">
+          💬 WhatsApp Group
+        </a>
+        ` : ""}
 
         ${event.slug ? `
         <a href="https://gdgajce.vercel.app/programs/${event.slug}" target="_blank" style="display: inline-block; background-color: #f1f5f9; color: #334155; text-decoration: none; font-weight: 600; font-size: 14px; padding: 12px 20px; border-radius: 10px; border: 1px solid #cbd5e1;">

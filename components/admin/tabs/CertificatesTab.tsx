@@ -237,6 +237,7 @@ export default function CertificatesTab({
                         eventDate={selectedEvent.date}
                         participants={participants}
                         isWriter={true}
+                        whatsappLink={selectedEvent.whatsappUrl || selectedEvent.whatsappLink || selectedEvent.postRegistrationLink || ""}
                     />
                 )
             ) : (

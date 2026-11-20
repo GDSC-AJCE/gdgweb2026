@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
     Mail,
@@ -23,6 +23,8 @@ import {
 import { useRouter } from "next/navigation";
 import { useDialog } from "@/context/DialogContext";
 import GoogleBadge from "../GoogleBadge";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "@/lib/firebase";
 
 interface Participant {
     id: string;
@@ -33,6 +35,9 @@ interface Participant {
     college?: string;
     phoneNumber?: string;
     registeredAt?: any;
+    whatsapp_link?: string;
+    whatsappLink?: string;
+    whatsappUrl?: string;
 }
 
 interface EventMailTabProps {
@@ -41,6 +46,7 @@ interface EventMailTabProps {
     eventDate?: string;
     participants: Participant[];
     isWriter?: boolean;
+    whatsappLink?: string;
 }
 
 export default function EventMailTab({
@@ -49,9 +55,28 @@ export default function EventMailTab({
     eventDate,
     participants,
     isWriter = true,
+    whatsappLink,
 }: EventMailTabProps) {
     const router = useRouter();
     const dialog = useDialog();
+
+    const [fetchedWhatsapp, setFetchedWhatsapp] = useState<string>("");
+
+    useEffect(() => {
+        if (!whatsappLink && eventId) {
+            getDoc(doc(db, "events", eventId))
+                .then((snap) => {
+                    if (snap.exists()) {
+                        const d = snap.data();
+                        const wa = d.whatsappUrl || d.whatsappLink || d.whatsappGroup || d.postRegistrationLink || "";
+                        if (wa) setFetchedWhatsapp(wa);
+                    }
+                })
+                .catch(() => {});
+        }
+    }, [eventId, whatsappLink]);
+
+    const effectiveWhatsapp = (whatsappLink || fetchedWhatsapp || "").trim();
 
     // Selection state
     const [selectedIds, setSelectedIds] = useState<Set<string>>(
@@ -59,10 +84,7 @@ export default function EventMailTab({
     );
     const [searchQuery, setSearchQuery] = useState("");
 
-    // Message Editor state
-    const [subject, setSubject] = useState(`Important Update regarding ${eventTitle} — GDG on Campus AJCE`);
-    const [markdownBody, setMarkdownBody] = useState(
-`Hello {{name}},
+    const generateDefaultBody = (waUrl: string) => `Hello {{name}},
 
 Thank you for registering for **${eventTitle}** hosted by **Google Developer Groups on Campus, Amal Jyothi College of Engineering**.
 
@@ -70,15 +92,25 @@ Thank you for registering for **${eventTitle}** hosted by **Google Developer Gro
 - **Event:** ${eventTitle}
 - **Date:** ${eventDate || "Upcoming"}
 - **Organized by:** GDG on Campus AJCE
-
-Please ensure you join our community group and stay tuned for hands-on technical sessions and workshop resources.
+${waUrl ? `- **WhatsApp Updates Group:** [Join WhatsApp Group](${waUrl})\n` : ""}
+${waUrl ? `Please make sure to join our WhatsApp group above for technical prerequisites and live announcements.` : `Please ensure you join our community group and stay tuned for hands-on technical sessions and workshop resources.`}
 
 If you have any questions, feel free to reply to this email.
 
 Best regards,  
 **GDG on Campus AJCE Team**  
-Amal Jyothi College of Engineering`.trim()
-    );
+Amal Jyothi College of Engineering`.trim();
+
+    // Message Editor state
+    const [subject, setSubject] = useState(`Important Update regarding ${eventTitle} — GDG on Campus AJCE`);
+    const [markdownBody, setMarkdownBody] = useState(generateDefaultBody(effectiveWhatsapp));
+
+    // Update default body if effectiveWhatsapp loads asynchronously
+    useEffect(() => {
+        if (effectiveWhatsapp && !markdownBody.includes(effectiveWhatsapp)) {
+            setMarkdownBody(generateDefaultBody(effectiveWhatsapp));
+        }
+    }, [effectiveWhatsapp]);
 
     const [activeSubTab, setActiveSubTab] = useState<"compose" | "preview">("compose");
     const [sending, setSending] = useState(false);
@@ -122,6 +154,7 @@ Amal Jyothi College of Engineering`.trim()
                 date: eventDate || new Date().toLocaleDateString(),
                 time: "10:00 AM",
                 time_slot: "10:00 AM",
+                whatsapp_link: effectiveWhatsapp || p.whatsapp_link || p.whatsappLink || p.whatsappUrl || undefined,
                 status: "Pending" as const,
                 isValid: true,
                 selected: true
@@ -130,6 +163,9 @@ Amal Jyothi College of Engineering`.trim()
         try {
             localStorage.setItem("gdg_mail_studio_recipients", JSON.stringify(selectedRecipients));
             localStorage.setItem("gdg_mail_studio_event_title", eventTitle);
+            if (effectiveWhatsapp) {
+                localStorage.setItem("gdg_mail_studio_whatsapp_link", effectiveWhatsapp);
+            }
         } catch (e) {
             console.error("Storage error:", e);
         }
@@ -152,6 +188,8 @@ We are thrilled to have you join us for an inspiring session exploring modern Go
 - **Event:** ${eventTitle}
 - **Date & Time:** ${eventDate || "To be announced"}
 - **Venue:** Amal Jyothi College of Engineering / Google Meet
+${effectiveWhatsapp ? `- **Official WhatsApp Group:** [Join Event Group](${effectiveWhatsapp})\n` : ""}
+${effectiveWhatsapp ? `Make sure to join our WhatsApp group to receive workshop materials and live notifications.` : `Stay tuned to your inbox for workshop materials and live notifications.`}
 
 See you there!
 
@@ -166,7 +204,7 @@ Warmly,
 This is a friendly reminder that **${eventTitle}** is starting soon!
 
 Please arrive 10 minutes prior to the scheduled time with your laptop and student ID.
-
+${effectiveWhatsapp ? `\nJoin the official event WhatsApp Group for real-time room updates: [Join WhatsApp Group](${effectiveWhatsapp})\n` : ""}
 Looking forward to an energetic technical session!
 
 Best regards,  
@@ -215,9 +253,14 @@ Warm regards,
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    recipients: recipientsToSend.map((r) => ({ name: r.name, email: r.email })),
+                    recipients: recipientsToSend.map((r) => ({
+                        name: r.name,
+                        email: r.email,
+                        whatsapp_link: effectiveWhatsapp || r.whatsapp_link || r.whatsappLink || r.whatsappUrl || "",
+                    })),
                     subject,
                     markdownBody,
+                    whatsappLink: effectiveWhatsapp,
                 })
             });
 
