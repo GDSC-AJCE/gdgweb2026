@@ -25,8 +25,8 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\package.json": {
-    "mtime": 1795153010.6143131,
-    "ast_hash": "717bf4670960543afd510b25191051b2",
+    "mtime": 1795166338.248487,
+    "ast_hash": "dda3648839e4f57c8602681f046a12e4",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\postcss.config.mjs": {
@@ -60,7 +60,7 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\app\\layout.tsx": {
-    "mtime": 1795153617.0531063,
+    "mtime": 1795160539.182975,
     "ast_hash": "404fc713b52a04575cfc288283c33b07",
     "semantic_hash": ""
   },
@@ -75,7 +75,7 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\app\\page.tsx": {
-    "mtime": 1795153010.5964296,
+    "mtime": 1795160539.182975,
     "ast_hash": "d6852f96a8de0e235bd86640eeb04472",
     "semantic_hash": ""
   },
@@ -90,12 +90,12 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\app\\about\\page.tsx": {
-    "mtime": 1794628059.9510264,
+    "mtime": 1795160539.177367,
     "ast_hash": "940b40284a1af0d4f0fc7cbcc50fa01c",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\app\\admin\\page.tsx": {
-    "mtime": 1795154526.7689686,
+    "mtime": 1795160539.1783679,
     "ast_hash": "625882946b9789ce756b4a23cef16174",
     "semantic_hash": ""
   },
@@ -135,13 +135,13 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\app\\api\\mail-sender\\gemini\\route.ts": {
-    "mtime": 1795159991.6808348,
-    "ast_hash": "14ea4b190000fa837cf1005977ba4b41",
+    "mtime": 1795160539.1783679,
+    "ast_hash": "e6f7963894af6c5d27c90e0d7eb15f74",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\app\\api\\mail-sender\\preview\\route.ts": {
-    "mtime": 1795156308.63492,
-    "ast_hash": "fd1014807f8d62472413d0bb730f14f8",
+    "mtime": 1795160539.179678,
+    "ast_hash": "7adb3ae3c9d819a4fa5e72343f4fb823",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\app\\api\\mail-sender\\recipients\\route.ts": {
@@ -150,8 +150,8 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\app\\api\\mail-sender\\send-batch\\route.ts": {
-    "mtime": 1795156365.5444708,
-    "ast_hash": "d5e351c6e01d83a57432ea1b9f6ba492",
+    "mtime": 1795160539.179678,
+    "ast_hash": "2d033cb9e559aa95f80ddf6f88d486ac",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\app\\api\\mail-sender\\sheet\\tabs\\route.ts": {
@@ -160,18 +160,18 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\app\\api\\mail-sender\\templates\\route.ts": {
-    "mtime": 1795156243.0806687,
-    "ast_hash": "203c49154768257f96267c79a0bb0d38",
+    "mtime": 1795160539.180975,
+    "ast_hash": "26c35baf1e6b24461ab67655997a3673",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\app\\api\\mail-sender\\templates\\[name]\\route.ts": {
-    "mtime": 1795157389.9872088,
-    "ast_hash": "291909b68558ae2076cba8882cb367ff",
+    "mtime": 1795160539.179678,
+    "ast_hash": "4da424f1b1f6175eb0c150742ae11ac3",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\app\\api\\mail-sender\\test-email\\route.ts": {
-    "mtime": 1795156345.1142774,
-    "ast_hash": "92a80e84d0c29013d9aa32a9115f9fa6",
+    "mtime": 1795160539.180975,
+    "ast_hash": "770e56f320707e50176597f3b6df1177",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\app\\api\\og\\[slug]\\route.ts": {
@@ -210,8 +210,8 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\app\\design-system\\page.tsx": {
-    "mtime": 1795118419.7551534,
-    "ast_hash": "c0c27351a968505ace928205ebc288bf",
+    "mtime": 1795160539.1819751,
+    "ast_hash": "f0646248d917b8c9d0e76b11d5e11ed9",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\app\\execom\\page.tsx": {
@@ -250,7 +250,7 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\app\\programs\\ProgramsClient.tsx": {
-    "mtime": 1795153010.5974288,
+    "mtime": 1795160539.183975,
     "ast_hash": "e49d10c455f3ee851ce4a540ea41b1eb",
     "semantic_hash": ""
   },
@@ -290,8 +290,8 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\app\\verify\\[id]\\page.tsx": {
-    "mtime": 1795155692.7165866,
-    "ast_hash": "0936aa5c7a40a10d46263a5e59513e4c",
+    "mtime": 1795160539.1849763,
+    "ast_hash": "63bb0c73ee9a6e5ef6001ec750c21345",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\assets\\gallery\\gallery-manifest.json": {
@@ -320,8 +320,8 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\ConfirmationModal.tsx": {
-    "mtime": 1794595772.5194018,
-    "ast_hash": "5d8878bb1db02e926f132fda668b324f",
+    "mtime": 1795160539.1849763,
+    "ast_hash": "142e4683c21fa083eab0737a485cdcef",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\CoreProfileModal.tsx": {
@@ -330,8 +330,8 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\CustomDialog.tsx": {
-    "mtime": 1794595742.4174728,
-    "ast_hash": "3172ce953d2b1c8f746f0124bb5d9d48",
+    "mtime": 1795160539.1849763,
+    "ast_hash": "644f74d0fa93d99cb7e5883e7fbb4e52",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\CustomFormBuilder.tsx": {
@@ -350,7 +350,7 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\ExecomEmailModal.tsx": {
-    "mtime": 1794628047.663138,
+    "mtime": 1795160539.1863375,
     "ast_hash": "315e0f8b83cdeb63e2db52fc032e606a",
     "semantic_hash": ""
   },
@@ -360,7 +360,7 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\Footer.tsx": {
-    "mtime": 1795153125.038558,
+    "mtime": 1795160539.1863375,
     "ast_hash": "b580e35e060e92e9c1e5c4b44ce65a2f",
     "semantic_hash": ""
   },
@@ -370,7 +370,7 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\GoogleLabsPreloader.tsx": {
-    "mtime": 1795153010.5984292,
+    "mtime": 1795160539.1863375,
     "ast_hash": "592faa9f07ece26081b4da08019d7a61",
     "semantic_hash": ""
   },
@@ -395,7 +395,7 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\Navbar.tsx": {
-    "mtime": 1795153112.0168586,
+    "mtime": 1795160539.1877384,
     "ast_hash": "655049b725f56812ab1c36910437e9f6",
     "semantic_hash": ""
   },
@@ -405,7 +405,7 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\ThemeToggle.tsx": {
-    "mtime": 1795153137.698216,
+    "mtime": 1795160539.1877384,
     "ast_hash": "a0e2173a3815ef08ffce995b335df77e",
     "semantic_hash": ""
   },
@@ -415,22 +415,22 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\admin\\AdminHeader.tsx": {
-    "mtime": 1795154428.234825,
+    "mtime": 1795160539.188738,
     "ast_hash": "106aed87fef9ecb5544ade3c5a88ac71",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\admin\\AdminSidebar.tsx": {
-    "mtime": 1795154414.858297,
+    "mtime": 1795160539.188738,
     "ast_hash": "c06c63d0497827a6f69bb7ef4e646c95",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\admin\\RestrictedAccessCard.tsx": {
-    "mtime": 1794595799.7645624,
-    "ast_hash": "838726d986442e5ad2a2ff6742a06d70",
+    "mtime": 1795160539.189988,
+    "ast_hash": "fa77e67170c79979885ab0505af61427",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\admin\\modals\\AddExecomMemberModal.tsx": {
-    "mtime": 1795153010.6004307,
+    "mtime": 1795160539.1909883,
     "ast_hash": "419fa2e58cef27894b50b65d33ad225f",
     "semantic_hash": ""
   },
@@ -460,7 +460,7 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\admin\\tabs\\ApplicationsTab.tsx": {
-    "mtime": 1795118383.677788,
+    "mtime": 1795160539.1923478,
     "ast_hash": "6058644f03b1f10a43cf602f01794d56",
     "semantic_hash": ""
   },
@@ -470,12 +470,12 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\admin\\tabs\\EventsManagementTab.tsx": {
-    "mtime": 1795154550.9087493,
+    "mtime": 1795160539.1923478,
     "ast_hash": "6dcc14be3782e9a36e994ae20118d6f4",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\admin\\tabs\\ExecomManagementTab.tsx": {
-    "mtime": 1795153010.6024292,
+    "mtime": 1795160539.1947443,
     "ast_hash": "1a115d9f690ae3c325107bfe2449a91a",
     "semantic_hash": ""
   },
@@ -485,17 +485,17 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\admin\\tabs\\GeminiMailStudio.tsx": {
-    "mtime": 1795158494.0358613,
-    "ast_hash": "5acf5c33a3ef1088c31c5893c3b35829",
+    "mtime": 1795160539.1947443,
+    "ast_hash": "59e96e65636f833b2d836adf1cf15c84",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\admin\\tabs\\MailStudioTab.tsx": {
-    "mtime": 1795160153.1956027,
-    "ast_hash": "c45e1ee90480dcbd368c51317bbeb4ea",
+    "mtime": 1795160539.1957445,
+    "ast_hash": "5205fdc7e7f66bf2f5696572ac2fabd7",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\admin\\tabs\\OverviewTab.tsx": {
-    "mtime": 1795154788.3199914,
+    "mtime": 1795160539.1967452,
     "ast_hash": "840702a796c9e404d3fe41ef8479b4be",
     "semantic_hash": ""
   },
@@ -550,7 +550,7 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\core\\CreateEventModal.tsx": {
-    "mtime": 1795118422.2456295,
+    "mtime": 1795160539.2114835,
     "ast_hash": "2508feae413a8111230be024f5e16999",
     "semantic_hash": ""
   },
@@ -565,7 +565,7 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\core\\ExecomDetailsModal.tsx": {
-    "mtime": 1795118297.2669697,
+    "mtime": 1795160539.2114835,
     "ast_hash": "60d3a4fa9b86c899c40d500c1e8ac630",
     "semantic_hash": ""
   },
@@ -585,8 +585,8 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\home\\CallToAction.tsx": {
-    "mtime": 1794627995.3803754,
-    "ast_hash": "9ebe1d685822dad2275e3b42c38ad1f6",
+    "mtime": 1795160539.2140949,
+    "ast_hash": "2782f71dbea664718170af6d7e4126a1",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\home\\HomeHero.tsx": {
@@ -600,28 +600,28 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\home\\LabsBeyondSection.tsx": {
-    "mtime": 1794628027.1971188,
-    "ast_hash": "32e9b757a75d84c5a6a54d36e3a3675d",
+    "mtime": 1795160539.2140949,
+    "ast_hash": "067617a8b0a68c5923bd2e466ea4bdec",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\home\\LabsExperimentsSection.tsx": {
-    "mtime": 1794628019.7863638,
-    "ast_hash": "ca566a17ca1d952133e45d437f7b3377",
+    "mtime": 1795160539.215348,
+    "ast_hash": "c3b50ac1f7157b06809d6fe1c00b6748",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\home\\LabsHeroCarousel.tsx": {
-    "mtime": 1795153010.6034293,
+    "mtime": 1795160539.215348,
     "ast_hash": "80c43bc8ba11faa97571fcff3595ff27",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\home\\LabsStayConnected.tsx": {
-    "mtime": 1795153010.604429,
+    "mtime": 1795160539.2164278,
     "ast_hash": "5dc8f7567e8e1a4c0f5354dd93dac9ad",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\home\\Manifesto.tsx": {
-    "mtime": 1794628003.89941,
-    "ast_hash": "b52e294d10936a178d6e5ac8c07dd635",
+    "mtime": 1795160539.2164278,
+    "ast_hash": "3223394db1609ecb1cc5d0db55e7d288",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\home\\Marquee.tsx": {
@@ -635,38 +635,38 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\home\\MindMarketCommunity.tsx": {
-    "mtime": 1795153010.604429,
+    "mtime": 1795160539.217427,
     "ast_hash": "d747714b7b29fe291ded3bfbbfd93096",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\home\\MindMarketContact.tsx": {
-    "mtime": 1795153010.6059337,
+    "mtime": 1795160539.217427,
     "ast_hash": "0b085cfa5a94834e65e1621c0786c967",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\home\\MindMarketHero.tsx": {
-    "mtime": 1795153010.6059337,
+    "mtime": 1795160539.218428,
     "ast_hash": "7bb12e3164a476ce953d4f49334af07f",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\home\\MindMarketTracks.tsx": {
-    "mtime": 1795153282.0466788,
+    "mtime": 1795160539.218428,
     "ast_hash": "ad96da74e37f457bb81a5ec04d69b102",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\home\\OngoingEventsSection.tsx": {
-    "mtime": 1795153010.607142,
+    "mtime": 1795160539.218428,
     "ast_hash": "d7573691e44e3cd7f53b19a8ad2ef18e",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\home\\ScrollDrawnPath.tsx": {
-    "mtime": 1795153010.607142,
+    "mtime": 1795160539.2194283,
     "ast_hash": "f5a028efd9695bd09b319ca161be5e86",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\home\\SkyHeroSection.tsx": {
-    "mtime": 1794627989.8548026,
-    "ast_hash": "dc35576b7e6f9ffdfe6f880df50e0a1b",
+    "mtime": 1795160539.2194283,
+    "ast_hash": "287fc96f2682d72431df13b065eb2fc4",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\home\\SlushArenaSection.tsx": {
@@ -690,7 +690,7 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\leaderboard\\LeaderboardTable.tsx": {
-    "mtime": 1794628037.989815,
+    "mtime": 1795160539.2209377,
     "ast_hash": "4180d3bae5fd716656d91a3f63b5fdad",
     "semantic_hash": ""
   },
@@ -700,12 +700,12 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\programs\\ProgramCard.tsx": {
-    "mtime": 1795153010.6082716,
+    "mtime": 1795160539.2209377,
     "ast_hash": "c29f27ae439f7c6a8feeefb96fd8ea1c",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\programs\\ProgramsNavTabs.tsx": {
-    "mtime": 1795153010.6082716,
+    "mtime": 1795160539.2219453,
     "ast_hash": "18a1dc21e8dee286d975ed1473668ca0",
     "semantic_hash": ""
   },
@@ -720,18 +720,18 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\ui\\Alert.tsx": {
-    "mtime": 1794595701.464515,
-    "ast_hash": "c2239a3a2e0759b21ec29f04fd369bad",
+    "mtime": 1795160539.2219453,
+    "ast_hash": "4b685f5212a8886902ccfba601856bc8",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\ui\\Badge.tsx": {
-    "mtime": 1794595321.956216,
-    "ast_hash": "9b72098219203e1beeb8c6bc3fb57ba6",
+    "mtime": 1795160539.2229524,
+    "ast_hash": "ce2c3975b2c13aa282feba3f7fe4d24c",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\ui\\Button.tsx": {
-    "mtime": 1794595293.7169652,
-    "ast_hash": "5b5b48856d729e0825c0a9e37ba4645c",
+    "mtime": 1795160539.2229524,
+    "ast_hash": "82b41d3464ee402b779cf1531cc04a62",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\ui\\calendar.tsx": {
@@ -740,18 +740,18 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\ui\\card.tsx": {
-    "mtime": 1795153071.7074428,
+    "mtime": 1795160539.2259524,
     "ast_hash": "88e3de81046f09f520801c0e54316ed3",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\ui\\checkbox.tsx": {
-    "mtime": 1794595398.6412241,
-    "ast_hash": "a40257c819472823538b51da8cb5c972",
+    "mtime": 1795160539.2259524,
+    "ast_hash": "587bc639c9dec8798adc55287def25cd",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\ui\\Chip.tsx": {
-    "mtime": 1794595475.4383478,
-    "ast_hash": "a262f221b32da2fc2a570965b0483a54",
+    "mtime": 1795160539.2229524,
+    "ast_hash": "19fdc1781278b924b28ded2596e0700c",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\ui\\CreativeProfileAvatar.tsx": {
@@ -770,13 +770,13 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\ui\\dialog.tsx": {
-    "mtime": 1794595334.4713855,
-    "ast_hash": "0583c4032caecebaf0b8d9cf1d71ca53",
+    "mtime": 1795160539.2270744,
+    "ast_hash": "66edd4445da2819c4c82d248fe025a28",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\ui\\dropdown-menu.tsx": {
-    "mtime": 1794595376.3149068,
-    "ast_hash": "4a3d523ba19f709d7ada7ad426201fec",
+    "mtime": 1795160539.2270744,
+    "ast_hash": "b963c5214abbc1ff6b52d5c0afe38ac5",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\ui\\GDGFooterAdapter.tsx": {
@@ -800,7 +800,7 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\ui\\Input.tsx": {
-    "mtime": 1795153047.672394,
+    "mtime": 1795160539.2239523,
     "ast_hash": "993be83764420305c32625eb0d0b6ba0",
     "semantic_hash": ""
   },
@@ -820,13 +820,13 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\ui\\PhysicsPlayground.tsx": {
-    "mtime": 1795153010.6092727,
+    "mtime": 1795160539.2239523,
     "ast_hash": "0c9002e8c664db48700b68519b7ddd42",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\ui\\popover.tsx": {
-    "mtime": 1794595412.2403803,
-    "ast_hash": "70d27d3c185d556ea4157437c0237f57",
+    "mtime": 1795160539.228361,
+    "ast_hash": "a97cab0bf0bd870cbceea053e9097655",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\ui\\Ribbon3D.tsx": {
@@ -835,18 +835,18 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\ui\\select.tsx": {
-    "mtime": 1794595348.8761213,
-    "ast_hash": "1873d76ec664c69b50cdc0c682ab0f64",
+    "mtime": 1795160539.2298665,
+    "ast_hash": "609e13190fcc8083824ca4acb89e309f",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\ui\\separator.tsx": {
-    "mtime": 1794595431.4541032,
-    "ast_hash": "84a69c2120ccbf85797e292cdb72801c",
+    "mtime": 1795160539.2303762,
+    "ast_hash": "ff679ca91238d0eec0a8d8d913f4a305",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\ui\\StatusDot.tsx": {
-    "mtime": 1794595486.6136956,
-    "ast_hash": "6c96ccec38761e4ef29a823e1be4cf4d",
+    "mtime": 1795160539.2249527,
+    "ast_hash": "ed27d6befdc7df74451dcf8645826622",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\ui\\Sticker.tsx": {
@@ -855,17 +855,17 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\ui\\switch.tsx": {
-    "mtime": 1794595388.2617893,
-    "ast_hash": "dbb3e584eba39365e47a47c21c3afa80",
+    "mtime": 1795160539.2313952,
+    "ast_hash": "49c1ee034641b413d943b1b65e1c8de5",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\ui\\tabs.tsx": {
-    "mtime": 1794595356.9758453,
-    "ast_hash": "9024c197e200ef707839d9e872812759",
+    "mtime": 1795160539.232612,
+    "ast_hash": "940e9e47ca0cbdcbefbc11537a452ae4",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\ui\\textarea.tsx": {
-    "mtime": 1795153084.776651,
+    "mtime": 1795160539.2336102,
     "ast_hash": "2fde795373034e51c90a8a4b8df27879",
     "semantic_hash": ""
   },
@@ -875,8 +875,8 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\ui\\tooltip.tsx": {
-    "mtime": 1794595441.8056734,
-    "ast_hash": "cbe38890fb02784c36fba5b21a4c341e",
+    "mtime": 1795160539.2336102,
+    "ast_hash": "19072fc524ce29698541e3204a305ccf",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\context\\AuthContext.tsx": {
@@ -890,7 +890,7 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\context\\ThemeContext.tsx": {
-    "mtime": 1795153010.6102707,
+    "mtime": 1795160539.234875,
     "ast_hash": "a7389f92b7b264b1780b54911f46ac7a",
     "semantic_hash": ""
   },
@@ -905,13 +905,13 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\lib\\constants.ts": {
-    "mtime": 1794627973.9037201,
+    "mtime": 1795160539.2493575,
     "ast_hash": "97133f80f9c879a2e391bd8a4cd021f1",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\lib\\design-system.ts": {
-    "mtime": 1794595234.7333524,
-    "ast_hash": "d71a6d10481d6094425bfe15c8910ba3",
+    "mtime": 1795160539.250839,
+    "ast_hash": "861889a57e2aca80881ae2ff61386b62",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\lib\\firebase.ts": {
@@ -920,8 +920,8 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\lib\\gemini.ts": {
-    "mtime": 1795159972.6905394,
-    "ast_hash": "d17e11d5f717e2d832aff3ad0614166d",
+    "mtime": 1795160539.250839,
+    "ast_hash": "60b4bd4d06750c667410ecaa9d2c0f82",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\lib\\guardrails.ts": {
@@ -960,8 +960,8 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\lib\\data\\TeamData.ts": {
-    "mtime": 1794627978.7776463,
-    "ast_hash": "d7233cc774e5c012b83d1366d114bef8",
+    "mtime": 1795160539.2493575,
+    "ast_hash": "b88619d998d9ee7574136cd535e15cc5",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\public\\settings.json": {
@@ -1025,7 +1025,7 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\AGENTS.md": {
-    "mtime": 1795153010.594429,
+    "mtime": 1795160539.175295,
     "ast_hash": "26e17908d7170f2d92977d87568483fb",
     "semantic_hash": ""
   },
@@ -1035,22 +1035,22 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\content.md": {
-    "mtime": 1794628066.6285832,
-    "ast_hash": "2a0c48cc7ec627fcc176a125d2c67b7d",
+    "mtime": 1795160539.2336102,
+    "ast_hash": "0bc1fb9ab4a413eb287a1085a65f20a8",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\design.md": {
-    "mtime": 1794628632.650877,
-    "ast_hash": "50e98b4ade5391637079c7d471eb556a",
+    "mtime": 1795160539.234875,
+    "ast_hash": "c4d5998c61dcbe13e9025d12a6012a25",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\GEMINI.md": {
-    "mtime": 1795153010.594429,
+    "mtime": 1795160539.175825,
     "ast_hash": "564556b276773652fe6ab6c152e9504f",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\HEAD.md": {
-    "mtime": 1795153010.5954301,
+    "mtime": 1795160539.1763587,
     "ast_hash": "c0e59b2d23e957bf86ae9a6b0c0bca76",
     "semantic_hash": ""
   },
@@ -1070,8 +1070,8 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\.agents\\rules\\agent-constraints.md": {
-    "mtime": 1795115541.7095087,
-    "ast_hash": "b0d75088398488cdd16d88693e262523",
+    "mtime": 1795160539.174766,
+    "ast_hash": "2145e30e3e737d9a5a8cdeda8b71a3e1",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\.agents\\rules\\graphify.md": {
@@ -1090,7 +1090,7 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\public\\Blankspace Report.md": {
-    "mtime": 1794628586.1132066,
+    "mtime": 1795160539.2577443,
     "ast_hash": "589702d2d6662345c82581fbcbacf659",
     "semantic_hash": ""
   },
@@ -1945,13 +1945,13 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\certificates\\CertificateGenerator.tsx": {
-    "mtime": 1795155623.1897542,
-    "ast_hash": "e76082dd5ee7d011ed3b2be5520c5641",
+    "mtime": 1795160539.2102137,
+    "ast_hash": "d672a3c2581be8c449aa0ffc05a2fa19",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\public\\assets\\certificates\\gdg-certificate-frame.svg": {
-    "mtime": 1795155365.9516048,
-    "ast_hash": "b81f8c4acf3d033951553c35deef294f",
+    "mtime": 1795160539.2592294,
+    "ast_hash": "81e2ef38ab3bc6f3911d3341eccb57eb",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\certificates\\EventMailTab.tsx": {
@@ -1960,328 +1960,328 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\admin\\tabs\\CertificatesTab.tsx": {
-    "mtime": 1794594779.875108,
-    "ast_hash": "c4d686df091c9c4a3ae16c9103486096",
+    "mtime": 1795160539.1923478,
+    "ast_hash": "a7b6036a997ff4f04288693b9ce9f80c",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\ui\\kbd.tsx": {
-    "mtime": 1794595501.5662491,
-    "ast_hash": "1af9315d0896f7236e68624682ec92f7",
+    "mtime": 1795160539.228361,
+    "ast_hash": "2a3f90ed2fef5f9b6042d5f9bb93c80c",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\ui\\skeleton.tsx": {
-    "mtime": 1794595496.0385554,
-    "ast_hash": "4bd7360459f48729eba0a2accc153b1f",
+    "mtime": 1795160539.2313952,
+    "ast_hash": "bd84df20444b5ccd5002283106a2c95d",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\ui\\accordion.tsx": {
-    "mtime": 1794596685.9324975,
-    "ast_hash": "54fad39a9512921b9a8102dd9f0890c6",
+    "mtime": 1795160539.2249527,
+    "ast_hash": "b42bb917109241ebe0df4d2b7956417d",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\ui\\alert-dialog.tsx": {
-    "mtime": 1794596744.1314406,
-    "ast_hash": "cc1aa8c2167b9d7e4177ffd7de41a686",
+    "mtime": 1795160539.2249527,
+    "ast_hash": "5c1e8700e03f98fc5c7e466871dee689",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\ui\\avatar.tsx": {
-    "mtime": 1794596710.277565,
-    "ast_hash": "e990de38c291c658d563609bb5239b5e",
+    "mtime": 1795160539.2259524,
+    "ast_hash": "3811dfc7c5270ae1cc9b8adc4c144553",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\ui\\index.ts": {
-    "mtime": 1795118265.5926814,
-    "ast_hash": "1c225621d0283e51f03a82ff1c363051",
+    "mtime": 1795160539.2270744,
+    "ast_hash": "78fd6b81153d8171d30e770ebe55e91b",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\ui\\progress.tsx": {
-    "mtime": 1794596692.1050901,
-    "ast_hash": "cb4ac2987cb9ab6c2d8531c55b2f7930",
+    "mtime": 1795160539.228361,
+    "ast_hash": "8c57de171e7da34834a41a1d3ecb7ec8",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\ui\\scroll-area.tsx": {
-    "mtime": 1794596717.2222257,
-    "ast_hash": "bb8b7ff6152235efaa0c068a8c38df59",
+    "mtime": 1795160539.228361,
+    "ast_hash": "73628bcb70e7bcf226eaf96312eca079",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\ui\\sheet.tsx": {
-    "mtime": 1794596763.5577734,
-    "ast_hash": "dfe719360105e983963a6ab059ee064e",
+    "mtime": 1795160539.2303762,
+    "ast_hash": "d176e55264860f8fcfe1a1677d66fc9d",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\ui\\sonner.tsx": {
-    "mtime": 1794596778.980009,
-    "ast_hash": "041f2e1117e0e786081916414e6a6ede",
+    "mtime": 1795160539.2313952,
+    "ast_hash": "75a073eeac0b64ea5b254ccd871497c0",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\ui\\table.tsx": {
-    "mtime": 1794596702.0892012,
-    "ast_hash": "757bfb471deed0e8ede6285be2e2eb0e",
+    "mtime": 1795160539.232612,
+    "ast_hash": "6dae24cafe03a6f8b5db50d220bc756b",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\hooks\\use-mobile.ts": {
-    "mtime": 1794596787.0638075,
-    "ast_hash": "8093731975f02b40c11fb6de742e5c7e",
+    "mtime": 1795160539.2488496,
+    "ast_hash": "8aca848552c42436dcbf8a319bdcc925",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\hooks\\use-toast.ts": {
-    "mtime": 1794596786.6112828,
-    "ast_hash": "68b0a46b6414f6e2f6a0d298a8de126a",
+    "mtime": 1795160539.2493575,
+    "ast_hash": "2294902c18790dfc71aa717a83781376",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\application\\notification-center\\notification-center.tsx": {
-    "mtime": 1795114067.7917905,
-    "ast_hash": "d6de85dabffe19a52752140af84f5848",
+    "mtime": 1795160539.1978195,
+    "ast_hash": "5c4802091e6fd7176e566d6ab94277fb",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\base\\avatar\\avatar.tsx": {
-    "mtime": 1795114067.775964,
-    "ast_hash": "38eaf7619b599b383365d1bd3a2a6b35",
+    "mtime": 1795160539.1978195,
+    "ast_hash": "6b264151e328851a2d4e504d3b6bece5",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\base\\buttons\\button.tsx": {
-    "mtime": 1795114067.7806804,
-    "ast_hash": "dc9fdfbc14c5e9fdae55b37874d1e2fd",
+    "mtime": 1795160539.2003386,
+    "ast_hash": "58a593ce25d043b81aec72edfbeee525",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\base\\segmented-control\\segmented-control.tsx": {
-    "mtime": 1795114067.7841685,
-    "ast_hash": "7bb8d55ef0917552a10190c232289797",
+    "mtime": 1795160539.206157,
+    "ast_hash": "0ffdd33b0c937335712fa5dd6880d711",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\foundations\\direction\\direction.tsx": {
-    "mtime": 1795114067.783158,
-    "ast_hash": "5a4199ed39f6ab1764695c7aec0eefc2",
+    "mtime": 1795160539.212585,
+    "ast_hash": "960b4ccf4af46049124772ecb453b45e",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\foundations\\template-copy\\template-copy.tsx": {
-    "mtime": 1795114067.7851653,
-    "ast_hash": "be47e46e44c676db30e2c03b1b088611",
+    "mtime": 1795160539.2140949,
+    "ast_hash": "023dcb33a1d45bb073dcaf071ef31e37",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\utils\\cx.ts": {
-    "mtime": 1795114067.774665,
-    "ast_hash": "9fe12e94c2bf37174529582d69d115a4",
+    "mtime": 1795160539.2675056,
+    "ast_hash": "2091e41febacd30283d96143b30cb0b5",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\utils\\directional-icon.ts": {
-    "mtime": 1795114067.775964,
-    "ast_hash": "54a6e054d2a522bbcce8ef4f2bc73d3a",
+    "mtime": 1795160539.2675056,
+    "ast_hash": "cda192dfd9be16eff17c715e29af9a41",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\admin\\events\\EventsDataTable.tsx": {
-    "mtime": 1795154074.0329082,
-    "ast_hash": "5eda771ac094c0b704162cecd0cd9992",
+    "mtime": 1795160539.1909883,
+    "ast_hash": "cd6171e1ad192ab637657f6b5bceec40",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\application\\data-table\\data-table.tsx": {
-    "mtime": 1795114739.4560568,
-    "ast_hash": "628ff92923780df48f485a3aa1a7452a",
+    "mtime": 1795160539.1978195,
+    "ast_hash": "fb9b8a17487cb1588d6a118d710eb362",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\base\\badges\\chip.tsx": {
-    "mtime": 1795114739.4312649,
-    "ast_hash": "f13d88a7fb1d7aa7a5dc8962e8de6ae2",
+    "mtime": 1795160539.199328,
+    "ast_hash": "b402aa78bacc44f377b5174abda46d8f",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\base\\badges\\status-dot.tsx": {
-    "mtime": 1795114739.44872,
-    "ast_hash": "1ac4a09425abc14ed9e6dc3fda8aed2c",
+    "mtime": 1795160539.199328,
+    "ast_hash": "4b3330c50a0350e929afee7dfbe23517",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\base\\buttons\\icon-button.tsx": {
-    "mtime": 1795114739.4419045,
-    "ast_hash": "d516b71e084d136697878778ae07ca5a",
+    "mtime": 1795160539.2003386,
+    "ast_hash": "ab3ca42b0819e1c0e303f80b3a0df4b0",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\base\\checkbox\\checkbox-glyph.tsx": {
-    "mtime": 1795114739.4302597,
-    "ast_hash": "7854e1660c23153d06a490d3e7304798",
+    "mtime": 1795160539.2013488,
+    "ast_hash": "6a38de4d4be682fd0836dc1cdb2117c0",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\base\\checkbox\\checkbox.tsx": {
-    "mtime": 1795154062.1449242,
-    "ast_hash": "253cf0efb916d2b7e52b6adf35b66625",
+    "mtime": 1795160539.2013488,
+    "ast_hash": "2c4dff054a9d9abdf30d710a77e832bc",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\base\\dropdown\\dropdown.tsx": {
-    "mtime": 1795114739.4322746,
-    "ast_hash": "1fe00509b97f994ca53f70840d035269",
+    "mtime": 1795160539.20274,
+    "ast_hash": "d4e9034c68823aca02202840d7d2631d",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\base\\dropdown\\menu-styles.ts": {
-    "mtime": 1795114739.441386,
-    "ast_hash": "68f4ec77ca8f917e6b34d50d1481fefe",
+    "mtime": 1795160539.2041585,
+    "ast_hash": "66f390b52f1589d1d433e16e4f831072",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\base\\input\\hint-text.tsx": {
-    "mtime": 1795114739.442913,
-    "ast_hash": "88b082c73abf27f51eed2a7e9bec12e1",
+    "mtime": 1795160539.2041585,
+    "ast_hash": "70d5329344015bb942738c06aff3c4c6",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\base\\input\\input.tsx": {
-    "mtime": 1795114739.442913,
-    "ast_hash": "5c07f40c2ff24a8faa9d12554b95ec6c",
+    "mtime": 1795160539.2041585,
+    "ast_hash": "3165d686dc2c8c5a3246a1c86725e07b",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\base\\input\\label.tsx": {
-    "mtime": 1795114739.442913,
-    "ast_hash": "9edcc4444ca86515e5f633d8f74871fd",
+    "mtime": 1795160539.2051575,
+    "ast_hash": "0ea5654425aadf8d162ed98ca7760ca3",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\base\\pagination\\pagination.tsx": {
-    "mtime": 1795114739.4444199,
-    "ast_hash": "adaed24af74f6aa78659677b60d19518",
+    "mtime": 1795160539.2051575,
+    "ast_hash": "e33100a87b2bf93d3cf27995f438aa89",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\base\\select\\select.tsx": {
-    "mtime": 1795114739.446973,
-    "ast_hash": "917d77cf7c61b4108d14f5be1dfa57ef",
+    "mtime": 1795160539.206157,
+    "ast_hash": "d95d78e197660649e684e6c89a3a24d1",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\base\\skeleton\\skeleton.tsx": {
-    "mtime": 1795114739.4479818,
-    "ast_hash": "d98c8036e18b2bb62f0621e11a9b0a97",
+    "mtime": 1795160539.206157,
+    "ast_hash": "bdc9a1fd783fe65c7a876606cb419814",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\base\\table\\table.tsx": {
-    "mtime": 1795114739.449726,
-    "ast_hash": "3a174f1b0498c4bc40b06ff25e435a02",
+    "mtime": 1795160539.2071836,
+    "ast_hash": "9b00ddeeb5c431a0850175f1f4486985",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\base\\tooltip\\tooltip.tsx": {
-    "mtime": 1795114739.4550464,
-    "ast_hash": "badd0676ec31859fbc491c87e6a3577f",
+    "mtime": 1795160539.2092154,
+    "ast_hash": "e7e06586f79c877b1755af577950113e",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\foundations\\icons\\chevrons.tsx": {
-    "mtime": 1795114739.4302597,
-    "ast_hash": "acc07a00613a884560c2894f068e1dd7",
+    "mtime": 1795160539.212585,
+    "ast_hash": "6f5871ecca57f689be7a205c3a3d224b",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\foundations\\scroll-fade\\scroll-fade.tsx": {
-    "mtime": 1795114739.4449377,
-    "ast_hash": "50e8d011e46d1944d50bd84c5f62bc28",
+    "mtime": 1795160539.212585,
+    "ast_hash": "3568f6695c4e75cf235d7db3a64e8150",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\utils\\use-dismiss-on-outside-press.ts": {
-    "mtime": 1795114739.4312649,
-    "ast_hash": "396d14c3aa91315807815bb630658d62",
+    "mtime": 1795160539.2685077,
+    "ast_hash": "6a86a4109099dd75aca1b6d9ab0f2247",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\public\\avatars\\ann-press.webp": {
-    "mtime": 1795114739.5415568,
+    "mtime": 1795160539.2601066,
     "ast_hash": "fcc65aa9861a576a6b7138185adf9c59",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\public\\avatars\\aspen-lubin.webp": {
-    "mtime": 1795114739.7822933,
+    "mtime": 1795160539.2601066,
     "ast_hash": "ae1a8fc51e374f23b1baf0fd410e05fc",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\public\\avatars\\jaydon-aminoff.webp": {
-    "mtime": 1795114739.8745136,
+    "mtime": 1795160539.2607975,
     "ast_hash": "4202a4bcb5bce4ad2c39822b03277a9c",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\public\\avatars\\john-clarkson.webp": {
-    "mtime": 1795114739.9732406,
+    "mtime": 1795160539.2607975,
     "ast_hash": "f51edf6506002dd03566b82c91f0b7cb",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\public\\avatars\\kianna-vaccaro.webp": {
-    "mtime": 1795114740.0410287,
+    "mtime": 1795160539.2607975,
     "ast_hash": "18b212ec32d2182b937b2004cb8d3468",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\public\\avatars\\livia-saris.webp": {
-    "mtime": 1795114740.1234179,
+    "mtime": 1795160539.2618084,
     "ast_hash": "7c3324184eb56d67bc34b6240a8cfe7a",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\public\\avatars\\maria-lubin.webp": {
-    "mtime": 1795114740.2034292,
+    "mtime": 1795160539.2618084,
     "ast_hash": "e598f092548511f779c820a7d5474c4e",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\public\\avatars\\michael-ekstrom.webp": {
-    "mtime": 1795114740.282351,
+    "mtime": 1795160539.2618084,
     "ast_hash": "e5909a9a6d162b394ea5cb44304637a7",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\base\\tree-view\\tree-view.tsx": {
-    "mtime": 1795115481.7662618,
-    "ast_hash": "0de6d8de064e93633edf2d5dc85dae99",
+    "mtime": 1795160539.2092154,
+    "ast_hash": "8d99903fd6730837daf236c97e2667e9",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\base\\time-field\\time-field.tsx": {
-    "mtime": 1795115807.1809385,
-    "ast_hash": "ba4a202addfa2331a53278a8f4575937",
+    "mtime": 1795160539.2082162,
+    "ast_hash": "a12d16ca8c112b0f1846e6f49753c06f",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\base\\tag-group\\tag-group.tsx": {
-    "mtime": 1795116119.61724,
-    "ast_hash": "809df785fe07e20c4484f4754e0d8ae3",
+    "mtime": 1795160539.2082162,
+    "ast_hash": "6bab6d890a1703b71a57f553b2d9b58d",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\base\\tabs\\pill-tab.tsx": {
-    "mtime": 1795116483.841428,
-    "ast_hash": "0cd8eb6231dd3ca43b6d584602f28a41",
+    "mtime": 1795160539.2071836,
+    "ast_hash": "ef39ff7d5e15588fa644580fe32b3497",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\base\\tabs\\tabs.tsx": {
-    "mtime": 1795116969.0532176,
-    "ast_hash": "695ee29de245b6062ed802545023bd42",
+    "mtime": 1795160539.2082162,
+    "ast_hash": "ae1529706fe174abf502a92f2948f7f7",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\base\\buttons\\link-button.tsx": {
-    "mtime": 1795118135.9778042,
-    "ast_hash": "d7fd7c06ec91b7aa118632d4c6f2c5f5",
+    "mtime": 1795160539.2013488,
+    "ast_hash": "f66d41c34cac1cefdcfcceeb9a8117d0",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\base\\date-picker\\date-picker.tsx": {
-    "mtime": 1795117910.9917078,
-    "ast_hash": "18b0039678939d0deaa20a2fe1645aba",
+    "mtime": 1795160539.2013488,
+    "ast_hash": "38a5568f47ef02c14ab2515df6b98bbf",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\base\\date-picker\\date-range-picker.tsx": {
-    "mtime": 1795117910.9927413,
-    "ast_hash": "c8e5609ababf97db36e2701f0b228b59",
+    "mtime": 1795160539.20274,
+    "ast_hash": "3cb84f71a76ea0b6127ab4c6ea6cc23d",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\base\\date-picker\\shared.tsx": {
-    "mtime": 1795117910.9917078,
-    "ast_hash": "dfd808da16b4473edc0ecd887444c893",
+    "mtime": 1795160539.20274,
+    "ast_hash": "9dd14db0c3b02fcd7b53e65fbdf91510",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\base\\breadcrumb\\breadcrumb.tsx": {
-    "mtime": 1795118258.0598905,
-    "ast_hash": "8eee257a8e7c72843ee04217542eaf3a",
+    "mtime": 1795160539.2003386,
+    "ast_hash": "fe8a4c4ba317bc0138d29636e30f5c36",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\public\\animations\\gdg-mascot.json": {
-    "mtime": 1795153010.6153147,
+    "mtime": 1795160539.2577443,
     "ast_hash": "f8ddcd8a203449ce138e50e23c56c6ef",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\public\\images\\realistic-clouds-bed.png": {
-    "mtime": 1795153010.617675,
+    "mtime": 1795160539.2643247,
     "ast_hash": "b9a00b75743fbf92e40f8970e14fb6db",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\public\\images\\realistic-clouds-bed.webp": {
-    "mtime": 1795153010.617675,
+    "mtime": 1795160539.2643247,
     "ast_hash": "5b5997dbe2b82566690c23db09f642d0",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\templates\\execom-invitation-2026-27.json": {
-    "mtime": 1795159159.7442212,
-    "ast_hash": "a772aac822bcfa148629e14e22fb0e36",
+    "mtime": 1795165219.0976682,
+    "ast_hash": "9aa3c4bbb9afd1fd279202c13803a23a",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\templates\\execom-invitation-2026-27.html": {
-    "mtime": 1795159159.743714,
-    "ast_hash": "ae73b505e103ae806138f02569fe606d",
+    "mtime": 1795165219.0970986,
+    "ast_hash": "46770f6cb106f674923da1f418b8c43b",
     "semantic_hash": ""
   }
 }

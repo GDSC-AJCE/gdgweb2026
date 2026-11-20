@@ -1,188 +1,33 @@
 {
   "counters": {
-    "u_row": 6,
-    "u_column": 6,
-    "u_content_image": 4,
-    "u_content_heading": 2,
-    "u_content_text": 4,
-    "u_content_html": 4
+    "u_row": 2,
+    "u_column": 2,
+    "u_content_html": 1
   },
   "body": {
-    "id": "u_body",
+    "id": "XC_nj4Iek2",
     "rows": [
       {
-        "id": "u_row_header",
+        "id": "zAeDNpxuMv",
         "cells": [
           1
         ],
         "columns": [
           {
-            "id": "u_col_header",
+            "id": "rSwm9R0Jrt",
             "contents": [
               {
-                "id": "u_content_header_img",
-                "type": "image",
-                "values": {
-                  "containerPadding": "0px",
-                  "anchor": "",
-                  "src": {
-                    "url": "https://assets.unlayer.com/projects/0/1793981389866-GDG%20Header.png?w=1160px",
-                    "width": 1160,
-                    "height": 289,
-                    "filename": "GDG Header.png",
-                    "dynamic": true
-                  },
-                  "textAlign": "center",
-                  "altText": "GDG Header",
-                  "action": {
-                    "name": "web",
-                    "values": {
-                      "href": "",
-                      "target": "_blank"
-                    }
-                  },
-                  "hideDesktop": false,
-                  "displayCondition": null,
-                  "_styleGuide": null,
-                  "_meta": {
-                    "htmlID": "u_content_image_3",
-                    "htmlClassNames": "u_content_image"
-                  },
-                  "selectable": true,
-                  "draggable": true,
-                  "duplicatable": true,
-                  "deletable": true,
-                  "hideable": true,
-                  "locked": false
-                }
-              }
-            ],
-            "values": {
-              "backgroundColor": "#ffffff",
-              "padding": "0px",
-              "_meta": {
-                "htmlID": "u_column_4",
-                "htmlClassNames": "u_column"
-              }
-            }
-          }
-        ],
-        "values": {
-          "displayCondition": null,
-          "columns": false,
-          "_styleGuide": null,
-          "backgroundColor": "#f1f5f9",
-          "columnsBackgroundColor": "#ffffff",
-          "backgroundImage": {
-            "url": "",
-            "fullWidth": true,
-            "repeat": "no-repeat",
-            "size": "custom",
-            "position": "center"
-          },
-          "padding": "0px",
-          "anchor": "",
-          "hideDesktop": false,
-          "_meta": {
-            "htmlID": "u_row_4",
-            "htmlClassNames": "u_row"
-          },
-          "selectable": true,
-          "draggable": true,
-          "duplicatable": true,
-          "deletable": true,
-          "hideable": true,
-          "locked": false
-        }
-      },
-      {
-        "id": "u_row_main",
-        "cells": [
-          1
-        ],
-        "columns": [
-          {
-            "id": "u_col_main",
-            "contents": [
-              {
-                "id": "u_content_heading",
-                "type": "heading",
-                "values": {
-                  "containerPadding": "14px 36px 12px 36px",
-                  "anchor": "",
-                  "headingType": "h1",
-                  "fontSize": "24px",
-                  "color": "#0f172a",
-                  "textAlign": "left",
-                  "lineHeight": "130%",
-                  "linkStyle": {
-                    "inherit": true,
-                    "linkColor": "#0000ee",
-                    "linkHoverColor": "#0000ee",
-                    "linkUnderline": true,
-                    "linkHoverUnderline": true
-                  },
-                  "hideDesktop": false,
-                  "displayCondition": null,
-                  "_styleGuide": null,
-                  "_meta": {
-                    "htmlID": "u_content_heading_2",
-                    "htmlClassNames": "u_content_heading"
-                  },
-                  "selectable": true,
-                  "draggable": true,
-                  "duplicatable": true,
-                  "deletable": true,
-                  "hideable": true,
-                  "locked": false,
-                  "text": "<span>Congratulations, New GDG AJCE Excecom 2026-27 Members!</span>"
-                }
-              },
-              {
-                "id": "u_content_greeting",
-                "type": "text",
-                "values": {
-                  "containerPadding": "6px 36px 16px 36px",
-                  "anchor": "",
-                  "fontSize": "15px",
-                  "color": "#334155",
-                  "textAlign": "left",
-                  "lineHeight": "165%",
-                  "linkStyle": {
-                    "inherit": true,
-                    "linkColor": "#0000ee",
-                    "linkHoverColor": "#0000ee",
-                    "linkUnderline": true,
-                    "linkHoverUnderline": true
-                  },
-                  "hideDesktop": false,
-                  "displayCondition": null,
-                  "_styleGuide": null,
-                  "_meta": {
-                    "htmlID": "u_content_text_3",
-                    "htmlClassNames": "u_content_text"
-                  },
-                  "selectable": true,
-                  "draggable": true,
-                  "duplicatable": true,
-                  "deletable": true,
-                  "hideable": true,
-                  "locked": false,
-                  "text": "<p style=\"margin:0 0 12px;\">Dear <strong>{{name}}</strong>,</p><p style=\"margin:0 0 12px;\">On behalf of the entire GDG AJCE community, it is with immense pleasure that we extend our warmest welcome to you as a newly selected member of our Executive Committee. Your dedication, passion, and vision for fostering a vibrant developer community truly stood out, and we are excited to have you join us. Specifically, your selection for the '{{team}}' role is a testament to your potential and commitment.</p><p style=\"margin:0 0 12px;\">This is an exciting moment to contribute actively to shaping the future of technology and innovation at Amal Jyothi College of Engineering. As an Excecom member, you will play a pivotal role in organizing impactful events, workshops, and initiatives that empower fellow students and developers. You will collaborate with a diverse team of enthusiastic peers and mentors, gaining invaluable leadership, technical, and organizational experience.</p><p style=\"margin:0;\">To ensure you're fully integrated and receive all essential updates, we urge you to join our official GDG AJCE Excecom WhatsApp group immediately. This will be our primary channel for real-time communication, planning, and coordination. We look forward to your active participation and fresh perspectives as we embark on this exciting journey together!</p>"
-                }
-              },
-              {
-                "id": "u_content_action_buttons",
+                "id": "lb646lcs3w",
                 "type": "html",
                 "values": {
-                  "html": "<div style=\"text-align:center;\"><a href=\"https://chat.whatsapp.com/Ftflnf70DRrAXIhwWJQ2Bo\" target=\"_blank\" style=\"box-sizing:border-box; display:inline-block; text-decoration:none; background-color:#25D366; color:#ffffff; border-radius:28px; padding:13px 24px; font-size:14px; font-weight:700; margin:6px; box-shadow:0 4px 12px rgba(37,211,102,0.35); text-align:center; border:1px solid #1ebe5d;\"><table role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"display:inline-table; vertical-align:middle;\"><tr><td style=\"vertical-align:middle; padding-right:10px;\"><img src=\"https://gdgajce.vercel.app/assets/whatsapp-icon.png\" width=\"22\" height=\"22\" alt=\"WhatsApp\" style=\"display:block; width:22px; height:22px; border:0;\" /></td><td style=\"vertical-align:middle; color:#ffffff; font-size:14px; font-weight:700; line-height:1;\">Join Excecom WhatsApp Group</td></tr></table></a></div>",
+                  "html": "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional //EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n<html xmlns=\"http://www.w3.org/1999/xhtml\" xmlns:v=\"urn:schemas-microsoft-com:vml\" xmlns:o=\"urn:schemas-microsoft-com:office:office\">\n<head>\n<!--[if gte mso 9]>\n<xml>\n  <o:OfficeDocumentSettings>\n    <o:AllowPNG/>\n    <o:PixelsPerInch>96</o:PixelsPerInch>\n  </o:OfficeDocumentSettings>\n</xml>\n<![endif]-->\n  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <meta name=\"x-apple-disable-message-reformatting\">\n  <!--[if !mso]><!--><meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\"><!--<![endif]-->\n  \n  \n    <style type=\"text/css\">\n      \n      @media only screen and (min-width: 620px) {\n        .u-row {\n          width: 600px !important;\n        }\n\n        .u-row .u-col {\n          vertical-align: top;\n        }\n\n        \n            .u-row .u-col-100 {\n              width: 600px !important;\n            }\n          \n      }\n\n      @media only screen and (max-width: 620px) {\n        .u-row-container {\n          max-width: 100% !important;\n          padding-left: 0px !important;\n          padding-right: 0px !important;\n        }\n\n        .u-row {\n          width: 100% !important;\n        }\n\n        .u-row .u-col {\n          display: block !important;\n          width: 100% !important;\n          min-width: 320px !important;\n          max-width: 100% !important;\n        }\n\n        .u-row .u-col > div {\n          margin: 0 auto;\n        }\n\n}\n    \nbody{margin:0;padding:0}table,td,tr{border-collapse:collapse;vertical-align:top}p{margin:0}.ie-container table,.mso-container table{table-layout:fixed}*{line-height:inherit}a[x-apple-data-detectors=true]{color:inherit!important;text-decoration:none!important}\n\n\ntable, td { color: #334155; } #u_body a { color: #0000ee; text-decoration: underline; } @media only screen and (max-width: 620px) { #u_content_image_3 .v-src-width { width: 100% !important; } #u_content_image_3 .v-src-max-width { max-width: 100% !important; } } @media only screen and (max-width: 620px) { #u_content_image_4 .v-src-width { width: 100% !important; } #u_content_image_4 .v-src-max-width { max-width: 100% !important; } }\n    </style>\n  \n  \n\n</head>\n\n<body class=\"clean-body u_body\" style=\"margin: 0;padding: 0;-webkit-text-size-adjust: 100%;background-color: #f1f5f9;color: #334155\">\n  <!--[if IE]><div class=\"ie-container\"><![endif]-->\n  <!--[if mso]><div class=\"mso-container\"><![endif]-->\n  <table role=\"presentation\" id=\"u_body\" style=\"border-collapse: collapse;table-layout: fixed;border-spacing: 0;mso-table-lspace: 0pt;mso-table-rspace: 0pt;vertical-align: top;min-width: 320px;Margin: 0 auto;background-color: #f1f5f9;width:100%\" cellpadding=\"0\" cellspacing=\"0\">\n  <tbody>\n  <tr style=\"vertical-align: top\">\n    <td style=\"word-break: break-word;border-collapse: collapse !important;vertical-align: top\">\n    <!--[if (mso)|(IE)]><table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\"><tr><td align=\"center\" style=\"background-color: #f1f5f9;\" bgcolor=\"#f1f5f9\"><table role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" width=\"600\" align=\"center\" style=\"border-collapse: collapse;\"><tr><td style=\"padding:0;\"><![endif]-->\n    \n\n\n<div class=\"u-row-container\" style=\"padding: 0px;background-color: #f1f5f9;\">\n  <div class=\"u-row\" style=\"margin: 0 auto;min-width: 320px;max-width: 600px;overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;background-color: #ffffff;\">\n    <div style=\"border-collapse: collapse;display: table;width: 100%;height: 100%;background-color: transparent;\">\n      <!--[if (mso)|(IE)]><table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\"><tr><td style=\"padding: 0px;background-color: #f1f5f9;\"><table role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" width=\"100%\" bgcolor=\"#ffffff\"><tr style=\"background-color: #ffffff;\"><![endif]-->\n      \n<!--[if (mso)|(IE)]><td align=\"center\" width=\"600\" style=\"background-color: #ffffff;width: 600px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;\" valign=\"top\"><table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\"><tr><td style=\"padding: 0px;\"><![endif]-->\n<div class=\"u-col u-col-100\" style=\"max-width: 320px;min-width: 600px;display: table-cell;vertical-align: top;\">\n  <div style=\"background-color: #ffffff;height: 100%;width: 100% !important;\">\n  <!--[if (!mso)&(!IE)]><!--><div style=\"box-sizing: border-box; height: 100%; padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;\"><!--<![endif]-->\n  \n<table id=\"u_content_image_3\" style=\"font-family:arial,helvetica,sans-serif;\" role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\" border=\"0\">\n  <tbody>\n    <tr>\n      <td style=\"overflow-wrap:break-word;word-break:break-word;padding:0px;font-family:arial,helvetica,sans-serif;\" align=\"left\">\n        \n<table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\">\n  <tr>\n    <td style=\"padding-right: 0px;padding-left: 0px;\" align=\"center\">\n      \n      <!--[if mso]><img align=\"center\" border=\"0\" src=\"https://assets.unlayer.com/projects/0/1793981389866-GDG%20Header.png?w=1160px\" alt=\"GDG Header\" title=\"GDG Header\" style=\"outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: inline-block !important;border: none;float: none;\" width=\"600\" height=\"149\" class=\"v-src-width v-src-max-width\"/><![endif]--><!--[if !mso]><!--><img align=\"center\" border=\"0\" src=\"https://assets.unlayer.com/projects/0/1793981389866-GDG%20Header.png?w=1160px\" alt=\"GDG Header\" title=\"GDG Header\" style=\"outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: inline-block !important;border: none;height: auto;float: none;width: 100%;max-width: 600px;\" width=\"600\" class=\"v-src-width v-src-max-width\"/><!--<![endif]-->\n      \n    </td>\n  </tr>\n</table>\n\n      </td>\n    </tr>\n  </tbody>\n</table>\n\n  <!--[if (!mso)&(!IE)]><!--></div><!--<![endif]-->\n  </div>\n</div>\n<!--[if (mso)|(IE)]></td></tr></table></td><![endif]-->\n      <!--[if (mso)|(IE)]></tr></table></td></tr></table><![endif]-->\n    </div>\n  </div>\n</div>\n\n\n\n\n\n<div class=\"u-row-container\" style=\"padding: 0px;background-color: #f1f5f9;\">\n  <div class=\"u-row\" style=\"margin: 0 auto;min-width: 320px;max-width: 600px;overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;background-color: #ffffff;\">\n    <div style=\"border-collapse: collapse;display: table;width: 100%;height: 100%;background-color: transparent;\">\n      <!--[if (mso)|(IE)]><table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\"><tr><td style=\"padding: 0px;background-color: #f1f5f9;\"><table role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" width=\"100%\" bgcolor=\"#ffffff\"><tr style=\"background-color: #ffffff;\"><![endif]-->\n      \n<!--[if (mso)|(IE)]><td align=\"center\" width=\"600\" style=\"background-color: #ffffff;width: 600px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;\" valign=\"top\"><table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\"><tr><td style=\"padding: 0px;\"><![endif]-->\n<div class=\"u-col u-col-100\" style=\"max-width: 320px;min-width: 600px;display: table-cell;vertical-align: top;\">\n  <div style=\"background-color: #ffffff;height: 100%;width: 100% !important;\">\n  <!--[if (!mso)&(!IE)]><!--><div style=\"box-sizing: border-box; height: 100%; padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;\"><!--<![endif]-->\n  \n<table style=\"font-family:arial,helvetica,sans-serif;\" role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\" border=\"0\">\n  <tbody>\n    <tr>\n      <td style=\"overflow-wrap:break-word;word-break:break-word;padding:14px 36px 12px 36px;font-family:arial,helvetica,sans-serif;\" align=\"left\">\n        \n  <!--[if mso]><table role=\"presentation\" width=\"100%\"><tr><td><![endif]-->\n    <h1 style=\"margin: 0px; color: #0f172a; line-height: 130%; text-align: left; word-wrap: break-word; font-size: 24px; font-weight: 400;\"><span>Congratulations, New GDG AJCE Excecom 2026-27 Members!</span></h1>\n  <!--[if mso]></td></tr></table><![endif]-->\n\n      </td>\n    </tr>\n  </tbody>\n</table>\n\n<table style=\"font-family:arial,helvetica,sans-serif;\" role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\" border=\"0\">\n  <tbody>\n    <tr>\n      <td style=\"overflow-wrap:break-word;word-break:break-word;padding:6px 36px 16px 36px;font-family:arial,helvetica,sans-serif;\" align=\"left\">\n        \n  <div style=\"font-size: 15px; color: #334155; line-height: 165%; text-align: left; word-wrap: break-word;\">\n    <p style=\"margin:0 0 12px;\">Dear <strong>{{name}}</strong>,</p>\n    <p style=\"margin:0 0 12px;\">Welcome to the GDG AJCE Executive Committee! Your dedication and passion for fostering a vibrant developer community stood out, and we're thrilled to have you in the '{{team}}' role.</p>\n    <p style=\"margin:0 0 12px;\">As an Excecom member, you'll play a pivotal role in organizing impactful events and initiatives, collaborating with peers, and gaining invaluable leadership and technical experience.</p>\n    <p style=\"margin:0;\">Please join our official GDG AJCE Excecom WhatsApp group immediately for essential updates, planning, and coordination. We look forward to your active participation!</p>\n  </div>\n\n      </td>\n    </tr>\n  </tbody>\n</table>\n\n<table style=\"font-family:arial,helvetica,sans-serif;\" role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\" border=\"0\">\n  <tbody>\n    <tr>\n      <td style=\"overflow-wrap:break-word;word-break:break-word;padding:6px 36px 26px 36px;font-family:arial,helvetica,sans-serif;\" align=\"left\">\n        \n  <div>\n    <div style=\"text-align:center;\"><a href=\"https://chat.whatsapp.com/Ftflnf70DRrAXIhwWJQ2Bo\" target=\"_blank\" style=\"box-sizing:border-box; display:inline-block; text-decoration:none; background-color:#25D366; color:#ffffff; border-radius:28px; padding:13px 24px; font-size:14px; font-weight:700; margin:6px; box-shadow:0 4px 12px rgba(37,211,102,0.35); text-align:center; border:1px solid #1ebe5d;\"><table role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"display:inline-table; vertical-align:middle;\"><tr><td style=\"vertical-align:middle; padding-right:10px;\"><img src=\"https://gdgajce.vercel.app/assets/whatsapp-icon.png\" width=\"22\" height=\"22\" alt=\"WhatsApp\" style=\"display:block; width:22px; height:22px; border:0;\" /></td><td style=\"vertical-align:middle; color:#ffffff; font-size:14px; font-weight:700; line-height:1;\">Join Excecom WhatsApp Group</td></tr></table></a></div>\n  </div>\n\n      </td>\n    </tr>\n  </tbody>\n</table>\n\n<table style=\"font-family:arial,helvetica,sans-serif;\" role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\" border=\"0\">\n  <tbody>\n    <tr>\n      <td style=\"overflow-wrap:break-word;word-break:break-word;padding:0px 36px 18px 36px;font-family:arial,helvetica,sans-serif;\" align=\"left\">\n        \n  <div style=\"font-size: 13px; color: #64748b; line-height: 170%; text-align: left; word-wrap: break-word;\">\n    <div style=\"border-top:1px solid #f1f5f9; padding-top:18px;\"><strong style=\"color:#334155; font-size:13px;\">Your First Steps as an Excecom Member:</strong><ul style=\"margin:8px 0 0 18px; padding:0;\"><li style=\"line-height:22px;\">Join the official GDG AJCE Excecom WhatsApp group immediately for critical updates and discussions.</li><li style=\"line-height:22px;\">Familiarize yourself with the GDG mission, vision, and past events on our official website.</li><li style=\"line-height:22px;\">Look out for the invitation to our first Excecom onboarding meeting, which will be shared soon.</li><li style=\"line-height:22px;\">Prepare to actively contribute your ideas and energy to our upcoming initiatives.</li><li style=\"line-height:22px;\">Connect with fellow Excecom members and core team leads within the WhatsApp group.</li></ul></div>\n  </div>\n\n      </td>\n    </tr>\n  </tbody>\n</table>\n\n  <!--[if (!mso)&(!IE)]><!--></div><!--<![endif]-->\n  </div>\n</div>\n<!--[if (mso)|(IE)]></td></tr></table></td><![endif]-->\n      <!--[if (mso)|(IE)]></tr></table></td></tr></table><![endif]-->\n    </div>\n  </div>\n</div>\n\n\n\n\n\n<div class=\"u-row-container\" style=\"padding: 0px;background-color: #f1f5f9;\">\n  <div class=\"u-row\" style=\"margin: 0 auto;min-width: 320px;max-width: 600px;overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;background-color: #ffffff;\">\n    <div style=\"border-collapse: collapse;display: table;width: 100%;height: 100%;background-color: transparent;\">\n      <!--[if (mso)|(IE)]><table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\"><tr><td style=\"padding: 0px;background-color: #f1f5f9;\"><table role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" width=\"100%\" bgcolor=\"#ffffff\"><tr style=\"background-color: #ffffff;\"><![endif]-->\n      \n<!--[if (mso)|(IE)]><td align=\"center\" width=\"600\" style=\"background-color: #ffffff;width: 600px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;\" valign=\"top\"><table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\"><tr><td style=\"padding: 0px;\"><![endif]-->\n<div class=\"u-col u-col-100\" style=\"max-width: 320px;min-width: 600px;display: table-cell;vertical-align: top;\">\n  <div style=\"background-color: #ffffff;height: 100%;width: 100% !important;\">\n  <!--[if (!mso)&(!IE)]><!--><div style=\"box-sizing: border-box; height: 100%; padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;\"><!--<![endif]-->\n  \n<table id=\"u_content_image_4\" style=\"font-family:arial,helvetica,sans-serif;\" role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\" border=\"0\">\n  <tbody>\n    <tr>\n      <td style=\"overflow-wrap:break-word;word-break:break-word;padding:0px;font-family:arial,helvetica,sans-serif;\" align=\"left\">\n        \n<table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\">\n  <tr>\n    <td style=\"padding-right: 0px;padding-left: 0px;\" align=\"center\">\n      <a href=\"https://gdgajce.vercel.app/\" target=\"_blank\">\n      <!--[if mso]><img align=\"center\" border=\"0\" src=\"https://assets.unlayer.com/projects/0/1793981396347-GDG%20Footer.jpg?w=1160px\" alt=\"GDG Footer\" title=\"GDG Footer\" style=\"outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: inline-block !important;border: none;float: none;\" width=\"600\" height=\"161\" class=\"v-src-width v-src-max-width\"/><![endif]--><!--[if !mso]><!--><img align=\"center\" border=\"0\" src=\"https://assets.unlayer.com/projects/0/1793981396347-GDG%20Footer.jpg?w=1160px\" alt=\"GDG Footer\" title=\"GDG Footer\" style=\"outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: inline-block !important;border: none;height: auto;float: none;width: 100%;max-width: 600px;\" width=\"600\" class=\"v-src-width v-src-max-width\"/><!--<![endif]-->\n      </a>\n    </td>\n  </tr>\n</table>\n\n      </td>\n    </tr>\n  </tbody>\n</table>\n\n  <!--[if (!mso)&(!IE)]><!--></div><!--<![endif]-->\n  </div>\n</div>\n<!--[if (mso)|(IE)]></td></tr></table></td><![endif]-->\n      <!--[if (mso)|(IE)]></tr></table></td></tr></table><![endif]-->\n    </div>\n  </div>\n</div>\n\n\n\n    <!--[if (mso)|(IE)]></td></tr></table></td></tr></table><![endif]-->\n    </td>\n  </tr>\n  </tbody>\n  </table>\n  <!--[if mso]></div><![endif]-->\n  <!--[if IE]></div><![endif]-->\n</body>\n\n</html>\n",
                   "hideDesktop": false,
                   "displayCondition": null,
                   "_styleGuide": null,
-                  "containerPadding": "6px 36px 26px 36px",
+                  "containerPadding": "10px",
                   "anchor": "",
                   "_meta": {
-                    "htmlID": "u_content_html_4",
+                    "htmlID": "u_content_html_1",
                     "htmlClassNames": "u_content_html"
                   },
                   "selectable": true,
@@ -192,48 +37,14 @@
                   "hideable": true,
                   "locked": false
                 }
+              }
+            ],
+            "values": {
+              "_meta": {
+                "htmlID": "u_column_2",
+                "htmlClassNames": "u_column"
               },
-              {
-                "id": "u_content_prep_guidelines",
-                "type": "text",
-                "values": {
-                  "containerPadding": "0px 36px 18px 36px",
-                  "anchor": "",
-                  "fontSize": "13px",
-                  "color": "#64748b",
-                  "textAlign": "left",
-                  "lineHeight": "170%",
-                  "linkStyle": {
-                    "inherit": true,
-                    "linkColor": "#0000ee",
-                    "linkHoverColor": "#0000ee",
-                    "linkUnderline": true,
-                    "linkHoverUnderline": true
-                  },
-                  "hideDesktop": false,
-                  "displayCondition": null,
-                  "_styleGuide": null,
-                  "_meta": {
-                    "htmlID": "u_content_text_4",
-                    "htmlClassNames": "u_content_text"
-                  },
-                  "selectable": true,
-                  "draggable": true,
-                  "duplicatable": true,
-                  "deletable": true,
-                  "hideable": true,
-                  "locked": false,
-                  "text": "<div style=\"border-top:1px solid #f1f5f9; padding-top:18px;\"><strong style=\"color:#334155; font-size:13px;\">Your First Steps as an Excecom Member:</strong><ul style=\"margin:8px 0 0 18px; padding:0;\"><li style=\"line-height:22px;\">Join the official GDG AJCE Excecom WhatsApp group immediately for critical updates and discussions.</li><li style=\"line-height:22px;\">Familiarize yourself with the GDG mission, vision, and past events on our official website.</li><li style=\"line-height:22px;\">Look out for the invitation to our first Excecom onboarding meeting, which will be shared soon.</li><li style=\"line-height:22px;\">Prepare to actively contribute your ideas and energy to our upcoming initiatives.</li><li style=\"line-height:22px;\">Connect with fellow Excecom members and core team leads within the WhatsApp group.</li></ul></div>"
-                }
-              }
-            ],
-            "values": {
-              "backgroundColor": "#ffffff",
-              "padding": "0px",
-              "_meta": {
-                "htmlID": "u_column_5",
-                "htmlClassNames": "u_column"
-              }
+              "deletable": true
             }
           }
         ],
@@ -241,8 +52,8 @@
           "displayCondition": null,
           "columns": false,
           "_styleGuide": null,
-          "backgroundColor": "#f1f5f9",
-          "columnsBackgroundColor": "#ffffff",
+          "backgroundColor": "",
+          "columnsBackgroundColor": "",
           "backgroundImage": {
             "url": "",
             "fullWidth": true,
@@ -254,92 +65,7 @@
           "anchor": "",
           "hideDesktop": false,
           "_meta": {
-            "htmlID": "u_row_5",
-            "htmlClassNames": "u_row"
-          },
-          "selectable": true,
-          "draggable": true,
-          "duplicatable": true,
-          "deletable": true,
-          "hideable": true,
-          "locked": false
-        }
-      },
-      {
-        "id": "u_row_footer",
-        "cells": [
-          1
-        ],
-        "columns": [
-          {
-            "id": "u_col_footer",
-            "contents": [
-              {
-                "id": "u_content_footer_img",
-                "type": "image",
-                "values": {
-                  "containerPadding": "0px",
-                  "anchor": "",
-                  "src": {
-                    "url": "https://assets.unlayer.com/projects/0/1793981396347-GDG%20Footer.jpg?w=1160px",
-                    "width": 1160,
-                    "height": 312,
-                    "filename": "GDG Footer.jpg",
-                    "dynamic": true
-                  },
-                  "textAlign": "center",
-                  "altText": "GDG Footer",
-                  "action": {
-                    "name": "web",
-                    "values": {
-                      "href": "https://gdgajce.vercel.app/",
-                      "target": "_blank"
-                    }
-                  },
-                  "hideDesktop": false,
-                  "displayCondition": null,
-                  "_styleGuide": null,
-                  "_meta": {
-                    "htmlID": "u_content_image_4",
-                    "htmlClassNames": "u_content_image"
-                  },
-                  "selectable": true,
-                  "draggable": true,
-                  "duplicatable": true,
-                  "deletable": true,
-                  "hideable": true,
-                  "locked": false
-                }
-              }
-            ],
-            "values": {
-              "backgroundColor": "#ffffff",
-              "padding": "0px",
-              "_meta": {
-                "htmlID": "u_column_6",
-                "htmlClassNames": "u_column"
-              }
-            }
-          }
-        ],
-        "values": {
-          "displayCondition": null,
-          "columns": false,
-          "_styleGuide": null,
-          "backgroundColor": "#f1f5f9",
-          "columnsBackgroundColor": "#ffffff",
-          "backgroundImage": {
-            "url": "",
-            "fullWidth": true,
-            "repeat": "no-repeat",
-            "size": "custom",
-            "position": "center"
-          },
-          "padding": "0px",
-          "anchor": "",
-          "hideDesktop": false,
-          "_meta": {
-            "htmlID": "u_row_6",
+            "htmlID": "u_row_2",
             "htmlClassNames": "u_row"
           },
           "selectable": true,
@@ -364,10 +90,10 @@
       "contentVerticalAlign": "middle",
       "contentWidth": "600px",
       "fontFamily": {
-        "label": "Arial",
-        "value": "arial,helvetica,sans-serif"
+        "label": "Google Sans",
+        "value": "'Google Sans', Roboto, sans-serif"
       },
-      "textColor": "#334155",
+      "textColor": "#000000",
       "popupBackgroundColor": "#FFFFFF",
       "popupBackgroundImage": {
         "url": "",
@@ -389,7 +115,7 @@
         }
       },
       "language": {},
-      "backgroundColor": "#f1f5f9",
+      "backgroundColor": "#f8fafc",
       "documentSize": "A4",
       "documentOrientation": "portrait",
       "documentMargin": "auto",

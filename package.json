@@ -2,6 +2,7 @@
   "name": "gdg-website",
   "version": "1.0.0",
   "private": true,
+  "packageManager": "pnpm@10.5.2",
   "scripts": {
     "dev": "next dev",
     "build": "next build --webpack",
@@ -9,6 +10,10 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@firebase/app": "0.16.5",
+    "@firebase/auth": "1.13.9",
+    "@firebase/firestore": "4.19.1",
+    "@firebase/storage": "0.14.6",
     "@google/genai": "^3.2.0",
     "@heroicons/react": "^2.2.0",
     "@internationalized/date": "^3.12.4",
