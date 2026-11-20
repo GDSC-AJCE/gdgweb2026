@@ -1530,7 +1530,7 @@
       "source_file": "app/not-found.tsx",
       "source_location": "L24",
       "id": "app_not_found_notfound",
-      "community": 151,
+      "community": 184,
       "norm_label": "notfound()"
     },
     {
@@ -1924,7 +1924,7 @@
       "label": "PATCH()",
       "file_type": "code",
       "source_file": "app/api/mail-sender/templates/[name]/route.ts",
-      "source_location": "L158",
+      "source_location": "L156",
       "id": "name_route_patch",
       "community": 28,
       "norm_label": "patch()"
@@ -1933,7 +1933,7 @@
       "label": "DELETE()",
       "file_type": "code",
       "source_file": "app/api/mail-sender/templates/[name]/route.ts",
-      "source_location": "L240",
+      "source_location": "L238",
       "id": "name_route_delete",
       "community": 28,
       "norm_label": "delete()"
@@ -2313,7 +2313,7 @@
       "source_file": "app/gallery/page.tsx",
       "source_location": "L1",
       "id": "app_gallery_page_tsx",
-      "community": 72,
+      "community": 204,
       "norm_label": "page.tsx"
     },
     {
@@ -2322,7 +2322,7 @@
       "source_file": "app/gallery/page.tsx",
       "source_location": "L10",
       "id": "gallery_page_fallback_memories",
-      "community": 72,
+      "community": 204,
       "norm_label": "fallback_memories"
     },
     {
@@ -2331,7 +2331,7 @@
       "source_file": "app/gallery/page.tsx",
       "source_location": "L15",
       "id": "gallery_page_gallerypage",
-      "community": 72,
+      "community": 204,
       "norm_label": "gallerypage()"
     },
     {
@@ -2565,7 +2565,7 @@
       "source_file": "app/programs/[slug]/ProgramDetailPage.tsx",
       "source_location": "L34",
       "id": "slug_programdetailpage_programdetailpage",
-      "community": 151,
+      "community": 184,
       "norm_label": "programdetailpage()"
     },
     {
@@ -3096,7 +3096,7 @@
       "source_file": "components/CoreProfileModal.tsx",
       "source_location": "L1",
       "id": "components_coreprofilemodal_tsx",
-      "community": 198,
+      "community": 202,
       "norm_label": "coreprofilemodal.tsx"
     },
     {
@@ -3105,7 +3105,7 @@
       "source_file": "components/CoreProfileModal.tsx",
       "source_location": "L42",
       "id": "components_coreprofilemodal_sociallink",
-      "community": 198,
+      "community": 202,
       "norm_label": "sociallink"
     },
     {
@@ -3114,7 +3114,7 @@
       "source_file": "components/CoreProfileModal.tsx",
       "source_location": "L47",
       "id": "components_coreprofilemodal_customlink",
-      "community": 198,
+      "community": 202,
       "norm_label": "customlink"
     },
     {
@@ -3123,7 +3123,7 @@
       "source_file": "components/CoreProfileModal.tsx",
       "source_location": "L52",
       "id": "components_coreprofilemodal_coreprofiledata",
-      "community": 198,
+      "community": 202,
       "norm_label": "coreprofiledata"
     },
     {
@@ -3132,7 +3132,7 @@
       "source_file": "components/CoreProfileModal.tsx",
       "source_location": "L75",
       "id": "components_coreprofilemodal_coreprofilemodalprops",
-      "community": 198,
+      "community": 202,
       "norm_label": "coreprofilemodalprops"
     },
     {
@@ -3141,7 +3141,7 @@
       "source_file": "components/CoreProfileModal.tsx",
       "source_location": "L82",
       "id": "components_coreprofilemodal_tabtype",
-      "community": 198,
+      "community": 202,
       "norm_label": "tabtype"
     },
     {
@@ -3150,7 +3150,7 @@
       "source_file": "components/CoreProfileModal.tsx",
       "source_location": "L84",
       "id": "components_coreprofilemodal_social_platforms",
-      "community": 198,
+      "community": 202,
       "norm_label": "social_platforms"
     },
     {
@@ -3159,7 +3159,7 @@
       "source_file": "components/CoreProfileModal.tsx",
       "source_location": "L95",
       "id": "components_coreprofilemodal_theme_presets",
-      "community": 198,
+      "community": 202,
       "norm_label": "theme_presets"
     },
     {
@@ -3168,7 +3168,7 @@
       "source_file": "components/CoreProfileModal.tsx",
       "source_location": "L103",
       "id": "components_coreprofilemodal_coreprofilemodal",
-      "community": 198,
+      "community": 202,
       "norm_label": "coreprofilemodal()"
     },
     {
@@ -3177,7 +3177,7 @@
       "source_file": "components/CustomDialog.tsx",
       "source_location": "L1",
       "id": "components_customdialog_tsx",
-      "community": 10,
+      "community": 198,
       "norm_label": "customdialog.tsx"
     },
     {
@@ -3186,7 +3186,7 @@
       "source_file": "components/CustomDialog.tsx",
       "source_location": "L16",
       "id": "components_customdialog_customdialogprops",
-      "community": 10,
+      "community": 198,
       "norm_label": "customdialogprops"
     },
     {
@@ -3231,7 +3231,7 @@
       "source_file": "components/CustomFormBuilder.tsx",
       "source_location": "L41",
       "id": "components_customformbuilder_teamconfig",
-      "community": 7,
+      "community": 198,
       "norm_label": "teamconfig"
     },
     {
@@ -3663,7 +3663,7 @@
       "source_file": "components/Onboarding.tsx",
       "source_location": "L1",
       "id": "components_onboarding_tsx",
-      "community": 4,
+      "community": 54,
       "norm_label": "onboarding.tsx"
     },
     {
@@ -3672,7 +3672,7 @@
       "source_file": "components/Onboarding.tsx",
       "source_location": "L47",
       "id": "components_onboarding_onboardingstep",
-      "community": 4,
+      "community": 54,
       "norm_label": "onboardingstep"
     },
     {
@@ -3681,7 +3681,7 @@
       "source_file": "components/Onboarding.tsx",
       "source_location": "L49",
       "id": "components_onboarding_departments",
-      "community": 4,
+      "community": 54,
       "norm_label": "departments"
     },
     {
@@ -3690,7 +3690,7 @@
       "source_file": "components/Onboarding.tsx",
       "source_location": "L62",
       "id": "components_onboarding_colleges",
-      "community": 4,
+      "community": 54,
       "norm_label": "colleges"
     },
     {
@@ -3699,7 +3699,7 @@
       "source_file": "components/Onboarding.tsx",
       "source_location": "L67",
       "id": "components_onboarding_onboarding",
-      "community": 184,
+      "community": 54,
       "norm_label": "onboarding()"
     },
     {
@@ -3843,7 +3843,7 @@
       "source_file": "components/admin/RestrictedAccessCard.tsx",
       "source_location": "L1",
       "id": "components_admin_restrictedaccesscard_tsx",
-      "community": 49,
+      "community": 198,
       "norm_label": "restrictedaccesscard.tsx"
     },
     {
@@ -3861,7 +3861,7 @@
       "source_file": "components/admin/RestrictedAccessCard.tsx",
       "source_location": "L13",
       "id": "admin_restrictedaccesscard_restricted_tab_details",
-      "community": 49,
+      "community": 198,
       "norm_label": "restricted_tab_details"
     },
     {
@@ -3870,7 +3870,7 @@
       "source_file": "components/admin/RestrictedAccessCard.tsx",
       "source_location": "L43",
       "id": "admin_restrictedaccesscard_restrictedaccesscard",
-      "community": 49,
+      "community": 198,
       "norm_label": "restrictedaccesscard()"
     },
     {
@@ -4059,7 +4059,7 @@
       "source_file": "components/admin/modals/UploadPreviousExecomModal.tsx",
       "source_location": "L1",
       "id": "components_admin_modals_uploadpreviousexecommodal_tsx",
-      "community": 191,
+      "community": 72,
       "norm_label": "uploadpreviousexecommodal.tsx"
     },
     {
@@ -4068,7 +4068,7 @@
       "source_file": "components/admin/modals/UploadPreviousExecomModal.tsx",
       "source_location": "L23",
       "id": "modals_uploadpreviousexecommodal_uploadpreviousexecommodalprops",
-      "community": 191,
+      "community": 72,
       "norm_label": "uploadpreviousexecommodalprops"
     },
     {
@@ -4077,7 +4077,7 @@
       "source_file": "components/admin/modals/UploadPreviousExecomModal.tsx",
       "source_location": "L30",
       "id": "modals_uploadpreviousexecommodal_parsedcandidate",
-      "community": 191,
+      "community": 72,
       "norm_label": "parsedcandidate"
     },
     {
@@ -4086,7 +4086,7 @@
       "source_file": "components/admin/modals/UploadPreviousExecomModal.tsx",
       "source_location": "L42",
       "id": "modals_uploadpreviousexecommodal_preset_years",
-      "community": 191,
+      "community": 72,
       "norm_label": "preset_years"
     },
     {
@@ -4095,7 +4095,7 @@
       "source_file": "components/admin/modals/UploadPreviousExecomModal.tsx",
       "source_location": "L49",
       "id": "modals_uploadpreviousexecommodal_uploadpreviousexecommodal",
-      "community": 191,
+      "community": 72,
       "norm_label": "uploadpreviousexecommodal()"
     },
     {
@@ -4446,43 +4446,43 @@
       "source_file": "components/admin/tabs/MailStudioTab.tsx",
       "source_location": "L1",
       "id": "components_admin_tabs_mailstudiotab_tsx",
-      "community": 49,
+      "community": 191,
       "norm_label": "mailstudiotab.tsx"
     },
     {
       "label": "Window",
       "file_type": "code",
       "source_file": "components/admin/tabs/MailStudioTab.tsx",
-      "source_location": "L87",
+      "source_location": "L96",
       "id": "tabs_mailstudiotab_window",
-      "community": 49,
+      "community": 191,
       "norm_label": "window"
     },
     {
       "label": "Recipient",
       "file_type": "code",
       "source_file": "components/admin/tabs/MailStudioTab.tsx",
-      "source_location": "L92",
+      "source_location": "L101",
       "id": "tabs_mailstudiotab_recipient",
-      "community": 49,
+      "community": 191,
       "norm_label": "recipient"
     },
     {
       "label": "TemplateMeta",
       "file_type": "code",
       "source_file": "components/admin/tabs/MailStudioTab.tsx",
-      "source_location": "L108",
+      "source_location": "L117",
       "id": "tabs_mailstudiotab_templatemeta",
-      "community": 49,
+      "community": 191,
       "norm_label": "templatemeta"
     },
     {
       "label": "MailStudioTab()",
       "file_type": "code",
       "source_file": "components/admin/tabs/MailStudioTab.tsx",
-      "source_location": "L115",
+      "source_location": "L124",
       "id": "tabs_mailstudiotab_mailstudiotab",
-      "community": 10,
+      "community": 191,
       "norm_label": "mailstudiotab()"
     },
     {
@@ -9126,7 +9126,7 @@
       "source_file": "components/ui/Button.tsx",
       "source_location": "L6",
       "id": "ui_button_buttonvariants",
-      "community": 198,
+      "community": 38,
       "norm_label": "buttonvariants"
     },
     {
@@ -9144,7 +9144,7 @@
       "source_file": "components/ui/Button.tsx",
       "source_location": "L56",
       "id": "ui_button_button",
-      "community": 49,
+      "community": 198,
       "norm_label": "button"
     },
     {
@@ -9234,7 +9234,7 @@
       "source_file": "components/ui/card.tsx",
       "source_location": "L66",
       "id": "ui_card_cardfooter",
-      "community": 49,
+      "community": 191,
       "norm_label": "cardfooter"
     },
     {
@@ -9261,7 +9261,7 @@
       "source_file": "components/ui/Chip.tsx",
       "source_location": "L1",
       "id": "components_ui_chip_tsx",
-      "community": 10,
+      "community": 49,
       "norm_label": "chip.tsx"
     },
     {
@@ -9270,7 +9270,7 @@
       "source_file": "components/ui/Chip.tsx",
       "source_location": "L4",
       "id": "ui_chip_chipcolor",
-      "community": 10,
+      "community": 49,
       "norm_label": "chipcolor"
     },
     {
@@ -9279,7 +9279,7 @@
       "source_file": "components/ui/Chip.tsx",
       "source_location": "L15",
       "id": "ui_chip_chipvariant",
-      "community": 10,
+      "community": 49,
       "norm_label": "chipvariant"
     },
     {
@@ -9288,7 +9288,7 @@
       "source_file": "components/ui/Chip.tsx",
       "source_location": "L17",
       "id": "ui_chip_chipprops",
-      "community": 10,
+      "community": 49,
       "norm_label": "chipprops"
     },
     {
@@ -9297,7 +9297,7 @@
       "source_file": "components/ui/Chip.tsx",
       "source_location": "L23",
       "id": "ui_chip_color_map",
-      "community": 10,
+      "community": 49,
       "norm_label": "color_map"
     },
     {
@@ -9306,7 +9306,7 @@
       "source_file": "components/ui/Chip.tsx",
       "source_location": "L76",
       "id": "ui_chip_chip",
-      "community": 10,
+      "community": 49,
       "norm_label": "chip()"
     },
     {
@@ -9495,7 +9495,7 @@
       "source_file": "components/ui/dialog.tsx",
       "source_location": "L1",
       "id": "components_ui_dialog_tsx",
-      "community": 10,
+      "community": 34,
       "norm_label": "dialog.tsx"
     },
     {
@@ -9504,7 +9504,7 @@
       "source_file": "components/ui/dialog.tsx",
       "source_location": "L11",
       "id": "ui_dialog_dialogoverlay",
-      "community": 10,
+      "community": 34,
       "norm_label": "dialogoverlay"
     },
     {
@@ -9522,7 +9522,7 @@
       "source_file": "components/ui/dialog.tsx",
       "source_location": "L50",
       "id": "ui_dialog_dialogheader",
-      "community": 10,
+      "community": 34,
       "norm_label": "dialogheader()"
     },
     {
@@ -9531,7 +9531,7 @@
       "source_file": "components/ui/dialog.tsx",
       "source_location": "L64",
       "id": "ui_dialog_dialogfooter",
-      "community": 10,
+      "community": 34,
       "norm_label": "dialogfooter()"
     },
     {
@@ -9540,7 +9540,7 @@
       "source_file": "components/ui/dialog.tsx",
       "source_location": "L78",
       "id": "ui_dialog_dialogtitle",
-      "community": 10,
+      "community": 34,
       "norm_label": "dialogtitle"
     },
     {
@@ -9549,7 +9549,7 @@
       "source_file": "components/ui/dialog.tsx",
       "source_location": "L93",
       "id": "ui_dialog_dialogdescription",
-      "community": 10,
+      "community": 34,
       "norm_label": "dialogdescription"
     },
     {
@@ -9819,7 +9819,7 @@
       "source_file": "components/ui/Input.tsx",
       "source_location": "L4",
       "id": "ui_input_inputprops",
-      "community": 198,
+      "community": 38,
       "norm_label": "inputprops"
     },
     {
@@ -9981,7 +9981,7 @@
       "source_file": "components/ui/progress.tsx",
       "source_location": "L1",
       "id": "components_ui_progress_tsx",
-      "community": 38,
+      "community": 191,
       "norm_label": "progress.tsx"
     },
     {
@@ -9990,7 +9990,7 @@
       "source_file": "components/ui/progress.tsx",
       "source_location": "L7",
       "id": "ui_progress_progress",
-      "community": 38,
+      "community": 191,
       "norm_label": "progress"
     },
     {
@@ -10143,7 +10143,7 @@
       "source_file": "components/ui/sheet.tsx",
       "source_location": "L1",
       "id": "components_ui_sheet_tsx",
-      "community": 38,
+      "community": 10,
       "norm_label": "sheet.tsx"
     },
     {
@@ -10152,7 +10152,7 @@
       "source_file": "components/ui/sheet.tsx",
       "source_location": "L14",
       "id": "ui_sheet_sheetoverlay",
-      "community": 38,
+      "community": 10,
       "norm_label": "sheetoverlay"
     },
     {
@@ -10161,7 +10161,7 @@
       "source_file": "components/ui/sheet.tsx",
       "source_location": "L29",
       "id": "ui_sheet_sheetvariants",
-      "community": 38,
+      "community": 10,
       "norm_label": "sheetvariants"
     },
     {
@@ -10170,7 +10170,7 @@
       "source_file": "components/ui/sheet.tsx",
       "source_location": "L48",
       "id": "ui_sheet_sheetcontentprops",
-      "community": 38,
+      "community": 10,
       "norm_label": "sheetcontentprops"
     },
     {
@@ -10179,7 +10179,7 @@
       "source_file": "components/ui/sheet.tsx",
       "source_location": "L52",
       "id": "ui_sheet_sheetcontent",
-      "community": 38,
+      "community": 10,
       "norm_label": "sheetcontent"
     },
     {
@@ -10188,7 +10188,7 @@
       "source_file": "components/ui/sheet.tsx",
       "source_location": "L73",
       "id": "ui_sheet_sheetheader",
-      "community": 38,
+      "community": 10,
       "norm_label": "sheetheader()"
     },
     {
@@ -10197,7 +10197,7 @@
       "source_file": "components/ui/sheet.tsx",
       "source_location": "L87",
       "id": "ui_sheet_sheetfooter",
-      "community": 38,
+      "community": 10,
       "norm_label": "sheetfooter()"
     },
     {
@@ -10206,7 +10206,7 @@
       "source_file": "components/ui/sheet.tsx",
       "source_location": "L101",
       "id": "ui_sheet_sheettitle",
-      "community": 38,
+      "community": 10,
       "norm_label": "sheettitle"
     },
     {
@@ -10215,7 +10215,7 @@
       "source_file": "components/ui/sheet.tsx",
       "source_location": "L113",
       "id": "ui_sheet_sheetdescription",
-      "community": 38,
+      "community": 10,
       "norm_label": "sheetdescription"
     },
     {
@@ -10377,7 +10377,7 @@
       "source_file": "components/ui/table.tsx",
       "source_location": "L1",
       "id": "components_ui_table_tsx",
-      "community": 38,
+      "community": 191,
       "norm_label": "table.tsx"
     },
     {
@@ -10386,7 +10386,7 @@
       "source_file": "components/ui/table.tsx",
       "source_location": "L4",
       "id": "ui_table_table",
-      "community": 38,
+      "community": 191,
       "norm_label": "table"
     },
     {
@@ -10395,7 +10395,7 @@
       "source_file": "components/ui/table.tsx",
       "source_location": "L18",
       "id": "ui_table_tableheader",
-      "community": 38,
+      "community": 191,
       "norm_label": "tableheader"
     },
     {
@@ -10404,7 +10404,7 @@
       "source_file": "components/ui/table.tsx",
       "source_location": "L30",
       "id": "ui_table_tablebody",
-      "community": 38,
+      "community": 191,
       "norm_label": "tablebody"
     },
     {
@@ -10413,7 +10413,7 @@
       "source_file": "components/ui/table.tsx",
       "source_location": "L42",
       "id": "ui_table_tablefooter",
-      "community": 38,
+      "community": 191,
       "norm_label": "tablefooter"
     },
     {
@@ -10422,7 +10422,7 @@
       "source_file": "components/ui/table.tsx",
       "source_location": "L57",
       "id": "ui_table_tablerow",
-      "community": 38,
+      "community": 191,
       "norm_label": "tablerow"
     },
     {
@@ -10431,7 +10431,7 @@
       "source_file": "components/ui/table.tsx",
       "source_location": "L72",
       "id": "ui_table_tablehead",
-      "community": 38,
+      "community": 191,
       "norm_label": "tablehead"
     },
     {
@@ -10440,7 +10440,7 @@
       "source_file": "components/ui/table.tsx",
       "source_location": "L87",
       "id": "ui_table_tablecell",
-      "community": 38,
+      "community": 191,
       "norm_label": "tablecell"
     },
     {
@@ -10449,7 +10449,7 @@
       "source_file": "components/ui/table.tsx",
       "source_location": "L102",
       "id": "ui_table_tablecaption",
-      "community": 38,
+      "community": 191,
       "norm_label": "tablecaption"
     },
     {
@@ -10458,7 +10458,7 @@
       "source_file": "components/ui/tabs.tsx",
       "source_location": "L1",
       "id": "components_ui_tabs_tsx",
-      "community": 34,
+      "community": 191,
       "norm_label": "tabs.tsx"
     },
     {
@@ -10467,7 +10467,7 @@
       "source_file": "components/ui/tabs.tsx",
       "source_location": "L7",
       "id": "ui_tabs_tabslist",
-      "community": 34,
+      "community": 191,
       "norm_label": "tabslist"
     },
     {
@@ -10476,7 +10476,7 @@
       "source_file": "components/ui/tabs.tsx",
       "source_location": "L22",
       "id": "ui_tabs_tabstrigger",
-      "community": 34,
+      "community": 191,
       "norm_label": "tabstrigger"
     },
     {
@@ -10485,7 +10485,7 @@
       "source_file": "components/ui/tabs.tsx",
       "source_location": "L38",
       "id": "ui_tabs_tabscontent",
-      "community": 34,
+      "community": 191,
       "norm_label": "tabscontent"
     },
     {
@@ -11502,7 +11502,7 @@
       "source_file": "lib/utils.ts",
       "source_location": "L12",
       "id": "lib_utils_ensureabsoluteurl",
-      "community": 198,
+      "community": 202,
       "norm_label": "ensureabsoluteurl()"
     },
     {
@@ -11511,7 +11511,7 @@
       "source_file": "lib/utils.ts",
       "source_location": "L23",
       "id": "lib_utils_normalizeurl",
-      "community": 184,
+      "community": 54,
       "norm_label": "normalizeurl()"
     },
     {
@@ -11556,7 +11556,7 @@
       "source_file": "lib/data/GalleryData.ts",
       "source_location": "L1",
       "id": "lib_data_gallerydata_ts",
-      "community": 72,
+      "community": 204,
       "norm_label": "gallerydata.ts"
     },
     {
@@ -11565,7 +11565,7 @@
       "source_file": "lib/data/GalleryData.ts",
       "source_location": "L1",
       "id": "data_gallerydata_galleryitem",
-      "community": 72,
+      "community": 204,
       "norm_label": "galleryitem"
     },
     {
@@ -11574,7 +11574,7 @@
       "source_file": "lib/data/GalleryData.ts",
       "source_location": "L9",
       "id": "data_gallerydata_previous_gdsc_gallery",
-      "community": 72,
+      "community": 204,
       "norm_label": "previous_gdsc_gallery"
     },
     {
@@ -23235,9 +23235,9 @@
       "source_file": "app/core/events/[eventId]/page.tsx",
       "source_location": "L53",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_core_events_eventid_page_tsx",
-      "target": "components_certificates_certificatestudio_tsx",
-      "confidence_score": 1.0
+      "target": "components_certificates_certificatestudio_tsx"
     },
     {
       "relation": "imports_from",
@@ -31545,6 +31545,28 @@
       "target": "components_ui_index_ts"
     },
     {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "components/admin/tabs/MailStudioTab.tsx",
+      "source_location": "L85",
+      "weight": 1.0,
+      "source": "components_admin_tabs_mailstudiotab_tsx",
+      "target": "lib_firebase_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "components/admin/tabs/MailStudioTab.tsx",
+      "source_location": "L85",
+      "weight": 1.0,
+      "source": "components_admin_tabs_mailstudiotab_tsx",
+      "target": "lib_firebase_db",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "components/admin/tabs/MailStudioTab.tsx",
@@ -38423,9 +38445,9 @@
       "source_file": "components/certificates/CertificateStudio.tsx",
       "source_location": "L37",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "components_certificates_certificatestudio_tsx",
-      "target": "lib_firebase_ts",
-      "confidence_score": 1.0
+      "target": "lib_firebase_ts"
     },
     {
       "relation": "imports",
@@ -38434,9 +38456,9 @@
       "source_file": "components/certificates/CertificateStudio.tsx",
       "source_location": "L37",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "components_certificates_certificatestudio_tsx",
-      "target": "lib_firebase_db",
-      "confidence_score": 1.0
+      "target": "lib_firebase_db"
     },
     {
       "relation": "imports",
@@ -38445,9 +38467,9 @@
       "source_file": "components/certificates/CertificateStudio.tsx",
       "source_location": "L37",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "components_certificates_certificatestudio_tsx",
-      "target": "lib_firebase_storage",
-      "confidence_score": 1.0
+      "target": "lib_firebase_storage"
     },
     {
       "relation": "imports_from",
@@ -38456,9 +38478,9 @@
       "source_file": "components/certificates/CertificateStudio.tsx",
       "source_location": "L51",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "components_certificates_certificatestudio_tsx",
-      "target": "context_dialogcontext_tsx",
-      "confidence_score": 1.0
+      "target": "context_dialogcontext_tsx"
     },
     {
       "relation": "imports",
@@ -38467,9 +38489,9 @@
       "source_file": "components/certificates/CertificateStudio.tsx",
       "source_location": "L51",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "components_certificates_certificatestudio_tsx",
-      "target": "context_dialogcontext_usedialog",
-      "confidence_score": 1.0
+      "target": "context_dialogcontext_usedialog"
     },
     {
       "relation": "contains",
@@ -38477,9 +38499,9 @@
       "source_file": "components/certificates/CertificateStudio.tsx",
       "source_location": "L53",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "components_certificates_certificatestudio_tsx",
-      "target": "certificates_certificatestudio_dynamicelement",
-      "confidence_score": 1.0
+      "target": "certificates_certificatestudio_dynamicelement"
     },
     {
       "relation": "contains",
@@ -38487,9 +38509,9 @@
       "source_file": "components/certificates/CertificateStudio.tsx",
       "source_location": "L72",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "components_certificates_certificatestudio_tsx",
-      "target": "certificates_certificatestudio_participant",
-      "confidence_score": 1.0
+      "target": "certificates_certificatestudio_participant"
     },
     {
       "relation": "contains",
@@ -38497,9 +38519,9 @@
       "source_file": "components/certificates/CertificateStudio.tsx",
       "source_location": "L84",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "components_certificates_certificatestudio_tsx",
-      "target": "certificates_certificatestudio_certificatestudioprops",
-      "confidence_score": 1.0
+      "target": "certificates_certificatestudio_certificatestudioprops"
     },
     {
       "relation": "contains",
@@ -38507,9 +38529,9 @@
       "source_file": "components/certificates/CertificateStudio.tsx",
       "source_location": "L93",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "components_certificates_certificatestudio_tsx",
-      "target": "certificates_certificatestudio_default_fonts",
-      "confidence_score": 1.0
+      "target": "certificates_certificatestudio_default_fonts"
     },
     {
       "relation": "contains",
@@ -38517,9 +38539,9 @@
       "source_file": "components/certificates/CertificateStudio.tsx",
       "source_location": "L102",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "components_certificates_certificatestudio_tsx",
-      "target": "certificates_certificatestudio_default_elements",
-      "confidence_score": 1.0
+      "target": "certificates_certificatestudio_default_elements"
     },
     {
       "relation": "contains",
@@ -38527,9 +38549,9 @@
       "source_file": "components/certificates/CertificateStudio.tsx",
       "source_location": "L235",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "components_certificates_certificatestudio_tsx",
-      "target": "certificates_certificatestudio_certificatestudio",
-      "confidence_score": 1.0
+      "target": "certificates_certificatestudio_certificatestudio"
     },
     {
       "relation": "calls",
@@ -54867,5 +54889,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "482883537411a3384e89d836b759fc00cbeeb5dc"
+  "built_at_commit": "f1f82a8ff697b39791c37584d3e3a87b8a7bd4c5"
 }

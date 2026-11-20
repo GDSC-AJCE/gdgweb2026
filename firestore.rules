@@ -218,5 +218,13 @@ service cloud.firestore {
     match /{path=**}/participants/{participantId} {
       allow read: if isCoreUser() || (isAuthenticated() && resource.data.userId == request.auth.uid);
     }
+
+    // ============================================
+    // 15. MAIL TEMPLATES
+    // ============================================
+    match /mail_templates/{templateId} {
+      allow read: if true;
+      allow write: if isCoreWriter();
+    }
   }
 }

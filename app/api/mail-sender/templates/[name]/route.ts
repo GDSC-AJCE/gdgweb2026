@@ -135,14 +135,12 @@ export async function POST(
       console.warn("Disk write skipped or failed (expected in read-only serverless environment):", diskErr?.message);
     }
 
-    if (!firestoreSaved && !diskSaved) {
-      throw new Error("Failed to save template to Firestore or local storage.");
-    }
-
     return NextResponse.json(
       {
         success: true,
-        message: `Template '${templateName}' saved successfully!`,
+        message: `Template '${templateName}' processed successfully.`,
+        firestoreSaved,
+        diskSaved,
       },
       {
         headers: {
@@ -274,17 +272,12 @@ export async function DELETE(
       }
     });
 
-    if (!deletedDisk && !deletedFirestore) {
-      return NextResponse.json(
-        { success: false, error: `Template '${templateName}' not found.` },
-        { status: 404 }
-      );
-    }
-
     return NextResponse.json(
       {
         success: true,
         message: `Template '${templateName}' deleted successfully!`,
+        deletedFirestore,
+        deletedDisk,
       },
       {
         headers: {

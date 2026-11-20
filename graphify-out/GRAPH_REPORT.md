@@ -1,16 +1,16 @@
 # Graph Report - newwebsite  (2026-11-20)
 
 ## Corpus Check
-- 273 files · ~874,676 words
+- 273 files · ~875,090 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 2108 nodes · 3429 edges · 205 communities (180 shown, 25 thin omitted)
+- 2108 nodes · 3431 edges · 207 communities (182 shown, 25 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 3 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `48288353`
+- Built from commit: `f1f82a8f`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -200,14 +200,16 @@
 - [[_COMMUNITY_Community 199|Community 199]]
 - [[_COMMUNITY_Community 200|Community 200]]
 - [[_COMMUNITY_Community 201|Community 201]]
+- [[_COMMUNITY_Community 202|Community 202]]
 - [[_COMMUNITY_Community 203|Community 203]]
+- [[_COMMUNITY_Community 204|Community 204]]
 - [[_COMMUNITY_Community 205|Community 205]]
 - [[_COMMUNITY_Community 211|Community 211]]
 
 ## God Nodes (most connected - your core abstractions)
 1. `cx` - 81 edges
-2. `glyphs` - 62 edges
-3. `db` - 61 edges
+2. `db` - 62 edges
+3. `glyphs` - 62 edges
 4. `cn()` - 57 edges
 5. `values` - 31 edges
 6. `useBodyScrollLock()` - 29 edges
@@ -221,14 +223,14 @@
   lib/utils.ts → utils/cx.ts
 - `GET()` --calls--> `getMailConfig()`  [EXTRACTED]
   app/api/mail-sender/config/route.ts → lib/mailer.ts
+- `GalleryPage()` --calls--> `useBodyScrollLock()`  [EXTRACTED]
+  app/gallery/page.tsx → hooks/useBodyScrollLock.ts
 - `CoreProfileModal()` --calls--> `useBodyScrollLock()`  [EXTRACTED]
   components/CoreProfileModal.tsx → hooks/useBodyScrollLock.ts
 - `ExecomScheduleEmailModal()` --calls--> `useBodyScrollLock()`  [EXTRACTED]
   components/ExecomScheduleEmailModal.tsx → hooks/useBodyScrollLock.ts
-- `Navbar()` --calls--> `useAuth()`  [EXTRACTED]
-  components/Navbar.tsx → context/AuthContext.tsx
 
-## Communities (205 total, 25 thin omitted)
+## Communities (207 total, 25 thin omitted)
 
 ### Community 0 - "Community 0"
 Cohesion: 0.23
@@ -247,8 +249,8 @@ Cohesion: 0.16
 Nodes (13): EMPTY_FORM, Participant, ParticipantsList(), ParticipantsListProps, FormField, CertificateTemplate, Collaborator, EventDashboardPage() (+5 more)
 
 ### Community 4 - "Community 4"
-Cohesion: 0.15
-Nodes (19): MASCOT_404_QUOTES, COLLEGES, DEPARTMENTS, OnboardingStep, CATEGORIES, DEFAULT_LEADERBOARD_DATA, LeaderboardEntry, SEASONS (+11 more)
+Cohesion: 0.16
+Nodes (16): MASCOT_404_QUOTES, CATEGORIES, DEFAULT_LEADERBOARD_DATA, LeaderboardEntry, SEASONS, BlueWavyRosette(), CoralDonut(), DaisyStarburst() (+8 more)
 
 ### Community 5 - "Community 5"
 Cohesion: 0.14
@@ -260,7 +262,7 @@ Nodes (11): getMailConfig(), getTransporter(), isBatchCancelled(), markEmailAsSe
 
 ### Community 7 - "Community 7"
 Cohesion: 0.12
-Nodes (17): TeamConfig, CreateEventModal(), CreateEventModalProps, EventCategory, formatDateForInput(), formatToLocalIso(), toCalendarDate(), Tag() (+9 more)
+Nodes (16): CreateEventModal(), CreateEventModalProps, EventCategory, formatDateForInput(), formatToLocalIso(), toCalendarDate(), Tag(), TagGroup() (+8 more)
 
 ### Community 8 - "Community 8"
 Cohesion: 0.17
@@ -271,8 +273,8 @@ Cohesion: 0.09
 Nodes (23): values, accessibilityTitle, backgroundColor, borderRadius, contentAlign, contentVerticalAlign, contentWidth, language (+15 more)
 
 ### Community 10 - "Community 10"
-Cohesion: 0.06
-Nodes (30): ConfirmationModal(), ConfirmationModalProps, CustomDialog(), CustomDialogProps, cn(), MailStudioTab(), Alert(), AlertProps (+22 more)
+Cohesion: 0.08
+Nodes (26): ConfirmationModal(), ConfirmationModalProps, CustomDialog(), cn(), Alert(), AlertProps, Calendar(), CalendarProps (+18 more)
 
 ### Community 11 - "Community 11"
 Cohesion: 0.09
@@ -368,7 +370,7 @@ Nodes (27): 1. Design Philosophy & Visual Tenets, 1. Floating Pill Navigation Ba
 
 ### Community 34 - "Community 34"
 Cohesion: 0.05
-Nodes (30): Breadcrumb(), BreadcrumbItem(), IconComponent, LinkButton(), LinkButtonAnchorProps, LinkButtonBaseProps, LinkButtonButtonProps, LinkButtonProps (+22 more)
+Nodes (32): Breadcrumb(), BreadcrumbItem(), IconComponent, LinkButton(), LinkButtonAnchorProps, LinkButtonBaseProps, LinkButtonButtonProps, LinkButtonProps (+24 more)
 
 ### Community 35 - "Community 35"
 Cohesion: 0.20
@@ -383,8 +385,8 @@ Cohesion: 0.08
 Nodes (25): 1. General Organization & Contact Details, 2. Navigation Architecture, 3.1 Hero Section, 3.2 About Us Section, 3.3 Newsletter Teaser Section, 3.4 Gallery Section, 3.5 Frequently Asked Questions (FAQ), 3.6 Contact Section (+17 more)
 
 ### Community 38 - "Community 38"
-Cohesion: 0.05
-Nodes (61): linkButtonStyles, AccordionContent, AccordionItem, AccordionTrigger, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription (+53 more)
+Cohesion: 0.06
+Nodes (46): linkButtonStyles, AccordionContent, AccordionItem, AccordionTrigger, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription (+38 more)
 
 ### Community 39 - "Community 39"
 Cohesion: 0.12
@@ -428,7 +430,7 @@ Nodes (8): counters, u_column, u_content_divider, u_content_heading, u_content_i
 
 ### Community 49 - "Community 49"
 Cohesion: 0.11
-Nodes (24): AdminTab, RESTRICTED_TAB_DETAILS, RestrictedAccessCardProps, AnalyticsTabProps, GDG_COLORS, Recipient, TemplateMeta, Window (+16 more)
+Nodes (23): AdminTab, RestrictedAccessCardProps, AnalyticsTabProps, GDG_COLORS, formatNumber(), GDG_COLORS, OverviewTab(), OverviewTabProps (+15 more)
 
 ### Community 50 - "Community 50"
 Cohesion: 0.29
@@ -447,8 +449,8 @@ Cohesion: 0.29
 Nodes (6): body, footers, headers, id, rows, schemaVersion
 
 ### Community 54 - "Community 54"
-Cohesion: 0.24
-Nodes (8): AuthContext, AuthContextType, AuthProvider(), ADMIN_EMAILS, GDG_CONFIG, isAdminEmail(), auth, googleProvider
+Cohesion: 0.17
+Nodes (13): COLLEGES, DEPARTMENTS, Onboarding(), OnboardingStep, AuthContext, AuthContextType, AuthProvider(), ADMIN_EMAILS (+5 more)
 
 ### Community 55 - "Community 55"
 Cohesion: 0.24
@@ -516,7 +518,7 @@ Nodes (3): GDG AJCE Agent Rules & Architectural Constraints, Key Constraints:, K
 
 ### Community 72 - "Community 72"
 Cohesion: 0.18
-Nodes (11): MembershipApplicationModal(), DEFAULT_TEMPLATES, EditExecomTemplateModal(), EditExecomTemplateModalProps, GalleryItem, PREVIOUS_GDSC_GALLERY, FALLBACK_MEMORIES, GalleryPage() (+3 more)
+Nodes (11): MembershipApplicationModal(), DEFAULT_TEMPLATES, EditExecomTemplateModal(), EditExecomTemplateModalProps, useBodyScrollLock(), AddExecomMemberModal(), ExecomDriveSettingsModal(), ParsedCandidate (+3 more)
 
 ### Community 73 - "Community 73"
 Cohesion: 0.40
@@ -795,8 +797,8 @@ Cohesion: 0.67
 Nodes (3): label, value, fontFamily
 
 ### Community 151 - "Community 151"
-Cohesion: 0.18
-Nodes (7): NotFound(), CustomFieldsForm(), MemberFieldsForm(), DualUPIPaymentProps, PAYMENT_METHODS, PaymentCardProps, ProgramDetailPage()
+Cohesion: 0.22
+Nodes (5): CustomFieldsForm(), MemberFieldsForm(), DualUPIPaymentProps, PAYMENT_METHODS, PaymentCardProps
 
 ### Community 176 - "Community 176"
 Cohesion: 0.50
@@ -839,8 +841,8 @@ Cohesion: 0.20
 Nodes (9): name, packageManager, private, scripts, build, dev, lint, start (+1 more)
 
 ### Community 191 - "Community 191"
-Cohesion: 0.40
-Nodes (4): ParsedCandidate, PRESET_YEARS, UploadPreviousExecomModal(), UploadPreviousExecomModalProps
+Cohesion: 0.13
+Nodes (17): MailStudioTab(), Recipient, TemplateMeta, Window, CardFooter, Progress, Table, TableBody (+9 more)
 
 ### Community 192 - "Community 192"
 Cohesion: 0.33
@@ -867,16 +869,24 @@ Cohesion: 0.67
 Nodes (3): htmlClassNames, htmlID, _meta
 
 ### Community 198 - "Community 198"
-Cohesion: 0.07
-Nodes (35): TAB_METADATA, CoreProfileData, CoreProfileModal(), CoreProfileModalProps, CustomLink, SOCIAL_PLATFORMS, SocialLink, TabType (+27 more)
+Cohesion: 0.08
+Nodes (28): TAB_METADATA, RESTRICTED_TAB_DETAILS, CustomDialogProps, CustomFormBuilderProps, fieldTypeLabels, TeamConfig, TeamMemberField, TeamMemberEntry (+20 more)
 
 ### Community 201 - "Community 201"
 Cohesion: 0.14
 Nodes (8): inter, metadata, robotoMono, urbanist, viewport, CustomShape, Toaster(), ToasterProps
 
+### Community 202 - "Community 202"
+Cohesion: 0.20
+Nodes (9): CoreProfileData, CoreProfileModal(), CoreProfileModalProps, CustomLink, SOCIAL_PLATFORMS, SocialLink, TabType, THEME_PRESETS (+1 more)
+
 ### Community 203 - "Community 203"
 Cohesion: 0.25
 Nodes (5): generateMetadata(), getProfileData(), Props, SOCIAL_ICONS, TECH_ICONS
+
+### Community 204 - "Community 204"
+Cohesion: 0.40
+Nodes (4): GalleryItem, PREVIOUS_GDSC_GALLERY, FALLBACK_MEMORIES, GalleryPage()
 
 ### Community 211 - "Community 211"
 Cohesion: 0.20
@@ -890,8 +900,8 @@ Nodes (3): Lottie, Navbar(), GDGLogoMarkProps
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `db` connect `Community 2` to `Community 130`, `Community 3`, `Community 4`, `Community 131`, `Community 6`, `Community 7`, `Community 13`, `Community 151`, `Community 24`, `Community 27`, `Community 28`, `Community 31`, `Community 34`, `Community 42`, `Community 45`, `Community 176`, `Community 177`, `Community 181`, `Community 54`, `Community 184`, `Community 58`, `Community 191`, `Community 198`, `Community 199`, `Community 72`, `Community 203`, `Community 211`?**
-  _High betweenness centrality (0.044) - this node is a cross-community bridge._
+- **Why does `db` connect `Community 2` to `Community 130`, `Community 3`, `Community 131`, `Community 4`, `Community 6`, `Community 7`, `Community 13`, `Community 151`, `Community 24`, `Community 27`, `Community 28`, `Community 31`, `Community 34`, `Community 42`, `Community 45`, `Community 176`, `Community 177`, `Community 181`, `Community 54`, `Community 184`, `Community 58`, `Community 191`, `Community 198`, `Community 199`, `Community 72`, `Community 202`, `Community 203`, `Community 211`?**
+  _High betweenness centrality (0.046) - this node is a cross-community bridge._
 - **Why does `cx` connect `Community 135` to `Community 34`, `Community 5`, `Community 7`, `Community 15`, `Community 17`, `Community 19`, `Community 180`, `Community 183`, `Community 184`, `Community 56`, `Community 187`?**
   _High betweenness centrality (0.028) - this node is a cross-community bridge._
 - **Why does `glyphs` connect `Community 59` to `Community 128`, `Community 129`, `Community 73`, `Community 74`, `Community 75`, `Community 76`, `Community 77`, `Community 78`, `Community 79`, `Community 80`, `Community 81`, `Community 82`, `Community 83`, `Community 84`, `Community 85`, `Community 86`, `Community 87`, `Community 88`, `Community 89`, `Community 90`, `Community 91`, `Community 92`, `Community 93`, `Community 94`, `Community 95`, `Community 96`, `Community 97`, `Community 98`, `Community 99`, `Community 100`, `Community 101`, `Community 102`, `Community 103`, `Community 104`, `Community 105`, `Community 106`, `Community 107`, `Community 108`, `Community 109`, `Community 110`, `Community 111`, `Community 112`, `Community 113`, `Community 114`, `Community 115`, `Community 116`, `Community 117`, `Community 118`, `Community 119`, `Community 120`, `Community 121`, `Community 122`, `Community 123`, `Community 124`, `Community 125`, `Community 126`, `Community 127`?**
@@ -902,5 +912,5 @@ _Questions this graph is uniquely positioned to answer:_
   _Cohesion score 0.03076923076923077 - nodes in this community are weakly interconnected._
 - **Should `Community 2` be split into smaller, more focused modules?**
   _Cohesion score 0.0967741935483871 - nodes in this community are weakly interconnected._
-- **Should `Community 4` be split into smaller, more focused modules?**
-  _Cohesion score 0.1455026455026455 - nodes in this community are weakly interconnected._
+- **Should `Community 5` be split into smaller, more focused modules?**
+  _Cohesion score 0.13756613756613756 - nodes in this community are weakly interconnected._
