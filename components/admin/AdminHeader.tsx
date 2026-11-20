@@ -45,7 +45,7 @@ const TAB_CATEGORY_MAP: Record<string, { category: { label: string; tab?: AdminT
   },
   analytics: {
     category: { label: "Home", tab: "overview" },
-    current: "Analytics & Telemetry",
+    current: "Overview",
   },
   events: {
     category: { label: "Events", tab: "events" },

@@ -95,8 +95,8 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\app\\admin\\page.tsx": {
-    "mtime": 1795153624.5771604,
-    "ast_hash": "a285a8b28a8f2c4a4a1ef2e83e8f0fb7",
+    "mtime": 1795154526.7689686,
+    "ast_hash": "625882946b9789ce756b4a23cef16174",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\app\\admin\\mailer\\page.tsx": {
@@ -415,13 +415,13 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\admin\\AdminHeader.tsx": {
-    "mtime": 1795153309.676066,
-    "ast_hash": "57da2f652d45d4e2dbd6805df7171e46",
+    "mtime": 1795154428.234825,
+    "ast_hash": "106aed87fef9ecb5544ade3c5a88ac71",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\admin\\AdminSidebar.tsx": {
-    "mtime": 1795153326.0719008,
-    "ast_hash": "44ac63fe951aa933a2d6f9cce72b61f7",
+    "mtime": 1795154414.858297,
+    "ast_hash": "c06c63d0497827a6f69bb7ef4e646c95",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\admin\\RestrictedAccessCard.tsx": {
@@ -470,8 +470,8 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\admin\\tabs\\EventsManagementTab.tsx": {
-    "mtime": 1795153349.3377256,
-    "ast_hash": "3e7455e4d156e58f632484c3ebeaf57a",
+    "mtime": 1795154550.9087493,
+    "ast_hash": "6dcc14be3782e9a36e994ae20118d6f4",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\admin\\tabs\\ExecomManagementTab.tsx": {
@@ -495,8 +495,8 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\admin\\tabs\\OverviewTab.tsx": {
-    "mtime": 1795153010.6034293,
-    "ast_hash": "e7937ca2277aac44f8c8bc195381d3d1",
+    "mtime": 1795154788.3199914,
+    "ast_hash": "840702a796c9e404d3fe41ef8479b4be",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\admin\\tabs\\UsersManagementTab.tsx": {

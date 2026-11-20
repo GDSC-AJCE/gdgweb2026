@@ -19,7 +19,6 @@ import GDGLogoMark from "@/components/ui/GDGLogoMark";
 import AdminSidebar, { AdminTab } from "@/components/admin/AdminSidebar";
 import AdminHeader from "@/components/admin/AdminHeader";
 import OverviewTab from "@/components/admin/tabs/OverviewTab";
-import AnalyticsTab from "@/components/admin/tabs/AnalyticsTab";
 import ExecomManagementTab from "@/components/admin/tabs/ExecomManagementTab";
 import EventsManagementTab from "@/components/admin/tabs/EventsManagementTab";
 import UsersManagementTab from "@/components/admin/tabs/UsersManagementTab";
@@ -102,7 +101,10 @@ export default function AdminPage() {
     if (typeof window !== "undefined") {
       const params = new URLSearchParams(window.location.search);
       const tabParam = params.get("tab") as AdminTab;
-      if (tabParam && ["overview", "analytics", "execom", "events", "events-list", "calendar", "certificates", "newsletter", "mailer", "website", "users", "applications", "funds", "audit"].includes(tabParam)) {
+      if (tabParam === "analytics") {
+        return "overview";
+      }
+      if (tabParam && ["overview", "execom", "events", "events-list", "calendar", "certificates", "newsletter", "mailer", "website", "users", "applications", "funds", "audit"].includes(tabParam)) {
         return tabParam;
       }
     }
@@ -172,7 +174,9 @@ export default function AdminPage() {
         setIsDevPreview(true);
       }
       const tabParam = params.get("tab") as AdminTab;
-      if (tabParam && ["overview", "analytics", "execom", "events", "events-list", "calendar", "certificates", "newsletter", "mailer", "website", "users", "applications", "funds", "audit"].includes(tabParam)) {
+      if (tabParam === "analytics") {
+        setActiveTab("overview");
+      } else if (tabParam && ["overview", "execom", "events", "events-list", "calendar", "certificates", "newsletter", "mailer", "website", "users", "applications", "funds", "audit"].includes(tabParam)) {
         setActiveTab(tabParam);
       }
     }
@@ -639,7 +643,7 @@ export default function AdminPage() {
                 exit={{ opacity: 0, y: -12 }}
                 transition={{ duration: 0.25, ease: "easeOut" }}
               >
-                {activeTab === "overview" && (
+                {(activeTab === "overview" || activeTab === "analytics") && (
                   <OverviewTab
                     stats={{
                       totalUsers: totalUsersCount || usersList.length,
@@ -666,17 +670,6 @@ export default function AdminPage() {
                     isSuperAdmin={isSuperAdmin}
                     theme={adminTheme}
                     loading={loadingOverview}
-                  />
-                )}
-
-                {activeTab === "analytics" && (
-                  <AnalyticsTab
-                    users={usersList}
-                    events={events}
-                    applications={applications}
-                    funds={funds}
-                    onNavigateTab={setActiveTab}
-                    theme={adminTheme}
                   />
                 )}
 

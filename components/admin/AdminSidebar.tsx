@@ -157,8 +157,8 @@ export default function AdminSidebar({
           id: "overview",
           label: "Overview",
           icon: LayoutDashboard,
-          description: "Chapter velocity & stats",
-          keywords: ["dashboard", "home", "stats", "overview"],
+          description: "Chapter velocity, stats & analytics",
+          keywords: ["dashboard", "home", "stats", "overview", "analytics", "metrics", "telemetry"],
         },
         {
           id: "funds",
@@ -167,13 +167,6 @@ export default function AdminSidebar({
           adminOnly: true,
           description: "Chapter treasury & budget",
           keywords: ["funds", "money", "treasury", "budget", "finance"],
-        },
-        {
-          id: "analytics",
-          label: "Analytics",
-          icon: BarChart3,
-          description: "Telemetry & demographics",
-          keywords: ["analytics", "metrics", "stats", "telemetry"],
         },
       ],
     },
@@ -430,7 +423,7 @@ export default function AdminSidebar({
               size="sm"
               showGuides={true}
               selectionMode="single"
-              selectedKeys={new Set<Key>([activeTab])}
+              selectedKeys={new Set<Key>([activeTab === "analytics" ? "overview" : activeTab])}
               onSelectionChange={(keys) => {
                 if (keys === "all") return;
                 const selectedKey = Array.from(keys)[0] as string | undefined;
@@ -442,6 +435,8 @@ export default function AdminSidebar({
                   onSelectTab("events");
                 } else if (selectedKey === "branch-execom") {
                   onSelectTab("execom");
+                } else if (selectedKey === "analytics") {
+                  onSelectTab("overview");
                 } else {
                   onSelectTab(selectedKey as AdminTab);
                 }

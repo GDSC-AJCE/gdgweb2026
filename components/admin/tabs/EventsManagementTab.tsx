@@ -664,12 +664,13 @@ export default function EventsManagementTab({
       <div className={`rounded-3xl p-5 shadow-xs border transition-colors ${
         isDark ? "bg-[#18181b] border-zinc-800" : "bg-white border-slate-200/80"
       }`}>
+        {/* ROW 1: TITLE & TOP ACTIONS */}
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
           {/* Left: Title & Quick Stats */}
           <div>
             <div className="flex items-center gap-2.5">
               <h2 className={`text-2xl font-bold tracking-tight ${isDark ? "text-white" : "text-slate-900"}`}>
-                {monthYearLabel}
+                {viewMode === "calendar" ? "Events Calendar" : "Manage Events"}
               </h2>
               <span className={`px-2.5 py-0.5 rounded-full border text-[11px] font-mono transition-colors ${
                 isDark
@@ -680,13 +681,14 @@ export default function EventsManagementTab({
               </span>
             </div>
             <p className={`text-xs mt-1 ${isDark ? "text-zinc-400" : "text-slate-500"}`}>
-              Google Calendar integrated scheduling, core alerts, and attendee
-              rosters.
+              {viewMode === "calendar"
+                ? "Monthly schedule, synchronized meetings, and Google Calendar integration."
+                : "Search, filter, inspect attendee registrations, and manage event details."}
             </p>
           </div>
 
-          {/* Right: BoardUI Action Bar matching reference image */}
-          <div className="flex items-center gap-2.5 flex-wrap">
+          {/* Right: Top Row Action Bar */}
+          <div className="flex items-center gap-2 sm:gap-2.5 flex-wrap sm:flex-nowrap">
             {/* Notification Bell with red badge */}
             <div className="relative" ref={bellRef}>
               <button
@@ -803,7 +805,7 @@ export default function EventsManagementTab({
             {/* Google Calendar Sync Button */}
             <button
               onClick={() => setIsGCalModalOpen(true)}
-              className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border text-xs transition cursor-pointer ${
+              className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border text-xs font-semibold transition cursor-pointer whitespace-nowrap ${
                 isDark
                   ? "bg-zinc-900 border-zinc-800 text-zinc-300 hover:text-white hover:bg-zinc-800"
                   : "bg-slate-100 border-slate-200 text-slate-700 hover:text-slate-900 hover:bg-slate-200"
@@ -814,47 +816,108 @@ export default function EventsManagementTab({
               <span className="hidden sm:inline">Google Calendar</span>
             </button>
 
-            {/* Month Navigator Capsule: < [Month Year] > */}
-            <div className={`flex items-center rounded-xl border px-1 py-1 ${
-              isDark ? "bg-zinc-900 border-zinc-800" : "bg-slate-100 border-slate-200"
-            }`}>
-              <button
-                onClick={prevMonth}
-                className={`p-1.5 rounded-lg transition cursor-pointer ${
-                  isDark
-                    ? "text-zinc-400 hover:text-white hover:bg-zinc-800"
-                    : "text-slate-500 hover:text-slate-900 hover:bg-slate-200"
-                }`}
-                title="Previous Month"
-              >
-                <ChevronLeft className="w-4 h-4" />
-              </button>
-              <button
-                onClick={goToToday}
-                className={`px-2.5 py-1 text-xs font-semibold transition ${
-                  isDark
-                    ? "text-zinc-200 hover:text-white"
-                    : "text-slate-700 hover:text-slate-900"
-                }`}
-                title="Jump to Today"
-              >
-                {monthYearLabel}
-              </button>
-              <button
-                onClick={nextMonth}
-                className={`p-1.5 rounded-lg transition cursor-pointer ${
-                  isDark
-                    ? "text-zinc-400 hover:text-white hover:bg-zinc-800"
-                    : "text-slate-500 hover:text-slate-900 hover:bg-slate-200"
-                }`}
-                title="Next Month"
-              >
-                <ChevronRight className="w-4 h-4" />
-              </button>
-            </div>
+            {/* + New Event Button (BoardUI Blue Accent) */}
+            <Button
+              onClick={onOpenCreateModal}
+              className="h-9 px-3.5 sm:px-4 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold shadow-sm transition active:scale-95 cursor-pointer flex items-center gap-1.5 whitespace-nowrap"
+            >
+              <Plus className="w-4 h-4" />
+              <span>New event</span>
+            </Button>
+          </div>
+        </div>
 
+        {/* ======================================================== */}
+        {/* ROW 2: VIEW MODES, CONTROLS & FILTERS                    */}
+        {/* ======================================================== */}
+        <div className={`pt-4 mt-4 border-t flex flex-col md:flex-row md:items-center justify-between gap-3.5 ${
+          isDark ? "border-zinc-800/80" : "border-slate-100"
+        }`}>
+          {/* Left Side: Month Navigator (Calendar) OR Search & Filters (Cards/Table) */}
+          {viewMode === "calendar" ? (
+            <div className="flex items-center">
+              {/* Month Navigator Capsule: < [Month Year] > */}
+              <div className={`flex items-center rounded-xl border px-1 py-1 ${
+                isDark ? "bg-zinc-900 border-zinc-800" : "bg-slate-100 border-slate-200"
+              }`}>
+                <button
+                  onClick={prevMonth}
+                  className={`p-1.5 rounded-lg transition cursor-pointer ${
+                    isDark
+                      ? "text-zinc-400 hover:text-white hover:bg-zinc-800"
+                      : "text-slate-500 hover:text-slate-900 hover:bg-slate-200"
+                  }`}
+                  title="Previous Month"
+                >
+                  <ChevronLeft className="w-4 h-4" />
+                </button>
+                <button
+                  onClick={goToToday}
+                  className={`px-3 py-1 text-xs font-semibold transition cursor-pointer ${
+                    isDark
+                      ? "text-zinc-200 hover:text-white"
+                      : "text-slate-700 hover:text-slate-900"
+                  }`}
+                  title="Jump to Today"
+                >
+                  {monthYearLabel}
+                </button>
+                <button
+                  onClick={nextMonth}
+                  className={`p-1.5 rounded-lg transition cursor-pointer ${
+                    isDark
+                      ? "text-zinc-400 hover:text-white hover:bg-zinc-800"
+                      : "text-slate-500 hover:text-slate-900 hover:bg-slate-200"
+                  }`}
+                  title="Next Month"
+                >
+                  <ChevronRight className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          ) : (
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full md:w-auto">
+              <div className="relative w-full sm:w-64">
+                <Search className={`w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none ${
+                  isDark ? "text-zinc-500" : "text-slate-400"
+                }`} />
+                <Input
+                  type="text"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  placeholder="Search events, venues..."
+                  className={`pl-9 h-9 w-full rounded-xl text-xs ${
+                    isDark
+                      ? "bg-zinc-900 border-zinc-800 text-zinc-100 placeholder:text-zinc-500"
+                      : "bg-white border-slate-200 text-slate-900 placeholder:text-slate-400"
+                  }`}
+                />
+              </div>
+
+              <div className="flex items-center gap-1.5 w-full sm:w-auto overflow-x-auto pb-0.5 sm:pb-0">
+                <TagGroup
+                  aria-label="Filter events by status"
+                  selectionMode="single"
+                  selectedKeys={new Set([filter])}
+                  onSelectionChange={(keys) => {
+                    const next = Array.from(keys)[0] as "all" | "upcoming" | "past" | undefined;
+                    if (next) setFilter(next);
+                  }}
+                  disallowEmptySelection
+                  size="small"
+                >
+                  <Tag id="all" color="neutral">All Events</Tag>
+                  <Tag id="upcoming" color="lime">Upcoming</Tag>
+                  <Tag id="past" color="soft">Concluded</Tag>
+                </TagGroup>
+              </div>
+            </div>
+          )}
+
+          {/* Right Side: View Mode Sub-Tabs */}
+          <div className="flex items-center justify-start md:justify-end overflow-x-auto pb-0.5 md:pb-0">
             {/* Sub-Tabs: Manage Events (Cards) | Data Table (List) | Calendar | Certificates */}
-            <div className={`flex items-center p-1 rounded-xl border ${
+            <div className={`flex items-center p-1 rounded-xl border shrink-0 ${
               isDark ? "bg-zinc-900 border-zinc-800" : "bg-slate-100 border-slate-200"
             }`}>
               <button
@@ -863,7 +926,7 @@ export default function EventsManagementTab({
                   setViewMode("cards");
                   onNavigateTab?.("events");
                 }}
-                className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer ${
+                className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer whitespace-nowrap ${
                   viewMode === "cards"
                     ? isDark
                       ? "bg-zinc-800 text-white shadow-xs"
@@ -884,7 +947,7 @@ export default function EventsManagementTab({
                   setViewMode("table");
                   onNavigateTab?.("events-list");
                 }}
-                className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer ${
+                className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer whitespace-nowrap ${
                   viewMode === "table"
                     ? isDark
                       ? "bg-zinc-800 text-white shadow-xs"
@@ -905,7 +968,7 @@ export default function EventsManagementTab({
                   setViewMode("calendar");
                   onNavigateTab?.("calendar");
                 }}
-                className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer ${
+                className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer whitespace-nowrap ${
                   viewMode === "calendar"
                     ? isDark
                       ? "bg-zinc-800 text-white shadow-xs"
@@ -924,7 +987,7 @@ export default function EventsManagementTab({
                 <button
                   type="button"
                   onClick={() => onNavigateTab("certificates")}
-                  className={`hidden sm:flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer ${
+                  className={`hidden sm:flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer whitespace-nowrap ${
                     isDark
                       ? "text-zinc-400 hover:text-zinc-200"
                       : "text-slate-500 hover:text-slate-900"
@@ -936,59 +999,8 @@ export default function EventsManagementTab({
                 </button>
               )}
             </div>
-
-            {/* + New Event Button (BoardUI Blue Accent) */}
-            <Button
-              onClick={onOpenCreateModal}
-              className="h-9 px-4 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold shadow-sm transition active:scale-95 cursor-pointer flex items-center gap-1.5"
-            >
-              <Plus className="w-4 h-4" />
-              <span>New event</span>
-            </Button>
           </div>
         </div>
-
-        {/* Search & Filters (active in Cards view or available for quick search) */}
-        {viewMode === "cards" && (
-          <div className={`flex flex-col sm:flex-row items-center justify-between gap-3 pt-4 mt-4 border-t ${
-            isDark ? "border-zinc-800/80" : "border-slate-200"
-          }`}>
-            <div className="relative w-full sm:w-64">
-              <Search className={`w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none ${
-                isDark ? "text-zinc-500" : "text-slate-400"
-              }`} />
-              <Input
-                type="text"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                placeholder="Search events, venues..."
-                className={`pl-9 h-9 w-full rounded-xl text-xs ${
-                  isDark
-                    ? "bg-zinc-900 border-zinc-800 text-zinc-100 placeholder:text-zinc-500"
-                    : "bg-white border-slate-200 text-slate-900 placeholder:text-slate-400"
-                }`}
-              />
-            </div>
-
-            <div className="flex items-center gap-1.5 w-full sm:w-auto">
-              <TagGroup
-                aria-label="Filter events by status"
-                selectionMode="single"
-                selectedKeys={new Set([filter])}
-                onSelectionChange={(keys) => {
-                  const next = Array.from(keys)[0] as "all" | "upcoming" | "past" | undefined;
-                  if (next) setFilter(next);
-                }}
-                disallowEmptySelection
-                size="small"
-              >
-                <Tag id="all" color="neutral">All Events</Tag>
-                <Tag id="upcoming" color="lime">Upcoming</Tag>
-                <Tag id="past" color="soft">Concluded</Tag>
-              </TagGroup>
-            </div>
-          </div>
-        )}
       </div>
 
       {/* ======================================================== */}
@@ -1395,7 +1407,7 @@ export default function EventsManagementTab({
       {/* ======================================================== */}
       {viewMode === "table" && (
         <EventsDataTable
-          events={events}
+          events={filteredEvents}
           onOpenEditModal={onOpenEditModal}
           onDeleteEvent={(id) => {
             const ev = events.find((e) => e.id === id);
