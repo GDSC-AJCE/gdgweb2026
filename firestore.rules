@@ -15,7 +15,13 @@ service cloud.firestore {
     // Check if the user document has is_admin: true or email is an authorized chapter lead
     function isAdmin() {
       return isAuthenticated() && (
-        request.auth.token.email in ['dsc@amaljyothi.ac.in', 'vinayakprakash2026@cs.ajce.in', 'abinvarghese092005@gmail.com', 'abinvarghese2026@cs.ajce.in', 'karthiksambhu123@gmail.com'] ||
+        request.auth.token.email in [
+          'dsc@amaljyothi.ac.in',
+          'vinayakprakash2026@cs.ajce.in',
+          'abinvarghese092005@gmail.com',
+          'abinvarghese2026@cs.ajce.in',
+          'karthiksambhu123@gmail.com'
+        ] ||
         (exists(/databases/$(database)/documents/users/$(request.auth.uid)) && (
           get(/databases/$(database)/documents/users/$(request.auth.uid)).data.get('is_admin', false) == true ||
           get(/databases/$(database)/documents/users/$(request.auth.uid)).data.get('isAdmin', false) == true ||
@@ -29,8 +35,7 @@ service cloud.firestore {
       return isAuthenticated() && (
         isAdmin() ||
         (exists(/databases/$(database)/documents/users/$(request.auth.uid)) && (
-          get(/databases/$(database)/documents/users/$(request.auth.uid)).data.get('role', '') == 'core' ||
-          get(/databases/$(database)/documents/users/$(request.auth.uid)).data.get('role', '') == 'core-manage'
+          get(/databases/$(database)/documents/users/$(request.auth.uid)).data.get('role', '') in ['core', 'core-manage', 'admin']
         ))
       );
     }
@@ -40,28 +45,8 @@ service cloud.firestore {
       return isAuthenticated() && (
         isAdmin() ||
         (exists(/databases/$(database)/documents/users/$(request.auth.uid)) && (
-          get(/databases/$(database)/documents/users/$(request.auth.uid)).data.get('role', '') == 'core-manage' ||
-          get(/databases/$(database)/documents/users/$(request.auth.uid)).data.get('role', '') == 'core'
+          get(/databases/$(database)/documents/users/$(request.auth.uid)).data.get('role', '') in ['core', 'core-manage', 'admin']
         ))
-      );
-    }
-
-    // Check if a 'core' member is assigned to the current event (can update it)
-    function isCoreAssignedWriter() {
-      return isAuthenticated() &&
-        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.get('role', '') == 'core' &&
-        request.auth.uid in resource.data.get('assignedCore', []) &&
-        // Prevent reassigning core members — only core-manage/admin may touch assignedCore
-        !request.resource.data.diff(resource.data).affectedKeys().hasAny(['assignedCore']);
-    }
-
-    // Check if the user has a core profile (core, ex-core, core-manage, admin)
-    function hasCoreProfile() {
-      return isAuthenticated() && (
-        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.get('role', '') == 'core' ||
-        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.get('role', '') == 'ex-core' ||
-        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.get('role', '') == 'core-manage' ||
-        isAdmin()
       );
     }
 
@@ -71,178 +56,109 @@ service cloud.firestore {
     }
 
     // ============================================
-    // USERS COLLECTION
+    // 1. USERS COLLECTION
     // ============================================
     match /users/{userId} {
-      // Users can read their own document, core/admin can read all
       allow read: if isOwner(userId) || isCoreUser();
-
-      // Users can create their own document during signup
-      allow create: if isOwner(userId);
-
-      // Role field: only admins may change it
-      // is_admin field: immutable from the app (console-only) — nobody can write it
-      // Other fields: users can update their own; core can update all (except role/is_admin)
-      allow update: if (
-        // Designated admin can update any field
-        request.auth.token.email in ['dsc@amaljyothi.ac.in', 'karthiksambhu123@gmail.com']
-      ) || (
-        // Admin can change anything, including role — but not is_admin (protected below)
-        isAdmin() && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['is_admin'])
-      ) || (
-        // Core team can update any field EXCEPT role and is_admin
-        isCoreWriter() && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['role', 'is_admin'])
-      ) || (
-        // Users can update their own doc — but not role or is_admin
-        isOwner(userId) && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['role', 'is_admin'])
-      );
-
-      // Only core/admin can delete users
+      allow create: if isOwner(userId) || isCoreWriter();
+      allow update: if isOwner(userId) || isCoreWriter();
       allow delete: if isCoreWriter();
+
+      // User's own issued certificates subcollection
+      match /certificates/{certId} {
+        allow read: if isOwner(userId) || isCoreUser();
+        allow write: if isCoreWriter() || isOwner(userId);
+      }
     }
 
     // ============================================
-    // EVENTS COLLECTION
+    // 2. ROOT CERTIFICATES (Universal /verify/[id] lookup)
     // ============================================
-    match /events/{eventId} {
-      // Anyone can read events (public)
+    match /certificates/{certificateId} {
+      // Anyone on the internet can read & verify a certificate
       allow read: if true;
-
-      // core-manage/admin can create and delete events
-      allow create, delete: if isCoreWriter();
-
-      // core-manage/admin can update any field
-      // core members assigned to the event can update all fields EXCEPT assignedCore
-      allow update: if isCoreWriter() || isCoreAssignedWriter();
-
-      // ----------------------------------------
-      // PARTICIPANTS SUBCOLLECTION
-      // ----------------------------------------
-      match /participants/{participantId} {
-        // Core/admin can read all, users can read their own registration
-        allow read: if isCoreUser() ||
-                    (isAuthenticated() && resource.data.userId == request.auth.uid);
-
-        // Authenticated users can register (create) themselves, or core members can add walk-ins
-        allow create: if (isAuthenticated() && request.resource.data.userId == request.auth.uid) ||
-                      isCoreUser();
-
-        // Core members and admin writers can update details, or users can claim/link their manual entries
-        allow update: if isCoreUser() ||
-                      (isAuthenticated() &&
-                       resource.data.userId == "manual" &&
-                       resource.data.email == request.auth.token.email &&
-                       request.resource.data.userId == request.auth.uid);
-
-        // Core/admin can delete, users can withdraw their own registration
-        allow delete: if isCoreUser() ||
-                      (isAuthenticated() && resource.data.userId == request.auth.uid);
-      }
-
-      // ----------------------------------------
-      // CERTIFICATES (TEMPLATES) SUBCOLLECTION
-      // ----------------------------------------
-      match /certificates/{certificateId} {
-        allow read: if true;
-        allow create, update, delete: if isCoreUser();
-      }
-
-      // ----------------------------------------
-      // ISSUED CERTIFICATES SUBCOLLECTION
-      // ----------------------------------------
-      match /issuedCertificates/{issuedCertId} {
-        allow read: if true;
-        // Core can issue/revoke/edit, or users can claim/link their manual certificates
-        allow create, delete: if isCoreUser();
-        allow update: if isCoreUser() ||
-                      (isAuthenticated() &&
-                       resource.data.userId == "manual" &&
-                       resource.data.recipientEmail == request.auth.token.email &&
-                       request.resource.data.userId == request.auth.uid);
-      }
-    }
-
-    // ============================================
-    // MEMBERSHIP APPLICATIONS
-    // ============================================
-    match /membershipApplications/{applicationId} {
-      allow read: if isCoreUser();
-      allow create: if isAuthenticated() &&
-                    request.resource.data.userId == request.auth.uid;
-      allow update: if isCoreWriter();
-      allow delete: if isCoreWriter();
-    }
-
-    // ============================================
-    // AUDIT LOGS (Admin Read Only, Core Create)
-    // ============================================
-    match /auditLogs/{logId} {
-      allow read: if isAdmin();
-      allow create: if isCoreWriter();
-      // Audit logs are immutable — never updated or deleted by anyone
-      allow update, delete: if false;
-    }
-
-    // ============================================
-    // CONTACT FORM RESPONSES
-    // ============================================
-    match /contactFormResponses/{responseId} {
-      allow read: if isCoreUser();
-      allow create: if true;
-      allow update, delete: if isCoreWriter();
-    }
-
-    // ============================================
-    // EXECOM APPLICATIONS
-    // ============================================
-    match /execomApplications/{applicationId} {
-      allow read: if isCoreUser();
-      allow create: if true;
-      allow update, delete: if isCoreWriter();
-    }
-
-    // ============================================
-    // CERTIFICATE TEMPLATES (Top-level)
-    // ============================================
-    match /certificateTemplates/{templateId} {
-      allow read: if true;
+      // Core members and admins can create/update/revoke certificates
       allow create, update, delete: if isCoreWriter();
     }
 
     // ============================================
-    // CORE MEMBER PROFILES
+    // 3. EVENTS & SUBCOLLECTIONS
     // ============================================
-    match /coreProfiles/{uid} {
-      // Anyone can read (public profiles)
+    match /events/{eventId} {
+      // Public event directory
       allow read: if true;
+      allow create, update, delete: if isCoreWriter();
 
-      // Admin or core writer can create, update, and delete any core profile
-      allow create, update, delete: if isAdmin() || isCoreWriter();
+      // Participants / Attendees subcollection
+      match /participants/{participantId} {
+        allow read: if isCoreUser() || (isAuthenticated() && resource.data.userId == request.auth.uid);
+        allow create: if (isAuthenticated() && request.resource.data.userId == request.auth.uid) || isCoreUser();
+        allow update, delete: if isCoreUser() || (isAuthenticated() && resource.data.userId == request.auth.uid);
+      }
 
-      // Core member can create/update their own profile
-      allow create, update: if isOwner(uid) && hasCoreProfile();
+      // Certificate Templates subcollection
+      match /certificates/{certificateId} {
+        allow read: if true;
+        allow write: if isCoreWriter();
+      }
+
+      // Issued Certificates subcollection
+      match /issuedCertificates/{issuedCertId} {
+        allow read: if true;
+        allow write: if isCoreWriter();
+      }
     }
 
     // ============================================
-    // TRASH BIN
+    // 4. CORE PROFILES (Team & Execom)
     // ============================================
-    match /bin/{binId} {
-      // Core/admin can read the bin
-      allow read: if isCoreUser();
-      
-      // Core/admin can move items to the bin
-      allow create: if isCoreWriter();
- 
-      // Only core/admin can restore or delete items from the bin
-      // (RESTORE involves deleting from bin after writing to original)
-      allow delete: if isCoreWriter();
-      
-      // Bin items should be immutable
-      allow update: if false;
+    match /coreProfiles/{profileId} {
+      allow read: if true;
+      allow create, update, delete: if isCoreWriter() || (isAuthenticated() && request.auth.uid == profileId);
     }
 
     // ============================================
-    // AUDIT LOGS
+    // 5. EXECOM APPLICATIONS & RECRUITMENT
+    // ============================================
+    match /execomApplications/{applicationId} {
+      allow read: if isCoreUser() || (isAuthenticated() && resource.data.userId == request.auth.uid);
+      allow create: if true; // Allows student submissions
+      allow update, delete: if isCoreWriter() || (isAuthenticated() && resource.data.userId == request.auth.uid);
+    }
+
+    match /membershipApplications/{applicationId} {
+      allow read: if isCoreUser() || (isAuthenticated() && resource.data.userId == request.auth.uid);
+      allow create: if true;
+      allow update, delete: if isCoreWriter();
+    }
+
+    // ============================================
+    // 6. SITE SETTINGS & CONFIGS
+    // ============================================
+    match /settings/{settingId} {
+      // Allow reading homepage, recruitment status, or by core users
+      allow read: if true;
+      allow write: if isCoreWriter();
+    }
+
+    // ============================================
+    // 7. PUBLIC GALLERY & MEMORIES
+    // ============================================
+    match /gallery/{imageId} {
+      allow read: if true;
+      allow write: if isCoreWriter();
+    }
+
+    // ============================================
+    // 8. LEADERBOARD & RANKINGS
+    // ============================================
+    match /leaderboard/{studentId} {
+      allow read: if true;
+      allow write: if isCoreWriter();
+    }
+
+    // ============================================
+    // 9. AUDIT LOGS & TELEMETRY
     // ============================================
     match /auditLogs/{logId} {
       allow read: if isCoreUser();
@@ -251,88 +167,56 @@ service cloud.firestore {
     }
 
     // ============================================
-    // SETTINGS
+    // 10. CONTACT FORM INBOX
     // ============================================
-    match /settings/{settingId} {
-      allow read: if isCoreUser() || settingId == 'execomRecruitment';
+    match /contactFormResponses/{responseId} {
+      allow read: if isCoreUser();
+      allow create: if true; // Public submission
+      allow update, delete: if isCoreWriter();
+    }
+
+    // ============================================
+    // 11. CHAPTER FUNDS & TREASURY
+    // ============================================
+    match /funds/{fundId} {
+      allow read: if isCoreUser();
       allow write: if isCoreWriter();
     }
 
     // ============================================
-    // EXECOM APPLICATIONS COLLECTION
+    // 12. NEWSLETTER SUBSCRIBERS & CAMPAIGNS
     // ============================================
-    match /execomApplications/{applicationId} {
-      // Core members and admins can read all applications; applicants can read their own
-      allow read: if isCoreUser() || (isAuthenticated() && resource.data.userId == request.auth.uid);
-      
-      // Authenticated users can submit (create) an application
-      allow create: if isAuthenticated() && request.resource.data.userId == request.auth.uid;
-      
-      // Core writers can update (accept, reject status) or owner can update their own
-      allow update: if isCoreWriter() || (isAuthenticated() && resource.data.userId == request.auth.uid);
-      
-      // Core writers and admins can delete applications
-      allow delete: if isCoreWriter();
+    match /newsletter_subscribers/{subscriberId} {
+      allow read: if isCoreUser();
+      allow create: if true;
+      allow update, delete: if isCoreWriter();
+    }
+
+    match /newsletters/{newsletterId} {
+      allow read: if true;
+      allow write: if isCoreWriter();
     }
 
     // ============================================
-    // COLLECTION GROUP RULES
+    // 13. TRASH RECYCLE BIN
     // ============================================
+    match /bin/{binId} {
+      allow read, write: if isCoreWriter();
+    }
 
+    // ============================================
+    // 14. COLLECTION GROUP QUERIES
+    // ============================================
     match /{path=**}/issuedCertificates/{issuedCertId} {
       allow read: if true;
     }
 
+    match /{path=**}/certificates/{certId} {
+      allow read: if true;
+    }
+
     match /{path=**}/participants/{participantId} {
-      allow read: if isCoreUser() ||
-                  (isAuthenticated() && resource.data.userId == request.auth.uid);
+      allow read: if isCoreUser() || (isAuthenticated() && resource.data.userId == request.auth.uid);
     }
-
-    // ============================================
-    // FUNDS COLLECTION
-    // ============================================
-    match /funds/{fundId} {
-      allow read: if isCoreUser();
-      allow create: if isCoreWriter();
-      allow update: if isCoreWriter();
-      allow delete: if isAdmin();
-    }
-
-    // ============================================
-    // NEWSLETTER SUBSCRIBERS
-    // ============================================
-    match /newsletter_subscribers/{subscriberId} {
-      // Core and admin can read all subscriber records
-      allow read: if isCoreUser();
-      
-      // Anyone can subscribe (create)
-      allow create: if request.resource.data.keys().hasAll(['email', 'status', 'subscribedAt'])
-                    && request.resource.data.email is string
-                    && request.resource.data.status in ['active', 'unsubscribed'];
-
-      // Allow unsubscribe or preference update with matching token or by core writer
-      allow update: if isCoreWriter() || (
-        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'unsubscribedAt', 'topics'])
-      );
-
-      // Only admins can delete subscriber records
-      allow delete: if isAdmin();
-    }
-
-    // ============================================
-    // NEWSLETTERS (WEEKLY ISSUES)
-    // ============================================
-    match /newsletters/{newsletterId} {
-      // Anyone can read published issues on the web archive
-      allow read: if resource.data.status == 'sent' || resource.data.isPublished == true || isCoreUser();
-
-      // Core writers and admins can manage newsletters
-      allow create, update: if isCoreWriter();
-      allow delete: if isAdmin();
-    }
-
-    // ============================================
-    // DEFAULT DENY ALL OTHER COLLECTIONS
-    // ============================================
   }
 }

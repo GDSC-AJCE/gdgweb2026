@@ -25,11 +25,13 @@ interface CertificateData {
     recipientName: string;
     recipientEmail: string;
     eventTitle: string;
-    templateName: string;
-    templateId: string;
-    eventId: string;
-    issueDate: string;
-    issuedAt: any;
+    templateName?: string;
+    templateId?: string;
+    eventId?: string;
+    issueDate?: string;
+    issuedAt?: any;
+    backgroundUrl?: string;
+    elements?: any[];
     revoked?: boolean;
     revokedAt?: any;
     revokedReason?: string;
@@ -54,7 +56,7 @@ export default function VerifyPage({
     const [isDownloading, setIsDownloading] = useState(false);
     const [downloadProgress, setDownloadProgress] = useState(0);
     const [downloadStatus, setDownloadStatus] = useState("");
-    const [aspectRatio, setAspectRatio] = useState<string>("1754 / 1240");
+    const [aspectRatio, setAspectRatio] = useState<string>("1600 / 1131");
     const [copied, setCopied] = useState(false);
     const certificateRef = useRef<HTMLDivElement>(null);
 
@@ -92,40 +94,55 @@ export default function VerifyPage({
                 if (certData) {
                     setCertificate(certData);
 
-                    // Fetch or construct template
-                    if (certData.templateId && certData.eventId) {
-                        const templateDoc = await getDoc(
-                            doc(db, "events", certData.eventId, "certificates", certData.templateId)
-                        );
-                        if (templateDoc.exists()) {
-                            setTemplate(templateDoc.data() as TemplateData);
+                    // Fetch template from event if available
+                    let fetchedTemplate: TemplateData | null = null;
+                    if (certData.eventId) {
+                        try {
+                            const templateDoc = await getDoc(
+                                doc(db, "events", certData.eventId, "certificates", certData.templateId || "default")
+                            );
+                            if (templateDoc.exists()) {
+                                fetchedTemplate = templateDoc.data() as TemplateData;
+                            }
+                        } catch (err) {
+                            console.warn("Could not load event templateDoc:", err);
                         }
                     }
 
-                    // If template was not loaded from subcollection, use certificate's backgroundUrl and elements
-                    setTemplate((prev) => {
-                        if (prev) return prev;
-                        return {
-                            backgroundUrl: (certData as any).backgroundUrl || (certData as any).templateConfig?.backgroundUrl || "/assets/certificates/gdg-certificate-frame.svg",
-                            elements: (certData as any).elements || (certData as any).templateConfig?.elements || [
-                                { id: "elem_name", type: "name", x: 50, y: 44, fontSize: 44, color: "#1a73e8", fontWeight: "bold", textAlign: "center" },
-                                { id: "elem_date", type: "date", x: 50, y: 90, fontSize: 13, color: "#80827f", textAlign: "center" },
-                                { id: "elem_id", type: "certificateId", x: 50, y: 92, fontSize: 11, color: "#4285F4", textAlign: "center" },
-                                { id: "elem_qr", type: "qrcode", x: 80, y: 75, fontSize: 90 }
-                            ]
-                        };
-                    });
+                    if (fetchedTemplate && fetchedTemplate.elements && fetchedTemplate.elements.length > 0) {
+                        setTemplate(fetchedTemplate);
+                    } else if (certData.elements && certData.elements.length > 0) {
+                        setTemplate({
+                            backgroundUrl: certData.backgroundUrl || "",
+                            elements: certData.elements,
+                        });
+                    } else {
+                        // Fallback default elements
+                        setTemplate({
+                            backgroundUrl: certData.backgroundUrl || "",
+                            elements: [
+                                { id: "elem_title", type: "text", field: "custom", customText: "CERTIFICATE OF PARTICIPATION", x: 50, y: 28, fontSize: 26, color: "#0f172a", fontFamily: "Urbanist, sans-serif", fontWeight: "800", textAlign: "center", visible: true },
+                                { id: "elem_name", type: "text", field: "name", x: 50, y: 45, fontSize: 48, color: "#2563EB", fontFamily: "Playfair Display, serif", fontWeight: "800", textAlign: "center", visible: true },
+                                { id: "elem_desc", type: "text", field: "custom", customText: "for active participation and successful completion of the hands-on technical workshop.", x: 50, y: 54, fontSize: 14, color: "#475569", fontFamily: "Urbanist, sans-serif", fontWeight: "500", textAlign: "center", visible: true },
+                                { id: "elem_event", type: "text", field: "eventTitle", x: 50, y: 61, fontSize: 22, color: "#0f172a", fontFamily: "Urbanist, sans-serif", fontWeight: "800", textAlign: "center", visible: true },
+                                { id: "elem_date", type: "text", field: "date", x: 25, y: 82, fontSize: 13, color: "#334155", fontFamily: "Urbanist, sans-serif", fontWeight: "600", textAlign: "center", visible: true },
+                                { id: "elem_sig1", type: "text", field: "custom", customText: "Prof. Fr. Rubin Thoppil\nFaculty Advisor, GDG AJCE", x: 50, y: 82, fontSize: 12, color: "#334155", fontFamily: "Urbanist, sans-serif", fontWeight: "600", textAlign: "center", visible: true },
+                                { id: "elem_id", type: "text", field: "certificateId", x: 82, y: 87, fontSize: 11, color: "#2563EB", fontFamily: "Courier New, monospace", fontWeight: "700", textAlign: "center", visible: true },
+                                { id: "elem_qr", type: "qrcode", field: "certificateId", x: 82, y: 76, fontSize: 80, color: "#0f172a", textAlign: "center", visible: true },
+                            ],
+                        });
+                    }
 
                     // Generate clean QR code
                     const verifyUrl = `${window.location.origin}/verify/${id}`;
                     const qr = await QRCode.toDataURL(verifyUrl, {
                         width: 400,
-                        margin: 0,
+                        margin: 1,
                         color: {
                             dark: "#000000",
-                            light: "#ffffff"
+                            light: "#ffffff",
                         },
-                        errorCorrectionLevel: "H"
+                        errorCorrectionLevel: "H",
                     });
                     setQrDataUrl(qr);
                 }
@@ -139,9 +156,28 @@ export default function VerifyPage({
         if (id) fetchCertificate();
     }, [id]);
 
-    // Download certificate high-resolution canvas
+    const getElementContent = (el: any): string => {
+        if (!certificate) return "";
+        const field = el.field || el.type;
+        switch (field) {
+            case "name":
+                return certificate.recipientName || "Recipient Name";
+            case "eventTitle":
+                return certificate.eventTitle || "GDG Event";
+            case "date":
+                return certificate.issueDate || (certificate.issuedAt?.toDate ? certificate.issuedAt.toDate().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" }) : new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" }));
+            case "certificateId":
+                return certificate.certificateId || id;
+            case "custom":
+                return el.customText || "";
+            default:
+                return el.customText || "";
+        }
+    };
+
+    // Download certificate high-resolution canvas matching Studio 1:1
     const handleDownload = async () => {
-        if (!certificate || !template?.backgroundUrl || !qrDataUrl) return;
+        if (!certificate || !qrDataUrl) return;
 
         try {
             setIsDownloading(true);
@@ -150,118 +186,82 @@ export default function VerifyPage({
 
             await document.fonts.ready;
             setDownloadProgress(15);
-            setDownloadStatus("Fetching high-res background...");
+            setDownloadStatus("Preparing artwork...");
 
-            const loadImage = (src: string, crossOrigin = true): Promise<HTMLImageElement> =>
-                new Promise((resolve, reject) => {
-                    const img = new Image();
-                    if (crossOrigin) img.crossOrigin = "anonymous";
-                    img.onload = () => resolve(img);
-                    img.onerror = reject;
-                    img.src = src;
-                });
-
-            const bgImg = await loadImage(template.backgroundUrl);
-            const bgRatio = bgImg.naturalWidth / bgImg.naturalHeight;
-
-            // Standard A4 Landscape @ 300 DPI
-            const RENDER_W = 3508;
-            const RENDER_H = Math.round(RENDER_W / bgRatio);
-
-            setDownloadProgress(40);
-            setDownloadStatus("Synthesizing credential layers...");
+            const RENDER_W = 1600;
+            const RENDER_H = 1131;
 
             const canvas = document.createElement("canvas");
             canvas.width = RENDER_W;
             canvas.height = RENDER_H;
             const ctx = canvas.getContext("2d")!;
 
-            ctx.fillStyle = "#ffffff";
-            ctx.fillRect(0, 0, RENDER_W, RENDER_H);
-            ctx.drawImage(bgImg, 0, 0, RENDER_W, RENDER_H);
+            const drawContent = async () => {
+                const qrImg = new Image();
+                await new Promise((resolve) => {
+                    qrImg.onload = resolve;
+                    qrImg.onerror = resolve;
+                    qrImg.src = qrDataUrl;
+                });
+
+                const elementsToRender = template?.elements || [];
+                for (const el of elementsToRender) {
+                    if (el.visible === false) continue;
+
+                    const posX = (el.x / 100) * RENDER_W;
+                    const posY = (el.y / 100) * RENDER_H;
+
+                    if (el.type === "qrcode") {
+                        const size = (el.fontSize || 80) * 1.5;
+                        let drawX = posX - size / 2;
+                        if (el.textAlign === "left") drawX = posX;
+                        if (el.textAlign === "right") drawX = posX - size;
+                        ctx.drawImage(qrImg, drawX, posY - size / 2, size, size);
+                    } else {
+                        const content = getElementContent(el);
+                        if (!content) continue;
+
+                        const fontSize = (el.fontSize || 20) * 1.3;
+                        const fontFamily = el.fontFamily || "Urbanist, sans-serif";
+                        const fontWeight = el.fontWeight || "normal";
+
+                        ctx.save();
+                        ctx.font = `${fontWeight} ${fontSize}px ${fontFamily}`;
+                        ctx.fillStyle = el.color || "#0f172a";
+                        ctx.textAlign = el.textAlign || "center";
+                        ctx.textBaseline = "middle";
+
+                        const lines = content.split("\n");
+                        const lineHeight = (el.fontSize || 20) * 1.6;
+                        lines.forEach((line: string, i: number) => {
+                            ctx.fillText(line, posX, posY + i * lineHeight);
+                        });
+                        ctx.restore();
+                    }
+                }
+            };
+
+            if (template?.backgroundUrl) {
+                const bgImg = new Image();
+                bgImg.crossOrigin = "anonymous";
+                await new Promise((resolve) => {
+                    bgImg.onload = () => {
+                        ctx.drawImage(bgImg, 0, 0, RENDER_W, RENDER_H);
+                        resolve(null);
+                    };
+                    bgImg.onerror = () => {
+                        drawFallbackBg(ctx, RENDER_W, RENDER_H);
+                        resolve(null);
+                    };
+                    bgImg.src = template.backgroundUrl;
+                });
+            } else {
+                drawFallbackBg(ctx, RENDER_W, RENDER_H);
+            }
 
             setDownloadProgress(60);
-            setDownloadStatus("Injecting cryptographic signature...");
-
-            const qrImg = await loadImage(qrDataUrl, false);
-
-            for (const el of (template.elements ?? [])) {
-                if (el.visible === false) continue;
-                const is1754Coord = el.x > 100 || el.y > 100;
-                const leftPx = is1754Coord ? (el.x / 1754) * RENDER_W : (el.x / 100) * RENDER_W;
-                const topPx = is1754Coord ? (el.y / 1240) * RENDER_H : (el.y / 100) * RENDER_H;
-                const sizePx = is1754Coord ? (el.fontSize / 1754) * RENDER_W : (el.fontSize / 800) * RENDER_W;
-
-                if (el.type === "qrcode" || el.type === "qr") {
-                    const qrPixelSize = is1754Coord
-                        ? ((el.qrSize || el.fontSize || 110) / 1754) * RENDER_W
-                        : sizePx;
-                    let drawX = leftPx;
-                    if (el.textAlign === "center") drawX = leftPx - qrPixelSize / 2;
-                    else if (el.textAlign === "right") drawX = leftPx - qrPixelSize;
-                    ctx.drawImage(qrImg, drawX, topPx, qrPixelSize, qrPixelSize);
-                } else if (el.type === "signatory") {
-                    const fontFamily = (el.fontFamily || "Inter, sans-serif")
-                        .split(",")[0]
-                        .trim()
-                        .replace(/['"]/g, "");
-
-                    try {
-                        await document.fonts.load(`${el.fontWeight || "bold"} ${sizePx}px "${fontFamily}"`);
-                    } catch {
-                        // fallback
-                    }
-
-                    ctx.save();
-                    ctx.font = `${el.fontWeight || "bold"} ${sizePx}px "${fontFamily}"`;
-                    ctx.fillStyle = el.color || "#202124";
-                    ctx.textBaseline = "middle";
-                    ctx.textAlign = (el.textAlign === "center" || el.textAlign === "right") ? el.textAlign : "left";
-                    ctx.fillText(el.signatoryName || "", leftPx, topPx);
-
-                    const roleSizePx = is1754Coord
-                        ? ((el.signatoryRoleSize || 12) / 1754) * RENDER_W
-                        : ((el.signatoryRoleSize || 12) / 800) * RENDER_W;
-                    ctx.font = `normal ${roleSizePx}px "${fontFamily}"`;
-                    ctx.fillStyle = el.signatoryRoleColor || "#80827f";
-                    ctx.fillText(el.signatoryRole || "", leftPx, topPx + (20 / 1240) * RENDER_H);
-                    ctx.restore();
-                } else {
-                    let content = el.text || "";
-                    if (el.type === "name") content = certificate.recipientName;
-                    else if (el.type === "date") content = certificate.issueDate;
-                    else if (el.type === "certificateId") content = certificate.certificateId;
-
-                    content = content
-                        .replace(/\{\{NAME\}\}/gi, certificate.recipientName || "")
-                        .replace(/\{\{EVENT\}\}/gi, certificate.eventTitle || "")
-                        .replace(/\{\{ID\}\}/gi, certificate.certificateId || "")
-                        .replace(/\{\{DATE\}\}/gi, certificate.issueDate || "");
-
-                    if (!content) continue;
-
-                    const fontFamily = (el.fontFamily || "Inter, sans-serif")
-                        .split(",")[0]
-                        .trim()
-                        .replace(/['"]/g, "");
-
-                    try {
-                        await document.fonts.load(`${el.fontWeight || "normal"} ${sizePx}px "${fontFamily}"`);
-                    } catch {
-                        // fallback
-                    }
-
-                    ctx.save();
-                    ctx.font = `${el.fontWeight || "normal"} ${sizePx}px "${fontFamily}"`;
-                    ctx.fillStyle = el.color || "#000000";
-                    ctx.textBaseline = is1754Coord ? "middle" : "top";
-                    ctx.textAlign = (el.textAlign === "center" || el.textAlign === "right")
-                        ? el.textAlign
-                        : "left";
-                    ctx.fillText(content, leftPx, topPx);
-                    ctx.restore();
-                }
-            }
+            setDownloadStatus("Rendering credential layers...");
+            await drawContent();
 
             setDownloadProgress(90);
             setDownloadStatus("Finalizing PNG artifact...");
@@ -285,6 +285,41 @@ export default function VerifyPage({
         }
     };
 
+    const drawFallbackBg = (ctx: CanvasRenderingContext2D, width: number, height: number) => {
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(0, 0, width, height);
+
+        ctx.lineWidth = 14;
+        ctx.strokeStyle = "#f1f5f9";
+        ctx.strokeRect(36, 36, width - 72, height - 72);
+
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = "#cbd5e1";
+        ctx.strokeRect(48, 48, width - 96, height - 96);
+
+        const cornerSize = 48;
+        ctx.fillStyle = "#2563EB";
+        ctx.fillRect(48, 48, cornerSize, 8);
+        ctx.fillRect(48, 48, 8, cornerSize);
+
+        ctx.fillStyle = "#EF4444";
+        ctx.fillRect(width - 48 - cornerSize, 48, cornerSize, 8);
+        ctx.fillRect(width - 48 - 8, 48, 8, cornerSize);
+
+        ctx.fillStyle = "#F59E0B";
+        ctx.fillRect(48, height - 48 - 8, cornerSize, 8);
+        ctx.fillRect(48, height - 48 - cornerSize, 8, cornerSize);
+
+        ctx.fillStyle = "#10B981";
+        ctx.fillRect(width - 48 - cornerSize, height - 48 - 8, cornerSize, 8);
+        ctx.fillRect(width - 48 - 8, height - 48 - cornerSize, 8, cornerSize);
+
+        ctx.font = "bold 18px Urbanist, sans-serif";
+        ctx.fillStyle = "#64748b";
+        ctx.textAlign = "center";
+        ctx.fillText("GOOGLE DEVELOPER GROUPS ON CAMPUS • AMAL JYOTHI COLLEGE OF ENGINEERING", width / 2, 130);
+    };
+
     const handleShare = async () => {
         const shareUrl = window.location.href;
 
@@ -296,33 +331,40 @@ export default function VerifyPage({
                     url: shareUrl
                 });
             } catch (error) {
-                // User dismissed share dialog
+                console.log("Error sharing:", error);
             }
         } else {
-            try {
-                await navigator.clipboard.writeText(shareUrl);
-                setCopied(true);
-                setTimeout(() => setCopied(false), 2500);
-                dialog.alert("Verification URL copied to clipboard!", "Link Copied");
-            } catch {
-                dialog.prompt("Verification URL:", shareUrl, "Copy Link");
-            }
+            navigator.clipboard.writeText(shareUrl);
+            dialog.alert("Verification link copied to clipboard!", "Link Copied");
         }
     };
 
-    if (loading) return <LoadingSpinner text="Querying Google credential registry..." />;
-
-    if (!certificate || !template) {
+    if (loading) {
         return (
-            <main className="min-h-screen text-[#2c2e2a] relative overflow-hidden pb-32">
-                <div className="max-w-4xl mx-auto px-6 pt-32 pb-20 text-center">
-                    <div className="w-20 h-20 mx-auto mb-6 rounded-3xl bg-red-500/10 border border-red-500/20 flex items-center justify-center">
-                        <XCircle className="w-10 h-10 text-red-500" />
+            <main className="min-h-screen flex items-center justify-center">
+                <LoadingSpinner size="lg" text="Validating credential cryptographic signature..." />
+            </main>
+        );
+    }
+
+    if (!certificate) {
+        return (
+            <main className="min-h-screen flex items-center justify-center p-4">
+                <div className="max-w-md w-full bg-[#ffffff] border border-[#d5d5d4] rounded-3xl p-8 text-center shadow-xs">
+                    <div className="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-4 border border-red-200">
+                        <XCircle className="w-8 h-8 text-red-500" />
                     </div>
-                    <h1 className="text-3xl font-extrabold text-[#2c2e2a] mb-4">Certificate Not Found</h1>
-                    <p className="text-[#80827f] text-sm max-w-md mx-auto">
-                        This credential ID is either invalid, nonexistent, or has been archived from the Google Developer Groups registry.
+                    <GoogleBadge label="Record Not Found" variant="red" />
+                    <h1 className="text-2xl font-bold text-[#2c2e2a] mt-4 mb-2">Invalid Credential</h1>
+                    <p className="text-[#80827f] text-sm mb-6 leading-relaxed">
+                        No official certificate with ID <span className="font-mono text-[#2c2e2a]">#{id}</span> was found on the GDG AJCE registry.
                     </p>
+                    <a
+                        href="/programs"
+                        className="inline-flex items-center justify-center px-6 py-2.5 bg-[#4285F4] hover:bg-[#3367d6] text-white text-xs font-semibold rounded-full transition shadow-xs"
+                    >
+                        Browse GDG Programs
+                    </a>
                 </div>
             </main>
         );
@@ -330,10 +372,10 @@ export default function VerifyPage({
 
     if (certificate.revoked) {
         return (
-            <main className="min-h-screen text-[#2c2e2a] relative overflow-hidden pb-32">
-                <div className="max-w-2xl mx-auto px-6 pt-32 pb-20 text-center">
-                    <div className="w-20 h-20 mx-auto mb-6 rounded-3xl bg-red-500/10 border border-red-500/20 flex items-center justify-center">
-                        <XCircle className="w-10 h-10 text-red-500" />
+            <main className="min-h-screen flex items-center justify-center p-4">
+                <div className="max-w-md w-full bg-[#ffffff] border border-red-200 rounded-3xl p-8 text-center shadow-xs">
+                    <div className="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-4 border border-red-200">
+                        <XCircle className="w-8 h-8 text-red-500" />
                     </div>
                     <GoogleBadge label="Credential Revoked" variant="red" />
                     <h1 className="text-3xl font-extrabold text-[#2c2e2a] mt-4 mb-3">Certificate Deauthorized</h1>
@@ -366,7 +408,7 @@ export default function VerifyPage({
     }
 
     return (
-        <main className="min-h-screen text-[#e3e3e3] relative overflow-hidden pb-32">
+        <main className="min-h-screen text-[#0f172a] relative overflow-hidden pb-32">
             <div className="google-ambient-bg pointer-events-none" />
 
             <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 pt-12 pb-20">
@@ -377,25 +419,25 @@ export default function VerifyPage({
                     className="text-center mb-10"
                 >
                     <div className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 mb-4 shadow-lg shadow-emerald-500/5">
-                        <CheckCircle2 className="w-5 h-5 text-emerald-400" />
-                        <span className="text-emerald-300 font-semibold text-xs tracking-wide">
+                        <CheckCircle2 className="w-5 h-5 text-emerald-500" />
+                        <span className="text-emerald-700 font-semibold text-xs tracking-wide">
                             Official Google Developer Groups Credential
                         </span>
                     </div>
 
-                    <h1 className="text-3xl md:text-5xl font-black text-[#2c2e2a] tracking-tight mb-2">
+                    <h1 className="text-3xl md:text-5xl font-black text-[#0f172a] tracking-tight mb-2">
                         {certificate.recipientName}
                     </h1>
-                    <div className="flex items-center justify-center gap-2 text-xs font-mono text-[#80827f]">
+                    <div className="flex items-center justify-center gap-2 text-xs font-mono text-[#64748b]">
                         <span>Credential ID:</span>
-                        <span className="text-[#4285F4] font-bold">#{id}</span>
+                        <span className="text-[#2563EB] font-bold">#{id}</span>
                         <button
                             onClick={() => {
                                 navigator.clipboard.writeText(id);
                                 setCopied(true);
                                 setTimeout(() => setCopied(false), 2000);
                             }}
-                            className="p-1 rounded-md hover:bg-[#f5f1e4] text-[#80827f] hover:text-[#2c2e2a] transition"
+                            className="p-1 rounded-md hover:bg-slate-100 text-slate-500 hover:text-slate-900 transition"
                             title="Copy ID"
                         >
                             {copied ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
@@ -403,7 +445,7 @@ export default function VerifyPage({
                     </div>
                 </motion.div>
 
-                {/* Certificate Preview Card */}
+                {/* 1:1 Responsive Certificate Preview Card */}
                 <motion.div
                     initial={{ opacity: 0, scale: 0.98 }}
                     animate={{ opacity: 1, scale: 1 }}
@@ -413,144 +455,94 @@ export default function VerifyPage({
                     <div
                         ref={certificateRef}
                         data-cert-container="true"
-                        className="relative mx-auto rounded-2xl sm:rounded-3xl overflow-hidden shadow-xs border border-[#d5d5d4] bg-white"
+                        className="relative mx-auto rounded-2xl sm:rounded-3xl overflow-hidden shadow-lg border border-slate-200 bg-white select-none [container-type:inline-size]"
                         style={{
-                            width: "800px",
-                            maxWidth: "100%",
-                            aspectRatio: aspectRatio,
-                            containerType: "inline-size"
+                            width: "100%",
+                            maxWidth: "960px",
+                            aspectRatio: "1600 / 1131",
                         }}
                     >
                         {/* Background */}
-                        <img
-                            src={template.backgroundUrl}
-                            alt="Certificate artwork"
-                            className="absolute inset-0 w-full h-full object-cover"
-                            onLoad={(e) => {
-                                const img = e.currentTarget;
-                                if (img.naturalWidth && img.naturalHeight) {
-                                    setAspectRatio(`${img.naturalWidth} / ${img.naturalHeight}`);
-                                }
-                            }}
-                            crossOrigin="anonymous"
-                        />
+                        {template?.backgroundUrl ? (
+                            <img
+                                src={template.backgroundUrl}
+                                alt="Certificate artwork"
+                                className="absolute inset-0 w-full h-full object-cover"
+                                crossOrigin="anonymous"
+                            />
+                        ) : (
+                            <div className="absolute inset-0 w-full h-full bg-white">
+                                <div className="absolute inset-4 border-[7px] border-slate-100" />
+                                <div className="absolute inset-6 border border-slate-300" />
+                                {/* 4 Google Corner accents */}
+                                <div className="absolute top-6 left-6 w-8 h-1.5 bg-[#2563EB]" />
+                                <div className="absolute top-6 left-6 w-1.5 h-8 bg-[#2563EB]" />
+                                <div className="absolute top-6 right-6 w-8 h-1.5 bg-[#EF4444]" />
+                                <div className="absolute top-6 right-6 w-1.5 h-8 bg-[#EF4444]" />
+                                <div className="absolute bottom-6 left-6 w-8 h-1.5 bg-[#F59E0B]" />
+                                <div className="absolute bottom-6 left-6 w-1.5 h-8 bg-[#F59E0B]" />
+                                <div className="absolute bottom-6 right-6 w-8 h-1.5 bg-[#10B981]" />
+                                <div className="absolute bottom-6 right-6 w-1.5 h-8 bg-[#10B981]" />
+                                <div className="absolute top-10 left-0 right-0 text-center font-bold text-[1.2cqw] tracking-wider text-slate-500 font-sans">
+                                    GOOGLE DEVELOPER GROUPS ON CAMPUS • AMAL JYOTHI COLLEGE OF ENGINEERING
+                                </div>
+                            </div>
+                        )}
 
-                        {/* Elements */}
-                        {template.elements?.map((el: any) => {
+                        {/* 1:1 Responsive Dynamic Elements matching Studio */}
+                        {template?.elements?.map((el: any) => {
                             if (el.visible === false) return null;
-                            const is1754Coord = el.x > 100 || el.y > 100;
-                            const leftPercent = is1754Coord ? (el.x / 1754) * 100 : el.x;
-                            const topPercent = is1754Coord ? (el.y / 1240) * 100 : el.y;
-                            const baseFontSizePercent = is1754Coord
-                                ? (el.fontSize / 1754) * 100
-                                : (el.fontSize / 800) * 100;
 
-                            const transformStyle = is1754Coord
-                                ? (el.textAlign === "center" ? "translate(-50%, -50%)" : el.textAlign === "right" ? "translate(-100%, -50%)" : "translate(0, -50%)")
-                                : (el.textAlign === "center" ? "translateX(-50%)" : el.textAlign === "right" ? "translateX(-100%)" : "none");
+                            // Scale font size proportionally using container query units (cqw)
+                            // In Studio, width is 1600px. So fontSize * 1.3 relative to 1600 is:
+                            const fontSizeCqw = ((el.fontSize * 1.3) / 1600) * 100;
+                            let translateX = "-50%";
+                            if (el.textAlign === "left") translateX = "0";
+                            if (el.textAlign === "right") translateX = "-100%";
 
-                            if ((el.type === "qrcode" || el.type === "qr") && qrDataUrl) {
-                                const qrSizePercent = is1754Coord
-                                    ? ((el.qrSize || el.fontSize || 110) / 1754) * 100
-                                    : (el.fontSize / 800) * 100;
+                            if (el.type === "qrcode" && qrDataUrl) {
+                                const qrSizePercent = (el.fontSize * 1.5 / 1600) * 100;
+                                const qrHeightPercent = (el.fontSize * 1.5 / 1131) * 100;
                                 return (
                                     <div
                                         key={el.id}
-                                        className="cert-element qr-element"
                                         style={{
                                             position: "absolute",
-                                            left: `${leftPercent}%`,
-                                            top: `${topPercent}%`,
-                                            width: `${qrSizePercent}cqw`,
-                                            height: `${qrSizePercent}cqw`,
-                                            transform: is1754Coord
-                                                ? "none"
-                                                : (el.textAlign === "center" ? "translateX(-50%)" : el.textAlign === "right" ? "translateX(-100%)" : "none")
+                                            left: `${el.x}%`,
+                                            top: `${el.y}%`,
+                                            width: `${qrSizePercent}%`,
+                                            height: `${qrHeightPercent}%`,
+                                            transform: `translate(${translateX}, -50%)`,
                                         }}
                                     >
                                         <img
                                             src={qrDataUrl}
                                             alt="Verification QR"
-                                            className="w-full h-full"
-                                            style={{ display: "block" }}
+                                            className="w-full h-full object-contain"
                                         />
                                     </div>
                                 );
                             }
 
-                            if (el.type === "signatory") {
-                                const roleFontSizePercent = is1754Coord
-                                    ? ((el.signatoryRoleSize || 12) / 1754) * 100
-                                    : ((el.signatoryRoleSize || 12) / 800) * 100;
-
-                                return (
-                                    <div
-                                        key={el.id}
-                                        className="cert-element signatory-element"
-                                        style={{
-                                            position: "absolute",
-                                            left: `${leftPercent}%`,
-                                            top: `${topPercent}%`,
-                                            textAlign: el.textAlign || "center",
-                                            transform: transformStyle,
-                                            lineHeight: 1.2,
-                                            whiteSpace: "nowrap"
-                                        }}
-                                    >
-                                        <div
-                                            style={{
-                                                fontSize: `${baseFontSizePercent}cqw`,
-                                                color: el.color || "#202124",
-                                                fontWeight: el.fontWeight || "bold",
-                                                fontFamily: el.fontFamily || "'Inter', sans-serif",
-                                            }}
-                                        >
-                                            {el.signatoryName || ""}
-                                        </div>
-                                        <div
-                                            style={{
-                                                fontSize: `${roleFontSizePercent}cqw`,
-                                                color: el.signatoryRoleColor || "#80827f",
-                                                fontFamily: el.fontFamily || "'Inter', sans-serif",
-                                            }}
-                                        >
-                                            {el.signatoryRole || ""}
-                                        </div>
-                                    </div>
-                                );
-                            }
-
-                            let content = el.text || "";
-                            if (el.type === "name") content = certificate.recipientName;
-                            else if (el.type === "date") content = certificate.issueDate;
-                            else if (el.type === "certificateId") content = certificate.certificateId;
-
-                            content = content
-                                .replace(/\{\{NAME\}\}/gi, certificate.recipientName || "")
-                                .replace(/\{\{EVENT\}\}/gi, certificate.eventTitle || "")
-                                .replace(/\{\{ID\}\}/gi, certificate.certificateId || "")
-                                .replace(/\{\{DATE\}\}/gi, certificate.issueDate || "");
-
-                            const style: React.CSSProperties = {
-                                position: "absolute",
-                                left: `${leftPercent}%`,
-                                top: `${topPercent}%`,
-                                fontSize: `${baseFontSizePercent}cqw`,
-                                color: el.color,
-                                fontWeight: el.fontWeight,
-                                fontFamily: el.fontFamily || "Inter, sans-serif",
-                                textAlign: el.textAlign || "left",
-                                whiteSpace: "nowrap",
-                                lineHeight: 1.1,
-                                display: "inline-block",
-                                transform: transformStyle
-                            };
+                            const content = getElementContent(el);
+                            if (!content) return null;
 
                             return (
                                 <div
                                     key={el.id}
-                                    className="cert-element"
-                                    style={style}
+                                    style={{
+                                        position: "absolute",
+                                        left: `${el.x}%`,
+                                        top: `${el.y}%`,
+                                        fontSize: `${fontSizeCqw}cqw`,
+                                        color: el.color || "#0f172a",
+                                        fontWeight: el.fontWeight || "normal",
+                                        fontFamily: el.fontFamily || "Urbanist, sans-serif",
+                                        textAlign: el.textAlign || "center",
+                                        whiteSpace: "pre-line",
+                                        lineHeight: 1.25,
+                                        transform: `translate(${translateX}, -50%)`,
+                                    }}
                                 >
                                     {content}
                                 </div>
@@ -566,30 +558,32 @@ export default function VerifyPage({
                     transition={{ delay: 0.3 }}
                     className="max-w-2xl mx-auto space-y-6"
                 >
-                    <div className="bg-[#ffffff] border border-[#d5d5d4] rounded-3xl p-6 sm:p-8 shadow-xs">
+                    <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-sm">
                         <div className="flex items-center gap-3 mb-6">
-                            <div className="p-2 rounded-xl bg-[#2ba0ff]/10 border border-[#2ba0ff]/20 text-[#2ba0ff]">
+                            <div className="p-2 rounded-xl bg-blue-50 border border-blue-200 text-[#2563EB]">
                                 <ShieldCheck className="w-5 h-5" />
                             </div>
-                            <h3 className="text-base font-bold text-[#2c2e2a] tracking-wide">Registry Details</h3>
+                            <h3 className="text-base font-bold text-[#0f172a] tracking-wide">Registry Details</h3>
                         </div>
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-sm">
                             <div>
-                                <span className="text-[11px] font-mono text-[#80827f] uppercase tracking-wider block mb-1">Recipient Name</span>
-                                <p className="text-[#2c2e2a] font-semibold">{certificate.recipientName}</p>
+                                <span className="text-[11px] font-mono text-slate-400 uppercase tracking-wider block mb-1">Recipient Name</span>
+                                <p className="text-[#0f172a] font-semibold">{certificate.recipientName}</p>
                             </div>
                             <div>
-                                <span className="text-[11px] font-mono text-[#80827f] uppercase tracking-wider block mb-1">Associated Event</span>
-                                <p className="text-[#2c2e2a] font-semibold">{certificate.eventTitle}</p>
+                                <span className="text-[11px] font-mono text-slate-400 uppercase tracking-wider block mb-1">Associated Event</span>
+                                <p className="text-[#0f172a] font-semibold">{certificate.eventTitle}</p>
                             </div>
                             <div>
-                                <span className="text-[11px] font-mono text-[#80827f] uppercase tracking-wider block mb-1">Credential Track</span>
-                                <p className="text-[#2c2e2a] font-semibold">{certificate.templateName}</p>
+                                <span className="text-[11px] font-mono text-slate-400 uppercase tracking-wider block mb-1">Recipient Email</span>
+                                <p className="text-[#0f172a] font-semibold">{certificate.recipientEmail || "Protected"}</p>
                             </div>
                             <div>
-                                <span className="text-[11px] font-mono text-[#80827f] uppercase tracking-wider block mb-1">Issuance Date</span>
-                                <p className="text-[#2c2e2a] font-semibold">{certificate.issueDate}</p>
+                                <span className="text-[11px] font-mono text-slate-400 uppercase tracking-wider block mb-1">Issuance Date</span>
+                                <p className="text-[#0f172a] font-semibold">
+                                    {certificate.issueDate || (certificate.issuedAt?.toDate ? certificate.issuedAt.toDate().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" }) : new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" }))}
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -598,14 +592,14 @@ export default function VerifyPage({
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
                         <button
                             onClick={handleDownload}
-                            className="flex items-center justify-center gap-2 px-8 py-3.5 bg-[#4285F4] hover:bg-[#3367d6] text-white font-semibold text-sm rounded-full transition-all shadow-xs hover:scale-[1.02] cursor-pointer"
+                            className="flex items-center justify-center gap-2 px-8 py-3.5 bg-[#2563EB] hover:bg-[#1d4ed8] text-white font-semibold text-sm rounded-full transition-all shadow-md hover:scale-[1.02] cursor-pointer"
                         >
                             <Download className="w-4 h-4" />
                             Download High-Res PNG
                         </button>
                         <button
                             onClick={handleShare}
-                            className="flex items-center justify-center gap-2 px-8 py-3.5 bg-[#ffffff] hover:bg-[#f5f1e4] text-[#2c2e2a] font-semibold text-sm rounded-full transition-all border border-[#d5d5d4] hover:scale-[1.02] cursor-pointer shadow-xs"
+                            className="flex items-center justify-center gap-2 px-8 py-3.5 bg-white hover:bg-slate-50 text-[#0f172a] font-semibold text-sm rounded-full transition-all border border-slate-200 hover:scale-[1.02] cursor-pointer shadow-sm"
                         >
                             <Share2 className="w-4 h-4" />
                             Share Verification Link
@@ -622,15 +616,15 @@ export default function VerifyPage({
                         animate={{ opacity: 1, scale: 1 }}
                         className="bg-[#1e1f20] border border-zinc-800 rounded-3xl p-8 max-w-sm w-full mx-6 text-center shadow-2xl relative overflow-hidden"
                     >
-                        <div className="w-16 h-16 bg-[#4285F4]/10 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-[#4285F4]/20">
-                            <Download className="w-8 h-8 text-[#4285F4] animate-bounce" />
+                        <div className="w-16 h-16 bg-[#2563EB]/10 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-[#2563EB]/20">
+                            <Download className="w-8 h-8 text-[#2563EB] animate-bounce" />
                         </div>
                         <h3 className="text-lg font-bold text-white mb-1">Rendering Artifact</h3>
                         <p className="text-zinc-400 text-xs mb-6">{downloadStatus}</p>
 
                         <div className="w-full bg-zinc-800 h-2 rounded-full overflow-hidden mb-2">
                             <motion.div
-                                className="h-full bg-gradient-to-r from-[#4285F4] to-[#34A853]"
+                                className="h-full bg-gradient-to-r from-[#2563EB] to-[#10B981]"
                                 initial={{ width: 0 }}
                                 animate={{ width: `${downloadProgress}%` }}
                                 transition={{ duration: 0.3 }}
@@ -638,7 +632,7 @@ export default function VerifyPage({
                         </div>
                         <div className="flex justify-between items-center text-[10px] font-mono text-zinc-500 uppercase tracking-widest">
                             <span>Processing</span>
-                            <span className="text-[#4285F4] font-bold">{downloadProgress}%</span>
+                            <span className="text-[#2563EB] font-bold">{downloadProgress}%</span>
                         </div>
                     </motion.div>
                 </div>

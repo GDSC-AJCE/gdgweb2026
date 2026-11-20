@@ -1319,6 +1319,19 @@ export default function EventsManagementTab({
                           <CalendarPlus className="w-3.5 h-3.5" />
                         </a>
 
+                        {/* Issue Certificates */}
+                        <Link
+                          href={`/core/events/${event.id}?tab=certificates`}
+                          className={`p-2 rounded-xl transition ${
+                            isDark
+                              ? "bg-blue-950/40 hover:bg-blue-900/60 text-blue-400 border border-blue-900/50"
+                              : "bg-blue-50 hover:bg-blue-100 text-[#2563EB] border border-blue-200"
+                          }`}
+                          title="Issue Certificates"
+                        >
+                          <Award className="w-3.5 h-3.5" />
+                        </Link>
+
                         {/* Export .ICS */}
                         <button
                           onClick={() => downloadIcsFile(event)}

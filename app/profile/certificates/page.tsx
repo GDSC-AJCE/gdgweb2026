@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import { db } from "@/lib/firebase";
-import { collectionGroup, collection, query, where, getDocs, orderBy, doc, getDoc } from "firebase/firestore";
+import { collectionGroup, collection, query, where, getDocs, doc, getDoc } from "firebase/firestore";
 import { motion, AnimatePresence } from "framer-motion";
 import {
     ArrowLeft as ArrowLeftIcon,
@@ -21,21 +21,25 @@ interface Certificate {
     id: string;
     certificateId: string;
     eventTitle: string;
-    templateName: string;
-    backgroundUrl: string;
-    issueDate: string;
-    issuedAt: any;
+    templateName?: string;
+    backgroundUrl?: string;
+    issueDate?: string;
+    issuedAt?: any;
     eventId?: string;
     templateId?: string;
 }
 
 export default function MyCertificatesPage() {
-    const { user } = useAuth();
+    const { user, loading: authLoading } = useAuth();
     const router = useRouter();
-    const [loading, setLoading] = useState(true);
+    const [fetching, setFetching] = useState(true);
     const [certificates, setCertificates] = useState<Certificate[]>([]);
 
     useEffect(() => {
+        // Wait until Firebase Auth has initialized
+        if (authLoading) return;
+
+        // If auth resolved and there's no user, redirect to home
         if (!user) {
             router.push("/");
             return;
@@ -43,9 +47,11 @@ export default function MyCertificatesPage() {
 
         const fetchCertificates = async () => {
             try {
-                // Fetch user's certificates from issuedCertificates collectionGroup by userId
+                setFetching(true);
                 const certsMap = new Map<string, any>();
+                const userEmail = user.email?.toLowerCase().trim();
 
+                // 1. Fetch user's certificates from issuedCertificates collectionGroup by userId
                 try {
                     const qUser = query(
                         collectionGroup(db, "issuedCertificates"),
@@ -60,12 +66,13 @@ export default function MyCertificatesPage() {
                     console.log("Query by userId:", err);
                 }
 
-                // Also fetch by recipientEmail (handles registrations before account creation or manual UID)
-                if (user.email) {
+                // 2. Also fetch by recipientEmail (handles case-insensitive match & unlinked UID)
+                if (userEmail) {
+                    // Try lowercase
                     try {
                         const qEmail = query(
                             collectionGroup(db, "issuedCertificates"),
-                            where("recipientEmail", "==", user.email.toLowerCase())
+                            where("recipientEmail", "==", userEmail)
                         );
                         const snapEmail = await getDocs(qEmail);
                         snapEmail.docs.forEach((d) => {
@@ -73,11 +80,45 @@ export default function MyCertificatesPage() {
                             certsMap.set(data.certificateId || d.id, { id: d.id, ...data });
                         });
                     } catch (err) {
-                        console.log("Query by email:", err);
+                        console.log("Query by lowercase email:", err);
+                    }
+
+                    // Also try exact user.email if casing was preserved
+                    if (user.email && user.email !== userEmail) {
+                        try {
+                            const qExact = query(
+                                collectionGroup(db, "issuedCertificates"),
+                                where("recipientEmail", "==", user.email)
+                            );
+                            const snapExact = await getDocs(qExact);
+                            snapExact.docs.forEach((d) => {
+                                const data = d.data();
+                                certsMap.set(data.certificateId || d.id, { id: d.id, ...data });
+                            });
+                        } catch (err) {
+                            console.log("Query by exact email:", err);
+                        }
                     }
                 }
 
-                // Also fetch from user document's subcollection directly
+                // 3. Also fetch from root certificates collection by recipientEmail
+                if (userEmail) {
+                    try {
+                        const qRoot = query(
+                            collection(db, "certificates"),
+                            where("recipientEmail", "==", userEmail)
+                        );
+                        const snapRoot = await getDocs(qRoot);
+                        snapRoot.docs.forEach((d) => {
+                            const data = d.data();
+                            certsMap.set(data.certificateId || d.id, { id: d.id, ...data });
+                        });
+                    } catch (err) {
+                        console.log("Query root certificates by email:", err);
+                    }
+                }
+
+                // 4. Also fetch from user document's direct subcollection
                 try {
                     const snapDirect = await getDocs(collection(db, "users", user.uid, "certificates"));
                     snapDirect.docs.forEach((d) => {
@@ -89,14 +130,31 @@ export default function MyCertificatesPage() {
                 }
 
                 const basicCerts = Array.from(certsMap.values()).sort((a, b) => {
-                    const aTime = a.issuedAt?.seconds || 0;
-                    const bTime = b.issuedAt?.seconds || 0;
+                    const aTime = a.issuedAt?.seconds || (a.issuedAt?.toDate ? a.issuedAt.toDate().getTime() : 0);
+                    const bTime = b.issuedAt?.seconds || (b.issuedAt?.toDate ? b.issuedAt.toDate().getTime() : 0);
                     return bTime - aTime;
                 });
 
                 // Fetch template background URL for each certificate if needed
                 const fullCerts = await Promise.all(basicCerts.map(async (cert: any) => {
-                    if (cert.backgroundUrl) return cert as Certificate;
+                    let formattedDate = cert.issueDate;
+                    if (!formattedDate && cert.issuedAt) {
+                        try {
+                            formattedDate = cert.issuedAt.toDate
+                                ? cert.issuedAt.toDate().toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })
+                                : new Date().toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
+                        } catch {
+                            formattedDate = "Verified";
+                        }
+                    }
+
+                    if (cert.backgroundUrl) {
+                        return {
+                            ...cert,
+                            issueDate: formattedDate,
+                            templateName: cert.templateName || "Official Participation Credential",
+                        } as Certificate;
+                    }
 
                     if (cert.eventId && cert.templateId) {
                         try {
@@ -107,7 +165,9 @@ export default function MyCertificatesPage() {
                                 const templateData = templateDoc.data();
                                 return {
                                     ...cert,
-                                    backgroundUrl: templateData.backgroundUrl
+                                    issueDate: formattedDate,
+                                    templateName: cert.templateName || "Official Participation Credential",
+                                    backgroundUrl: templateData.backgroundUrl || ""
                                 } as Certificate;
                             }
                         } catch (e) {
@@ -117,6 +177,8 @@ export default function MyCertificatesPage() {
 
                     return {
                         ...cert,
+                        issueDate: formattedDate,
+                        templateName: cert.templateName || "Official Participation Credential",
                         backgroundUrl: ""
                     } as Certificate;
                 }));
@@ -125,37 +187,43 @@ export default function MyCertificatesPage() {
             } catch (error) {
                 console.error("Error fetching certificates:", error);
             } finally {
-                setLoading(false);
+                setFetching(false);
             }
         };
 
         fetchCertificates();
-    }, [user, router]);
+    }, [user, authLoading, router]);
 
-    if (loading) return <LoadingSpinner text="Retrieving verified credentials..." />;
+    if (authLoading || fetching) {
+        return (
+            <main className="min-h-screen flex items-center justify-center">
+                <LoadingSpinner text="Retrieving verified credentials..." />
+            </main>
+        );
+    }
 
     return (
-        <main className="min-h-screen text-[#2c2e2a] relative overflow-hidden pb-32 select-none">
+        <main className="min-h-screen text-[#0f172a] relative overflow-hidden pb-32 select-none">
             <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 pt-12 pb-20">
                 {/* Header */}
                 <div className="mb-10">
                     <Link
                         href="/profile"
-                        className="inline-flex items-center text-xs font-mono text-[#80827f] hover:text-[#2c2e2a] mb-6 transition-colors group"
+                        className="inline-flex items-center text-xs font-mono text-slate-500 hover:text-slate-900 mb-6 transition-colors group"
                     >
                         <ArrowLeftIcon className="w-3.5 h-3.5 mr-2 group-hover:-translate-x-1 transition-transform" />
                         Back to Profile
                     </Link>
 
                     <div className="flex items-center gap-3 mb-2">
-                        <div className="p-2 rounded-xl bg-[#2ba0ff]/10 border border-[#2ba0ff]/20 text-[#2ba0ff]">
+                        <div className="p-2 rounded-xl bg-blue-50 border border-blue-200 text-[#2563EB]">
                             <Sparkles className="w-5 h-5" />
                         </div>
-                        <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-[#2c2e2a]">
+                        <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-[#0f172a]">
                             My Credentials & Certificates
                         </h1>
                     </div>
-                    <p className="text-[#80827f] text-sm max-w-2xl">
+                    <p className="text-slate-500 text-sm max-w-2xl">
                         Official, verifiable certifications and participation credentials awarded to you by Google Developer Groups.
                     </p>
                 </div>
@@ -165,18 +233,18 @@ export default function MyCertificatesPage() {
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="text-center py-20 bg-[#ffffff] rounded-3xl border border-[#d5d5d4] shadow-xs"
+                        className="text-center py-20 bg-white rounded-3xl border border-slate-200 shadow-sm"
                     >
-                        <div className="w-16 h-16 rounded-2xl bg-[#f5f1e4] flex items-center justify-center mx-auto mb-4 border border-[#d5d5d4]">
-                            <DocumentTextIcon className="w-8 h-8 text-[#80827f]" />
+                        <div className="w-16 h-16 rounded-2xl bg-slate-50 flex items-center justify-center mx-auto mb-4 border border-slate-200">
+                            <DocumentTextIcon className="w-8 h-8 text-slate-400" />
                         </div>
-                        <h3 className="text-xl font-medium text-[#2c2e2a] mb-2">No Certificates Issued Yet</h3>
-                        <p className="text-[#80827f] max-w-md mx-auto text-sm mb-8">
+                        <h3 className="text-xl font-bold text-[#0f172a] mb-2">No Certificates Issued Yet</h3>
+                        <p className="text-slate-500 max-w-md mx-auto text-sm mb-8">
                             You haven't been issued any certificates yet. Complete workshops, hackathons, and technical sessions to earn verifiable credentials!
                         </p>
                         <Link
                             href="/programs"
-                            className="inline-flex items-center gap-2 px-6 py-3 bg-[#ff705d] hover:bg-[#ee6350] text-white font-medium text-sm rounded-[50px] transition-all shadow-xs cursor-pointer"
+                            className="inline-flex items-center gap-2 px-6 py-3 bg-[#2563EB] hover:bg-[#1d4ed8] text-white font-medium text-sm rounded-full transition-all shadow-md cursor-pointer"
                         >
                             Explore Upcoming Events
                         </Link>
@@ -194,31 +262,31 @@ export default function MyCertificatesPage() {
                                     <Link
                                         href={`/verify/${cert.certificateId}`}
                                         target="_blank"
-                                        className="group relative bg-[#ffffff] border border-[#d5d5d4] rounded-3xl overflow-hidden hover:border-[#2c2e2a]/40 transition-all duration-300 block p-6 h-full flex flex-col shadow-xs hover:-translate-y-1"
+                                        className="group relative bg-white border border-slate-200 rounded-3xl overflow-hidden hover:border-[#2563EB]/50 transition-all duration-300 block p-6 h-full flex flex-col shadow-sm hover:shadow-md hover:-translate-y-1"
                                     >
                                         <div className="flex justify-between items-start mb-4">
-                                            <div className="p-3 rounded-2xl bg-[#2ba0ff]/10 text-[#2ba0ff] border border-[#2ba0ff]/20 group-hover:scale-105 transition-all">
+                                            <div className="p-3 rounded-2xl bg-blue-50 text-[#2563EB] border border-blue-200 group-hover:scale-105 transition-all">
                                                 <DocumentTextIcon className="w-6 h-6" />
                                             </div>
-                                            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#8ed462]/15 border border-[#8ed462]/30 text-[#2c2e2a] text-[10px] font-mono font-semibold">
-                                                <CheckCircle2 className="w-3 h-3 text-[#34A853]" />
+                                            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 text-[10px] font-mono font-semibold">
+                                                <CheckCircle2 className="w-3 h-3 text-emerald-500" />
                                                 Verified
                                             </div>
                                         </div>
 
-                                        <h4 className="font-semibold text-[#2c2e2a] text-lg mb-1 line-clamp-2 group-hover:text-[#ff705d] transition-colors">
+                                        <h4 className="font-bold text-[#0f172a] text-lg mb-1 line-clamp-2 group-hover:text-[#2563EB] transition-colors">
                                             {cert.eventTitle}
                                         </h4>
-                                        <p className="text-xs text-[#80827f] mb-6 flex-1">
+                                        <p className="text-xs text-slate-500 mb-6 flex-1">
                                             {cert.templateName}
                                         </p>
 
-                                        <div className="flex items-center justify-between text-xs text-[#80827f] border-t border-[#f5f1e4] pt-4 mt-auto">
+                                        <div className="flex items-center justify-between text-xs text-slate-500 border-t border-slate-100 pt-4 mt-auto">
                                             <div className="flex items-center gap-1.5 font-mono text-[11px]">
-                                                <CalendarDaysIcon className="w-3.5 h-3.5 text-[#80827f]" />
-                                                {cert.issueDate}
+                                                <CalendarDaysIcon className="w-3.5 h-3.5 text-slate-400" />
+                                                {cert.issueDate || "Issued"}
                                             </div>
-                                            <div className="flex items-center gap-1 font-mono text-[11px] text-[#2ba0ff] group-hover:translate-x-0.5 transition-transform">
+                                            <div className="flex items-center gap-1 font-mono text-[11px] text-[#2563EB] group-hover:translate-x-0.5 transition-transform font-bold">
                                                 <span>#{cert.certificateId}</span>
                                                 <ArrowTopRightOnSquareIcon className="w-3 h-3" />
                                             </div>

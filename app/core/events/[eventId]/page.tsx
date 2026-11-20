@@ -50,7 +50,7 @@ import CertificateTemplateCard from "@/components/certificates/CertificateTempla
 import ParticipantsList from "@/components/certificates/ParticipantsList";
 import IssueCertificateModal from "@/components/certificates/IssueCertificateModal";
 import IssuedCertificatesManager from "@/components/certificates/IssuedCertificatesManager";
-import CertificateGenerator from "@/components/certificates/CertificateGenerator";
+import CertificateStudio from "@/components/certificates/CertificateStudio";
 import EventMailTab from "@/components/certificates/EventMailTab";
 import CustomFormBuilder, { FormField, TeamConfig } from "@/components/CustomFormBuilder";
 
@@ -433,108 +433,57 @@ export default function EventDashboardPage({
     if (!event) return null;
 
     return (
-        <main className="min-h-screen text-[#e3e3e3] relative selection:bg-[#4285F4]/30 pb-32">
-            <div className="google-ambient-bg pointer-events-none" />
+        <main className="min-h-screen bg-[#f8fafc] text-[#0f172a] relative selection:bg-[#2563EB]/20 pb-32">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-8 pb-24 relative z-10">
+                {/* Minimalist Top Header & Event Identity */}
+                <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-5 rounded-2xl bg-white border border-slate-200 shadow-xs">
+                    <div className="flex items-center gap-4">
+                        <Link
+                            href="/admin"
+                            className="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition"
+                            title="Back to Admin Dashboard"
+                        >
+                            <ArrowLeftIcon className="w-4 h-4" />
+                        </Link>
 
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-12 pb-24 relative z-10">
-                {/* Breadcrumb Navigation */}
-                <div className="mb-8 flex items-center justify-between">
-                    <Link
-                        href="/core"
-                        className="inline-flex items-center gap-2 text-xs font-mono text-zinc-400 hover:text-white transition group"
-                    >
-                        <ArrowLeftIcon className="w-3.5 h-3.5 group-hover:-translate-x-1 transition-transform" />
-                        Back to GDG Deck
-                    </Link>
-
-                    <div className="flex items-center gap-2">
-                        <span className={`px-3 py-1 rounded-full text-[10px] font-mono font-bold uppercase tracking-wider ${event.isHidden ? "bg-red-500/10 text-red-400 border border-red-500/20" : "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"}`}>
-                            {event.isHidden ? "Private Draft" : "Live Event"}
-                        </span>
-                    </div>
-                </div>
-
-                {/* Event Hero Details */}
-                <div className="relative overflow-hidden mb-10 flex flex-col md:flex-row gap-8 items-start md:items-center p-6 sm:p-8 rounded-3xl bg-[#1e1f20]/50 backdrop-blur-md border border-zinc-800">
-                    <div className="w-full md:w-44 aspect-[3/4] shrink-0 rounded-2xl overflow-hidden border border-zinc-700 bg-black/40 relative">
-                        {posterPreview ? (
-                            <img src={posterPreview} className="w-full h-full object-cover" alt="Event Artwork" />
-                        ) : (
-                            <div className="w-full h-full flex items-center justify-center text-zinc-600">
-                                <PhotoIcon className="w-10 h-10" />
+                        <div>
+                            <div className="flex items-center gap-2 mb-0.5">
+                                <h1 className="text-xl sm:text-2xl font-black text-[#0f172a] tracking-tight">
+                                    {event.title}
+                                </h1>
+                                <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase tracking-wider ${
+                                    event.isHidden
+                                        ? "bg-rose-50 text-rose-600 border border-rose-200"
+                                        : "bg-emerald-50 text-emerald-600 border border-emerald-200"
+                                }`}>
+                                    {event.isHidden ? "Draft" : "Live Event"}
+                                </span>
                             </div>
-                        )}
+
+                            <div className="flex items-center gap-3 text-xs text-slate-500 font-medium">
+                                <span>{event.category || "Workshop"}</span>
+                                <span>•</span>
+                                <span>{event.date || "Date Open"}</span>
+                                <span>•</span>
+                                <span>{participants.length} Attendees</span>
+                                <span>•</span>
+                                <span className="font-semibold text-emerald-600">
+                                    {event.isPaid ? `₹${event.paymentAmount}` : "Free Event"}
+                                </span>
+                            </div>
+                        </div>
                     </div>
 
-                    <div className="flex-1">
-                        <div className="flex flex-wrap gap-2 mb-3">
-                            <span className="px-3 py-1 rounded-full bg-zinc-800 border border-zinc-700 text-[#4285F4] text-[10px] font-mono font-bold uppercase tracking-wider">
-                                {event.category || "Workshop"}
-                            </span>
-                            <span className="px-3 py-1 rounded-full bg-zinc-800 border border-zinc-700 text-zinc-300 text-[10px] font-mono font-bold uppercase tracking-wider">
-                                {event.date || "Date Open"}
-                            </span>
-                        </div>
-                        <h1 className="text-3xl md:text-5xl font-black text-white tracking-tight mb-2">
-                            {event.title}
-                        </h1>
-                        <p className="text-zinc-400 text-sm leading-relaxed max-w-2xl">
-                            {event.tagline || "Organize attendees, check payment verification, and generate automated certificates."}
-                        </p>
-                    </div>
-                </div>
-
-                {/* KPI Metrics */}
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
-                    <div className="p-5 rounded-3xl bg-[#1e1f20]/50 border border-zinc-800 flex items-center gap-4">
-                        <div className="w-12 h-12 rounded-2xl bg-blue-500/10 text-blue-400 border border-blue-500/20 flex items-center justify-center shrink-0">
-                            <UsersIcon className="w-6 h-6" />
-                        </div>
-                        <div>
-                            <p className="text-2xl font-black text-white">{participants.length}</p>
-                            <span className="text-[10px] font-mono text-zinc-500 uppercase">Attendees</span>
-                        </div>
-                    </div>
-                    <div className="p-5 rounded-3xl bg-[#1e1f20]/50 border border-zinc-800 flex items-center gap-4">
-                        <div className="w-12 h-12 rounded-2xl bg-purple-500/10 text-purple-400 border border-purple-500/20 flex items-center justify-center shrink-0">
-                            <DocumentTextIcon className="w-6 h-6" />
-                        </div>
-                        <div>
-                            <p className="text-2xl font-black text-white">{templates.length}</p>
-                            <span className="text-[10px] font-mono text-zinc-500 uppercase">Cert Templates</span>
-                        </div>
-                    </div>
-                    <div className="p-5 rounded-3xl bg-[#1e1f20]/50 border border-zinc-800 flex items-center gap-4">
-                        <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center shrink-0">
-                            <CheckCircleIcon className="w-6 h-6" />
-                        </div>
-                        <div>
-                            <p className="text-2xl font-black text-white">{event.isPaid ? `₹${event.paymentAmount}` : "Free"}</p>
-                            <span className="text-[10px] font-mono text-zinc-500 uppercase">Ticket Fee</span>
-                        </div>
-                    </div>
-                    <div className="p-5 rounded-3xl bg-[#1e1f20]/50 border border-zinc-800 flex items-center gap-4">
-                        <div className="w-12 h-12 rounded-2xl bg-amber-500/10 text-amber-400 border border-amber-500/20 flex items-center justify-center shrink-0">
-                            <TrophyIcon className="w-6 h-6" />
-                        </div>
-                        <div>
-                            <p className="text-2xl font-black text-white capitalize">{event.participationType || 'Solo'}</p>
-                            <span className="text-[10px] font-mono text-zinc-500 uppercase">Participation</span>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Sub-Deck Tabs */}
-                <div className="mb-10 flex justify-center">
-                    <div className="inline-flex gap-1 p-1 bg-[#18191b] border border-zinc-800 rounded-full shadow-lg overflow-x-auto max-w-full">
+                    {/* Sub-Deck Nav Tabs */}
+                    <div className="inline-flex gap-1 p-1 bg-slate-100 border border-slate-200 rounded-full shadow-inner overflow-x-auto">
                         {tabs.map((tab) => (
                             <button
                                 key={tab.id}
                                 onClick={() => setActiveTab(tab.id as Tab)}
-                                className={`flex items-center gap-2 px-5 py-2.5 rounded-full font-semibold text-xs tracking-wide transition ${
+                                className={`flex items-center gap-1.5 px-4 py-2 rounded-full font-semibold text-xs transition cursor-pointer ${
                                     activeTab === tab.id
-                                        ? "bg-[#4285F4] text-white shadow-md shadow-[#4285F4]/20"
-                                        : "text-zinc-400 hover:text-white"
+                                        ? "bg-[#0f172a] text-white shadow-xs"
+                                        : "text-slate-600 hover:text-slate-900 hover:bg-white/60"
                                 }`}
                             >
                                 <tab.icon className="w-3.5 h-3.5" />
@@ -888,10 +837,10 @@ export default function EventDashboardPage({
                             initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -10 }}
-                            className="space-y-8"
+                            className="space-y-6"
                         >
-                            {/* Primary Certificate Studio & Instant Issuance */}
-                            <CertificateGenerator
+                            {/* Modern Interactive Drag-and-Drop Certificate Studio */}
+                            <CertificateStudio
                                 eventId={eventId}
                                 eventTitle={event.title}
                                 eventDate={event.date}
@@ -899,53 +848,6 @@ export default function EventDashboardPage({
                                 onCertificatesUpdated={fetchTemplates}
                                 isWriter={isWriter}
                             />
-
-                            {/* Secondary Advanced Layout Designer & Issued Registry */}
-                            <div className="pt-8 border-t border-zinc-800 space-y-6">
-                                <div className="flex justify-between items-center">
-                                    <div>
-                                        <h3 className="text-base font-bold text-white">Advanced Layout Designer</h3>
-                                        <p className="text-xs text-zinc-400">Design custom drag-and-drop templates or inspect issued credentials log.</p>
-                                    </div>
-                                    {isWriter && (
-                                        <div className="flex gap-2">
-                                            <button
-                                                onClick={() => {
-                                                    setEditingTemplate(null);
-                                                    setShowBuilder(true);
-                                                }}
-                                                className="flex items-center gap-2 px-4 py-2 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 font-semibold text-xs rounded-full transition border border-zinc-700"
-                                            >
-                                                <PlusIcon className="w-3.5 h-3.5" />
-                                                Create Layout
-                                            </button>
-                                            <button
-                                                onClick={() => setShowIssuedManager(true)}
-                                                className="px-4 py-2 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 font-semibold text-xs rounded-full transition border border-zinc-700"
-                                            >
-                                                Issued Registry
-                                            </button>
-                                        </div>
-                                    )}
-                                </div>
-
-                                {templates.length > 0 && (
-                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                        {templates.map((template) => (
-                                            <CertificateTemplateCard
-                                                key={template.id}
-                                                template={template}
-                                                onEdit={() => {
-                                                    setEditingTemplate(template);
-                                                    setShowBuilder(true);
-                                                }}
-                                                onDelete={() => handleTemplateDelete(template.id)}
-                                                onIssue={() => setIssuingTemplate(template)}
-                                            />
-                                        ))}
-                                    </div>
-                                )}
-                            </div>
                         </motion.div>
                     )}
                 </AnimatePresence>

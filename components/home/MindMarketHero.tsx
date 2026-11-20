@@ -422,14 +422,6 @@ export default function MindMarketHero() {
 
       <div className="max-w-[1200px] mx-auto text-center flex flex-col items-center relative">
 
-        {/* CHAPTER IDENTITY PILL CHIP */}
-        <div className="inline-flex flex-wrap items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 rounded-[50px] bg-white border border-slate-200 text-[11px] sm:text-[13px] font-semibold text-[#0f172a] mb-6 sm:mb-8 md:mb-10 shadow-sm max-w-[320px] sm:max-w-none text-center">
-          <span className="w-2 h-2 rounded-full bg-[#10B981] shrink-0 animate-pulse" />
-          <span>Google Developer Groups on Campus</span>
-          <span className="text-slate-400 hidden sm:inline">•</span>
-          <span className="text-slate-600 hidden sm:inline">Amal Jyothi College of Engineering</span>
-        </div>
-
         {/* HERO DISPLAY: GDG AJCE IN TWO LINES OF ULTRA-BOLD TYPOGRAPHY WITH RIGHT-CORNER MASCOT */}
         <div className="relative w-full max-w-4xl mx-auto my-3 sm:my-5 flex flex-col items-center justify-center">
           {/* Giant Ultra Bold 2-Line Headline */}

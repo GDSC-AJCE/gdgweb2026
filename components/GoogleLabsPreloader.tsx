@@ -153,7 +153,7 @@ export default function GoogleLabsPreloader() {
             </div>
           </motion.div>
 
-          {/* Brand Title & Single-Piece Solid Rounded Spinner */}
+          {/* Brand Title */}
           <motion.div
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
@@ -167,36 +167,9 @@ export default function GoogleLabsPreloader() {
               </h1>
             </div>
 
-            <p className="text-[11px] sm:text-sm font-medium text-slate-500 dark:text-slate-400 tracking-wide mb-5 sm:mb-6">
+            <p className="text-[11px] sm:text-sm font-medium text-slate-500 dark:text-slate-400 tracking-wide">
               Google Developer Groups • Amal Jyothi College of Engineering
             </p>
-
-            {/* Single Piece Thick Solid Rounded Spinner (Black in light mode, White in dark mode) */}
-            <div className="relative flex items-center justify-center">
-              <svg
-                className="size-9 sm:size-11 animate-spin text-[#0f172a] dark:text-white"
-                viewBox="0 0 48 48"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                {/* Subtle Track Ring */}
-                <circle
-                  cx="24"
-                  cy="24"
-                  r="19"
-                  stroke="currentColor"
-                  strokeWidth="5"
-                  className="opacity-15 dark:opacity-20"
-                />
-                {/* Single Seamless Thick Arc with Rounded Caps */}
-                <path
-                  d="M 24 5 A 19 19 0 0 1 43 24"
-                  stroke="currentColor"
-                  strokeWidth="5"
-                  strokeLinecap="round"
-                />
-              </svg>
-            </div>
           </motion.div>
         </div>
       </motion.div>
