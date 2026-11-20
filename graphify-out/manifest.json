@@ -125,8 +125,8 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\app\\api\\mail-sender\\figma\\import\\route.ts": {
-    "mtime": 1795174771.4591565,
-    "ast_hash": "c8bbb45ffd53276ab847cfa33e985848",
+    "mtime": 1795175163.568713,
+    "ast_hash": "bc41f09c1ed4b3506160c9a93c386e56",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\app\\api\\mail-sender\\gateway\\test\\route.ts": {
@@ -165,7 +165,7 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\app\\api\\mail-sender\\templates\\[name]\\route.ts": {
-    "mtime": 1795174808.300807,
+    "mtime": 1795175163.5692434,
     "ast_hash": "7d320c105b48addd134903cd80689e15",
     "semantic_hash": ""
   },
@@ -205,8 +205,8 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\app\\core\\events\\[eventId]\\page.tsx": {
-    "mtime": 1794592407.3020227,
-    "ast_hash": "a012884211c40f177ebdbeb3d43918b3",
+    "mtime": 1795175163.5703104,
+    "ast_hash": "00c18969819d32b83720e50151967cd6",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\app\\design-system\\page.tsx": {
@@ -240,8 +240,8 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\app\\profile\\certificates\\page.tsx": {
-    "mtime": 1794592602.0375087,
-    "ast_hash": "a35426ab28759d6bb10f8f26aedc7565",
+    "mtime": 1795175163.5708458,
+    "ast_hash": "143c6e6575569dc33274e021553aec7e",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\app\\programs\\page.tsx": {
@@ -290,8 +290,8 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\app\\verify\\[id]\\page.tsx": {
-    "mtime": 1795160539.1849763,
-    "ast_hash": "63bb0c73ee9a6e5ef6001ec750c21345",
+    "mtime": 1795175163.5713744,
+    "ast_hash": "24e07c002f32b0ee00f6e44e4dbb9326",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\assets\\gallery\\gallery-manifest.json": {
@@ -370,8 +370,8 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\GoogleLabsPreloader.tsx": {
-    "mtime": 1795160539.1863375,
-    "ast_hash": "592faa9f07ece26081b4da08019d7a61",
+    "mtime": 1795175163.5738368,
+    "ast_hash": "5a0f6810be78e35336b64baaa229eef4",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\LoadingSpinner.tsx": {
@@ -455,8 +455,8 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\admin\\tabs\\AnalyticsTab.tsx": {
-    "mtime": 1795170572.962798,
-    "ast_hash": "79d2f95c0ce331f0f006befeaa821c58",
+    "mtime": 1795175163.574887,
+    "ast_hash": "5b72c484edacec146f0d50c458f6ae17",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\admin\\tabs\\ApplicationsTab.tsx": {
@@ -470,8 +470,8 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\admin\\tabs\\EventsManagementTab.tsx": {
-    "mtime": 1795160539.1923478,
-    "ast_hash": "6dcc14be3782e9a36e994ae20118d6f4",
+    "mtime": 1795175163.575946,
+    "ast_hash": "b36e496aa93613b12ce5e76cb91d9c03",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\admin\\tabs\\ExecomManagementTab.tsx": {
@@ -490,12 +490,12 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\admin\\tabs\\MailStudioTab.tsx": {
-    "mtime": 1795174941.84412,
+    "mtime": 1795175163.5769584,
     "ast_hash": "73b184e257d739259aa898aef0983749",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\admin\\tabs\\OverviewTab.tsx": {
-    "mtime": 1795170385.6090696,
+    "mtime": 1795175163.5783737,
     "ast_hash": "ef1ee98ed0f1730d1d5d4086bfa7f220",
     "semantic_hash": ""
   },
@@ -645,8 +645,8 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\home\\MindMarketHero.tsx": {
-    "mtime": 1795160539.218428,
-    "ast_hash": "7bb12e3164a476ce953d4f49334af07f",
+    "mtime": 1795175163.5793886,
+    "ast_hash": "840fd8226e3a2df4c4f2bebc619ddd5d",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\home\\MindMarketTracks.tsx": {
@@ -935,8 +935,8 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\lib\\mailer.ts": {
-    "mtime": 1795174755.437839,
-    "ast_hash": "76a5de46e7bdf40909a515a94b9d89d4",
+    "mtime": 1795175163.5949094,
+    "ast_hash": "15e381786b25389f341ab3592492f9ea",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\lib\\resend.ts": {
@@ -2282,6 +2282,11 @@
   "D:\\DEV\\GDG\\newwebsite\\templates\\new-execom-2026-27.html": {
     "mtime": 1795175054.7190013,
     "ast_hash": "bbee0e34f6ffe3ab8e09c0cf17d0d687",
+    "semantic_hash": ""
+  },
+  "D:\\DEV\\GDG\\newwebsite\\components\\certificates\\CertificateStudio.tsx": {
+    "mtime": 1795175163.5783737,
+    "ast_hash": "439761a96b3a346bab9642a133c825d4",
     "semantic_hash": ""
   }
 }
