@@ -41,6 +41,8 @@ import {
   Sliders as SlidersIcon,
 } from "lucide-react";
 import { GeneratedEmailResult, GDG_COLORS } from "@/lib/gemini";
+import { toast } from "sonner";
+import { Button } from "@/components/ui";
 
 // Supported Personalization Merge Tags for 1-click & drag-and-drop insertion
 const MERGE_TAGS = [
@@ -115,6 +117,7 @@ interface GeminiMailStudioProps {
   onOpenInUnlayer: (design: any, html: string) => void;
   onSendTestEmail: (subject: string, html: string) => void;
   existingTemplates: { id: string; name: string }[];
+  activeTemplate?: string;
 }
 
 export default function GeminiMailStudio({
@@ -123,6 +126,7 @@ export default function GeminiMailStudio({
   onOpenInUnlayer,
   onSendTestEmail,
   existingTemplates,
+  activeTemplate,
 }: GeminiMailStudioProps) {
   // Prompt & Generation Controls
   const [prompt, setPrompt] = useState(
@@ -528,10 +532,41 @@ export default function GeminiMailStudio({
     setGeneratingSubjects(false);
   };
 
-  // 5. Save as New Template
+  const [savingDirect, setSavingDirect] = useState(false);
+
+  // 5a. Direct Save to Active Template
+  const handleDirectSave = async () => {
+    if (!generatedData) return;
+    const targetTemplateId =
+      activeTemplate || (existingTemplates.length > 0 ? existingTemplates[0].id : null);
+
+    if (!targetTemplateId) {
+      setSaveTemplateName(
+        generatedData.headline
+          ? generatedData.headline.toLowerCase().replace(/[^a-z0-9]/g, "-")
+          : "gemini-email"
+      );
+      setSaveModalOpen(true);
+      return;
+    }
+
+    setSavingDirect(true);
+    try {
+      await onSaveAsTemplate(targetTemplateId, generatedData.fullHtml, generatedData.unlayerDesign);
+      const targetMeta = existingTemplates.find((t) => t.id === targetTemplateId);
+      const display = targetMeta?.name || targetTemplateId;
+      toast.success(`Template '${display}' updated and saved successfully!`);
+    } catch (err: any) {
+      toast.error("Error saving template: " + err.message);
+    } finally {
+      setSavingDirect(false);
+    }
+  };
+
+  // 5b. Save as New Template
   const handleConfirmSaveTemplate = async () => {
     if (!saveTemplateName.trim()) {
-      alert("Please enter a template name.");
+      toast.error("Please enter a template name.");
       return;
     }
     if (!generatedData) return;
@@ -542,9 +577,9 @@ export default function GeminiMailStudio({
       await onSaveAsTemplate(cleanName, generatedData.fullHtml, generatedData.unlayerDesign);
       setSaveModalOpen(false);
       setSaveTemplateName("");
-      alert(`Template '${cleanName}' saved successfully and available in Dispatch Hub!`);
+      toast.success(`Template '${cleanName}' saved successfully and available in Dispatch Hub!`);
     } catch (err: any) {
-      alert("Error saving template: " + err.message);
+      toast.error("Error saving template: " + err.message);
     } finally {
       setSavingTemplate(false);
     }
@@ -1520,8 +1555,29 @@ export default function GeminiMailStudio({
 
               {/* ================= ACTIONS TOOLBAR ================= */}
               <div className="pt-3 border-t border-slate-100 flex flex-wrap items-center justify-between gap-2">
-                <div className="flex items-center space-x-2">
-                  <button
+                <div className="flex flex-wrap items-center gap-2">
+                  {/* Direct Save Button */}
+                  <Button
+                    type="button"
+                    size="sm"
+                    onClick={handleDirectSave}
+                    disabled={savingDirect}
+                    className="h-8 px-3 text-xs font-semibold rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs gap-1.5 transition-all cursor-pointer disabled:opacity-50"
+                    title={activeTemplate ? `Save changes to active template: ${activeTemplate}` : "Save template"}
+                  >
+                    {savingDirect ? (
+                      <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                    ) : (
+                      <Save className="w-3.5 h-3.5 text-white" />
+                    )}
+                    <span>Save</span>
+                  </Button>
+
+                  {/* Save as New Template */}
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
                     onClick={() => {
                       setSaveTemplateName(
                         generatedData.headline
@@ -1530,42 +1586,50 @@ export default function GeminiMailStudio({
                       );
                       setSaveModalOpen(true);
                     }}
-                    className="px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-900 text-white hover:bg-slate-800 transition flex items-center shadow-xs"
+                    className="h-8 px-3 text-xs font-semibold rounded-lg bg-slate-900 hover:bg-slate-800 text-white border-0 shadow-xs gap-1.5 cursor-pointer"
                   >
-                    <Save className="w-3.5 h-3.5 mr-1.5 text-emerald-400" />
-                    Save as Template
-                  </button>
+                    <Save className="w-3.5 h-3.5 text-emerald-400" />
+                    <span>Save as Template</span>
+                  </Button>
 
-                  <button
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
                     onClick={() =>
                       onOpenInUnlayer(generatedData.unlayerDesign, generatedData.fullHtml)
                     }
-                    className="px-3 py-1.5 text-xs font-semibold rounded-lg border border-indigo-200 bg-indigo-50 text-indigo-700 hover:bg-indigo-100 transition flex items-center shadow-xs"
+                    className="h-8 px-3 text-xs font-semibold rounded-lg border-indigo-200 bg-indigo-50 text-indigo-700 hover:bg-indigo-100 shadow-xs gap-1.5 cursor-pointer"
                   >
-                    <Layout className="w-3.5 h-3.5 mr-1.5 text-indigo-600" />
-                    Open in Visual Editor
-                  </button>
+                    <Layout className="w-3.5 h-3.5 text-indigo-600" />
+                    <span>Open in Visual Editor</span>
+                  </Button>
 
-                  <button
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
                     onClick={() =>
                       onSendTestEmail(generatedData.subject, generatedData.fullHtml)
                     }
-                    className="px-3 py-1.5 text-xs font-semibold rounded-lg border border-slate-200 hover:bg-slate-50 text-slate-700 transition flex items-center"
+                    className="h-8 px-3 text-xs font-semibold rounded-lg border-slate-200 hover:bg-slate-50 text-slate-700 gap-1 cursor-pointer"
                   >
-                    <Send className="w-3.5 h-3.5 mr-1 text-blue-600" />
-                    Send Test
-                  </button>
+                    <Send className="w-3.5 h-3.5 text-blue-600" />
+                    <span>Send Test</span>
+                  </Button>
                 </div>
 
-                <button
+                <Button
+                  type="button"
+                  size="sm"
                   onClick={() =>
                     onApplyToDispatch("gemini-template", generatedData.subject, generatedData.fullHtml)
                   }
-                  className="px-4 py-1.5 text-xs font-bold rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition flex items-center shadow-xs"
+                  className="h-8 px-4 text-xs font-bold rounded-lg bg-blue-600 text-white hover:bg-blue-700 shadow-xs gap-1.5 cursor-pointer"
                 >
-                  <Send className="w-3.5 h-3.5 mr-1.5" />
-                  Use in Dispatch Hub →
-                </button>
+                  <Send className="w-3.5 h-3.5" />
+                  <span>Use in Dispatch Hub →</span>
+                </Button>
               </div>
             </div>
           )}

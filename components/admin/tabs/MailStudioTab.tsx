@@ -129,6 +129,7 @@ interface StoredCustomTemplate {
   hasDesign: boolean;
   type: string;
   updatedAt: string;
+  subject?: string;
 }
 
 const CUSTOM_TEMPLATES_STORAGE_KEY = "gdg_mail_custom_templates";
@@ -702,7 +703,74 @@ export default function MailStudioTab() {
 
   useEffect(() => {
     refreshPreview();
+    if (activeTemplate) {
+      if (typeof window !== "undefined") {
+        const savedSubj = localStorage.getItem(`gdg_mail_template_subject_${activeTemplate}`);
+        if (savedSubj) {
+          setEmailSubject(savedSubj);
+          return;
+        }
+      }
+      const stored = getStoredCustomTemplates();
+      if (stored[activeTemplate]?.subject) {
+        setEmailSubject(stored[activeTemplate].subject!);
+        return;
+      }
+      getDoc(doc(db, "mail_templates", activeTemplate))
+        .then((snap) => {
+          if (snap.exists() && snap.data().subject) {
+            setEmailSubject(snap.data().subject);
+          }
+        })
+        .catch(() => {});
+    }
   }, [activeTemplate]);
+
+  // Persist template settings (subject, active selection)
+  const handleSaveTemplateSettings = async () => {
+    try {
+      if (!activeTemplate) {
+        toast.error("No active template selected.");
+        return;
+      }
+
+      const activeMeta = templates.find((t) => t.id === activeTemplate);
+      const templateDisplayName = activeMeta?.name || activeTemplate;
+
+      // 1. Direct Client Firestore save
+      try {
+        const docRef = doc(db, "mail_templates", activeTemplate);
+        await setDoc(
+          docRef,
+          {
+            subject: emailSubject,
+            updatedAt: new Date().toISOString(),
+          },
+          { merge: true }
+        );
+      } catch (fsErr: any) {
+        console.warn("Direct client Firestore save for template settings failed:", fsErr);
+      }
+
+      // 2. Persist in localStorage custom template cache
+      const stored = getStoredCustomTemplates();
+      if (stored[activeTemplate]) {
+        stored[activeTemplate].subject = emailSubject;
+        stored[activeTemplate].updatedAt = new Date().toISOString();
+        saveCustomTemplateToStorage(stored[activeTemplate]);
+      }
+
+      // 3. Persist subject & active template in dedicated localStorage keys
+      if (typeof window !== "undefined") {
+        localStorage.setItem("gdg_mail_active_template", activeTemplate);
+        localStorage.setItem(`gdg_mail_template_subject_${activeTemplate}`, emailSubject);
+      }
+
+      toast.success("Template settings saved successfully!");
+    } catch (err: any) {
+      toast.error("Failed to save template settings: " + err.message);
+    }
+  };
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -955,6 +1023,24 @@ export default function MailStudioTab() {
       });
     }
   }, [activeView]);
+
+  // Visual Editor Keyboard Shortcuts (Ctrl+S / Cmd+S to save template)
+  useEffect(() => {
+    if (activeView !== "studio") return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "s") {
+        e.preventDefault();
+        e.stopPropagation();
+        handleSaveUnlayerDesign();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [activeView, activeTemplate, templates]);
 
   const loadTemplateToEditor = async (templateName: string) => {
     try {
@@ -1397,9 +1483,12 @@ export default function MailStudioTab() {
   const handleSaveGeminiTemplate = async (name: string, html: string, design: any) => {
     unmarkTemplateAsDeleted(name);
 
+    const existingMeta = templates.find((t) => t.id === name);
+    const displayName = existingMeta?.name || name;
+
     const tplData: StoredCustomTemplate = {
       id: name,
-      name,
+      name: displayName,
       design,
       content: html,
       hasDesign: Boolean(design),
@@ -1422,12 +1511,12 @@ export default function MailStudioTab() {
     await fetch(`/api/mail-sender/templates/${name}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ content: html, design, name }),
+      body: JSON.stringify({ content: html, design, name: displayName }),
     }).catch(() => {});
 
     setTemplates((prev) => [
       ...prev.filter((t) => t.id !== name),
-      { id: name, name, hasDesign: Boolean(design), type: "html" },
+      { id: name, name: displayName, hasDesign: Boolean(design), type: "html" },
     ]);
 
     setActiveTemplate(name);
@@ -2185,6 +2274,18 @@ export default function MailStudioTab() {
                     type="button"
                     variant="outline"
                     size="sm"
+                    onClick={handleSaveTemplateSettings}
+                    className="text-xs text-emerald-700 hover:text-emerald-800 font-semibold bg-emerald-50/80 border-emerald-200 hover:bg-emerald-100 h-8 px-2.5 rounded-lg gap-1.5 shadow-2xs transition-all cursor-pointer"
+                    title="Save template settings and subject"
+                  >
+                    <Save className="w-3.5 h-3.5 text-emerald-600" />
+                    <span className="hidden sm:inline">Save Template</span>
+                    <span className="sm:hidden">Save</span>
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
                     onClick={() => setActiveView("studio")}
                     className="text-xs text-indigo-600 hover:text-indigo-800 font-semibold bg-indigo-50 border-indigo-100 hover:bg-indigo-100 h-8 px-2.5 rounded-lg"
                   >
@@ -2320,15 +2421,28 @@ export default function MailStudioTab() {
                     <Label htmlFor="email-subject-input" className="text-xs font-semibold text-slate-700">
                       Subject Line
                     </Label>
-                    <Button
-                      type="button"
-                      variant="link"
-                      size="sm"
-                      onClick={handleOpenSubjectGenerator}
-                      className="text-[11px] text-indigo-600 hover:text-indigo-800 font-semibold p-0 h-auto"
-                    >
-                      <Sparkles className="w-3 h-3 mr-1 text-indigo-500" /> ✨ AI Subject Ideas
-                    </Button>
+                    <div className="flex items-center space-x-2">
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        onClick={handleSaveTemplateSettings}
+                        className="text-[11px] text-emerald-600 hover:text-emerald-700 font-semibold p-0 h-auto flex items-center gap-1 cursor-pointer"
+                        title="Save subject to template"
+                      >
+                        <Save className="w-3 h-3 text-emerald-600" /> Save
+                      </Button>
+                      <span className="text-slate-300">|</span>
+                      <Button
+                        type="button"
+                        variant="link"
+                        size="sm"
+                        onClick={handleOpenSubjectGenerator}
+                        className="text-[11px] text-indigo-600 hover:text-indigo-800 font-semibold p-0 h-auto"
+                      >
+                        <Sparkles className="w-3 h-3 mr-1 text-indigo-500" /> ✨ AI Subject Ideas
+                      </Button>
+                    </div>
                   </div>
                   <Input
                     id="email-subject-input"
@@ -2409,6 +2523,7 @@ export default function MailStudioTab() {
             setTestModalOpen(true);
           }}
           existingTemplates={templates}
+          activeTemplate={activeTemplate}
         />
       </div>
 
@@ -2627,16 +2742,17 @@ export default function MailStudioTab() {
                 {/* Divider */}
                 <div className="h-5 w-px bg-slate-200 hidden sm:block shrink-0" />
 
-                {/* Save Draft */}
+                {/* Save Template */}
                 <Button
                   type="button"
                   variant="outline"
                   size="sm"
                   onClick={handleSaveUnlayerDesign}
-                  className="h-8 px-3 text-xs font-medium border-slate-200 text-slate-700 hover:bg-slate-50 hover:text-emerald-700 rounded-lg gap-1.5 shrink-0 whitespace-nowrap"
+                  className="h-8 px-3 text-xs font-semibold border-emerald-300 bg-emerald-50/80 hover:bg-emerald-100 text-emerald-800 rounded-lg gap-1.5 shrink-0 whitespace-nowrap shadow-2xs transition-all cursor-pointer"
+                  title="Save template changes (Ctrl+S / Cmd+S)"
                 >
                   <Save className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-                  <span className="hidden sm:inline">Save Draft</span>
+                  <span className="hidden sm:inline">Save Template</span>
                   <span className="sm:hidden">Save</span>
                 </Button>
 
