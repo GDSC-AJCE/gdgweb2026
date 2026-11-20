@@ -32,14 +32,16 @@ export interface CheckboxProps extends Omit<AriaCheckboxProps, "children"> {
   children?: ReactNode;
   size?: CheckboxSize;
   ref?: Ref<HTMLLabelElement>;
+  slot?: string | null;
 }
 
-export function Checkbox({ className, children, size = "md", ref, ...props }: CheckboxProps) {
+export function Checkbox({ className, children, size = "md", ref, slot = null, ...props }: CheckboxProps) {
   const s = checkboxSizes[size];
 
   return (
     <AriaCheckbox
       ref={ref}
+      slot={slot}
       {...props}
       className={(state) =>
         cx(

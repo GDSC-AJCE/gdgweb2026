@@ -213,6 +213,7 @@ export default function EventsDataTable({
         enableSorting: false,
         header: ({ table }) => (
           <Checkbox
+            slot={null}
             size="sm"
             aria-label="Select all events"
             isSelected={table.getIsAllPageRowsSelected()}
@@ -222,6 +223,7 @@ export default function EventsDataTable({
         ),
         cell: ({ row }) => (
           <Checkbox
+            slot={null}
             size="sm"
             aria-label={`Select ${row.original.title}`}
             isSelected={row.getIsSelected()}
