@@ -11,7 +11,10 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const { templateContent, templateName, recipient = {} } = body;
 
-    let source = templateContent || (templateName ? getTemplateSource(templateName) : null);
+    let source: string | null =
+      typeof templateContent === "string" && templateContent.trim().length > 0
+        ? templateContent
+        : (templateName ? getTemplateSource(templateName) : null);
 
     if (!source && templateName) {
       try {
@@ -69,6 +72,42 @@ export async function POST(req: NextRequest) {
         recipient.meet_link ||
         recipient.MEET_LINK ||
         "https://meet.google.com/djf-bgpu-stt",
+      name: recipient.name || recipient.NAME || "Rahul Sharma",
+      email: recipient.email || recipient.MAIL || "rahul@amaljyothi.ac.in",
+      category:
+        recipient.category ||
+        recipient.CATEGORY ||
+        recipient.team ||
+        recipient.TEAM ||
+        "Web Team",
+      team:
+        recipient.category ||
+        recipient.CATEGORY ||
+        recipient.team ||
+        recipient.TEAM ||
+        "Web Team",
+      date: recipient.date || recipient.DATE || "November 9, 2026",
+      time:
+        recipient.time ||
+        recipient.TIME ||
+        recipient.time_slot ||
+        recipient.TIME_SLOT ||
+        "6:00 PM - 6:10 PM",
+      time_slot:
+        recipient.time ||
+        recipient.TIME ||
+        recipient.time_slot ||
+        recipient.TIME_SLOT ||
+        "6:00 PM - 6:10 PM",
+      whatsapp_link:
+        recipient.whatsapp_link ||
+        recipient.WHATSAPP_LINK ||
+        "https://chat.whatsapp.com/Ftflnf70DRrAXIhwWJQ2Bo?s=cl&p=a&mlu=4&ilr=4&iam=2",
+      meet_link:
+        recipient.meet_link ||
+        recipient.MEET_LINK ||
+        "https://meet.google.com/djf-bgpu-stt",
+      ...recipient,
     };
 
     const previewHtml = await renderTemplateToHtml(source, sample, true);

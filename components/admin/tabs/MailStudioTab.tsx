@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import {
   Send,
   Layout,
@@ -119,6 +119,48 @@ interface TemplateMeta {
   name: string;
   hasDesign: boolean;
   type: string;
+}
+
+interface StoredCustomTemplate {
+  id: string;
+  name: string;
+  content: string;
+  design?: any;
+  hasDesign: boolean;
+  type: string;
+  updatedAt: string;
+}
+
+const CUSTOM_TEMPLATES_STORAGE_KEY = "gdg_mail_custom_templates";
+
+function getStoredCustomTemplates(): Record<string, StoredCustomTemplate> {
+  if (typeof window === "undefined") return {};
+  try {
+    const raw = localStorage.getItem(CUSTOM_TEMPLATES_STORAGE_KEY);
+    return raw ? JSON.parse(raw) : {};
+  } catch (e) {
+    return {};
+  }
+}
+
+function saveCustomTemplateToStorage(tpl: StoredCustomTemplate) {
+  if (typeof window === "undefined") return;
+  try {
+    const map = getStoredCustomTemplates();
+    map[tpl.id] = tpl;
+    localStorage.setItem(CUSTOM_TEMPLATES_STORAGE_KEY, JSON.stringify(map));
+  } catch (e) {
+    console.warn("Failed to cache custom template in localStorage:", e);
+  }
+}
+
+function removeCustomTemplateFromStorage(id: string) {
+  if (typeof window === "undefined") return;
+  try {
+    const map = getStoredCustomTemplates();
+    delete map[id];
+    localStorage.setItem(CUSTOM_TEMPLATES_STORAGE_KEY, JSON.stringify(map));
+  } catch (e) {}
 }
 
 export default function MailStudioTab() {
@@ -313,7 +355,24 @@ export default function MailStudioTab() {
           console.warn("Direct Firestore mail_templates fetch failed:", fsErr);
         }
 
-        // 2. Fetch from API endpoint (includes disk templates) and merge
+        // 2. Load from localStorage (gdg_mail_custom_templates)
+        try {
+          const stored = getStoredCustomTemplates();
+          Object.values(stored).forEach((t) => {
+            if (!templateMap.has(t.id)) {
+              templateMap.set(t.id, {
+                id: t.id,
+                name: t.name || t.id,
+                hasDesign: Boolean(t.hasDesign || t.design),
+                type: t.type || "html",
+              });
+            }
+          });
+        } catch (storageErr) {
+          console.warn("LocalStorage custom templates read failed:", storageErr);
+        }
+
+        // 3. Fetch from API endpoint (includes disk templates) and merge
         try {
           const res = await fetch("/api/mail-sender/templates", { cache: "no-store" });
           if (res.ok) {
@@ -521,7 +580,7 @@ export default function MailStudioTab() {
   };
 
   // 7. Live Preview Generation
-  const refreshPreview = async () => {
+  const refreshPreview = async (overrideContent?: string | React.MouseEvent | any) => {
     setRefreshingPreview(true);
     try {
       const sampleRecipient = recipients.find((r) => r.selected) ||
@@ -532,11 +591,37 @@ export default function MailStudioTab() {
           team: "Web Team",
         };
 
+      let contentToPreview = typeof overrideContent === "string" ? overrideContent : undefined;
+
+      if (!contentToPreview && activeTemplate) {
+        // Try localStorage cache first (fastest)
+        const stored = getStoredCustomTemplates();
+        if (stored[activeTemplate]?.content) {
+          contentToPreview = stored[activeTemplate].content;
+        }
+
+        // If not in localStorage, try Firestore client-side
+        if (!contentToPreview) {
+          try {
+            const snap = await getDoc(doc(db, "mail_templates", activeTemplate));
+            if (snap.exists()) {
+              const d = snap.data();
+              if (d.content) {
+                contentToPreview = d.content;
+              }
+            }
+          } catch (fsErr) {
+            console.warn("Client Firestore getDoc in refreshPreview failed:", fsErr);
+          }
+        }
+      }
+
       const res = await fetch("/api/mail-sender/preview", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           templateName: activeTemplate,
+          templateContent: contentToPreview || undefined,
           recipient: sampleRecipient,
         }),
       });
@@ -807,7 +892,6 @@ export default function MailStudioTab() {
   }, [activeView]);
 
   const loadTemplateToEditor = async (templateName: string) => {
-    if (!window.unlayer) return;
     try {
       let loadedDesign: any = null;
       let loadedContent: string = "";
@@ -824,18 +908,34 @@ export default function MailStudioTab() {
         console.warn("Client Firestore getDoc failed:", fsErr);
       }
 
-      // 2. Fallback to API route
+      // 2. Try localStorage cache
       if (!loadedDesign && !loadedContent) {
-        const res = await fetch(`/api/mail-sender/templates/${templateName}`, { cache: "no-store" });
-        if (res.ok) {
-          const data = await res.json();
-          loadedDesign = data.design;
-          loadedContent = data.content;
+        const stored = getStoredCustomTemplates();
+        if (stored[templateName]) {
+          if (stored[templateName].design) loadedDesign = stored[templateName].design;
+          if (stored[templateName].content) loadedContent = stored[templateName].content;
+        }
+      }
+
+      // 3. Fallback to API route
+      if (!loadedDesign && !loadedContent) {
+        try {
+          const res = await fetch(`/api/mail-sender/templates/${templateName}`, { cache: "no-store" });
+          if (res.ok) {
+            const data = await res.json();
+            loadedDesign = data.design;
+            loadedContent = data.content;
+          }
+        } catch (apiErr) {
+          console.warn("API route fallback failed in loadTemplateToEditor:", apiErr);
         }
       }
 
       if (loadedDesign || loadedContent) {
-        applyDesignToUnlayer(loadedDesign, loadedContent);
+        pendingUnlayerDesignRef.current = { design: loadedDesign, html: loadedContent };
+        if (window.unlayer && isUnlayerReady) {
+          applyDesignToUnlayer(loadedDesign, loadedContent);
+        }
       }
     } catch (e) {
       console.error("Error loading template to editor:", e);
@@ -850,27 +950,28 @@ export default function MailStudioTab() {
         const activeMeta = templates.find((t) => t.id === activeTemplate);
         const templateDisplayName = activeMeta?.name || activeTemplate;
 
+        const tplData: StoredCustomTemplate = {
+          id: activeTemplate,
+          name: templateDisplayName,
+          content: html,
+          design,
+          hasDesign: Boolean(design),
+          type: "html",
+          updatedAt: new Date().toISOString(),
+        };
+
         // 1. Direct Client Firestore save
         try {
           const docRef = doc(db, "mail_templates", activeTemplate);
-          await setDoc(
-            docRef,
-            {
-              id: activeTemplate,
-              name: templateDisplayName,
-              content: html,
-              design,
-              hasDesign: Boolean(design),
-              type: "html",
-              updatedAt: new Date().toISOString(),
-            },
-            { merge: true }
-          );
+          await setDoc(docRef, tplData, { merge: true });
         } catch (fsErr: any) {
           console.warn("Direct client Firestore save failed:", fsErr);
         }
 
-        // 2. Also notify server API endpoint
+        // 2. LocalStorage cache
+        saveCustomTemplateToStorage(tplData);
+
+        // 3. Also notify server API endpoint
         await fetch(`/api/mail-sender/templates/${activeTemplate}`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -885,7 +986,7 @@ export default function MailStudioTab() {
           localStorage.setItem("gdg_mail_active_template", activeTemplate);
         }
         toast.success(`Template '${templateDisplayName}' saved successfully!`);
-        refreshPreview();
+        refreshPreview(html);
       } catch (err: any) {
         toast.error("Error saving template: " + err.message);
       }
@@ -900,27 +1001,28 @@ export default function MailStudioTab() {
         const activeMeta = templates.find((t) => t.id === activeTemplate);
         const templateDisplayName = activeMeta?.name || activeTemplate;
 
+        const tplData: StoredCustomTemplate = {
+          id: activeTemplate,
+          name: templateDisplayName,
+          content: html,
+          design,
+          hasDesign: Boolean(design),
+          type: "html",
+          updatedAt: new Date().toISOString(),
+        };
+
         // 1. Direct Client Firestore save
         try {
           const docRef = doc(db, "mail_templates", activeTemplate);
-          await setDoc(
-            docRef,
-            {
-              id: activeTemplate,
-              name: templateDisplayName,
-              content: html,
-              design,
-              hasDesign: Boolean(design),
-              type: "html",
-              updatedAt: new Date().toISOString(),
-            },
-            { merge: true }
-          );
+          await setDoc(docRef, tplData, { merge: true });
         } catch (fsErr: any) {
           console.warn("Direct client Firestore save failed:", fsErr);
         }
 
-        // 2. Server API fallback
+        // 2. LocalStorage cache
+        saveCustomTemplateToStorage(tplData);
+
+        // 3. Server API fallback
         await fetch(`/api/mail-sender/templates/${activeTemplate}`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -935,7 +1037,7 @@ export default function MailStudioTab() {
           localStorage.setItem("gdg_mail_active_template", activeTemplate);
         }
         setActiveView("dispatch");
-        refreshPreview();
+        refreshPreview(html);
       } catch (e) {
         setActiveView("dispatch");
       }
@@ -958,7 +1060,7 @@ export default function MailStudioTab() {
                   {
                     type: "heading",
                     values: {
-                      text: newTemplateName,
+                      text: newTemplateName.trim(),
                       headingType: "h1",
                       textAlign: "center",
                       color: "#1A73E8",
@@ -985,30 +1087,31 @@ export default function MailStudioTab() {
       },
     };
 
-    const initialContent = `<h1>${newTemplateName}</h1><p>Dear {{name}}, Welcome to Google Developer Groups on Campus AJCE!</p>`;
+    const initialContent = `<h1>${newTemplateName.trim()}</h1><p>Dear {{name}}, Welcome to Google Developer Groups on Campus AJCE!</p>`;
 
     try {
+      const templateData: StoredCustomTemplate = {
+        id: cleanName,
+        name: newTemplateName.trim(),
+        content: initialContent,
+        design: initialDesign,
+        hasDesign: true,
+        type: "html",
+        updatedAt: new Date().toISOString(),
+      };
+
       // 1. Direct Client Firestore write using authenticated session
       try {
         const docRef = doc(db, "mail_templates", cleanName);
-        await setDoc(
-          docRef,
-          {
-            id: cleanName,
-            name: newTemplateName.trim(),
-            design: initialDesign,
-            content: initialContent,
-            hasDesign: true,
-            type: "html",
-            updatedAt: new Date().toISOString(),
-          },
-          { merge: true }
-        );
+        await setDoc(docRef, templateData, { merge: true });
       } catch (fsErr: any) {
         console.warn("Direct Firestore write during template creation failed:", fsErr);
       }
 
-      // 2. Call server route
+      // 2. LocalStorage caching helper
+      saveCustomTemplateToStorage(templateData);
+
+      // 3. Call server route
       await fetch(`/api/mail-sender/templates/${cleanName}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -1019,33 +1122,37 @@ export default function MailStudioTab() {
         }),
       }).catch(() => {});
 
-      // 3. Update local state
+      // 4. Update local state - ensure it merges without wiping out the new template
+      const newTemplateMeta: TemplateMeta = {
+        id: cleanName,
+        name: newTemplateName.trim(),
+        hasDesign: true,
+        type: "html",
+      };
+
       setTemplates((prev) => [
         ...prev.filter((t) => t.id !== cleanName),
-        { id: cleanName, name: newTemplateName.trim(), hasDesign: true, type: "html" },
+        newTemplateMeta,
       ]);
-
-      // 4. Refresh templates list
-      try {
-        const listRes = await fetch("/api/mail-sender/templates", { cache: "no-store" });
-        if (listRes.ok) {
-          const listData = await listRes.json();
-          if (listData.templates) {
-            setTemplates(listData.templates);
-          }
-        }
-      } catch {}
 
       setActiveTemplate(cleanName);
       if (typeof window !== "undefined") {
         localStorage.setItem("gdg_mail_active_template", cleanName);
       }
+
+      // Set pending design so Unlayer loads it immediately upon opening/ready
+      pendingUnlayerDesignRef.current = { design: initialDesign, html: initialContent };
+
+      if (window.unlayer && isUnlayerReady) {
+        applyDesignToUnlayer(initialDesign, initialContent);
+      }
+
       setNewTemplateModalOpen(false);
       setNewTemplateName("");
-      if (activeView === "studio" && window.unlayer) {
-        window.unlayer.loadDesign(initialDesign);
-      }
-      refreshPreview();
+
+      // Render live preview immediately with initialContent
+      refreshPreview(initialContent);
+
       toast.success(`Template '${newTemplateName}' created successfully!`);
     } catch (e: any) {
       toast.error("Error creating template: " + e.message);
@@ -1064,7 +1171,10 @@ export default function MailStudioTab() {
         console.warn("Direct client Firestore delete failed:", fsErr);
       }
 
-      // 2. Server API route delete
+      // 2. Remove from LocalStorage cache
+      removeCustomTemplateFromStorage(activeTemplate);
+
+      // 3. Server API route delete
       await fetch(`/api/mail-sender/templates/${activeTemplate}`, {
         method: "DELETE",
       }).catch(() => {});
@@ -1114,7 +1224,15 @@ export default function MailStudioTab() {
         console.warn("Direct client Firestore rename failed:", fsErr);
       }
 
-      // 2. Server API route rename
+      // 2. Update localStorage cache
+      const stored = getStoredCustomTemplates();
+      if (stored[activeTemplate]) {
+        stored[activeTemplate].name = trimmed;
+        stored[activeTemplate].updatedAt = new Date().toISOString();
+        saveCustomTemplateToStorage(stored[activeTemplate]);
+      }
+
+      // 3. Server API route rename
       await fetch(`/api/mail-sender/templates/${activeTemplate}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
@@ -1124,16 +1242,6 @@ export default function MailStudioTab() {
       setTemplates((prev) =>
         prev.map((t) => (t.id === activeTemplate ? { ...t, name: trimmed } : t))
       );
-
-      try {
-        const listRes = await fetch("/api/mail-sender/templates", { cache: "no-store" });
-        if (listRes.ok) {
-          const listData = await listRes.json();
-          if (listData.templates) {
-            setTemplates(listData.templates);
-          }
-        }
-      } catch (err) {}
 
       toast.success("Template renamed successfully!");
       setRenameModalOpen(false);
@@ -1196,46 +1304,44 @@ export default function MailStudioTab() {
 
   // Gemini Studio Callbacks
   const handleSaveGeminiTemplate = async (name: string, html: string, design: any) => {
+    const tplData: StoredCustomTemplate = {
+      id: name,
+      name,
+      design,
+      content: html,
+      hasDesign: Boolean(design),
+      type: "html",
+      updatedAt: new Date().toISOString(),
+    };
+
     // 1. Direct Client Firestore save
     try {
       const docRef = doc(db, "mail_templates", name);
-      await setDoc(
-        docRef,
-        {
-          id: name,
-          name,
-          design,
-          content: html,
-          hasDesign: Boolean(design),
-          type: "html",
-          updatedAt: new Date().toISOString(),
-        },
-        { merge: true }
-      );
+      await setDoc(docRef, tplData, { merge: true });
     } catch (fsErr: any) {
       console.warn("Direct client Firestore save failed in handleSaveGeminiTemplate:", fsErr);
     }
 
-    // 2. Server API route
+    // 2. Cache in localStorage
+    saveCustomTemplateToStorage(tplData);
+
+    // 3. Server API route
     await fetch(`/api/mail-sender/templates/${name}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ content: html, design, name }),
     }).catch(() => {});
 
-    try {
-      const listRes = await fetch("/api/mail-sender/templates", { cache: "no-store" });
-      if (listRes.ok) {
-        const listData = await listRes.json();
-        if (listData.templates) setTemplates(listData.templates);
-      }
-    } catch {}
+    setTemplates((prev) => [
+      ...prev.filter((t) => t.id !== name),
+      { id: name, name, hasDesign: Boolean(design), type: "html" },
+    ]);
 
     setActiveTemplate(name);
     if (typeof window !== "undefined") {
       localStorage.setItem("gdg_mail_active_template", name);
     }
-    refreshPreview();
+    refreshPreview(html);
   };
 
   const handleApplyGeminiToDispatch = (templateId: string, subject: string, html: string) => {

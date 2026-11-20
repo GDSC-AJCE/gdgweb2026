@@ -224,7 +224,7 @@ service cloud.firestore {
     // ============================================
     match /mail_templates/{templateId} {
       allow read: if true;
-      allow write: if isCoreWriter();
+      allow write: if isAuthenticated() || isCoreWriter();
     }
   }
 }

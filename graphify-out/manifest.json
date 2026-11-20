@@ -140,8 +140,8 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\app\\api\\mail-sender\\preview\\route.ts": {
-    "mtime": 1795160539.179678,
-    "ast_hash": "7adb3ae3c9d819a4fa5e72343f4fb823",
+    "mtime": 1795179166.1775844,
+    "ast_hash": "f17e86f7071251ccc612de9929201322",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\app\\api\\mail-sender\\recipients\\route.ts": {
@@ -165,7 +165,7 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\app\\api\\mail-sender\\templates\\[name]\\route.ts": {
-    "mtime": 1795176980.3531756,
+    "mtime": 1795177351.9279878,
     "ast_hash": "a6fd15585ab3a82e0fde5eb062024de2",
     "semantic_hash": ""
   },
@@ -490,8 +490,8 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\admin\\tabs\\MailStudioTab.tsx": {
-    "mtime": 1795177160.833169,
-    "ast_hash": "a85a570bc056a830b52024241010d973",
+    "mtime": 1795179626.8349028,
+    "ast_hash": "5bc7e2bf5d0998427fd32cf3756abb53",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\admin\\tabs\\OverviewTab.tsx": {
