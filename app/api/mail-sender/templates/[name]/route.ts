@@ -88,7 +88,9 @@ export async function POST(
         .map((w: string) => w.charAt(0).toUpperCase() + w.slice(1))
         .join(" ");
 
-    // 1. Save to Firestore
+    let firestoreSaved = false;
+
+    // 1. Save to Firestore (Primary single source of truth)
     try {
       const docRef = doc(db, "mail_templates", templateName);
       const existingSnap = await getDoc(docRef);
@@ -106,23 +108,35 @@ export async function POST(
       if (design !== undefined) updatePayload.design = design;
 
       await setDoc(docRef, updatePayload, { merge: true });
-    } catch (fsErr) {
-      console.warn("Firestore save failed, proceeding with disk write:", fsErr);
+      firestoreSaved = true;
+    } catch (fsErr: any) {
+      console.warn("Firestore save failed:", fsErr?.message || fsErr);
     }
 
-    // 2. Also write to disk as fallback
-    if (!fs.existsSync(TEMPLATES_DIR)) {
-      fs.mkdirSync(TEMPLATES_DIR, { recursive: true });
+    // 2. Also write to disk as fallback (safe for serverless / EROFS)
+    let diskSaved = false;
+    try {
+      if (!fs.existsSync(TEMPLATES_DIR)) {
+        fs.mkdirSync(TEMPLATES_DIR, { recursive: true });
+      }
+
+      if (content !== undefined) {
+        const htmlPath = path.join(TEMPLATES_DIR, `${templateName}.html`);
+        fs.writeFileSync(htmlPath, content, "utf8");
+        diskSaved = true;
+      }
+
+      if (design !== undefined) {
+        const jsonPath = path.join(TEMPLATES_DIR, `${templateName}.json`);
+        fs.writeFileSync(jsonPath, JSON.stringify(design, null, 2), "utf8");
+        diskSaved = true;
+      }
+    } catch (diskErr: any) {
+      console.warn("Disk write skipped or failed (expected in read-only serverless environment):", diskErr?.message);
     }
 
-    if (content !== undefined) {
-      const htmlPath = path.join(TEMPLATES_DIR, `${templateName}.html`);
-      fs.writeFileSync(htmlPath, content, "utf8");
-    }
-
-    if (design !== undefined) {
-      const jsonPath = path.join(TEMPLATES_DIR, `${templateName}.json`);
-      fs.writeFileSync(jsonPath, JSON.stringify(design, null, 2), "utf8");
+    if (!firestoreSaved && !diskSaved) {
+      throw new Error("Failed to save template to Firestore or local storage.");
     }
 
     return NextResponse.json(
@@ -158,7 +172,9 @@ export async function PATCH(
       );
     }
 
-    // 1. Update Firestore
+    let firestoreUpdated = false;
+
+    // 1. Update Firestore (Primary)
     try {
       const docRef = doc(db, "mail_templates", templateName);
       const existingSnap = await getDoc(docRef);
@@ -184,23 +200,24 @@ export async function PATCH(
           { merge: true }
         );
       }
-    } catch (fsErr) {
-      console.warn("Firestore update failed:", fsErr);
+      firestoreUpdated = true;
+    } catch (fsErr: any) {
+      console.warn("Firestore update failed:", fsErr?.message || fsErr);
     }
 
-    // 2. Update local .json file if exists
-    const jsonPath = path.join(TEMPLATES_DIR, `${templateName}.json`);
-    if (fs.existsSync(jsonPath)) {
-      try {
+    // 2. Update local .json file if exists (safely caught for serverless)
+    try {
+      const jsonPath = path.join(TEMPLATES_DIR, `${templateName}.json`);
+      if (fs.existsSync(jsonPath)) {
         const raw = fs.readFileSync(jsonPath, "utf8");
         const data = JSON.parse(raw);
         if (typeof data === "object" && data !== null && !Array.isArray(data)) {
           data.name = updatedName;
           fs.writeFileSync(jsonPath, JSON.stringify(data, null, 2), "utf8");
         }
-      } catch (e) {
-        console.warn("Failed to update name in local json file:", e);
       }
+    } catch (e: any) {
+      console.warn("Failed or skipped updating name in local json file (expected in serverless):", e?.message);
     }
 
     return NextResponse.json(
@@ -229,7 +246,7 @@ export async function DELETE(
     const templateName = name.trim().toLowerCase().replace(/[^a-z0-9_-]/g, "-");
     let deletedFirestore = false;
 
-    // 1. Delete from Firestore
+    // 1. Delete from Firestore (Primary)
     try {
       const docRef = doc(db, "mail_templates", templateName);
       const snap = await getDoc(docRef);
@@ -237,19 +254,23 @@ export async function DELETE(
         await deleteDoc(docRef);
         deletedFirestore = true;
       }
-    } catch (fsErr) {
-      console.warn("Firestore delete failed:", fsErr);
+    } catch (fsErr: any) {
+      console.warn("Firestore delete failed:", fsErr?.message || fsErr);
     }
 
-    // 2. Delete from disk
+    // 2. Delete from disk (safely caught for serverless / read-only filesystem)
     const exts = [".html", ".json", ".mjml"];
     let deletedDisk = false;
 
     exts.forEach((ext) => {
-      const p = path.join(TEMPLATES_DIR, `${templateName}${ext}`);
-      if (fs.existsSync(p)) {
-        fs.unlinkSync(p);
-        deletedDisk = true;
+      try {
+        const p = path.join(TEMPLATES_DIR, `${templateName}${ext}`);
+        if (fs.existsSync(p)) {
+          fs.unlinkSync(p);
+          deletedDisk = true;
+        }
+      } catch (diskErr: any) {
+        console.warn(`Skipped disk deletion for ${templateName}${ext} (expected in serverless):`, diskErr?.message);
       }
     });
 

@@ -9,7 +9,6 @@ import {
   FileText,
   Download,
   Filter,
-  Sparkles,
   ArrowUpRight,
   ArrowDownRight,
   BarChart2,
@@ -41,7 +40,10 @@ import {
   Line,
 } from "recharts";
 import * as XLSX from "xlsx";
-import Chip from "@/components/ui/Chip";
+import { Badge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
+import { Separator } from "@/components/ui/separator";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { AdminTab } from "../AdminSidebar";
 
 interface AnalyticsTabProps {
@@ -165,7 +167,7 @@ export default function AnalyticsTab({
   const pendingApps = applications.filter((a) => (a.status || "pending") === "pending").length;
   const appAcceptanceRate = totalApplications > 0 ? Math.round((acceptedApps / totalApplications) * 100) : 0;
 
-  // 2. Member Signups & Growth Trajectory (Monthly Timeline)
+  // 2. Member Signups & Growth Timeline
   const memberGrowthData = useMemo(() => {
     const monthCounts: Record<string, number> = {};
     const monthsOrder: string[] = [
@@ -377,8 +379,8 @@ export default function AnalyticsTab({
     }));
   }, [funds]);
 
-  // Export full telemetry report to Excel
-  const handleExportTelemetry = () => {
+  // Export full analytics report to Excel
+  const handleExportAnalytics = () => {
     try {
       const wb = XLSX.utils.book_new();
 
@@ -426,7 +428,7 @@ export default function AnalyticsTab({
 
   return (
     <div className="space-y-6 select-none">
-      {/* 1. TOP HEADER & TELEMETRY CONTROLS */}
+      {/* 1. TOP HEADER & ANALYTICS CONTROLS */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-5 sm:p-6 rounded-[28px] bg-white border border-slate-200/90 shadow-2xs">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
@@ -434,11 +436,11 @@ export default function AnalyticsTab({
               <BarChart2 className="w-4 h-4" />
             </span>
             <h3 className="text-base font-bold text-slate-900 tracking-tight">
-              Executive Analytics & Performance Telemetry
+              Executive Analytics & Performance
             </h3>
           </div>
           <p className="text-xs text-slate-500 max-w-xl">
-            Real-time quantitative breakdowns across membership momentum, event RSVPs, engineering branch distribution, and treasury runway.
+            Membership metrics, event attendance, branch representation, and treasury cashflow.
           </p>
         </div>
 
@@ -468,13 +470,14 @@ export default function AnalyticsTab({
           </div>
 
           {/* Export Report Button */}
-          <button
-            onClick={handleExportTelemetry}
-            className="h-9 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold flex items-center gap-2 transition shadow-2xs cursor-pointer active:scale-95"
+          <Button
+            onClick={handleExportAnalytics}
+            size="sm"
+            className="h-9 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold shadow-2xs cursor-pointer active:scale-95"
           >
             <Download className="w-3.5 h-3.5" />
             <span>Export Report (.xlsx)</span>
-          </button>
+          </Button>
         </div>
       </div>
 
@@ -541,7 +544,7 @@ export default function AnalyticsTab({
           </div>
         </div>
 
-        {/* RECRUITMENT PIPELINE */}
+        {/* RECRUITMENT CONVERSION */}
         <div className="p-5 rounded-[24px] bg-white border border-slate-200/90 shadow-2xs hover:border-rose-200 transition-all">
           <div className="flex items-center justify-between mb-3">
             <span className="text-[11px] font-mono font-bold text-slate-500 uppercase tracking-wider">
@@ -567,7 +570,7 @@ export default function AnalyticsTab({
               onClick={() => onNavigateTab("applications")}
               className="text-rose-600 font-semibold hover:underline flex items-center gap-0.5"
             >
-              <span>Pipeline</span>
+              <span>Applications</span>
               <ChevronRight className="w-3 h-3" />
             </button>
           </div>
@@ -604,7 +607,7 @@ export default function AnalyticsTab({
         </div>
       </div>
 
-      {/* 3. ROW 1 CHARTS: MEMBER GROWTH TRAJECTORY & WORKSHOP RSVPS */}
+      {/* 3. ROW 1 CHARTS: MEMBER GROWTH & WORKSHOP RSVPS */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* CHART 1: MEMBER GROWTH CURVE */}
         <div className="p-5 sm:p-6 rounded-[28px] bg-white border border-slate-200/90 shadow-2xs space-y-4">
@@ -612,13 +615,13 @@ export default function AnalyticsTab({
             <div>
               <div className="flex items-center gap-2">
                 <TrendingUp className="w-4 h-4 text-blue-600" />
-                <h4 className="text-sm font-bold text-slate-900">Member Acquisition & Growth Curve</h4>
+                <h4 className="text-sm font-bold text-slate-900">Member Growth & Signups</h4>
               </div>
-              <p className="text-xs text-slate-400">Monthly new registrations vs total cumulative chapter members</p>
+              <p className="text-xs text-slate-400">Monthly registrations and cumulative chapter membership</p>
             </div>
-            <Chip color="blue" variant="subtle" className="font-mono text-[10px]">
-              Trajectory
-            </Chip>
+            <Badge variant="blue" className="font-mono text-[10px]">
+              Growth
+            </Badge>
           </div>
 
           <div className="h-72 w-full pt-2">
@@ -677,7 +680,7 @@ export default function AnalyticsTab({
               </ResponsiveContainer>
             ) : (
               <div className="h-full flex items-center justify-center text-xs text-slate-400 font-mono">
-                Initializing chart telemetry...
+                Loading chart data...
               </div>
             )}
           </div>
@@ -693,9 +696,9 @@ export default function AnalyticsTab({
               </div>
               <p className="text-xs text-slate-400">Seat fill rate and attendee turnout per workshop</p>
             </div>
-            <Chip color="yellow" variant="subtle" className="font-mono text-[10px]">
+            <Badge variant="yellow" className="font-mono text-[10px]">
               Turnout
-            </Chip>
+            </Badge>
           </div>
 
           <div className="h-72 w-full pt-2">
@@ -755,16 +758,16 @@ export default function AnalyticsTab({
               </div>
               <p className="text-xs text-slate-400">Engineering departments represented</p>
             </div>
-            <Chip color="purple" variant="subtle" className="font-mono text-[10px]">
+            <Badge variant="secondary" className="font-mono text-[10px] border-purple-200 bg-purple-50 text-purple-700">
               Demographics
-            </Chip>
+            </Badge>
           </div>
 
           <div className="h-64 w-full">
             {mounted ? (
               departmentData.length === 0 ? (
                 <div className="h-full flex items-center justify-center text-xs text-slate-400 font-mono">
-                  No department telemetry available.
+                  No department data available.
                 </div>
               ) : (
                 <ResponsiveContainer width="100%" height="100%">
@@ -834,9 +837,9 @@ export default function AnalyticsTab({
               </div>
               <p className="text-xs text-slate-400">Total applications submitted per specialization</p>
             </div>
-            <Chip color="red" variant="subtle" className="font-mono text-[10px]">
+            <Badge variant="coral" className="font-mono text-[10px]">
               Recruitment
-            </Chip>
+            </Badge>
           </div>
 
           <div className="h-64 w-full pt-1">
@@ -888,12 +891,14 @@ export default function AnalyticsTab({
 
           <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
             <span>Acceptance: <strong className="text-slate-800">{appAcceptanceRate}%</strong></span>
-            <button
+            <Button
+              variant="ghost"
+              size="sm"
               onClick={() => onNavigateTab("applications")}
-              className="text-rose-600 font-semibold hover:underline"
+              className="text-rose-600 font-semibold hover:underline hover:bg-rose-50 h-auto p-0 text-xs"
             >
               Open Candidate Roster →
-            </button>
+            </Button>
           </div>
         </div>
 
@@ -907,9 +912,9 @@ export default function AnalyticsTab({
               </div>
               <p className="text-xs text-slate-400">Class seniority breakdown of active participants</p>
             </div>
-            <Chip color="green" variant="subtle" className="font-mono text-[10px]">
+            <Badge variant="grass" className="font-mono text-[10px]">
               Batches
-            </Chip>
+            </Badge>
           </div>
 
           <div className="h-64 w-full pt-1">
@@ -942,30 +947,31 @@ export default function AnalyticsTab({
           </div>
 
           <div className="pt-2 border-t border-slate-100 text-xs text-slate-500 flex items-center justify-between">
-            <span>High junior-level engagement</span>
-            <span className="font-mono text-emerald-600 font-semibold">Healthy Pipeline</span>
+            <span>First and second year students</span>
+            <span className="font-mono text-emerald-600 font-semibold">Active representation</span>
           </div>
         </div>
       </div>
 
-      {/* 5. ROW 3: CHAPTER FINANCIAL PULSE & STRATEGIC AUTOMATED INSIGHTS */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* TREASURY CASHFLOW CHART (2 cols) */}
-        <div className="lg:col-span-2 p-5 sm:p-6 rounded-[28px] bg-white border border-slate-200/90 shadow-2xs space-y-4">
-          <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-            <div>
-              <div className="flex items-center gap-2">
-                <Wallet className="w-4 h-4 text-emerald-600" />
-                <h4 className="text-sm font-bold text-slate-900">Chapter Treasury Cashflow & Burn Rate</h4>
-              </div>
-              <p className="text-xs text-slate-400">Monthly breakdown of inflows (sponsorships/tickets) vs operating expenses</p>
+      {/* 5. ROW 3: TREASURY & CASHFLOW */}
+      <Card className="w-full rounded-[28px] bg-white border border-slate-200/90 shadow-2xs">
+        <CardHeader className="flex flex-row items-center justify-between border-b border-slate-100 pb-3 p-5 sm:p-6 space-y-0">
+          <div>
+            <div className="flex items-center gap-2">
+              <Wallet className="w-4 h-4 text-emerald-600" />
+              <CardTitle className="text-sm font-bold text-slate-900">Treasury & Cashflow</CardTitle>
             </div>
-            <span className="text-xs font-mono font-bold text-emerald-600">
-              Surplus: ₹{treasuryNet.toLocaleString()}
-            </span>
+            <CardDescription className="text-xs text-slate-400 mt-0.5">
+              Monthly breakdown of inflows vs operating expenses
+            </CardDescription>
           </div>
+          <span className="text-xs font-mono font-bold text-emerald-600">
+            Surplus: ₹{treasuryNet.toLocaleString()}
+          </span>
+        </CardHeader>
 
-          <div className="h-64 w-full pt-1">
+        <CardContent className="p-5 sm:p-6 pt-0 space-y-4">
+          <div className="h-72 w-full pt-1">
             {mounted ? (
               funds.length === 0 ? (
                 <div className="h-full flex flex-col items-center justify-center text-xs text-slate-400 font-mono gap-2">
@@ -1003,68 +1009,21 @@ export default function AnalyticsTab({
             ) : null}
           </div>
 
-          <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+          <Separator className="bg-slate-100" />
+
+          <div className="flex items-center justify-between text-xs text-slate-500">
             <span>Verified against Chapter ledger</span>
-            <button
+            <Button
+              variant="ghost"
+              size="sm"
               onClick={() => onNavigateTab("funds")}
-              className="text-emerald-700 font-semibold hover:underline"
+              className="text-emerald-700 font-semibold hover:underline hover:bg-emerald-50 h-auto p-0 text-xs"
             >
               Open Treasury Ledger →
-            </button>
+            </Button>
           </div>
-        </div>
-
-        {/* AI & EXECUTIVE TELEMETRY HEALTH SCORE (1 col) */}
-        <div className="p-5 sm:p-6 rounded-[28px] bg-gradient-to-br from-slate-900 to-slate-800 text-white border border-slate-800 shadow-md space-y-4 flex flex-col justify-between">
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <span className="p-1.5 rounded-lg bg-blue-500/20 text-blue-400">
-                <Sparkles className="w-4 h-4" />
-              </span>
-              <Chip color="blue" variant="subtle" className="text-[10px] bg-blue-500/20 text-blue-300 border-blue-400/30">
-                Health: 96 / 100
-              </Chip>
-            </div>
-
-            <div>
-              <h4 className="text-base font-extrabold tracking-tight text-white">
-                Chapter Velocity Score
-              </h4>
-              <p className="text-xs text-slate-400 mt-1">
-                Automated telemetry insights based on verified engagement across campus.
-              </p>
-            </div>
-
-            <div className="space-y-2.5 pt-2">
-              <div className="p-3 rounded-2xl bg-white/5 border border-white/10 flex items-start gap-2.5">
-                <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
-                <p className="text-xs text-slate-300 leading-relaxed">
-                  <strong>Strong Branch Diversity:</strong> {departmentData[0]?.name || "CSE"} constitutes the primary base, with steady cross-departmental adoption from {departmentData[1]?.name || "ECE"}.
-                </p>
-              </div>
-
-              <div className="p-3 rounded-2xl bg-white/5 border border-white/10 flex items-start gap-2.5">
-                <CheckCircle2 className="w-4 h-4 text-blue-400 shrink-0 mt-0.5" />
-                <p className="text-xs text-slate-300 leading-relaxed">
-                  <strong>High Workshop Turnout:</strong> Consistent average of <strong>~{avgRSVPsPerEvent} RSVPs</strong> per event demonstrates high community demand.
-                </p>
-              </div>
-
-              <div className="p-3 rounded-2xl bg-white/5 border border-white/10 flex items-start gap-2.5">
-                <CheckCircle2 className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
-                <p className="text-xs text-slate-300 leading-relaxed">
-                  <strong>Financial Stability:</strong> Chapter treasury maintains a positive surplus buffer of <strong>₹{treasuryNet.toLocaleString()}</strong> for upcoming summits.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="pt-4 border-t border-slate-700/80 flex items-center justify-between text-xs text-slate-400">
-            <span>Semester 2026</span>
-            <span className="font-mono text-blue-400 font-semibold">Audit Compliant</span>
-          </div>
-        </div>
-      </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }

@@ -25,7 +25,7 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\package.json": {
-    "mtime": 1795166338.248487,
+    "mtime": 1795167299.7035089,
     "ast_hash": "dda3648839e4f57c8602681f046a12e4",
     "semantic_hash": ""
   },
@@ -125,8 +125,8 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\app\\api\\mail-sender\\figma\\import\\route.ts": {
-    "mtime": 1793985080.649695,
-    "ast_hash": "88ba7a022db4ab78977a88da92ea258c",
+    "mtime": 1795174771.4591565,
+    "ast_hash": "c8bbb45ffd53276ab847cfa33e985848",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\app\\api\\mail-sender\\gateway\\test\\route.ts": {
@@ -165,8 +165,8 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\app\\api\\mail-sender\\templates\\[name]\\route.ts": {
-    "mtime": 1795160539.179678,
-    "ast_hash": "4da424f1b1f6175eb0c150742ae11ac3",
+    "mtime": 1795174808.300807,
+    "ast_hash": "7d320c105b48addd134903cd80689e15",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\app\\api\\mail-sender\\test-email\\route.ts": {
@@ -455,8 +455,8 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\admin\\tabs\\AnalyticsTab.tsx": {
-    "mtime": 1794344189.7272067,
-    "ast_hash": "cd336902715facd91afcfc86369ea4de",
+    "mtime": 1795170572.962798,
+    "ast_hash": "79d2f95c0ce331f0f006befeaa821c58",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\admin\\tabs\\ApplicationsTab.tsx": {
@@ -490,13 +490,13 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\admin\\tabs\\MailStudioTab.tsx": {
-    "mtime": 1795160539.1957445,
-    "ast_hash": "5205fdc7e7f66bf2f5696572ac2fabd7",
+    "mtime": 1795174941.84412,
+    "ast_hash": "73b184e257d739259aa898aef0983749",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\admin\\tabs\\OverviewTab.tsx": {
-    "mtime": 1795160539.1967452,
-    "ast_hash": "840702a796c9e404d3fe41ef8479b4be",
+    "mtime": 1795170385.6090696,
+    "ast_hash": "ef1ee98ed0f1730d1d5d4086bfa7f220",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\components\\admin\\tabs\\UsersManagementTab.tsx": {
@@ -935,8 +935,8 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\lib\\mailer.ts": {
-    "mtime": 1794376522.2817123,
-    "ast_hash": "e58d09e8aed1c4c810638185906cb7c3",
+    "mtime": 1795174755.437839,
+    "ast_hash": "76a5de46e7bdf40909a515a94b9d89d4",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\lib\\resend.ts": {
@@ -997,11 +997,6 @@
   "D:\\DEV\\GDG\\newwebsite\\public\\fonts\\helvetiker_bold.typeface.json": {
     "mtime": 1792420442.1810348,
     "ast_hash": "cf7b67a02df3d3b06389d114eb2bed4c",
-    "semantic_hash": ""
-  },
-  "D:\\DEV\\GDG\\newwebsite\\templates\\new-execom-2026-27.json": {
-    "mtime": 1794379918.1567345,
-    "ast_hash": "c86443d349de1995537aa34eeec6df64",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\templates\\not-shortlisted.json": {
@@ -1092,11 +1087,6 @@
   "D:\\DEV\\GDG\\newwebsite\\public\\Blankspace Report.md": {
     "mtime": 1795160539.2577443,
     "ast_hash": "589702d2d6662345c82581fbcbacf659",
-    "semantic_hash": ""
-  },
-  "D:\\DEV\\GDG\\newwebsite\\templates\\new-execom-2026-27.html": {
-    "mtime": 1794379918.1557362,
-    "ast_hash": "7f9044df618a9e9d54bc45ae1c07103d",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\templates\\not-shortlisted.html": {
@@ -2275,13 +2265,23 @@
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\templates\\execom-invitation-2026-27.json": {
-    "mtime": 1795165219.0976682,
-    "ast_hash": "9aa3c4bbb9afd1fd279202c13803a23a",
+    "mtime": 1795167299.7090635,
+    "ast_hash": "0ca6dfd8ecb488c5b39cc2a6dc91ed0f",
     "semantic_hash": ""
   },
   "D:\\DEV\\GDG\\newwebsite\\templates\\execom-invitation-2026-27.html": {
-    "mtime": 1795165219.0970986,
-    "ast_hash": "46770f6cb106f674923da1f418b8c43b",
+    "mtime": 1795167299.707646,
+    "ast_hash": "1779791acab114a0e063aa0524065776",
+    "semantic_hash": ""
+  },
+  "D:\\DEV\\GDG\\newwebsite\\templates\\new-execom-2026-27.json": {
+    "mtime": 1795175054.7200496,
+    "ast_hash": "f4547a89c644cd52078aa93493f4eaca",
+    "semantic_hash": ""
+  },
+  "D:\\DEV\\GDG\\newwebsite\\templates\\new-execom-2026-27.html": {
+    "mtime": 1795175054.7190013,
+    "ast_hash": "bbee0e34f6ffe3ab8e09c0cf17d0d687",
     "semantic_hash": ""
   }
 }

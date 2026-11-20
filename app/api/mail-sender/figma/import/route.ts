@@ -2,6 +2,11 @@ import { NextRequest, NextResponse } from "next/server";
 import { importFigmaDesign, TEMPLATES_DIR, getMailConfig, updateMailConfig } from "@/lib/mailer";
 import fs from "fs";
 import path from "path";
+import { doc, setDoc } from "firebase/firestore";
+import { db } from "@/lib/firebase";
+
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export async function POST(req: NextRequest) {
   try {
@@ -27,8 +32,36 @@ export async function POST(req: NextRequest) {
     const { design, assetCount } = await importFigmaDesign(figmaUrl, token);
 
     const cleanName = templateName.trim().toLowerCase().replace(/[^a-z0-9_-]/g, "-");
-    const jsonPath = path.join(TEMPLATES_DIR, `${cleanName}.json`);
-    fs.writeFileSync(jsonPath, JSON.stringify(design, null, 2), "utf8");
+
+    // 1. Save imported Figma design directly to Firestore mail_templates (Primary)
+    try {
+      const docRef = doc(db, "mail_templates", cleanName);
+      await setDoc(
+        docRef,
+        {
+          id: cleanName,
+          name: templateName,
+          design,
+          hasDesign: true,
+          type: "html",
+          updatedAt: new Date().toISOString(),
+        },
+        { merge: true }
+      );
+    } catch (fsErr) {
+      console.warn("Firestore save failed for Figma template:", fsErr);
+    }
+
+    // 2. Also write to disk as fallback if writable
+    try {
+      if (!fs.existsSync(TEMPLATES_DIR)) {
+        fs.mkdirSync(TEMPLATES_DIR, { recursive: true });
+      }
+      const jsonPath = path.join(TEMPLATES_DIR, `${cleanName}.json`);
+      fs.writeFileSync(jsonPath, JSON.stringify(design, null, 2), "utf8");
+    } catch (diskErr: any) {
+      console.warn("Skipped local disk save for Figma template (serverless environment):", diskErr.message);
+    }
 
     return NextResponse.json({
       success: true,

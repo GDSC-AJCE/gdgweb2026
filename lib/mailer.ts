@@ -11,15 +11,29 @@ export const TEMPLATES_DIR = path.join(process.cwd(), "templates");
 export const ASSETS_DIR = path.join(process.cwd(), "public", "assets");
 export const FIGMA_ASSETS_DIR = path.join(process.cwd(), "public", "assets", "figma");
 
-// Ensure directories exist
-if (!fs.existsSync(TEMPLATES_DIR)) {
-  fs.mkdirSync(TEMPLATES_DIR, { recursive: true });
+// Ensure directories exist (safely caught for read-only serverless filesystems like Vercel)
+try {
+  if (!fs.existsSync(TEMPLATES_DIR)) {
+    fs.mkdirSync(TEMPLATES_DIR, { recursive: true });
+  }
+} catch (e) {
+  // Read-only filesystem in serverless environments (e.g. /var/task on Vercel)
 }
-if (!fs.existsSync(ASSETS_DIR)) {
-  fs.mkdirSync(ASSETS_DIR, { recursive: true });
+
+try {
+  if (!fs.existsSync(ASSETS_DIR)) {
+    fs.mkdirSync(ASSETS_DIR, { recursive: true });
+  }
+} catch (e) {
+  // Read-only filesystem in serverless environments
 }
-if (!fs.existsSync(FIGMA_ASSETS_DIR)) {
-  fs.mkdirSync(FIGMA_ASSETS_DIR, { recursive: true });
+
+try {
+  if (!fs.existsSync(FIGMA_ASSETS_DIR)) {
+    fs.mkdirSync(FIGMA_ASSETS_DIR, { recursive: true });
+  }
+} catch (e) {
+  // Read-only filesystem in serverless environments
 }
 
 export interface MailConfig {

@@ -35,9 +35,53 @@ import {
   Megaphone,
   Maximize2,
   Wand2,
+  ChevronDown,
 } from "lucide-react";
 import * as XLSX from "xlsx";
 import GeminiMailStudio from "./GeminiMailStudio";
+import { cn } from "@/lib/utils";
+import {
+  Button,
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuLabel,
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+  TooltipProvider,
+  toast,
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  CardFooter,
+  Input,
+  Textarea,
+  Label,
+  Badge,
+  Checkbox,
+  Progress,
+  Separator,
+  Table,
+  TableHeader,
+  TableBody,
+  TableHead,
+  TableRow,
+  TableCell,
+  Tabs,
+  TabsList,
+  TabsTrigger,
+  TabsContent,
+} from "@/components/ui";
 
 declare global {
   interface Window {
@@ -140,6 +184,19 @@ export default function MailStudioTab() {
       localStorage.setItem("gdg_mail_active_template", activeTemplate);
     }
   }, [activeTemplate]);
+
+  // Merge tag copy feedback
+  const [copiedTag, setCopiedTag] = useState<string | null>(null);
+  const copyMergeTag = (tag: string) => {
+    if (typeof window !== "undefined" && navigator?.clipboard) {
+      navigator.clipboard.writeText(tag);
+      setCopiedTag(tag);
+      toast.success(`Copied ${tag} to clipboard`);
+      setTimeout(() => {
+        setCopiedTag((curr) => (curr === tag ? null : curr));
+      }, 1800);
+    }
+  };
 
   // Preview
   const [previewHtml, setPreviewHtml] = useState("");
@@ -337,12 +394,12 @@ export default function MailStudioTab() {
       });
       const data = await res.json();
       if (data.success) {
-        alert("Configuration saved successfully!");
+        toast.success("Configuration saved successfully!");
       } else {
-        alert("Failed to save: " + data.error);
+        toast.error("Failed to save: " + data.error);
       }
     } catch (e: any) {
-      alert("Error saving config: " + e.message);
+      toast.error("Error saving config: " + e.message);
     }
   };
 
@@ -364,10 +421,10 @@ export default function MailStudioTab() {
       if (data.success && data.recipients) {
         setRecipients(data.recipients.map((r: any) => ({ ...r, selected: true })));
       } else {
-        alert(data.error || "Could not load sheet recipients.");
+        toast.error(data.error || "Could not load sheet recipients.");
       }
     } catch (err: any) {
-      alert("Failed to load recipients: " + err.message);
+      toast.error("Failed to load recipients: " + err.message);
     } finally {
       setLoadingSheetData(false);
     }
@@ -388,7 +445,7 @@ export default function MailStudioTab() {
         setCsvText(csvContent);
         await parseCsvData(csvContent);
       } catch (err: any) {
-        alert("Error parsing file: " + err.message);
+        toast.error("Error parsing file: " + err.message);
       }
     };
     reader.readAsBinaryString(file);
@@ -406,10 +463,10 @@ export default function MailStudioTab() {
       if (data.success && data.recipients) {
         setRecipients(data.recipients.map((r: any) => ({ ...r, selected: true })));
       } else {
-        alert(data.error || "Could not parse CSV.");
+        toast.error(data.error || "Could not parse CSV.");
       }
     } catch (err: any) {
-      alert("Error: " + err.message);
+      toast.error("Error: " + err.message);
     }
   };
 
@@ -494,7 +551,7 @@ export default function MailStudioTab() {
   const handleStartBatchSend = async () => {
     const selectedRecipients = recipients.filter((r) => r.selected);
     if (!selectedRecipients.length) {
-      alert("Please select at least 1 recipient to dispatch emails.");
+      toast.error("Please select at least 1 recipient to dispatch emails.");
       return;
     }
 
@@ -595,7 +652,7 @@ export default function MailStudioTab() {
         }
       }
     } catch (err: any) {
-      alert("Error sending batch: " + err.message);
+      toast.error("Error sending batch: " + err.message);
     } finally {
       setIsSending(false);
     }
@@ -732,13 +789,13 @@ export default function MailStudioTab() {
           if (typeof window !== "undefined") {
             localStorage.setItem("gdg_mail_active_template", activeTemplate);
           }
-          alert(`Template '${activeTemplate}' saved successfully!`);
+          toast.success(`Template '${activeTemplate}' saved successfully!`);
           refreshPreview();
         } else {
-          alert("Failed to save: " + resData.error);
+          toast.error("Failed to save: " + resData.error);
         }
       } catch (err: any) {
-        alert("Error saving template: " + err.message);
+        toast.error("Error saving template: " + err.message);
       }
     });
   };
@@ -851,8 +908,9 @@ export default function MailStudioTab() {
         window.unlayer.loadDesign(initialDesign);
       }
       refreshPreview();
+      toast.success(`Template '${newTemplateName}' created successfully!`);
     } catch (e: any) {
-      alert("Error creating template: " + e.message);
+      toast.error("Error creating template: " + e.message);
     }
   };
 
@@ -874,11 +932,12 @@ export default function MailStudioTab() {
           localStorage.setItem("gdg_mail_active_template", nextActive);
         }
         refreshPreview();
+        toast.success(`Template '${activeTemplate}' deleted successfully!`);
       } else {
-        alert("Failed to delete template: " + (data.error || "Unknown error"));
+        toast.error("Failed to delete template: " + (data.error || "Unknown error"));
       }
     } catch (e: any) {
-      alert("Error deleting: " + e.message);
+      toast.error("Error deleting: " + e.message);
     }
   };
 
@@ -891,7 +950,7 @@ export default function MailStudioTab() {
   const handleConfirmRenameTemplate = async () => {
     const trimmed = editTemplateName.trim();
     if (!trimmed) {
-      alert("Please provide a valid template name.");
+      toast.error("Please provide a valid template name.");
       return;
     }
 
@@ -922,9 +981,10 @@ export default function MailStudioTab() {
         }
       } catch (err) {}
 
+      toast.success("Template renamed successfully!");
       setRenameModalOpen(false);
     } catch (err: any) {
-      alert("Error renaming template: " + err.message);
+      toast.error("Error renaming template: " + err.message);
     } finally {
       setRenamingTemplate(false);
     }
@@ -1103,78 +1163,78 @@ export default function MailStudioTab() {
   return (
     <div className="space-y-6">
       {/* ================= TOP SUB-HEADER & NAVIGATION ================= */}
-      <div className="bg-white rounded-2xl border border-slate-200 p-4 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        {/* Brand & Mode */}
-        <div className="flex items-center space-x-3">
-          <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-blue-50 border border-blue-100 text-blue-600">
-            <Send className="w-5 h-5" />
-          </div>
-          <div>
-            <div className="flex items-center space-x-2">
-              <h2 className="text-base font-bold text-slate-900 leading-none">
-                GDG AJCE Mail Studio
-              </h2>
-              <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-blue-800">
-                Apps Script & MJML
-              </span>
+      <Card className="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-xs">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          {/* Brand & Mode */}
+          <div className="flex items-center space-x-3">
+            <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-blue-50 border border-blue-100 text-blue-600 shrink-0">
+              <Send className="w-5 h-5" />
             </div>
-            <p className="text-xs text-slate-500 mt-1">
-              Automated high-deliverability email dispatcher & visual Unlayer editor
-            </p>
-          </div>
-        </div>
-
-        {/* View Switcher Tabs */}
-        <div className="flex items-center space-x-2">
-          <div className="flex p-1 bg-slate-100 rounded-xl text-xs font-semibold">
-            <button
-              onClick={() => setActiveView("dispatch")}
-              className={`flex items-center px-3.5 py-1.5 rounded-lg transition ${
-                activeView === "dispatch"
-                  ? "bg-white text-slate-900 shadow-xs"
-                  : "text-slate-600 hover:text-slate-900"
-              }`}
-            >
-              <Send className="w-3.5 h-3.5 mr-1.5 text-blue-600" />
-              1. Dispatch Hub
-            </button>
-            <button
-              onClick={() => setActiveView("gemini")}
-              className={`flex items-center px-3.5 py-1.5 rounded-lg transition ${
-                activeView === "gemini"
-                  ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-xs font-bold"
-                  : "text-slate-600 hover:text-slate-900"
-              }`}
-            >
-              <Sparkles
-                className={`w-3.5 h-3.5 mr-1.5 ${
-                  activeView === "gemini" ? "text-amber-300" : "text-indigo-600"
-                }`}
-              />
-              2. ✨ Gemini AI Studio
-            </button>
-            <button
-              onClick={() => setActiveView("studio")}
-              className={`flex items-center px-3.5 py-1.5 rounded-lg transition ${
-                activeView === "studio"
-                  ? "bg-white text-slate-900 shadow-xs"
-                  : "text-slate-600 hover:text-slate-900"
-              }`}
-            >
-              <Layout className="w-3.5 h-3.5 mr-1.5 text-indigo-600" />
-              3. Visual Editor (Unlayer)
-            </button>
+            <div>
+              <div className="flex items-center space-x-2">
+                <h2 className="text-base font-bold text-slate-900 leading-none">
+                  GDG AJCE Mail Studio
+                </h2>
+                <Badge variant="blue" className="text-[10px] font-bold px-2 py-0.5">
+                  Apps Script &amp; MJML
+                </Badge>
+              </div>
+              <p className="text-xs text-slate-500 mt-1">
+                Automated high-deliverability email dispatcher &amp; visual Unlayer editor
+              </p>
+            </div>
           </div>
 
-          <button
-            onClick={() => setWebsiteModalOpen(true)}
-            className="hidden md:inline-flex items-center px-3 py-1.5 text-xs font-semibold rounded-xl bg-blue-50 text-blue-700 border border-blue-200 hover:bg-blue-100 transition"
-          >
-            <Globe className="w-3.5 h-3.5 mr-1 text-blue-600" />
-            Website API
-          </button>
+          {/* View Switcher Tabs */}
+          <div className="flex items-center space-x-2">
+            <Tabs
+              value={activeView}
+              onValueChange={(val) => setActiveView(val as "dispatch" | "gemini" | "studio")}
+              className="w-auto"
+            >
+              <TabsList className="bg-slate-100 p-1 rounded-xl h-auto border border-slate-200/60">
+                <TabsTrigger
+                  value="dispatch"
+                  className="gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-xs transition"
+                >
+                  <Send className="w-3.5 h-3.5 text-blue-600" />
+                  1. Dispatch Hub
+                </TabsTrigger>
+                <TabsTrigger
+                  value="gemini"
+                  className="gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-600 data-[state=active]:to-indigo-600 data-[state=active]:text-white data-[state=active]:shadow-xs transition"
+                >
+                  <Sparkles
+                    className={cn(
+                      "w-3.5 h-3.5",
+                      activeView === "gemini" ? "text-amber-300" : "text-indigo-600"
+                    )}
+                  />
+                  2. ✨ Gemini AI Studio
+                </TabsTrigger>
+                <TabsTrigger
+                  value="studio"
+                  className="gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-xs transition"
+                >
+                  <Layout className="w-3.5 h-3.5 text-indigo-600" />
+                  3. Visual Editor (Unlayer)
+                </TabsTrigger>
+              </TabsList>
+            </Tabs>
+
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => setWebsiteModalOpen(true)}
+              className="hidden md:inline-flex items-center text-xs font-semibold rounded-xl bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100 h-9"
+            >
+              <Globe className="w-3.5 h-3.5 mr-1 text-blue-600" />
+              Website API
+            </Button>
+          </div>
         </div>
-      </div>
+      </Card>
 
       {/* ================= VIEW 1: DISPATCH HUB ================= */}
       <div className={activeView === "dispatch" ? "block" : "hidden"}>
@@ -1182,15 +1242,15 @@ export default function MailStudioTab() {
           {/* LEFT COLUMN: Controls & Recipients (7 Cols) */}
           <div className="lg:col-span-7 space-y-6">
             {/* Step 1: Dispatch Engine & Gateway Setup */}
-            <div className="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs space-y-4">
-              <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-                <div className="flex items-center space-x-2">
-                  <div className="w-7 h-7 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center font-bold text-xs">
+            <Card className="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-xs space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-slate-100 gap-3">
+                <div className="flex items-center space-x-3">
+                  <Badge variant="blue" className="w-7 h-7 rounded-xl p-0 flex items-center justify-center font-bold text-xs shrink-0">
                     1
-                  </div>
+                  </Badge>
                   <div>
-                    <h3 className="text-sm font-semibold text-slate-800">
-                      Dispatch Engine & Gateway
+                    <h3 className="text-sm font-bold text-slate-800">
+                      Dispatch Engine &amp; Gateway
                     </h3>
                     <p className="text-[11px] text-slate-500">
                       Send via Google Apps Script Gateway (No App Passwords required)
@@ -1198,95 +1258,97 @@ export default function MailStudioTab() {
                   </div>
                 </div>
 
-                <div className="flex p-0.5 bg-slate-100 rounded-lg text-xs font-medium">
-                  <button
-                    onClick={() => setEngineTab("gateway")}
-                    className={`px-3 py-1 rounded-md transition flex items-center ${
-                      engineTab === "gateway"
-                        ? "bg-white text-slate-800 shadow-2xs font-semibold"
-                        : "text-slate-500 hover:text-slate-800"
-                    }`}
-                  >
-                    <Zap className="w-3 h-3 mr-1 text-amber-500" />
-                    Apps Script Gateway
-                  </button>
-                  <button
-                    onClick={() => setEngineTab("password")}
-                    className={`px-3 py-1 rounded-md transition flex items-center ${
-                      engineTab === "password"
-                        ? "bg-white text-slate-800 shadow-2xs font-semibold"
-                        : "text-slate-500 hover:text-slate-800"
-                    }`}
-                  >
-                    <Key className="w-3 h-3 mr-1 text-slate-400" />
-                    App Password
-                  </button>
-                </div>
+                <Tabs
+                  value={engineTab}
+                  onValueChange={(val) => setEngineTab(val as "gateway" | "password")}
+                  className="w-auto"
+                >
+                  <TabsList className="bg-slate-100 p-0.5 rounded-lg h-auto">
+                    <TabsTrigger
+                      value="gateway"
+                      className="px-3 py-1 rounded-md text-xs font-medium data-[state=active]:bg-white data-[state=active]:text-slate-800 data-[state=active]:shadow-2xs data-[state=active]:font-semibold transition flex items-center gap-1"
+                    >
+                      <Zap className="w-3 h-3 text-amber-500" />
+                      Apps Script Gateway
+                    </TabsTrigger>
+                    <TabsTrigger
+                      value="password"
+                      className="px-3 py-1 rounded-md text-xs font-medium data-[state=active]:bg-white data-[state=active]:text-slate-800 data-[state=active]:shadow-2xs data-[state=active]:font-semibold transition flex items-center gap-1"
+                    >
+                      <Key className="w-3 h-3 text-slate-400" />
+                      App Password
+                    </TabsTrigger>
+                  </TabsList>
+                </Tabs>
               </div>
 
               {/* ENGINE 1: Apps Script Gateway */}
               {engineTab === "gateway" && (
-                <div className="space-y-3.5">
-                  <div className="p-3 rounded-xl bg-blue-50/70 border border-blue-200/80 text-xs text-blue-900 flex items-start space-x-2.5">
+                <div className="space-y-4">
+                  <div className="p-3.5 rounded-xl bg-blue-50/70 border border-blue-200/80 text-xs text-blue-900 flex items-start space-x-2.5">
                     <ShieldCheck className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
-                    <div>
-                      <span className="font-bold">Organization Google Workspace Mode:</span>
+                    <div className="leading-relaxed">
+                      <span className="font-bold">Organization Google Workspace Mode: </span>
                       <span>
-                        {" "}
                         Executes under authenticated session{" "}
-                        <strong className="font-semibold">{senderEmail}</strong> with{" "}
-                        <strong>1,500 daily quota</strong>. No App Passwords or custom domain needed.
+                        <strong className="font-semibold text-blue-950">{senderEmail}</strong> with{" "}
+                        <strong className="font-semibold text-blue-950">1,500 daily quota</strong>. No App Passwords or custom domain needed.
                       </span>
                     </div>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                    <div className="sm:col-span-2">
-                      <label className="block text-xs font-semibold text-slate-700 mb-1">
+                    <div className="sm:col-span-2 space-y-1.5">
+                      <Label htmlFor="gateway-url-input" className="text-xs font-semibold text-slate-700">
                         Apps Script Web App URL <span className="text-slate-400 font-normal">(/exec)</span>
-                      </label>
-                      <input
+                      </Label>
+                      <Input
+                        id="gateway-url-input"
                         type="url"
                         value={gatewayUrl}
                         onChange={(e) => setGatewayUrl(e.target.value)}
                         placeholder="https://script.google.com/macros/s/AKfycb.../exec"
-                        className="w-full text-xs font-mono px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none bg-slate-50/50"
+                        className="font-mono text-xs h-9 bg-slate-50/50"
                       />
                     </div>
-                    <div>
-                      <label className="block text-xs font-semibold text-slate-700 mb-1">
+                    <div className="space-y-1.5">
+                      <Label htmlFor="gateway-api-key-input" className="text-xs font-semibold text-slate-700">
                         API Key / Secret
-                      </label>
-                      <input
+                      </Label>
+                      <Input
+                        id="gateway-api-key-input"
                         type="text"
                         value={gatewayApiKey}
                         onChange={(e) => setGatewayApiKey(e.target.value)}
-                        className="w-full text-xs font-mono px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                        className="font-mono text-xs h-9"
                       />
                     </div>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <div>
-                      <label className="block text-xs font-semibold text-slate-700 mb-1">
+                    <div className="space-y-1.5">
+                      <Label htmlFor="sender-name-input" className="text-xs font-semibold text-slate-700">
                         Display Sender Name
-                      </label>
-                      <input
+                      </Label>
+                      <Input
+                        id="sender-name-input"
                         type="text"
                         value={senderName}
                         onChange={(e) => setSenderName(e.target.value)}
-                        className="w-full text-xs px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                        className="text-xs h-9"
                       />
                     </div>
-                    <div>
-                      <label className="block text-xs font-semibold text-slate-700 mb-1">
+                    <div className="space-y-1.5">
+                      <Label htmlFor="sender-email-input" className="text-xs font-semibold text-slate-700">
                         Sender Email
-                      </label>
-                      <input
+                      </Label>
+                      <Input
+                        id="sender-email-input"
                         type="email"
                         value={senderEmail}
                         readOnly
-                        className="w-full text-xs px-3 py-2 rounded-lg border border-slate-200 bg-slate-100 text-slate-600 cursor-not-allowed"
+                        disabled
+                        className="text-xs h-9 bg-slate-100 text-slate-600 cursor-not-allowed"
                       />
                     </div>
                   </div>
@@ -1294,27 +1356,31 @@ export default function MailStudioTab() {
                   {/* Gateway Status Alert */}
                   {gatewayStatus.tested && (
                     <div
-                      className={`text-xs p-3 rounded-xl flex items-center space-x-2 ${
+                      className={cn(
+                        "text-xs p-3 rounded-xl flex items-center space-x-2 border",
                         gatewayStatus.online
-                          ? "bg-emerald-50 text-emerald-800 border border-emerald-200"
-                          : "bg-red-50 text-red-800 border border-red-200"
-                      }`}
+                          ? "bg-emerald-50 text-emerald-800 border-emerald-200"
+                          : "bg-red-50 text-red-800 border-red-200"
+                      )}
                     >
                       {gatewayStatus.online ? (
                         <CheckCircle className="w-4 h-4 text-emerald-600 shrink-0" />
                       ) : (
                         <AlertCircle className="w-4 h-4 text-red-600 shrink-0" />
                       )}
-                      <span>{gatewayStatus.message}</span>
+                      <span className="font-medium">{gatewayStatus.message}</span>
                     </div>
                   )}
 
-                  <div className="flex flex-wrap items-center justify-between pt-2 border-t border-slate-100 gap-2">
-                    <div className="flex items-center space-x-2">
-                      <button
+                  <div className="flex flex-wrap items-center justify-between pt-3 border-t border-slate-100 gap-2">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
                         onClick={handleTestGateway}
                         disabled={gatewayStatus.loading}
-                        className="inline-flex items-center px-3 py-1.5 text-xs font-semibold rounded-lg border border-slate-300 text-slate-700 hover:bg-slate-50 transition"
+                        className="h-8 text-xs font-semibold"
                       >
                         {gatewayStatus.loading ? (
                           <Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin text-blue-600" />
@@ -1322,171 +1388,191 @@ export default function MailStudioTab() {
                           <Radio className="w-3.5 h-3.5 mr-1.5 text-blue-600" />
                         )}
                         Test Connection
-                      </button>
-                      <button
+                      </Button>
+                      <Button
+                        type="button"
+                        variant="default"
+                        size="sm"
                         onClick={handleSaveSettings}
-                        className="inline-flex items-center px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-900 text-white hover:bg-slate-800 transition"
+                        className="h-8 text-xs font-semibold bg-slate-900 hover:bg-slate-800 text-white"
                       >
                         <Save className="w-3.5 h-3.5 mr-1.5" />
                         Save Gateway
-                      </button>
-                      <button
+                      </Button>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
                         onClick={() => setAppsScriptModalOpen(true)}
-                        className="inline-flex items-center px-2.5 py-1.5 text-xs font-semibold rounded-lg text-emerald-700 bg-emerald-50 border border-emerald-200 hover:bg-emerald-100 transition"
+                        className="h-8 text-xs font-semibold text-emerald-700 bg-emerald-50 border-emerald-200 hover:bg-emerald-100"
                       >
                         <FileCode2 className="w-3.5 h-3.5 mr-1 text-emerald-600" />
-                        Setup & Code
-                      </button>
+                        Setup &amp; Code
+                      </Button>
                     </div>
 
-                    <button
+                    <Button
+                      type="button"
+                      size="sm"
                       onClick={() => setTestModalOpen(true)}
-                      className="inline-flex items-center px-3 py-1.5 text-xs font-semibold rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition"
+                      className="h-8 text-xs font-semibold bg-blue-600 hover:bg-blue-700 text-white"
                     >
-                      <Send className="w-3.5 h-3.5 mr-1" />
+                      <Send className="w-3.5 h-3.5 mr-1.5" />
                       Send Test Email
-                    </button>
+                    </Button>
                   </div>
                 </div>
               )}
 
               {/* ENGINE 2: Gmail App Password */}
               {engineTab === "password" && (
-                <div className="space-y-3.5">
-                  <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-600">
+                <div className="space-y-4">
+                  <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-600 leading-relaxed">
                     For personal Gmail accounts with 2-Step Verification enabled. Requires generating
                     a 16-character App Password.
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-xs font-semibold text-slate-700 mb-1">
+                    <div className="space-y-1.5">
+                      <Label htmlFor="personal-gmail-input" className="text-xs font-semibold text-slate-700">
                         Gmail Address
-                      </label>
-                      <input
+                      </Label>
+                      <Input
+                        id="personal-gmail-input"
                         type="email"
                         value={senderEmail}
                         onChange={(e) => setSenderEmail(e.target.value)}
-                        className="w-full text-xs px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                        className="text-xs h-9"
                       />
                     </div>
-                    <div>
-                      <div className="flex justify-between items-center mb-1">
-                        <label className="block text-xs font-semibold text-slate-700">
+                    <div className="space-y-1.5">
+                      <div className="flex justify-between items-center">
+                        <Label htmlFor="personal-app-password-input" className="text-xs font-semibold text-slate-700">
                           App Password (16-char)
-                        </label>
+                        </Label>
                         <a
                           href="https://myaccount.google.com/apppasswords"
                           target="_blank"
                           rel="noreferrer"
-                          className="text-[11px] text-blue-600 hover:underline flex items-center"
+                          className="text-[11px] text-blue-600 hover:underline flex items-center gap-0.5"
                         >
-                          Create Password <ExternalLink className="w-2.5 h-2.5 ml-0.5" />
+                          Create Password <ExternalLink className="w-2.5 h-2.5" />
                         </a>
                       </div>
-                      <input
+                      <Input
+                        id="personal-app-password-input"
                         type={showPassword ? "text" : "password"}
                         value={appPassword}
                         onChange={(e) => setAppPassword(e.target.value)}
                         placeholder="xxxx xxxx xxxx xxxx"
-                        className="w-full text-xs px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none font-mono"
+                        className="text-xs h-9 font-mono"
                       />
                     </div>
                   </div>
-                  <div className="flex justify-end pt-2 border-t border-slate-100">
-                    <button
+                  <div className="flex justify-end pt-3 border-t border-slate-100">
+                    <Button
+                      type="button"
+                      size="sm"
                       onClick={handleSaveSettings}
-                      className="px-3.5 py-1.5 text-xs font-semibold rounded-lg bg-slate-900 text-white hover:bg-slate-800 transition"
+                      className="h-8 text-xs font-semibold bg-slate-900 hover:bg-slate-800 text-white"
                     >
                       Save App Password
-                    </button>
+                    </Button>
                   </div>
                 </div>
               )}
-            </div>
+            </Card>
 
             {/* Step 2: Recipients Source */}
-            <div className="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs space-y-4">
-              <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-                <div className="flex items-center space-x-2">
-                  <div className="w-7 h-7 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center font-bold text-xs">
+            <Card className="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-xs space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-slate-100 gap-3">
+                <div className="flex items-center space-x-3">
+                  <Badge variant="blue" className="w-7 h-7 rounded-xl p-0 flex items-center justify-center font-bold text-xs shrink-0">
                     2
-                  </div>
-                  <h3 className="text-sm font-semibold text-slate-800">Recipients Source</h3>
+                  </Badge>
+                  <h3 className="text-sm font-bold text-slate-800">Recipients Source</h3>
                 </div>
-                <div className="flex p-0.5 bg-slate-100 rounded-lg text-xs font-medium">
-                  <button
-                    onClick={() => setSourceTab("sheet")}
-                    className={`px-3 py-1 rounded-md transition ${
-                      sourceTab === "sheet"
-                        ? "bg-white text-slate-800 shadow-2xs font-semibold"
-                        : "text-slate-500 hover:text-slate-800"
-                    }`}
-                  >
-                    Google Sheet
-                  </button>
-                  <button
-                    onClick={() => setSourceTab("csv")}
-                    className={`px-3 py-1 rounded-md transition ${
-                      sourceTab === "csv"
-                        ? "bg-white text-slate-800 shadow-2xs font-semibold"
-                        : "text-slate-500 hover:text-slate-800"
-                    }`}
-                  >
-                    Upload Excel / CSV
-                  </button>
-                </div>
+                <Tabs
+                  value={sourceTab}
+                  onValueChange={(val) => setSourceTab(val as "sheet" | "csv")}
+                  className="w-auto"
+                >
+                  <TabsList className="bg-slate-100 p-0.5 rounded-lg h-auto">
+                    <TabsTrigger
+                      value="sheet"
+                      className="px-3 py-1 rounded-md text-xs font-medium data-[state=active]:bg-white data-[state=active]:text-slate-800 data-[state=active]:shadow-2xs data-[state=active]:font-semibold transition"
+                    >
+                      Google Sheet
+                    </TabsTrigger>
+                    <TabsTrigger
+                      value="csv"
+                      className="px-3 py-1 rounded-md text-xs font-medium data-[state=active]:bg-white data-[state=active]:text-slate-800 data-[state=active]:shadow-2xs data-[state=active]:font-semibold transition"
+                    >
+                      Upload Excel / CSV
+                    </TabsTrigger>
+                  </TabsList>
+                </Tabs>
               </div>
 
               {sourceTab === "sheet" && (
-                <div className="space-y-3">
+                <div className="space-y-4">
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                    <div className="sm:col-span-2">
-                      <label className="block text-xs font-semibold text-slate-700 mb-1">
+                    <div className="sm:col-span-2 space-y-1.5">
+                      <Label htmlFor="sheet-id-input" className="text-xs font-semibold text-slate-700">
                         Google Sheet Link or Sheet ID
-                      </label>
-                      <div className="relative">
-                        <input
+                      </Label>
+                      <div className="relative flex items-center">
+                        <Input
+                          id="sheet-id-input"
                           type="text"
                           value={sheetId}
                           onChange={(e) => setSheetId(e.target.value)}
                           placeholder="Paste full Google Sheet link or Sheet ID"
-                          className="w-full text-xs font-mono px-3 py-2 pr-24 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                          className="font-mono text-xs pr-24 h-9"
                         />
-                        <button
+                        <Button
                           type="button"
+                          variant="outline"
+                          size="sm"
                           onClick={handleFetchSheetTabs}
                           disabled={fetchingTabs}
-                          className="absolute right-1.5 top-1.5 px-2.5 py-1 text-[11px] font-semibold text-blue-600 hover:bg-blue-50 rounded-md border border-blue-200 transition"
+                          className="absolute right-1 top-1 h-7 px-2.5 text-[11px] font-semibold text-blue-600 border-blue-200 hover:bg-blue-50"
                         >
                           {fetchingTabs ? "Fetching..." : "Fetch Tabs"}
-                        </button>
+                        </Button>
                       </div>
                     </div>
-                    <div>
-                      <label className="block text-xs font-semibold text-slate-700 mb-1">
+                    <div className="space-y-1.5">
+                      <Label className="text-xs font-semibold text-slate-700">
                         Sheet Tab
-                      </label>
-                      <select
+                      </Label>
+                      <Select
                         value={selectedSheetTab}
-                        onChange={(e) => setSelectedSheetTab(e.target.value)}
-                        className="w-full text-xs px-3 py-2 rounded-lg border border-slate-300 bg-white font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                        onValueChange={(val) => setSelectedSheetTab(val)}
+                        disabled={sheetTabs.length === 0}
                       >
-                        {sheetTabs.map((t) => (
-                          <option key={t.name} value={t.name}>
-                            {t.name}
-                          </option>
-                        ))}
-                      </select>
+                        <SelectTrigger className="h-9 text-xs">
+                          <SelectValue placeholder={sheetTabs.length === 0 ? "Fetch tabs first" : "Select tab"} />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {sheetTabs.map((t) => (
+                            <SelectItem key={t.name} value={t.name} className="text-xs">
+                              {t.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
                     </div>
                   </div>
                   <div className="flex items-center justify-between pt-2">
                     <span className="text-[11px] text-slate-500">
-                      Ensure Sheet Share is set to "Anyone with link: Viewer".
+                      Ensure Sheet Share is set to &quot;Anyone with link: Viewer&quot;.
                     </span>
-                    <button
+                    <Button
+                      type="button"
+                      size="sm"
                       onClick={handleLoadFromSheet}
                       disabled={loadingSheetData}
-                      className="inline-flex items-center px-4 py-2 text-xs font-semibold rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition"
+                      className="bg-blue-600 hover:bg-blue-700 text-white font-semibold h-9 px-4"
                     >
                       {loadingSheetData ? (
                         <Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin" />
@@ -1494,18 +1580,18 @@ export default function MailStudioTab() {
                         <DownloadCloud className="w-3.5 h-3.5 mr-1.5" />
                       )}
                       Load from Sheet
-                    </button>
+                    </Button>
                   </div>
                 </div>
               )}
 
               {sourceTab === "csv" && (
-                <div className="space-y-3">
-                  <div className="flex justify-between items-center mb-1">
-                    <label className="block text-xs font-semibold text-slate-700">
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center">
+                    <Label htmlFor="csv-input-area" className="text-xs font-semibold text-slate-700">
                       Paste CSV or Drop Excel/CSV File
-                    </label>
-                    <label className="text-xs text-blue-600 hover:underline cursor-pointer font-medium flex items-center">
+                    </Label>
+                    <label className="text-xs text-blue-600 hover:underline cursor-pointer font-medium flex items-center gap-1">
                       📁 Upload .xlsx or .csv
                       <input
                         type="file"
@@ -1515,35 +1601,38 @@ export default function MailStudioTab() {
                       />
                     </label>
                   </div>
-                  <textarea
+                  <Textarea
+                    id="csv-input-area"
                     rows={4}
                     value={csvText}
                     onChange={(e) => setCsvText(e.target.value)}
                     placeholder="Name,Email,Team&#10;Rahul Sharma,rahul@amaljyothi.ac.in,Web Team&#10;Anjali Nair,anjali@amaljyothi.ac.in,AI Team"
-                    className="w-full text-xs font-mono p-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                    className="font-mono text-xs p-3 resize-y min-h-[90px]"
                   />
                   <div className="flex justify-end">
-                    <button
+                    <Button
+                      type="button"
+                      size="sm"
                       onClick={() => parseCsvData(csvText)}
-                      className="inline-flex items-center px-4 py-2 text-xs font-semibold rounded-lg bg-slate-800 text-white hover:bg-slate-900 transition"
+                      className="bg-slate-800 hover:bg-slate-900 text-white font-semibold h-9 px-4"
                     >
                       <CheckCircle className="w-3.5 h-3.5 mr-1.5" />
                       Parse Recipients
-                    </button>
+                    </Button>
                   </div>
                 </div>
               )}
-            </div>
+            </Card>
 
             {/* Step 3: Recipients Table */}
-            <div className="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs space-y-4">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-slate-100 gap-2">
-                <div className="flex items-center space-x-2">
-                  <div className="w-7 h-7 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center font-bold text-xs">
+            <Card className="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-xs space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-slate-100 gap-3">
+                <div className="flex items-center space-x-3">
+                  <Badge variant="blue" className="w-7 h-7 rounded-xl p-0 flex items-center justify-center font-bold text-xs shrink-0">
                     3
-                  </div>
+                  </Badge>
                   <div>
-                    <h3 className="text-sm font-semibold text-slate-800">Recipients List</h3>
+                    <h3 className="text-sm font-bold text-slate-800">Recipients List</h3>
                     <span className="text-xs text-slate-500">
                       {recipients.length} students loaded ({selectedCount} selected)
                     </span>
@@ -1552,130 +1641,136 @@ export default function MailStudioTab() {
                 <div className="flex items-center space-x-2">
                   <div className="relative">
                     <Search className="w-3.5 h-3.5 absolute left-2.5 top-2.5 text-slate-400" />
-                    <input
+                    <Input
                       type="text"
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       placeholder="Search student..."
-                      className="text-xs pl-8 pr-2.5 py-1.5 rounded-lg border border-slate-200 focus:ring-1 focus:ring-blue-500 focus:outline-none w-44"
+                      className="text-xs pl-8 pr-2.5 h-8 w-44"
                     />
                   </div>
-                  <button
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
                     onClick={() =>
                       setRecipients((prev) => prev.map((r) => ({ ...r, selected: true })))
                     }
-                    className="text-xs text-blue-600 hover:underline font-semibold"
+                    className="h-8 text-xs text-blue-600 hover:text-blue-700 px-2 font-semibold"
                   >
                     All
-                  </button>
-                  <span className="text-slate-300">|</span>
-                  <button
+                  </Button>
+                  <Separator orientation="vertical" className="h-4" />
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
                     onClick={() =>
                       setRecipients((prev) => prev.map((r) => ({ ...r, selected: false })))
                     }
-                    className="text-xs text-slate-500 hover:underline font-semibold"
+                    className="h-8 text-xs text-slate-500 hover:text-slate-800 px-2 font-semibold"
                   >
                     None
-                  </button>
+                  </Button>
                 </div>
               </div>
 
               {/* Table */}
               <div className="overflow-x-auto max-h-72 border border-slate-100 rounded-xl">
-                <table className="w-full text-left text-xs border-collapse">
-                  <thead className="bg-slate-50 text-slate-600 font-semibold sticky top-0 border-b border-slate-200 z-10">
-                    <tr>
-                      <th className="p-2.5 w-8 text-center">
-                        <input
-                          type="checkbox"
-                          checked={recipients.length > 0 && selectedCount === recipients.length}
-                          onChange={(e) => {
-                            const val = e.target.checked;
-                            setRecipients((prev) => prev.map((r) => ({ ...r, selected: val })));
+                <Table className="w-full text-xs">
+                  <TableHeader className="bg-slate-50 sticky top-0 z-10">
+                    <TableRow className="border-b border-slate-200">
+                      <TableHead className="w-10 text-center p-2.5">
+                        <Checkbox
+                          checked={
+                            recipients.length > 0 && selectedCount === recipients.length
+                              ? true
+                              : selectedCount > 0
+                              ? "indeterminate"
+                              : false
+                          }
+                          onCheckedChange={(val) => {
+                            const isChecked = val === true;
+                            setRecipients((prev) => prev.map((r) => ({ ...r, selected: isChecked })));
                           }}
-                          className="rounded text-blue-600"
+                          aria-label="Select all recipients"
                         />
-                      </th>
-                      <th className="p-2.5">Name</th>
-                      <th className="p-2.5">Email</th>
-                      <th className="p-2.5">Category</th>
-                      <th className="p-2.5">Time</th>
-                      <th className="p-2.5 text-center">Status</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-100 font-normal">
+                      </TableHead>
+                      <TableHead className="p-2.5 text-xs font-semibold text-slate-700">Name</TableHead>
+                      <TableHead className="p-2.5 text-xs font-semibold text-slate-700">Email</TableHead>
+                      <TableHead className="p-2.5 text-xs font-semibold text-slate-700">Category</TableHead>
+                      <TableHead className="p-2.5 text-xs font-semibold text-slate-700">Time</TableHead>
+                      <TableHead className="p-2.5 text-center text-xs font-semibold text-slate-700">Status</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody className="divide-y divide-slate-100">
                     {filteredRecipients.length === 0 ? (
-                      <tr>
-                        <td colSpan={6} className="p-6 text-center text-slate-400">
-                          No recipients loaded yet. Click <strong>"Load from Sheet"</strong> or
+                      <TableRow>
+                        <TableCell colSpan={6} className="p-6 text-center text-slate-400 text-xs">
+                          No recipients loaded yet. Click <strong>&quot;Load from Sheet&quot;</strong> or
                           upload Excel/CSV.
-                        </td>
-                      </tr>
+                        </TableCell>
+                      </TableRow>
                     ) : (
                       filteredRecipients.map((r) => (
-                        <tr key={r.id} className="hover:bg-slate-50/50">
-                          <td className="p-2.5 text-center">
-                            <input
-                              type="checkbox"
+                        <TableRow key={r.id} className="hover:bg-slate-50/60 transition-colors">
+                          <TableCell className="p-2.5 text-center">
+                            <Checkbox
                               checked={r.selected ?? false}
-                              onChange={(e) => {
-                                const val = e.target.checked;
+                              onCheckedChange={(val) => {
+                                const isChecked = val === true;
                                 setRecipients((prev) =>
                                   prev.map((item) =>
-                                    item.id === r.id ? { ...item, selected: val } : item
+                                    item.id === r.id ? { ...item, selected: isChecked } : item
                                   )
                                 );
                               }}
-                              className="rounded text-blue-600"
+                              aria-label={`Select ${r.name}`}
                             />
-                          </td>
-                          <td className="p-2.5 font-medium text-slate-800">{r.name}</td>
-                          <td className="p-2.5 text-slate-600 font-mono text-[11px]">{r.email}</td>
-                          <td className="p-2.5 text-slate-600">{r.category || r.team || "-"}</td>
-                          <td className="p-2.5 text-slate-500 text-[11px]">{r.time || "-"}</td>
-                          <td className="p-2.5 text-center">
-                            <span
-                              className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
-                                r.status === "Sent"
-                                  ? "bg-emerald-100 text-emerald-800"
-                                  : "bg-amber-100 text-amber-800"
-                              }`}
+                          </TableCell>
+                          <TableCell className="p-2.5 font-medium text-slate-800">{r.name}</TableCell>
+                          <TableCell className="p-2.5 text-slate-600 font-mono text-[11px]">{r.email}</TableCell>
+                          <TableCell className="p-2.5 text-slate-600">{r.category || r.team || "-"}</TableCell>
+                          <TableCell className="p-2.5 text-slate-500 text-[11px]">{r.time || "-"}</TableCell>
+                          <TableCell className="p-2.5 text-center">
+                            <Badge
+                              variant={r.status === "Sent" ? "success" : "warning"}
+                              className="text-[10px] font-bold px-2 py-0.5"
                             >
                               {r.status}
-                            </span>
-                          </td>
-                        </tr>
+                            </Badge>
+                          </TableCell>
+                        </TableRow>
                       ))
                     )}
-                  </tbody>
-                </table>
+                  </TableBody>
+                </Table>
               </div>
 
               {/* Progress & Send Action */}
               <div className="pt-2 space-y-3">
                 {isSending && (
-                  <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
+                  <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2.5">
                     <div className="flex justify-between items-center text-xs font-semibold">
                       <span className="text-slate-700">{sendProgress.statusText}</span>
                       <span className="text-blue-600 font-bold">{sendProgress.percent}%</span>
                     </div>
-                    <div className="w-full bg-slate-200 h-2.5 rounded-full overflow-hidden">
-                      <div
-                        className="bg-blue-600 h-2.5 rounded-full transition-all duration-300"
-                        style={{ width: `${sendProgress.percent}%` }}
-                      />
-                    </div>
+                    <Progress value={sendProgress.percent} className="h-2.5 bg-slate-200" />
                     <div className="flex justify-between text-[11px] text-slate-500 pt-1">
                       <span>
                         {sendProgress.current} of {sendProgress.total} completed (Success:{" "}
-                        {sendProgress.successCount}, Failed: {sendProgress.failCount})
+                        <strong className="text-emerald-600">{sendProgress.successCount}</strong>, Failed:{" "}
+                        <strong className="text-red-500">{sendProgress.failCount}</strong>)
                       </span>
-                      <button
+                      <Button
+                        type="button"
+                        variant="link"
+                        size="sm"
                         onClick={handleCancelSend}
-                        className="text-red-600 font-semibold hover:underline"
+                        className="text-red-600 hover:text-red-700 font-semibold p-0 h-auto"
                       >
                         Cancel Sending
-                      </button>
+                      </Button>
                     </div>
                   </div>
                 )}
@@ -1685,10 +1780,11 @@ export default function MailStudioTab() {
                     <span className="font-semibold text-slate-700">{selectedCount}</span> selected to
                     send
                   </div>
-                  <button
+                  <Button
+                    type="button"
                     onClick={handleStartBatchSend}
                     disabled={isSending || selectedCount === 0}
-                    className="inline-flex items-center px-5 py-2.5 text-xs font-bold rounded-xl bg-blue-600 text-white hover:bg-blue-700 transition shadow-sm disabled:opacity-50"
+                    className="h-10 px-5 text-xs font-bold rounded-xl bg-blue-600 hover:bg-blue-700 text-white shadow-xs disabled:opacity-50"
                   >
                     {isSending ? (
                       <Loader2 className="w-4 h-4 mr-2 animate-spin" />
@@ -1696,134 +1792,176 @@ export default function MailStudioTab() {
                       <Send className="w-4 h-4 mr-2" />
                     )}
                     Send Emails to Selected
-                  </button>
+                  </Button>
                 </div>
               </div>
-            </div>
+            </Card>
           </div>
 
           {/* RIGHT COLUMN: Template & Live Preview (5 Cols) */}
           <div className="lg:col-span-5 space-y-6">
-            <div className="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs sticky top-24 space-y-4">
+            <Card className="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-xs sticky top-24 space-y-4">
               <div className="flex items-center justify-between pb-3 border-b border-slate-100">
                 <div className="flex items-center space-x-2">
                   <Palette className="w-5 h-5 text-blue-600" />
-                  <h3 className="text-sm font-semibold text-slate-800">Email Template</h3>
+                  <h3 className="text-sm font-bold text-slate-800">Email Template</h3>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <button
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
                     onClick={() => setActiveView("studio")}
-                    className="text-xs text-indigo-600 hover:text-indigo-800 font-semibold flex items-center bg-indigo-50 px-2.5 py-1 rounded-lg border border-indigo-100"
+                    className="text-xs text-indigo-600 hover:text-indigo-800 font-semibold bg-indigo-50 border-indigo-100 hover:bg-indigo-100 h-8 px-2.5 rounded-lg"
                   >
                     <Layout className="w-3 h-3 mr-1" /> Open in Editor
-                  </button>
+                  </Button>
                   <div className="flex items-center space-x-1 bg-slate-100 p-1 rounded-lg">
-                    <button
-                      type="button"
-                      title="Desktop view"
-                      onClick={() => setPreviewDevice("desktop")}
-                      className={`p-1 rounded transition-colors ${
-                        previewDevice === "desktop"
-                          ? "bg-white shadow-2xs text-slate-800"
-                          : "text-slate-500 hover:text-slate-700"
-                      }`}
-                    >
-                      <Monitor className="w-3.5 h-3.5" />
-                    </button>
-                    <button
-                      type="button"
-                      title="Mobile view"
-                      onClick={() => setPreviewDevice("mobile")}
-                      className={`p-1 rounded transition-colors ${
-                        previewDevice === "mobile"
-                          ? "bg-white shadow-2xs text-slate-800"
-                          : "text-slate-500 hover:text-slate-700"
-                      }`}
-                    >
-                      <Smartphone className="w-3.5 h-3.5" />
-                    </button>
-                    <div className="w-px h-3 bg-slate-300 mx-0.5" />
-                    <button
-                      type="button"
-                      title="Expand / Fullscreen Preview Modal"
-                      onClick={() => setFullscreenPreviewOpen(true)}
-                      className="p-1 rounded text-slate-500 hover:text-slate-800 hover:bg-white transition-colors"
-                    >
-                      <Maximize2 className="w-3.5 h-3.5" />
-                    </button>
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => setPreviewDevice("desktop")}
+                            className={cn(
+                              "h-7 w-7 rounded-md transition-colors",
+                              previewDevice === "desktop"
+                                ? "bg-white shadow-2xs text-slate-800"
+                                : "text-slate-500 hover:text-slate-700"
+                            )}
+                          >
+                            <Monitor className="w-3.5 h-3.5" />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent side="bottom" className="text-xs">Desktop view</TooltipContent>
+                      </Tooltip>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => setPreviewDevice("mobile")}
+                            className={cn(
+                              "h-7 w-7 rounded-md transition-colors",
+                              previewDevice === "mobile"
+                                ? "bg-white shadow-2xs text-slate-800"
+                                : "text-slate-500 hover:text-slate-700"
+                            )}
+                          >
+                            <Smartphone className="w-3.5 h-3.5" />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent side="bottom" className="text-xs">Mobile view</TooltipContent>
+                      </Tooltip>
+                      <Separator orientation="vertical" className="h-4 mx-0.5" />
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => setFullscreenPreviewOpen(true)}
+                            className="h-7 w-7 rounded-md text-slate-500 hover:text-slate-800 hover:bg-white transition-colors"
+                          >
+                            <Maximize2 className="w-3.5 h-3.5" />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent side="bottom" className="text-xs">Expand / Fullscreen</TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
                   </div>
                 </div>
               </div>
 
-              <div className="space-y-3">
-                <div>
-                  <div className="flex justify-between items-center mb-1">
-                    <label className="block text-xs font-semibold text-slate-700">
+              <div className="space-y-3.5">
+                <div className="space-y-1.5">
+                  <div className="flex justify-between items-center">
+                    <Label className="text-xs font-semibold text-slate-700">
                       Active Template
-                    </label>
-                    <div className="flex items-center space-x-2">
-                      <button
+                    </Label>
+                    <div className="flex items-center space-x-1.5">
+                      <Button
                         type="button"
+                        variant="link"
+                        size="sm"
                         onClick={() => setActiveView("gemini")}
-                        className="text-[11px] text-indigo-600 hover:underline flex items-center font-bold"
+                        className="text-[11px] text-indigo-600 hover:text-indigo-800 font-bold p-0 h-auto"
                       >
                         <Sparkles className="w-3 h-3 mr-0.5 text-indigo-500" /> AI Create
-                      </button>
+                      </Button>
                       <span className="text-slate-300">|</span>
-                      <button
+                      <Button
+                        type="button"
+                        variant="link"
+                        size="sm"
                         onClick={() => setNewTemplateModalOpen(true)}
-                        className="text-[11px] text-blue-600 hover:underline flex items-center font-semibold"
+                        className="text-[11px] text-blue-600 hover:text-blue-800 font-semibold p-0 h-auto"
                       >
                         <PlusCircle className="w-3 h-3 mr-0.5 text-blue-500" /> New
-                      </button>
+                      </Button>
                       <span className="text-slate-300">|</span>
-                      <button
+                      <Button
                         type="button"
+                        variant="link"
+                        size="sm"
                         onClick={handleOpenRenameModal}
-                        className="text-[11px] text-slate-700 hover:text-blue-600 flex items-center font-medium"
+                        className="text-[11px] text-slate-700 hover:text-blue-600 font-medium p-0 h-auto"
                       >
                         <Edit2 className="w-3 h-3 mr-0.5 text-slate-500" /> Rename
-                      </button>
+                      </Button>
                       <span className="text-slate-300">|</span>
-                      <button
+                      <Button
+                        type="button"
+                        variant="link"
+                        size="sm"
                         onClick={handleDeleteTemplate}
-                        className="text-[11px] text-red-600 hover:underline flex items-center font-medium"
+                        className="text-[11px] text-red-600 hover:text-red-800 font-medium p-0 h-auto"
                       >
                         <Trash2 className="w-3 h-3 mr-0.5 text-red-500" /> Delete
-                      </button>
+                      </Button>
                     </div>
                   </div>
-                  <select
+                  <Select
                     value={activeTemplate}
-                    onChange={(e) => setActiveTemplate(e.target.value)}
-                    className="w-full text-xs px-3 py-2 rounded-lg border border-slate-300 bg-white font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                    onValueChange={(val) => setActiveTemplate(val)}
                   >
-                    {templates.map((t) => (
-                      <option key={t.id} value={t.id}>
-                        {t.name}
-                      </option>
-                    ))}
-                  </select>
+                    <SelectTrigger className="h-9 text-xs">
+                      <SelectValue placeholder="Select template" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {templates.filter((t) => Boolean(t.id)).map((t) => (
+                        <SelectItem key={t.id} value={t.id} className="text-xs font-medium cursor-pointer">
+                          {t.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
 
-                <div>
-                  <div className="flex justify-between items-center mb-1">
-                    <label className="block text-xs font-semibold text-slate-700">
+                <div className="space-y-1.5">
+                  <div className="flex justify-between items-center">
+                    <Label htmlFor="email-subject-input" className="text-xs font-semibold text-slate-700">
                       Subject Line
-                    </label>
-                    <button
+                    </Label>
+                    <Button
                       type="button"
+                      variant="link"
+                      size="sm"
                       onClick={handleOpenSubjectGenerator}
-                      className="text-[11px] text-indigo-600 hover:text-indigo-800 font-semibold flex items-center hover:underline"
+                      className="text-[11px] text-indigo-600 hover:text-indigo-800 font-semibold p-0 h-auto"
                     >
                       <Sparkles className="w-3 h-3 mr-1 text-indigo-500" /> ✨ AI Subject Ideas
-                    </button>
+                    </Button>
                   </div>
-                  <input
+                  <Input
+                    id="email-subject-input"
                     type="text"
                     value={emailSubject}
                     onChange={(e) => setEmailSubject(e.target.value)}
-                    className="w-full text-xs px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                    className="text-xs h-9"
                   />
                 </div>
               </div>
@@ -1832,33 +1970,39 @@ export default function MailStudioTab() {
               <div className="pt-2 border-t border-slate-100">
                 <div className="flex justify-between items-center mb-2">
                   <span className="text-xs font-semibold text-slate-600">Live Preview</span>
-                  <div className="flex items-center space-x-2">
-                    <button
+                  <div className="flex items-center space-x-1">
+                    <Button
                       type="button"
+                      variant="ghost"
+                      size="sm"
                       onClick={() => setFullscreenPreviewOpen(true)}
-                      className="text-xs text-slate-600 hover:text-blue-600 flex items-center font-semibold transition-colors"
+                      className="h-7 px-2 text-xs text-slate-600 hover:text-blue-600 font-semibold"
                       title="Expand / Fullscreen Preview Modal"
                     >
                       <Maximize2 className="w-3 h-3 mr-1" />
                       Expand
-                    </button>
+                    </Button>
                     <span className="text-slate-300">|</span>
-                    <button
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
                       onClick={refreshPreview}
                       disabled={refreshingPreview}
-                      className="text-xs text-blue-600 hover:underline flex items-center font-semibold"
+                      className="h-7 px-2 text-xs text-blue-600 hover:text-blue-700 font-semibold"
                     >
                       <RotateCw
-                        className={`w-3 h-3 mr-1 ${refreshingPreview ? "animate-spin" : ""}`}
+                        className={cn("w-3 h-3 mr-1", refreshingPreview && "animate-spin")}
                       />
                       Refresh
-                    </button>
+                    </Button>
                   </div>
                 </div>
                 <div
-                  className={`bg-slate-50 rounded-xl border border-slate-200 transition-all duration-300 mx-auto overflow-hidden relative shadow-inner ${
+                  className={cn(
+                    "bg-slate-50 rounded-xl border border-slate-200 transition-all duration-300 mx-auto overflow-hidden relative shadow-inner",
                     previewDevice === "mobile" ? "max-w-[360px]" : "w-full"
-                  }`}
+                  )}
                   style={{ height: "520px", maxHeight: "520px" }}
                 >
                   <iframe
@@ -1875,7 +2019,7 @@ export default function MailStudioTab() {
                   />
                 </div>
               </div>
-            </div>
+            </Card>
           </div>
         </div>
       </div>
@@ -1898,110 +2042,243 @@ export default function MailStudioTab() {
       <div className={activeView === "studio" ? "block" : "hidden"}>
         <div className="bg-white rounded-2xl border border-slate-200 shadow-xs flex flex-col h-[calc(100vh-180px)] overflow-hidden">
           {/* Unlayer Top Action Bar */}
-          <div className="bg-white border-b border-slate-200 h-12 px-4 flex items-center justify-between flex-none z-20">
-            <div className="flex items-center space-x-3">
-              <div className="flex items-center space-x-2">
-                <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">
-                  Template:
-                </span>
-                <select
-                  value={activeTemplate}
-                  onChange={(e) => {
-                    setActiveTemplate(e.target.value);
-                    loadTemplateToEditor(e.target.value);
-                  }}
-                  className="text-xs font-semibold text-slate-800 bg-slate-50 border border-slate-300 rounded-md px-2.5 py-1 focus:ring-1 focus:ring-blue-500 focus:outline-none cursor-pointer"
-                >
-                  {templates.map((t) => (
-                    <option key={t.id} value={t.id}>
-                      {t.name}
-                    </option>
-                  ))}
-                </select>
-                <button
+          <TooltipProvider delayDuration={150}>
+            <div className="bg-white/95 backdrop-blur-sm border-b border-slate-200 h-14 px-4 lg:px-6 flex items-center justify-between gap-3 flex-none z-20 overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+              {/* Left Group: Template Management */}
+              <div className="flex items-center gap-2.5 shrink-0">
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-bold text-slate-500 uppercase tracking-wider hidden sm:inline select-none">
+                    Template:
+                  </span>
+                  <Select
+                    value={activeTemplate}
+                    onValueChange={(val) => {
+                      setActiveTemplate(val);
+                      loadTemplateToEditor(val);
+                    }}
+                  >
+                    <SelectTrigger className="h-8 w-36 sm:w-44 md:w-52 text-xs font-semibold bg-slate-50/90 border-slate-200 hover:bg-slate-100/70 focus:ring-1 focus:ring-blue-500 rounded-lg">
+                      <SelectValue placeholder="Select template" />
+                    </SelectTrigger>
+                    <SelectContent className="max-h-64 z-50">
+                      {templates.filter((t) => Boolean(t.id)).map((t) => (
+                        <SelectItem key={t.id} value={t.id} className="text-xs font-medium cursor-pointer">
+                          {t.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        onClick={handleOpenRenameModal}
+                        className="h-8 w-8 text-slate-500 hover:text-blue-600 hover:bg-slate-100 border border-slate-200 bg-white rounded-lg shrink-0"
+                      >
+                        <Edit2 className="w-3.5 h-3.5" />
+                        <span className="sr-only">Rename active template</span>
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent side="bottom" className="text-[11px] font-medium">
+                      Rename template
+                    </TooltipContent>
+                  </Tooltip>
+                </div>
+
+                <Button
                   type="button"
-                  onClick={handleOpenRenameModal}
-                  title="Rename active template"
-                  className="p-1.5 rounded-md hover:bg-slate-100 text-slate-500 hover:text-blue-600 transition border border-slate-200 bg-white"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setNewTemplateModalOpen(true)}
+                  className="h-8 text-xs font-medium text-slate-700 hover:text-blue-600 hover:bg-blue-50/50 hover:border-blue-200 border-slate-200 rounded-lg shrink-0 gap-1.5 whitespace-nowrap"
                 >
-                  <Edit2 className="w-3.5 h-3.5" />
-                </button>
+                  <PlusCircle className="w-3.5 h-3.5 text-blue-600" />
+                  <span>New</span>
+                </Button>
               </div>
 
-              <div className="h-4 w-px bg-slate-200 hidden md:block" />
+              {/* Center Group: Personalization & Merge Tags */}
+              <div className="hidden lg:flex items-center gap-2 shrink-0">
+                <span className="text-xs font-semibold text-slate-400 select-none">
+                  Merge Tags:
+                </span>
+                <div className="flex items-center gap-1.5">
+                  {[
+                    { tag: "{{name}}", label: "Name" },
+                    { tag: "{{team}}", label: "Team" },
+                    { tag: "{{email}}", label: "Email" },
+                  ].map(({ tag, label }) => {
+                    const isCopied = copiedTag === tag;
+                    return (
+                      <Tooltip key={tag}>
+                        <TooltipTrigger asChild>
+                          <button
+                            type="button"
+                            onClick={() => copyMergeTag(tag)}
+                            className={cn(
+                              "inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-mono font-medium transition-all cursor-pointer border select-none whitespace-nowrap",
+                              isCopied
+                                ? "bg-emerald-50 border-emerald-300 text-emerald-700 shadow-2xs scale-105"
+                                : "bg-slate-50 hover:bg-blue-50/70 border-slate-200 hover:border-blue-200 text-slate-700 hover:text-blue-700"
+                            )}
+                          >
+                            {isCopied ? (
+                              <Check className="w-3 h-3 text-emerald-600" />
+                            ) : (
+                              <Copy className="w-3 h-3 text-slate-400 opacity-60" />
+                            )}
+                            <span>{isCopied ? "Copied!" : tag}</span>
+                          </button>
+                        </TooltipTrigger>
+                        <TooltipContent side="bottom" className="text-[11px]">
+                          Click to copy {label} tag ({tag})
+                        </TooltipContent>
+                      </Tooltip>
+                    );
+                  })}
 
-              <div className="text-xs text-slate-500 hidden lg:flex items-center space-x-1.5">
-                <span className="font-medium text-slate-600">Merge Tags:</span>
-                <span className="bg-blue-50 text-blue-700 border border-blue-200 px-1.5 py-0.5 rounded text-[11px] font-mono">
-                  {"{{name}}"}
-                </span>
-                <span className="bg-blue-50 text-blue-700 border border-blue-200 px-1.5 py-0.5 rounded text-[11px] font-mono">
-                  {"{{team}}"}
-                </span>
-                <span className="bg-blue-50 text-blue-700 border border-blue-200 px-1.5 py-0.5 rounded text-[11px] font-mono">
-                  {"{{email}}"}
-                </span>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <button
+                        type="button"
+                        className="inline-flex items-center gap-1 px-2 py-1 rounded-md text-[11px] font-medium text-slate-500 hover:text-slate-800 hover:bg-slate-100 border border-transparent transition cursor-pointer select-none"
+                      >
+                        <span>More</span>
+                        <ChevronDown className="w-3 h-3 opacity-60" />
+                      </button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="center" className="w-56 z-50">
+                      <DropdownMenuLabel className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">
+                        More Personalization Tags
+                      </DropdownMenuLabel>
+                      {[
+                        { tag: "{{category}}", desc: "Applicant role / category" },
+                        { tag: "{{time_slot}}", desc: "Assigned interview slot" },
+                        { tag: "{{date}}", desc: "Interview or event date" },
+                        { tag: "{{meet_link}}", desc: "Google Meet link" },
+                        { tag: "{{whatsapp_link}}", desc: "WhatsApp community link" },
+                      ].map(({ tag, desc }) => (
+                        <DropdownMenuItem
+                          key={tag}
+                          onClick={() => copyMergeTag(tag)}
+                          className="text-xs cursor-pointer flex items-center justify-between py-1.5"
+                        >
+                          <div className="flex flex-col">
+                            <span className="font-mono font-semibold text-blue-600">{tag}</span>
+                            <span className="text-[10px] text-slate-400">{desc}</span>
+                          </div>
+                          <Copy className="w-3 h-3 text-slate-400 opacity-60" />
+                        </DropdownMenuItem>
+                      ))}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
+              </div>
+
+              {/* Right Group: Structured Actions */}
+              <div className="flex items-center gap-2 shrink-0">
+                {/* AI Assistant */}
+                <Button
+                  type="button"
+                  size="sm"
+                  onClick={() => {
+                    setAiCopilotError(null);
+                    setAiCopilotOpen(true);
+                  }}
+                  className="h-8 px-3.5 text-xs font-semibold rounded-lg bg-gradient-to-r from-indigo-600 via-indigo-500 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white shadow-xs border-0 gap-1.5 transition-all shrink-0 whitespace-nowrap"
+                >
+                  <Sparkles className="w-3.5 h-3.5 text-amber-300 fill-amber-300/30 shrink-0" />
+                  <span>AI Assistant</span>
+                </Button>
+
+                {/* Design Tools Dropdown */}
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      className="h-8 text-xs font-medium border-slate-200 text-slate-700 hover:bg-slate-50 hover:text-slate-900 rounded-lg gap-1.5 shrink-0 whitespace-nowrap"
+                    >
+                      <Wand2 className="w-3.5 h-3.5 text-indigo-600 shrink-0" />
+                      <span className="hidden sm:inline">Design Tools</span>
+                      <span className="sm:hidden">Tools</span>
+                      <ChevronDown className="w-3 h-3 text-slate-400 shrink-0" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-56 z-50">
+                    <DropdownMenuItem
+                      onClick={() => setActiveView("gemini")}
+                      className="text-xs cursor-pointer gap-2.5 py-2"
+                    >
+                      <div className="w-7 h-7 rounded-md bg-indigo-50 border border-indigo-100 flex items-center justify-center shrink-0">
+                        <Sparkles className="w-3.5 h-3.5 text-indigo-600" />
+                      </div>
+                      <div className="flex flex-col">
+                        <span className="font-semibold text-slate-800">Gemini Studio</span>
+                        <span className="text-[10px] text-slate-500">AI template generation</span>
+                      </div>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={() => setFigmaModalOpen(true)}
+                      className="text-xs cursor-pointer gap-2.5 py-2"
+                    >
+                      <div className="w-7 h-7 rounded-md bg-purple-50 border border-purple-100 flex items-center justify-center shrink-0">
+                        <Palette className="w-3.5 h-3.5 text-purple-600" />
+                      </div>
+                      <div className="flex flex-col">
+                        <span className="font-semibold text-slate-800">Figma Import</span>
+                        <span className="text-[10px] text-slate-500">Import design from Figma URL</span>
+                      </div>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem
+                      onClick={handleExportHtml}
+                      className="text-xs cursor-pointer gap-2.5 py-2"
+                    >
+                      <div className="w-7 h-7 rounded-md bg-amber-50 border border-amber-100 flex items-center justify-center shrink-0">
+                        <Code className="w-3.5 h-3.5 text-amber-600" />
+                      </div>
+                      <div className="flex flex-col">
+                        <span className="font-semibold text-slate-800">Export HTML</span>
+                        <span className="text-[10px] text-slate-500">Download or copy raw code</span>
+                      </div>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+
+                {/* Divider */}
+                <div className="h-5 w-px bg-slate-200 hidden sm:block shrink-0" />
+
+                {/* Save Draft */}
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={handleSaveUnlayerDesign}
+                  className="h-8 px-3 text-xs font-medium border-slate-200 text-slate-700 hover:bg-slate-50 hover:text-emerald-700 rounded-lg gap-1.5 shrink-0 whitespace-nowrap"
+                >
+                  <Save className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                  <span className="hidden sm:inline">Save Draft</span>
+                  <span className="sm:hidden">Save</span>
+                </Button>
+
+                {/* Save & Apply */}
+                <Button
+                  type="button"
+                  size="sm"
+                  onClick={handleSaveAndApply}
+                  className="h-8 px-3.5 text-xs font-semibold rounded-lg bg-blue-600 hover:bg-blue-700 text-white shadow-xs border-0 gap-1.5 shrink-0 whitespace-nowrap transition-all"
+                >
+                  <Check className="w-3.5 h-3.5 text-white stroke-[2.5] shrink-0" />
+                  <span>Save & Apply</span>
+                </Button>
               </div>
             </div>
-
-            {/* Unlayer Action Buttons */}
-            <div className="flex items-center space-x-2">
-              <button
-                type="button"
-                onClick={() => {
-                  setAiCopilotError(null);
-                  setAiCopilotOpen(true);
-                }}
-                className="px-3 py-1 text-xs font-bold rounded-md bg-gradient-to-r from-indigo-600 to-purple-600 text-white hover:from-indigo-700 hover:to-purple-700 flex items-center shadow-2xs transition"
-              >
-                <Sparkles className="w-3.5 h-3.5 mr-1.5 text-amber-300" />
-                AI Assistant
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setActiveView("gemini")}
-                className="px-2.5 py-1 text-xs font-bold rounded-md border border-indigo-200 bg-indigo-50 text-indigo-700 hover:bg-indigo-100 flex items-center shadow-2xs"
-              >
-                <Sparkles className="w-3.5 h-3.5 mr-1 text-indigo-600" /> ✨ Gemini Studio
-              </button>
-
-              <button
-                onClick={() => setFigmaModalOpen(true)}
-                className="px-2.5 py-1 text-xs font-semibold rounded-md border border-purple-200 bg-purple-50 text-purple-700 hover:bg-purple-100 flex items-center shadow-2xs"
-              >
-                <Sparkles className="w-3.5 h-3.5 mr-1 text-purple-600" /> Figma
-              </button>
-
-              <button
-                onClick={() => setNewTemplateModalOpen(true)}
-                className="px-2.5 py-1 text-xs font-semibold rounded-md border border-blue-200 bg-blue-50 text-blue-700 hover:bg-blue-100 flex items-center shadow-2xs"
-              >
-                <PlusCircle className="w-3.5 h-3.5 mr-1 text-blue-600" /> + New
-              </button>
-
-              <button
-                onClick={handleSaveUnlayerDesign}
-                className="px-2.5 py-1 text-xs font-semibold rounded-md border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 flex items-center shadow-2xs"
-              >
-                <Save className="w-3.5 h-3.5 mr-1 text-emerald-600" /> Save
-              </button>
-
-              <button
-                onClick={handleExportHtml}
-                className="px-2.5 py-1 text-xs font-semibold rounded-md border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 flex items-center shadow-2xs"
-              >
-                <Code className="w-3.5 h-3.5 mr-1 text-amber-600" /> HTML
-              </button>
-
-              <button
-                onClick={handleSaveAndApply}
-                className="px-3.5 py-1 text-xs font-bold rounded-md bg-blue-600 text-white hover:bg-blue-700 flex items-center shadow-2xs transition"
-              >
-                <Check className="w-3.5 h-3.5 mr-1.5" /> Save & Apply
-              </button>
-            </div>
-          </div>
+          </TooltipProvider>
 
           {/* AI Copilot Update Summary Banner */}
           {aiCopilotSummary && (
@@ -2394,7 +2671,7 @@ export default function MailStudioTab() {
               <button
                 onClick={() => {
                   navigator.clipboard.writeText(exportedHtml);
-                  alert("Copied HTML code to clipboard!");
+                  toast.success("Copied HTML code to clipboard!");
                 }}
                 className="px-4 py-2 text-xs font-semibold rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800"
               >
