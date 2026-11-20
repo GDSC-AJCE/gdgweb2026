@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Sparkles,
   Send,
@@ -28,8 +28,86 @@ import {
   Palette,
   Eye,
   Megaphone,
+  Upload,
+  Image as ImageIcon,
+  Trash2,
+  Clock,
+  FileText,
+  UserCheck,
+  GripHorizontal,
+  Ban,
+  SlidersHorizontal,
+  X,
+  Sliders as SlidersIcon,
 } from "lucide-react";
 import { GeneratedEmailResult, GDG_COLORS } from "@/lib/gemini";
+
+// Supported Personalization Merge Tags for 1-click & drag-and-drop insertion
+const MERGE_TAGS = [
+  { tag: "{{name}}", label: "Recipient Name", color: "border-blue-200 bg-blue-50/90 text-blue-700 hover:bg-blue-100" },
+  { tag: "{{team}}", label: "Team / Category", color: "border-emerald-200 bg-emerald-50/90 text-emerald-700 hover:bg-emerald-100" },
+  { tag: "{{email}}", label: "Email Address", color: "border-slate-300 bg-slate-100 text-slate-700 hover:bg-slate-200" },
+  { tag: "{{date}}", label: "Event Date", color: "border-amber-200 bg-amber-50/90 text-amber-700 hover:bg-amber-100" },
+  { tag: "{{time}}", label: "Time Slot", color: "border-purple-200 bg-purple-50/90 text-purple-700 hover:bg-purple-100" },
+  { tag: "{{meet_link}}", label: "Google Meet", color: "border-rose-200 bg-rose-50/90 text-rose-700 hover:bg-rose-100" },
+  { tag: "{{whatsapp_link}}", label: "WhatsApp Group", color: "border-teal-200 bg-teal-50/90 text-teal-700 hover:bg-teal-100" },
+];
+
+// Quick Negative Prompt Exclusion Presets
+const NEGATIVE_PRESETS = [
+  "No Corporate Jargon",
+  "No Complex Tables",
+  "No Aggressive Urgency",
+  "Under 150 Words",
+  "No Generic Greetings",
+  "Mobile Single Column",
+];
+
+// Expanded Tone Presets
+const TONE_PRESETS = [
+  {
+    id: "energetic",
+    label: "⚡ Energetic Community",
+    value: "GDG Community Energetic (Friendly, Tech-forward, Welcoming)",
+    desc: "Vibrant, friendly & tech-forward",
+  },
+  {
+    id: "academic",
+    label: "🎓 Formal Academic",
+    value: "Formal, Academic & Respectful (Faculty, Dean & College Administration)",
+    desc: "Polished, respectful & institutional",
+  },
+  {
+    id: "reminder",
+    label: "⏰ Urgent 24h Reminder",
+    value: "Urgent, Action-Oriented & Deadline Approaching",
+    desc: "High-stakes countdown",
+  },
+  {
+    id: "shortlist",
+    label: "🎉 Shortlist Congratulations",
+    value: "Warm, Celebratory & Congratulations (Selected Candidates)",
+    desc: "Celebratory milestone",
+  },
+  {
+    id: "encouragement",
+    label: "🤝 Warm Encouragement",
+    value: "Warm, Empathetic, Encouraging & Celebratory",
+    desc: "Empathetic community growth",
+  },
+];
+
+// Sample Student Data for Token Simulation in Live Preview
+const SAMPLE_STUDENT_DATA: Record<string, string> = {
+  "{{name}}": "Alex Developer",
+  "{{team}}": "AI & Cloud Innovation Team",
+  "{{category}}": "Machine Learning & Generative AI",
+  "{{email}}": "alex.dev@amaljyothi.ac.in",
+  "{{date}}": "Saturday, Nov 28, 2026",
+  "{{time}}": "10:30 AM - 11:00 AM IST",
+  "{{meet_link}}": "https://meet.google.com/xyz-gdg-ajce",
+  "{{whatsapp_link}}": "https://chat.whatsapp.com/GdgAjceCommunityDemo",
+};
 
 interface GeminiMailStudioProps {
   onSaveAsTemplate: (name: string, html: string, design: any) => Promise<void>;
@@ -54,6 +132,20 @@ export default function GeminiMailStudio({
   const [tone, setTone] = useState("GDG Community Energetic (Friendly, Tech-forward, Welcoming)");
   const [themeColor, setThemeColor] = useState(GDG_COLORS.blue);
   const [templateFormat, setTemplateFormat] = useState<"shortlisted" | "standard">("shortlisted");
+
+  // Power Features State: Negative Prompts & Temperature
+  const [negativePrompt, setNegativePrompt] = useState("");
+  const [temperature, setTemperature] = useState<number>(0.7);
+
+  // Power Features State: Custom Header Banner Drag & Drop
+  const [customBanner, setCustomBanner] = useState<string>("");
+  const [isDraggingBanner, setIsDraggingBanner] = useState(false);
+  const bannerFileInputRef = useRef<HTMLInputElement>(null);
+
+  // Power Features State: Live Token Simulator & Dragging Tags
+  const [simulateStudentData, setSimulateStudentData] = useState(false);
+  const [isPromptDragOver, setIsPromptDragOver] = useState(false);
+  const promptTextareaRef = useRef<HTMLTextAreaElement>(null);
 
   // Accordion details
   const [detailsOpen, setDetailsOpen] = useState(false);
@@ -269,6 +361,99 @@ export default function GeminiMailStudio({
     setDetailsOpen(true);
   };
 
+  // Helper: Insert merge tag at current cursor position in prompt textarea
+  const insertTag = (tag: string) => {
+    const el = promptTextareaRef.current;
+    if (el) {
+      const start = el.selectionStart ?? prompt.length;
+      const end = el.selectionEnd ?? prompt.length;
+      const updated = prompt.substring(0, start) + tag + prompt.substring(end);
+      setPrompt(updated);
+      setTimeout(() => {
+        el.focus();
+        el.setSelectionRange(start + tag.length, start + tag.length);
+      }, 0);
+    } else {
+      setPrompt((prev) => `${prev} ${tag}`);
+    }
+  };
+
+  // Helper: Toggle negative preset exclusions
+  const toggleNegativePreset = (preset: string) => {
+    const current = negativePrompt.trim();
+    const regex = new RegExp(`(^|[,;\\s]+)${preset.replace(/[-\\/\\\\^$*+?.()|[\\]{}]/g, "\\$&")}([,;\\s]+|$)`, "i");
+    if (regex.test(current)) {
+      const cleaned = current
+        .replace(regex, " ")
+        .replace(/\s*,\s*,/g, ",")
+        .replace(/^[\s,]+|[\s,]+$/g, "")
+        .trim();
+      setNegativePrompt(cleaned);
+    } else {
+      if (!current) {
+        setNegativePrompt(preset);
+      } else {
+        setNegativePrompt(`${current}, ${preset}`);
+      }
+    }
+  };
+
+  const isNegativePresetActive = (preset: string) => {
+    const regex = new RegExp(`(^|[,;\\s]+)${preset.replace(/[-\\/\\\\^$*+?.()|[\\]{}]/g, "\\$&")}([,;\\s]+|$)`, "i");
+    return regex.test(negativePrompt);
+  };
+
+  // Helper: Process drag-and-drop or file selection for header banner
+  const handleBannerFile = (file: File) => {
+    if (!file.type.startsWith("image/")) {
+      alert("Please upload a valid image file (PNG, JPG, WebP, SVG).");
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const dataUrl = e.target?.result as string;
+      if (dataUrl) {
+        setCustomBanner(dataUrl);
+      }
+    };
+    reader.readAsDataURL(file);
+  };
+
+  // Helper: Compute live reading time & word metrics
+  const computeMetrics = (data: GeneratedEmailResult | null) => {
+    if (!data) return { words: 0, chars: 0, readingTimeSec: 0 };
+    const allText = [
+      data.subject || "",
+      data.previewText || "",
+      data.headline || "",
+      data.summary || "",
+      (data.bodyHtml || "").replace(/<[^>]+>/g, " "),
+    ].join(" ");
+    const words = allText.trim().split(/\s+/).filter(Boolean).length;
+    const chars = allText.length;
+    const readingTimeSec = Math.max(15, Math.round((words / 200) * 60));
+    return { words, chars, readingTimeSec };
+  };
+
+  // Helper: Resolve display HTML for live preview with sample token simulation & banner override
+  const getDisplayHtml = (rawHtml: string, simulate: boolean, bannerUrl?: string) => {
+    if (!rawHtml) return "";
+    let html = rawHtml;
+    if (bannerUrl) {
+      html = html.replace(
+        /https:\/\/assets\.unlayer\.com\/projects\/0\/1793981389866-GDG%20Header\.png\?w=1160px/g,
+        bannerUrl
+      );
+    }
+    if (simulate) {
+      Object.entries(SAMPLE_STUDENT_DATA).forEach(([token, sampleVal]) => {
+        const escaped = token.replace(/[{}]/g, "\\$&");
+        html = html.replace(new RegExp(escaped, "g"), sampleVal);
+      });
+    }
+    return html;
+  };
+
   // 3. Generate Email with Gemini
   const handleGenerateEmail = async () => {
     if (!prompt.trim()) {
@@ -289,6 +474,10 @@ export default function GeminiMailStudio({
           themeColor,
           details,
           templateFormat,
+          negativePrompt: negativePrompt.trim() || undefined,
+          tags: MERGE_TAGS.map((t) => t.tag),
+          temperature,
+          headerBannerUrl: customBanner || undefined,
           apiKey: apiKey.trim() || undefined,
         }),
       });
@@ -487,18 +676,278 @@ export default function GeminiMailStudio({
               </button>
             </div>
 
+            {/* Draggable Merge Tags Toolbar */}
+            <div className="space-y-1.5 bg-slate-50 p-3 rounded-xl border border-slate-200">
+              <div className="flex items-center justify-between">
+                <span className="text-[11px] font-bold text-slate-700 flex items-center">
+                  <Tag className="w-3 h-3 mr-1 text-blue-600" />
+                  Personalization Merge Tags
+                </span>
+                <span className="text-[10px] text-slate-400">Drag chip or click to insert</span>
+              </div>
+              <div className="flex flex-wrap gap-1.5">
+                {MERGE_TAGS.map((t) => (
+                  <div
+                    key={t.tag}
+                    draggable={true}
+                    onDragStart={(e) => {
+                      e.dataTransfer.setData("text/plain", t.tag);
+                      e.dataTransfer.effectAllowed = "copy";
+                    }}
+                    onClick={() => insertTag(t.tag)}
+                    className={`inline-flex items-center space-x-1 px-2 py-1 rounded-lg border text-[11px] font-mono cursor-grab active:cursor-grabbing transition select-none shadow-2xs ${t.color}`}
+                    title={`Drag or click to insert ${t.tag} (${t.label})`}
+                  >
+                    <GripHorizontal className="w-3 h-3 opacity-60 mr-0.5" />
+                    <span className="font-semibold">{t.tag}</span>
+                    <span className="text-[9px] font-sans opacity-70 ml-1">({t.label})</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
             {/* Prompt Textarea */}
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">
-                Prompt / Brief
-              </label>
+              <div className="flex items-center justify-between mb-1">
+                <label className="block text-xs font-semibold text-slate-700">
+                  Prompt / Brief
+                </label>
+                <span className="text-[10px] text-slate-400">
+                  Drop tags anywhere inside
+                </span>
+              </div>
               <textarea
+                ref={promptTextareaRef}
                 rows={4}
                 value={prompt}
                 onChange={(e) => setPrompt(e.target.value)}
+                onDragOver={(e) => {
+                  e.preventDefault();
+                  setIsPromptDragOver(true);
+                }}
+                onDragLeave={() => setIsPromptDragOver(false)}
+                onDrop={(e) => {
+                  e.preventDefault();
+                  setIsPromptDragOver(false);
+                  const dropped = e.dataTransfer.getData("text/plain");
+                  if (dropped) {
+                    insertTag(dropped);
+                  }
+                }}
                 placeholder="e.g. Announce Flutter & Firebase build sprint, mention timing, lab venue, prerequisites, and registration link..."
-                className="w-full text-xs p-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none leading-relaxed resize-y font-normal"
+                className={`w-full text-xs p-3 rounded-xl border focus:ring-2 focus:ring-blue-500 focus:outline-none leading-relaxed resize-y font-normal transition ${
+                  isPromptDragOver
+                    ? "border-blue-500 bg-blue-50/40 ring-2 ring-blue-500/30"
+                    : "border-slate-300"
+                }`}
               />
+            </div>
+
+            {/* Negative Prompts & Constraints Section */}
+            <div className="space-y-2 pt-1 border-t border-slate-100">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-1.5">
+                  <Ban className="w-3.5 h-3.5 text-rose-500" />
+                  <label className="text-xs font-semibold text-slate-700">
+                    Negative Constraints (What to Avoid)
+                  </label>
+                </div>
+                {negativePrompt && (
+                  <button
+                    type="button"
+                    onClick={() => setNegativePrompt("")}
+                    className="text-[10px] font-semibold text-rose-600 hover:underline"
+                  >
+                    Clear All
+                  </button>
+                )}
+              </div>
+              <p className="text-[11px] text-slate-500">
+                Instruct Gemini what formatting styles, tones, buzzwords, or elements to strictly eliminate.
+              </p>
+
+              {/* Quick Toggleable Exclusion Pills */}
+              <div className="flex flex-wrap gap-1.5">
+                {NEGATIVE_PRESETS.map((preset) => {
+                  const active = isNegativePresetActive(preset);
+                  return (
+                    <button
+                      key={preset}
+                      type="button"
+                      onClick={() => toggleNegativePreset(preset)}
+                      className={`px-2.5 py-1 rounded-lg border text-[11px] font-medium transition flex items-center space-x-1 ${
+                        active
+                          ? "bg-rose-50 border-rose-300 text-rose-700 ring-2 ring-rose-500/20 shadow-2xs font-semibold"
+                          : "bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100"
+                      }`}
+                    >
+                      <span className="text-[10px]">{active ? "🚫" : "＋"}</span>
+                      <span>{preset}</span>
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Custom Negative Textarea/Input */}
+              <div className="relative">
+                <input
+                  type="text"
+                  value={negativePrompt}
+                  onChange={(e) => setNegativePrompt(e.target.value)}
+                  placeholder="e.g. Avoid clichés, no excessive exclamation marks, no pricing mention..."
+                  className="w-full text-xs px-3 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-rose-500 focus:outline-none pr-7 bg-white"
+                />
+                {negativePrompt && (
+                  <button
+                    type="button"
+                    onClick={() => setNegativePrompt("")}
+                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 text-xs"
+                  >
+                    ✕
+                  </button>
+                )}
+              </div>
+            </div>
+
+            {/* Creativity / Temperature Slider */}
+            <div className="space-y-2 pt-1 border-t border-slate-100">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-1.5">
+                  <SlidersHorizontal className="w-3.5 h-3.5 text-indigo-600" />
+                  <label className="text-xs font-semibold text-slate-700">
+                    Creativity & Temperature
+                  </label>
+                </div>
+                <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 border border-slate-200">
+                  {temperature.toFixed(2)}
+                </span>
+              </div>
+
+              {/* Dynamic Status Indicator */}
+              <div className="flex items-center justify-between text-[11px] px-2.5 py-1 rounded-lg bg-slate-50 border border-slate-200">
+                <span className="text-slate-500">Model Tone Mode:</span>
+                <span className="font-semibold text-slate-800">
+                  {temperature <= 0.35
+                    ? "🎯 Precise & Structured (0.2)"
+                    : temperature < 0.85
+                    ? "⚖️ Balanced Community (0.7)"
+                    : "🎨 Creative & Punchy (0.95)"}
+                </span>
+              </div>
+
+              {/* Range Slider */}
+              <input
+                type="range"
+                min="0.2"
+                max="1.0"
+                step="0.05"
+                value={temperature}
+                onChange={(e) => setTemperature(parseFloat(e.target.value))}
+                className="w-full accent-blue-600 cursor-pointer"
+              />
+
+              {/* Quick Preset Buttons */}
+              <div className="grid grid-cols-3 gap-1.5">
+                {[
+                  { val: 0.2, label: "🎯 Precise (0.2)" },
+                  { val: 0.7, label: "⚖️ Balanced (0.7)" },
+                  { val: 0.95, label: "🎨 Creative (0.95)" },
+                ].map((p) => (
+                  <button
+                    key={p.val}
+                    type="button"
+                    onClick={() => setTemperature(p.val)}
+                    className={`py-1 px-1.5 rounded-lg border text-[10px] font-semibold transition ${
+                      temperature === p.val
+                        ? "bg-blue-50 border-blue-400 text-blue-700 ring-1 ring-blue-400/30"
+                        : "bg-white border-slate-200 text-slate-600 hover:bg-slate-50"
+                    }`}
+                  >
+                    {p.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Header Banner Drag & Drop Area */}
+            <div className="space-y-2 pt-1 border-t border-slate-100">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-1.5">
+                  <ImageIcon className="w-3.5 h-3.5 text-blue-600" />
+                  <label className="text-xs font-semibold text-slate-700">
+                    Header Banner / Flyer Upload
+                  </label>
+                </div>
+                {customBanner ? (
+                  <span className="text-[10px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200 flex items-center">
+                    <Check className="w-2.5 h-2.5 mr-1" /> Custom Banner Set
+                  </span>
+                ) : (
+                  <span className="text-[10px] text-slate-400">Default Official GDG Banner</span>
+                )}
+              </div>
+
+              <input
+                type="file"
+                ref={bannerFileInputRef}
+                accept="image/*"
+                className="hidden"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) handleBannerFile(file);
+                }}
+              />
+
+              {customBanner ? (
+                <div className="relative rounded-xl border border-slate-200 overflow-hidden bg-slate-50 p-2 space-y-2">
+                  <div className="relative w-full h-24 rounded-lg overflow-hidden bg-slate-100 flex items-center justify-center border border-slate-200">
+                    <img
+                      src={customBanner}
+                      alt="Custom Banner Preview"
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="text-[11px] text-slate-500 font-medium">Custom Banner in Use</span>
+                    <button
+                      type="button"
+                      onClick={() => setCustomBanner("")}
+                      className="px-2 py-1 text-[11px] font-semibold text-rose-600 hover:text-rose-700 hover:bg-rose-50 rounded-md transition flex items-center space-x-1"
+                    >
+                      <Trash2 className="w-3 h-3" />
+                      <span>Reset to Official Banner</span>
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <div
+                  onDragOver={(e) => {
+                    e.preventDefault();
+                    setIsDraggingBanner(true);
+                  }}
+                  onDragLeave={() => setIsDraggingBanner(false)}
+                  onDrop={(e) => {
+                    e.preventDefault();
+                    setIsDraggingBanner(false);
+                    const file = e.dataTransfer.files?.[0];
+                    if (file) handleBannerFile(file);
+                  }}
+                  onClick={() => bannerFileInputRef.current?.click()}
+                  className={`border-2 border-dashed rounded-xl p-3.5 text-center cursor-pointer transition ${
+                    isDraggingBanner
+                      ? "border-blue-500 bg-blue-50/70"
+                      : "border-slate-300 hover:border-slate-400 bg-slate-50/50 hover:bg-slate-50"
+                  }`}
+                >
+                  <Upload className="w-5 h-5 text-slate-400 mx-auto mb-1.5" />
+                  <p className="text-xs font-semibold text-slate-700">
+                    Drag & drop flyer or click to browse
+                  </p>
+                  <p className="text-[10px] text-slate-400 mt-0.5">
+                    PNG, JPG, WebP (Optimal: 1200×300 or 600×150 px)
+                  </p>
+                </div>
+              )}
             </div>
 
             {/* Template Format Selector (Predefined Shortlisted vs Standard) */}
@@ -578,17 +1027,34 @@ export default function GeminiMailStudio({
                   onChange={(e) => setTone(e.target.value)}
                   className="w-full text-xs px-3 py-2 rounded-lg border border-slate-300 bg-white font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none"
                 >
-                  <option value="GDG Community Energetic (Friendly, Tech-forward, Welcoming)">
-                    ⚡ GDG Community Energy
-                  </option>
-                  <option value="Professional, Executive & Direct">👔 Professional & Formal</option>
-                  <option value="Urgent, Action-Oriented & Deadline Approaching">
-                    ⏳ Urgent & High-Stakes
-                  </option>
-                  <option value="Warm, Empathetic, Encouraging & Celebratory">
-                    🤝 Warm & Welcoming
-                  </option>
+                  {TONE_PRESETS.map((tp) => (
+                    <option key={tp.id} value={tp.value}>
+                      {tp.label}
+                    </option>
+                  ))}
                 </select>
+              </div>
+            </div>
+
+            {/* Quick Tone Selector Pills */}
+            <div>
+              <label className="block text-[11px] font-semibold text-slate-600 mb-1">Quick Tone Selection</label>
+              <div className="flex flex-wrap gap-1.5">
+                {TONE_PRESETS.map((tp) => (
+                  <button
+                    key={tp.id}
+                    type="button"
+                    onClick={() => setTone(tp.value)}
+                    className={`px-2 py-1 rounded-lg border text-[10px] font-medium transition ${
+                      tone === tp.value
+                        ? "bg-blue-50 border-blue-400 text-blue-700 font-bold shadow-2xs"
+                        : "bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100"
+                    }`}
+                    title={tp.desc}
+                  >
+                    {tp.label}
+                  </button>
+                ))}
               </div>
             </div>
 
@@ -720,28 +1186,6 @@ export default function GeminiMailStudio({
                   </div>
                 </div>
               )}
-            </div>
-
-            {/* Merge Tag Chips */}
-            <div>
-              <div className="flex items-center justify-between mb-1.5">
-                <span className="text-[11px] font-semibold text-slate-600">Personalization Tags:</span>
-                <span className="text-[10px] text-slate-400">Click to append to prompt</span>
-              </div>
-              <div className="flex flex-wrap gap-1.5">
-                {["{{name}}", "{{team}}", "{{date}}", "{{time}}", "{{meet_link}}", "{{whatsapp_link}}"].map(
-                  (tag) => (
-                    <button
-                      key={tag}
-                      type="button"
-                      onClick={() => setPrompt((prev) => `${prev} ${tag}`)}
-                      className="px-2 py-0.5 bg-slate-100 hover:bg-blue-50 hover:text-blue-700 hover:border-blue-200 border border-slate-200 text-slate-700 rounded-md font-mono text-[10px] transition"
-                    >
-                      {tag}
-                    </button>
-                  )
-                )}
-              </div>
             </div>
 
             {/* Main Generate Button */}
@@ -876,6 +1320,40 @@ export default function GeminiMailStudio({
                   </div>
                 </div>
 
+                {/* Live Metrics & Token Simulator Toolbar */}
+                <div className="flex flex-wrap items-center justify-between gap-2 pt-2 pb-1 border-t border-slate-100">
+                  {/* Live Reading Time & Word Count Metric */}
+                  {(() => {
+                    const m = computeMetrics(generatedData);
+                    return (
+                      <div className="flex items-center space-x-1.5 px-2.5 py-1 rounded-lg bg-slate-100 border border-slate-200 text-slate-700 text-[11px] font-medium">
+                        <Clock className="w-3.5 h-3.5 text-blue-600" />
+                        <span>~{m.readingTimeSec}s read</span>
+                        <span className="text-slate-300">•</span>
+                        <FileText className="w-3.5 h-3.5 text-slate-500" />
+                        <span>{m.words} words</span>
+                        <span className="text-slate-300">•</span>
+                        <span className="text-slate-400">{m.chars} chars</span>
+                      </div>
+                    );
+                  })()}
+
+                  {/* Token Preview Simulator Toggle */}
+                  <button
+                    type="button"
+                    onClick={() => setSimulateStudentData(!simulateStudentData)}
+                    className={`px-2.5 py-1 rounded-lg border text-xs font-semibold transition flex items-center space-x-1.5 ${
+                      simulateStudentData
+                        ? "bg-emerald-50 border-emerald-300 text-emerald-800 ring-2 ring-emerald-500/20 shadow-2xs"
+                        : "bg-white border-slate-200 text-slate-600 hover:bg-slate-50"
+                    }`}
+                    title="Toggle between raw template tags ({{name}}) and realistic student data in live preview"
+                  >
+                    <UserCheck className={`w-3.5 h-3.5 ${simulateStudentData ? "text-emerald-600" : "text-slate-400"}`} />
+                    <span>{simulateStudentData ? "Sample Student Mode (ON)" : "Token Simulator (OFF)"}</span>
+                  </button>
+                </div>
+
                 {/* Sub-Tabs: Visual Preview vs Alternative Subjects vs HTML Source */}
                 <div className="flex items-center justify-between pt-2 border-t border-slate-100">
                   <div className="flex p-0.5 bg-slate-100 rounded-lg text-xs font-medium">
@@ -960,7 +1438,7 @@ export default function GeminiMailStudio({
                 >
                   <iframe
                     title="Gemini Email Visual Preview"
-                    srcDoc={generatedData.fullHtml}
+                    srcDoc={getDisplayHtml(generatedData.fullHtml, simulateStudentData, customBanner)}
                     className="w-full h-full border-0 bg-white block overflow-y-auto"
                     style={{ height: "100%", width: "100%" }}
                   />
@@ -1245,7 +1723,7 @@ export default function GeminiMailStudio({
               >
                 <iframe
                   title="Fullscreen Gemini Preview"
-                  srcDoc={generatedData.fullHtml}
+                  srcDoc={getDisplayHtml(generatedData.fullHtml, simulateStudentData, customBanner)}
                   className="w-full h-full border-0 bg-white block overflow-y-auto"
                 />
               </div>

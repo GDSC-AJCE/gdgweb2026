@@ -1,5 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getTemplateSource, renderTemplateToHtml } from "@/lib/mailer";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "@/lib/firebase";
+
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export async function POST(req: NextRequest) {
   try {
@@ -7,6 +12,17 @@ export async function POST(req: NextRequest) {
     const { templateContent, templateName, recipient = {} } = body;
 
     let source = templateContent || (templateName ? getTemplateSource(templateName) : null);
+
+    if (!source && templateName) {
+      try {
+        const docSnap = await getDoc(doc(db, "mail_templates", templateName));
+        if (docSnap.exists()) {
+          source = docSnap.data().content || null;
+        }
+      } catch (fsErr) {
+        console.warn("Firestore template lookup failed in preview:", fsErr);
+      }
+    }
 
     if (!source) {
       source = `
@@ -56,7 +72,14 @@ export async function POST(req: NextRequest) {
     };
 
     const previewHtml = await renderTemplateToHtml(source, sample, true);
-    return NextResponse.json({ success: true, html: previewHtml });
+    return NextResponse.json(
+      { success: true, html: previewHtml },
+      {
+        headers: {
+          "Cache-Control": "no-store, no-cache, must-revalidate",
+        },
+      }
+    );
   } catch (err: any) {
     return NextResponse.json({ success: false, error: err.message }, { status: 500 });
   }

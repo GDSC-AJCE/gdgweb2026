@@ -102,12 +102,12 @@ export default function VerifyPage({
                         }
                     }
 
-                    // If template was not loaded from subcollection, use certificate's backgroundUrl
+                    // If template was not loaded from subcollection, use certificate's backgroundUrl and elements
                     setTemplate((prev) => {
                         if (prev) return prev;
                         return {
-                            backgroundUrl: (certData as any).backgroundUrl || "/assets/certificates/gdg-certificate-frame.svg",
-                            elements: (certData as any).elements || [
+                            backgroundUrl: (certData as any).backgroundUrl || (certData as any).templateConfig?.backgroundUrl || "/assets/certificates/gdg-certificate-frame.svg",
+                            elements: (certData as any).elements || (certData as any).templateConfig?.elements || [
                                 { id: "elem_name", type: "name", x: 50, y: 44, fontSize: 44, color: "#1a73e8", fontWeight: "bold", textAlign: "center" },
                                 { id: "elem_date", type: "date", x: 50, y: 90, fontSize: 13, color: "#80827f", textAlign: "center" },
                                 { id: "elem_id", type: "certificateId", x: 50, y: 92, fontSize: 11, color: "#4285F4", textAlign: "center" },
@@ -186,20 +186,58 @@ export default function VerifyPage({
             const qrImg = await loadImage(qrDataUrl, false);
 
             for (const el of (template.elements ?? [])) {
-                const leftPx = el.x > 100 ? (el.x / 1754) * RENDER_W : (el.x / 100) * RENDER_W;
-                const topPx = el.y > 100 ? (el.y / 1240) * RENDER_H : (el.y / 100) * RENDER_H;
-                const sizePx = (el.fontSize / 800) * RENDER_W;
+                if (el.visible === false) continue;
+                const is1754Coord = el.x > 100 || el.y > 100;
+                const leftPx = is1754Coord ? (el.x / 1754) * RENDER_W : (el.x / 100) * RENDER_W;
+                const topPx = is1754Coord ? (el.y / 1240) * RENDER_H : (el.y / 100) * RENDER_H;
+                const sizePx = is1754Coord ? (el.fontSize / 1754) * RENDER_W : (el.fontSize / 800) * RENDER_W;
 
-                if (el.type === "qrcode") {
+                if (el.type === "qrcode" || el.type === "qr") {
+                    const qrPixelSize = is1754Coord
+                        ? ((el.qrSize || el.fontSize || 110) / 1754) * RENDER_W
+                        : sizePx;
                     let drawX = leftPx;
-                    if (el.textAlign === "center") drawX = leftPx - sizePx / 2;
-                    else if (el.textAlign === "right") drawX = leftPx - sizePx;
-                    ctx.drawImage(qrImg, drawX, topPx, sizePx, sizePx);
+                    if (el.textAlign === "center") drawX = leftPx - qrPixelSize / 2;
+                    else if (el.textAlign === "right") drawX = leftPx - qrPixelSize;
+                    ctx.drawImage(qrImg, drawX, topPx, qrPixelSize, qrPixelSize);
+                } else if (el.type === "signatory") {
+                    const fontFamily = (el.fontFamily || "Inter, sans-serif")
+                        .split(",")[0]
+                        .trim()
+                        .replace(/['"]/g, "");
+
+                    try {
+                        await document.fonts.load(`${el.fontWeight || "bold"} ${sizePx}px "${fontFamily}"`);
+                    } catch {
+                        // fallback
+                    }
+
+                    ctx.save();
+                    ctx.font = `${el.fontWeight || "bold"} ${sizePx}px "${fontFamily}"`;
+                    ctx.fillStyle = el.color || "#202124";
+                    ctx.textBaseline = "middle";
+                    ctx.textAlign = (el.textAlign === "center" || el.textAlign === "right") ? el.textAlign : "left";
+                    ctx.fillText(el.signatoryName || "", leftPx, topPx);
+
+                    const roleSizePx = is1754Coord
+                        ? ((el.signatoryRoleSize || 12) / 1754) * RENDER_W
+                        : ((el.signatoryRoleSize || 12) / 800) * RENDER_W;
+                    ctx.font = `normal ${roleSizePx}px "${fontFamily}"`;
+                    ctx.fillStyle = el.signatoryRoleColor || "#80827f";
+                    ctx.fillText(el.signatoryRole || "", leftPx, topPx + (20 / 1240) * RENDER_H);
+                    ctx.restore();
                 } else {
-                    let content = "";
+                    let content = el.text || "";
                     if (el.type === "name") content = certificate.recipientName;
                     else if (el.type === "date") content = certificate.issueDate;
                     else if (el.type === "certificateId") content = certificate.certificateId;
+
+                    content = content
+                        .replace(/\{\{NAME\}\}/gi, certificate.recipientName || "")
+                        .replace(/\{\{EVENT\}\}/gi, certificate.eventTitle || "")
+                        .replace(/\{\{ID\}\}/gi, certificate.certificateId || "")
+                        .replace(/\{\{DATE\}\}/gi, certificate.issueDate || "");
+
                     if (!content) continue;
 
                     const fontFamily = (el.fontFamily || "Inter, sans-serif")
@@ -216,7 +254,7 @@ export default function VerifyPage({
                     ctx.save();
                     ctx.font = `${el.fontWeight || "normal"} ${sizePx}px "${fontFamily}"`;
                     ctx.fillStyle = el.color || "#000000";
-                    ctx.textBaseline = "top";
+                    ctx.textBaseline = is1754Coord ? "middle" : "top";
                     ctx.textAlign = (el.textAlign === "center" || el.textAlign === "right")
                         ? el.textAlign
                         : "left";
@@ -399,27 +437,22 @@ export default function VerifyPage({
 
                         {/* Elements */}
                         {template.elements?.map((el: any) => {
-                            const leftPercent = el.x > 100 ? (el.x / 1754) * 100 : el.x;
-                            const topPercent = el.y > 100 ? (el.y / 1240) * 100 : el.y;
-                            const baseFontSizePercent = (el.fontSize / 800) * 100;
+                            if (el.visible === false) return null;
+                            const is1754Coord = el.x > 100 || el.y > 100;
+                            const leftPercent = is1754Coord ? (el.x / 1754) * 100 : el.x;
+                            const topPercent = is1754Coord ? (el.y / 1240) * 100 : el.y;
+                            const baseFontSizePercent = is1754Coord
+                                ? (el.fontSize / 1754) * 100
+                                : (el.fontSize / 800) * 100;
 
-                            const style: React.CSSProperties = {
-                                position: "absolute",
-                                left: `${leftPercent}%`,
-                                top: `${topPercent}%`,
-                                fontSize: `${baseFontSizePercent}cqw`,
-                                color: el.color,
-                                fontWeight: el.fontWeight,
-                                fontFamily: el.fontFamily || "Inter, sans-serif",
-                                textAlign: el.textAlign || "left",
-                                whiteSpace: "nowrap",
-                                lineHeight: 1,
-                                display: "inline-block",
-                                transform: (el.textAlign === "center" ? "translateX(-50%)" : el.textAlign === "right" ? "translateX(-100%)" : "none")
-                            };
+                            const transformStyle = is1754Coord
+                                ? (el.textAlign === "center" ? "translate(-50%, -50%)" : el.textAlign === "right" ? "translate(-100%, -50%)" : "translate(0, -50%)")
+                                : (el.textAlign === "center" ? "translateX(-50%)" : el.textAlign === "right" ? "translateX(-100%)" : "none");
 
-                            if (el.type === "qrcode" && qrDataUrl) {
-                                const qrSizePercent = (el.fontSize / 800) * 100;
+                            if ((el.type === "qrcode" || el.type === "qr") && qrDataUrl) {
+                                const qrSizePercent = is1754Coord
+                                    ? ((el.qrSize || el.fontSize || 110) / 1754) * 100
+                                    : (el.fontSize / 800) * 100;
                                 return (
                                     <div
                                         key={el.id}
@@ -430,7 +463,9 @@ export default function VerifyPage({
                                             top: `${topPercent}%`,
                                             width: `${qrSizePercent}cqw`,
                                             height: `${qrSizePercent}cqw`,
-                                            transform: (el.textAlign === "center" ? "translateX(-50%)" : el.textAlign === "right" ? "translateX(-100%)" : "none")
+                                            transform: is1754Coord
+                                                ? "none"
+                                                : (el.textAlign === "center" ? "translateX(-50%)" : el.textAlign === "right" ? "translateX(-100%)" : "none")
                                         }}
                                     >
                                         <img
@@ -443,18 +478,73 @@ export default function VerifyPage({
                                 );
                             }
 
-                            let content = "";
-                            switch (el.type) {
-                                case "name":
-                                    content = certificate.recipientName;
-                                    break;
-                                case "date":
-                                    content = certificate.issueDate;
-                                    break;
-                                case "certificateId":
-                                    content = certificate.certificateId;
-                                    break;
+                            if (el.type === "signatory") {
+                                const roleFontSizePercent = is1754Coord
+                                    ? ((el.signatoryRoleSize || 12) / 1754) * 100
+                                    : ((el.signatoryRoleSize || 12) / 800) * 100;
+
+                                return (
+                                    <div
+                                        key={el.id}
+                                        className="cert-element signatory-element"
+                                        style={{
+                                            position: "absolute",
+                                            left: `${leftPercent}%`,
+                                            top: `${topPercent}%`,
+                                            textAlign: el.textAlign || "center",
+                                            transform: transformStyle,
+                                            lineHeight: 1.2,
+                                            whiteSpace: "nowrap"
+                                        }}
+                                    >
+                                        <div
+                                            style={{
+                                                fontSize: `${baseFontSizePercent}cqw`,
+                                                color: el.color || "#202124",
+                                                fontWeight: el.fontWeight || "bold",
+                                                fontFamily: el.fontFamily || "'Inter', sans-serif",
+                                            }}
+                                        >
+                                            {el.signatoryName || ""}
+                                        </div>
+                                        <div
+                                            style={{
+                                                fontSize: `${roleFontSizePercent}cqw`,
+                                                color: el.signatoryRoleColor || "#80827f",
+                                                fontFamily: el.fontFamily || "'Inter', sans-serif",
+                                            }}
+                                        >
+                                            {el.signatoryRole || ""}
+                                        </div>
+                                    </div>
+                                );
                             }
+
+                            let content = el.text || "";
+                            if (el.type === "name") content = certificate.recipientName;
+                            else if (el.type === "date") content = certificate.issueDate;
+                            else if (el.type === "certificateId") content = certificate.certificateId;
+
+                            content = content
+                                .replace(/\{\{NAME\}\}/gi, certificate.recipientName || "")
+                                .replace(/\{\{EVENT\}\}/gi, certificate.eventTitle || "")
+                                .replace(/\{\{ID\}\}/gi, certificate.certificateId || "")
+                                .replace(/\{\{DATE\}\}/gi, certificate.issueDate || "");
+
+                            const style: React.CSSProperties = {
+                                position: "absolute",
+                                left: `${leftPercent}%`,
+                                top: `${topPercent}%`,
+                                fontSize: `${baseFontSizePercent}cqw`,
+                                color: el.color,
+                                fontWeight: el.fontWeight,
+                                fontFamily: el.fontFamily || "Inter, sans-serif",
+                                textAlign: el.textAlign || "left",
+                                whiteSpace: "nowrap",
+                                lineHeight: 1.1,
+                                display: "inline-block",
+                                transform: transformStyle
+                            };
 
                             return (
                                 <div

@@ -6,6 +6,11 @@ import {
   sendViaAppsScriptGateway,
   getTransporter,
 } from "@/lib/mailer";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "@/lib/firebase";
+
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export async function POST(req: NextRequest) {
   try {
@@ -40,6 +45,16 @@ export async function POST(req: NextRequest) {
     };
 
     let source = templateContent || (templateName ? getTemplateSource(templateName) : null);
+    if (!source && templateName) {
+      try {
+        const docSnap = await getDoc(doc(db, "mail_templates", templateName));
+        if (docSnap.exists()) {
+          source = docSnap.data().content || null;
+        }
+      } catch (fsErr) {
+        console.warn("Firestore template lookup failed in test-email:", fsErr);
+      }
+    }
     if (!source) {
       source = `
         <div style="font-family: sans-serif; padding: 24px; color: #1e293b;">

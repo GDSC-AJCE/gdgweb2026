@@ -70,19 +70,8 @@
     </text>
   </g>
 
-  <!-- TITLE: CERTIFICATE OF PARTICIPATION -->
-  <g transform="translate(877, 345)" text-anchor="middle">
-    <text y="0" font-size="44" font-weight="900" letter-spacing="3" fill="#202124" font-family="'Inter', sans-serif">
-      CERTIFICATE OF PARTICIPATION
-    </text>
-    <rect x="-140" y="18" width="280" height="3" rx="1.5" fill="url(#frameGoogleBorder)" />
-    <text y="64" font-size="14" font-weight="600" letter-spacing="3" fill="#80827f" font-family="'Inter', sans-serif">
-      THIS IS PROUDLY PRESENTED TO
-    </text>
-  </g>
-
   <!-- Recipient underline -->
-  <g transform="translate(877, 564)">
+  <g transform="translate(877, 580)">
     <line x1="-380" y1="0" x2="380" y2="0" stroke="#d5d5d4" stroke-width="2" stroke-linecap="round" />
   </g>
 
@@ -91,15 +80,11 @@
     <!-- LEFT: Faculty Advisor Signature Line -->
     <g transform="translate(240, 0)">
       <line x1="0" y1="0" x2="260" y2="0" stroke="#2c2e2a" stroke-width="1.5" stroke-opacity="0.4" />
-      <text x="130" y="28" text-anchor="middle" font-size="15" font-weight="700" fill="#202124">Prof. Fr. Rubin Thoppil</text>
-      <text x="130" y="48" text-anchor="middle" font-size="12" font-weight="500" fill="#80827f">Faculty Advisor, GDG AJCE</text>
     </g>
 
     <!-- CENTER-LEFT: Lead Organizer Signature Line -->
     <g transform="translate(580, 0)">
       <line x1="0" y1="0" x2="260" y2="0" stroke="#2c2e2a" stroke-width="1.5" stroke-opacity="0.4" />
-      <text x="130" y="28" text-anchor="middle" font-size="15" font-weight="700" fill="#202124">Abin Varghese</text>
-      <text x="130" y="48" text-anchor="middle" font-size="12" font-weight="500" fill="#80827f">Organizer &amp; Chapter Lead</text>
     </g>
 
     <!-- CENTER: Verified Gold Seal Badge -->

@@ -22,6 +22,10 @@ export interface EmailGenerationParams {
   themeColor?: string;
   apiKey?: string;
   templateFormat?: "shortlisted" | "standard";
+  negativePrompt?: string;
+  tags?: string[];
+  temperature?: number;
+  headerBannerUrl?: string;
 }
 
 export interface GeneratedEmailResult {
@@ -157,6 +161,11 @@ export async function generateEmailWithGemini(
   const themeColor = params.themeColor || GDG_COLORS.blue;
   const details = params.details || {};
   const templateFormat = params.templateFormat || "shortlisted";
+  const temperature = typeof params.temperature === "number" ? Math.max(0.1, Math.min(1.0, params.temperature)) : 0.7;
+
+  const negativeConstraintInstruction = params.negativePrompt && params.negativePrompt.trim()
+    ? `NEGATIVE CONSTRAINTS / WHAT TO AVOID: ${params.negativePrompt.trim()}. Ensure the generated email strictly adheres to these negative constraints and does not contain these elements or patterns.`
+    : "";
 
   const systemInstruction = `You are the Lead Communications Officer & Creative Developer for Google Developer Groups (GDG) on Campus AJCE (Amal Jyothi College of Engineering).
 You write captivating, highly engaging, community-first emails for developers and students.
@@ -168,7 +177,7 @@ You format content to fit the official GDG AJCE Shortlisted Template layout—a 
 5. Dual Action Buttons (e.g., green WhatsApp community group button + primary Action/Google Meet/RSVP button)
 6. Important Guidelines / Key Highlights bullet list (4-6 clear, actionable points)
 7. An official GDG Footer banner
-
+${negativeConstraintInstruction ? `\nCRITICAL CONSTRAINTS TO ENFORCE:\n${negativeConstraintInstruction}\n` : ""}
 Supported personalization merge tags that you can naturally weave in:
 - {{name}} : First name of recipient
 - {{email}} : Email address
@@ -189,7 +198,8 @@ User Request / Topic:
 Email Category: ${category}
 Tone of Voice: ${tone}
 Primary Accent Color: ${themeColor}
-
+${params.tags && params.tags.length > 0 ? `Target Personalization Merge Tags: ${params.tags.join(", ")}\n` : ""}
+${negativeConstraintInstruction ? `${negativeConstraintInstruction}\n` : ""}
 Provided Key Details (use these or infer realistic values tailored to the prompt):
 - Event / Opportunity Name: ${details.eventName || "Not specified (generate an exciting title)"}
 - Date: ${details.date || "{{date}}"}
@@ -272,7 +282,7 @@ Return ONLY a JSON object with this exact shape:
       contents: promptContent,
       config: {
         systemInstruction,
-        temperature: 0.7,
+        temperature,
         responseMimeType: "application/json",
       },
     });
@@ -286,7 +296,7 @@ Return ONLY a JSON object with this exact shape:
         contents: promptContent,
         config: {
           systemInstruction,
-          temperature: 0.7,
+          temperature,
           responseMimeType: "application/json",
         },
       });
@@ -332,6 +342,7 @@ Return ONLY a JSON object with this exact shape:
       themeColor,
       category,
       details,
+      headerBannerUrl: params.headerBannerUrl,
     });
 
     unlayerDesign = buildUnlayerDesign({
@@ -400,6 +411,7 @@ Return ONLY a JSON object with this exact shape:
       keyPoints: parsed.keyPoints,
       callToAction: parsed.callToAction,
       themeColor,
+      headerBannerUrl: params.headerBannerUrl,
     });
 
     unlayerDesign = buildShortlistedUnlayerDesign({
@@ -410,6 +422,7 @@ Return ONLY a JSON object with this exact shape:
       actionButtons: effectiveActionButtons,
       guidelines: effectiveGuidelines,
       themeColor,
+      headerBannerUrl: params.headerBannerUrl,
     });
   }
 
@@ -537,6 +550,102 @@ Return a JSON object:
 }
 
 /**
+ * Updates / rewrites email HTML content for the Unlayer Visual Editor using Gemini AI
+ */
+export async function updateEditorContentWithGemini(params: {
+  content: string;
+  instruction?: string;
+  goal?: string;
+  apiKey?: string;
+}): Promise<{ updatedHtml: string; summary: string }> {
+  const { content, instruction, goal, apiKey } = params;
+  const key = getGeminiApiKey(apiKey);
+  if (!key) {
+    throw new Error(
+      "Gemini API key is required. Please set GEMINI_API_KEY in your environment or enter it in settings."
+    );
+  }
+
+  const ai = new GoogleGenAI({ apiKey: key, apiVersion: "v1beta" });
+
+  const goalDescriptions: Record<string, string> = {
+    more_engaging: "Make this email copy punchier, highly engaging, and full of developer community excitement.",
+    condense: "Condense and shorten this email, cutting unnecessary fluff while strictly preserving all crucial dates, times, venues, links, and CTAs.",
+    improve_cta: "Improve and enhance the Call-to-Action (CTA) elements and copy, creating urgency and a compelling next step for the reader.",
+    add_guidelines: "Add clear, professional participation guidelines, rules, or FAQ bullet points tailored to the event or announcement.",
+    urgent_countdown: "Rewrite with an urgent 24-hour countdown tone, highlighting limited slots/time and driving immediate action.",
+    custom: instruction || "Update and rewrite the email content according to instructions.",
+  };
+
+  const selectedGoal =
+    goalDescriptions[goal || ""] ||
+    (instruction ? instruction : "Make this email more engaging and polished.");
+
+  const systemInstruction = `You are an expert email copywriter and HTML email developer for Google Developer Groups (GDG) on Campus AJCE (Amal Jyothi College of Engineering).
+Your job is to update, rewrite, or polish the provided email HTML according to the user's instructions or goal.
+
+CRITICAL RULES:
+1. Return ONLY a valid JSON object matching the requested schema.
+2. Strictly preserve all personalization merge tags without modifying their syntax, such as {{name}}, {{team}}, {{category}}, {{date}}, {{time}}, {{meet_link}}, {{whatsapp_link}}, {{email}}, etc.
+3. Preserve HTML email compatibility: keep inline styles, table layouts, or styling clean and functional for email clients.
+4. If modifying text content, keep the visual hierarchy (headline, paragraphs, badges, buttons, details) intact unless instructed otherwise.
+5. Provide a clear, concise 1-sentence summary of the changes made.`;
+
+  const prompt = `
+Goal / Focus: ${selectedGoal}
+${instruction && goal !== "custom" ? `Additional Specific Instruction: ${instruction}\n` : ""}
+Current Email HTML Content:
+"""
+${content}
+"""
+
+Return a JSON object with this exact structure:
+{
+  "updatedHtml": "The complete updated email HTML string with the requested changes applied",
+  "summary": "A concise 1-sentence summary of what was updated or improved"
+}
+`;
+
+  let res: any;
+  try {
+    res = await ai.models.generateContent({
+      model: "gemini-2.5-flash",
+      contents: prompt,
+      config: {
+        systemInstruction,
+        responseMimeType: "application/json",
+      },
+    });
+  } catch (err: any) {
+    res = await ai.models.generateContent({
+      model: "gemini-flash-latest",
+      contents: prompt,
+      config: {
+        systemInstruction,
+        responseMimeType: "application/json",
+      },
+    });
+  }
+
+  let parsed: any = {};
+  try {
+    const raw = res.text || "{}";
+    const clean = raw.replace(/^```json\s*/i, "").replace(/\s*```$/i, "").trim();
+    parsed = JSON.parse(clean);
+  } catch (e) {
+    console.warn("Failed to parse Gemini JSON output directly:", e);
+    if (res.text && res.text.includes("<") && res.text.includes(">")) {
+      parsed = { updatedHtml: res.text, summary: "Content updated with Gemini AI" };
+    }
+  }
+
+  return {
+    updatedHtml: parsed.updatedHtml || content,
+    summary: parsed.summary || "Email content successfully updated with Gemini AI",
+  };
+}
+
+/**
  * Builds the predefined GDG AJCE Shortlisted Template HTML email
  * Exactly mirrors templates/shortlisted.html with dynamically adapted content
  */
@@ -561,6 +670,7 @@ export function buildShortlistedFormatEmail(data: {
   keyPoints?: string[];
   callToAction?: { label: string; url: string };
   themeColor?: string;
+  headerBannerUrl?: string;
 }): string {
   const {
     subject,
@@ -573,6 +683,7 @@ export function buildShortlistedFormatEmail(data: {
     keyPoints = [],
     callToAction,
     themeColor = GDG_COLORS.blue,
+    headerBannerUrl,
   } = data;
 
   // Prepare greeting & paragraphs cleanly
@@ -791,7 +902,7 @@ export function buildShortlistedFormatEmail(data: {
                       <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
                         <tr>
                           <td style="padding-right: 0px;padding-left: 0px;" align="center">
-                            <img align="center" border="0" src="https://assets.unlayer.com/projects/0/1793981389866-GDG%20Header.png?w=1160px" alt="GDG Header" title="GDG Header" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: inline-block !important;border: none;height: auto;float: none;width: 100%;max-width: 600px;" width="600"/>
+                            <img align="center" border="0" src="${headerBannerUrl || "https://assets.unlayer.com/projects/0/1793981389866-GDG%20Header.png?w=1160px"}" alt="GDG Header" title="GDG Header" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: inline-block !important;border: none;height: auto;float: none;width: 100%;max-width: 600px;" width="600"/>
                           </td>
                         </tr>
                       </table>
@@ -910,6 +1021,7 @@ export function buildShortlistedUnlayerDesign(data: {
     items?: string[];
   };
   themeColor?: string;
+  headerBannerUrl?: string;
 }): any {
   const {
     headline,
@@ -918,6 +1030,7 @@ export function buildShortlistedUnlayerDesign(data: {
     actionButtons,
     guidelines,
     themeColor = GDG_COLORS.blue,
+    headerBannerUrl,
   } = data;
 
   // Greeting & Paragraphs formatting
@@ -993,7 +1106,7 @@ export function buildShortlistedUnlayerDesign(data: {
             values: {
               containerPadding: "0px",
               src: {
-                url: "https://assets.unlayer.com/projects/0/1793981389866-GDG%20Header.png?w=1160px",
+                url: headerBannerUrl || "https://assets.unlayer.com/projects/0/1793981389866-GDG%20Header.png?w=1160px",
                 width: 1160,
                 height: 290,
                 filename: "GDG Header.png",
@@ -1215,6 +1328,7 @@ function buildResponsiveGdgEmail(data: {
   themeColor: string;
   category: string;
   details?: any;
+  headerBannerUrl?: string;
 }): string {
   const {
     subject,
@@ -1227,6 +1341,7 @@ function buildResponsiveGdgEmail(data: {
     themeColor,
     category,
     details = {},
+    headerBannerUrl,
   } = data;
 
   const keyPointsHtml =
@@ -1304,7 +1419,11 @@ function buildResponsiveGdgEmail(data: {
       <td align="center">
         <!-- Main Card Container -->
         <table role="presentation" class="email-container" width="600" cellpadding="0" cellspacing="0" style="max-width: 600px; width: 100%; background-color: #ffffff; border-radius: 16px; border: 1px solid #e2e8f0; overflow: hidden; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05); margin: 0 auto;">
-          
+          ${
+            headerBannerUrl
+              ? `<tr><td style="padding: 0; line-height: 0;"><img src="${headerBannerUrl}" alt="GDG Header Banner" width="600" style="width: 100%; max-width: 600px; height: auto; display: block; border: 0;" /></td></tr>`
+              : ""
+          }
           <!-- Top Google Color Bar -->
           <tr>
             <td style="padding: 0; height: 5px; line-height: 5px; font-size: 0;">

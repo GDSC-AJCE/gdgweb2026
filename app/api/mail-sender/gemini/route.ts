@@ -6,6 +6,7 @@ import {
   generateEmailWithGemini,
   generateSubjectLines,
   polishEmailContent,
+  updateEditorContentWithGemini,
   testGeminiConnection,
   getGeminiApiKey,
 } from "@/lib/gemini";
@@ -128,6 +129,28 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ success: true, ...result });
     }
 
+    // 3.5 Update Visual Editor (Unlayer) Content Action
+    if (action === "update-editor-content") {
+      const { content, instruction, goal, apiKey } = body;
+      if (!content || !content.trim()) {
+        return NextResponse.json(
+          { success: false, error: "Email content is required to update." },
+          { status: 400 }
+        );
+      }
+      const result = await updateEditorContentWithGemini({
+        content,
+        instruction,
+        goal,
+        apiKey,
+      });
+      return NextResponse.json({
+        success: true,
+        updatedHtml: result.updatedHtml,
+        summary: result.summary,
+      });
+    }
+
     // 4. Default: Generate Full Email Action
     const {
       prompt,
@@ -137,6 +160,10 @@ export async function POST(req: NextRequest) {
       themeColor,
       apiKey,
       templateFormat = "shortlisted",
+      negativePrompt,
+      tags,
+      temperature,
+      headerBannerUrl,
     } = body;
 
     if (!prompt || !prompt.trim()) {
@@ -154,6 +181,10 @@ export async function POST(req: NextRequest) {
       themeColor,
       apiKey,
       templateFormat,
+      negativePrompt,
+      tags,
+      temperature: typeof temperature === "number" ? temperature : undefined,
+      headerBannerUrl,
     });
 
     return NextResponse.json({
