@@ -11,12 +11,22 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const { templateContent, templateName, recipient = {} } = body;
 
+    let isDeleted = false;
+    if (templateName) {
+      try {
+        const docSnap = await getDoc(doc(db, "mail_templates", templateName));
+        if (docSnap.exists() && docSnap.data().deleted === true) {
+          isDeleted = true;
+        }
+      } catch (fsErr) {}
+    }
+
     let source: string | null =
       typeof templateContent === "string" && templateContent.trim().length > 0
         ? templateContent
-        : (templateName ? getTemplateSource(templateName) : null);
+        : (!isDeleted && templateName ? getTemplateSource(templateName) : null);
 
-    if (!source && templateName) {
+    if (!source && templateName && !isDeleted) {
       try {
         const docSnap = await getDoc(doc(db, "mail_templates", templateName));
         if (docSnap.exists()) {

@@ -132,6 +132,37 @@ interface StoredCustomTemplate {
 }
 
 const CUSTOM_TEMPLATES_STORAGE_KEY = "gdg_mail_custom_templates";
+const DELETED_TEMPLATES_STORAGE_KEY = "gdg_mail_deleted_templates";
+
+function getDeletedTemplateIds(): Set<string> {
+  if (typeof window === "undefined") return new Set();
+  try {
+    const raw = localStorage.getItem(DELETED_TEMPLATES_STORAGE_KEY);
+    if (!raw) return new Set();
+    const arr = JSON.parse(raw);
+    return new Set(Array.isArray(arr) ? arr : []);
+  } catch (e) {
+    return new Set();
+  }
+}
+
+function markTemplateAsDeleted(id: string) {
+  if (typeof window === "undefined") return;
+  try {
+    const set = getDeletedTemplateIds();
+    set.add(id);
+    localStorage.setItem(DELETED_TEMPLATES_STORAGE_KEY, JSON.stringify(Array.from(set)));
+  } catch (e) {}
+}
+
+function unmarkTemplateAsDeleted(id: string) {
+  if (typeof window === "undefined") return;
+  try {
+    const set = getDeletedTemplateIds();
+    set.delete(id);
+    localStorage.setItem(DELETED_TEMPLATES_STORAGE_KEY, JSON.stringify(Array.from(set)));
+  } catch (e) {}
+}
 
 function getStoredCustomTemplates(): Record<string, StoredCustomTemplate> {
   if (typeof window === "undefined") return {};
@@ -331,6 +362,7 @@ export default function MailStudioTab() {
     async function loadTemplatesList() {
       try {
         const templateMap = new Map<string, any>();
+        const deletedIds = getDeletedTemplateIds();
 
         // 1. Direct Firestore mail_templates query
         try {
@@ -338,6 +370,18 @@ export default function MailStudioTab() {
           snap.forEach((docSnap) => {
             const data = docSnap.data();
             const id = docSnap.id;
+
+            // If tombstone recorded in Firestore, update local deleted set and skip
+            if (data.deleted === true) {
+              deletedIds.add(id);
+              markTemplateAsDeleted(id);
+              return;
+            }
+
+            if (deletedIds.has(id)) {
+              return;
+            }
+
             const displayName =
               data.name ||
               id
@@ -359,6 +403,10 @@ export default function MailStudioTab() {
         try {
           const stored = getStoredCustomTemplates();
           Object.values(stored).forEach((t) => {
+            if (deletedIds.has(t.id)) {
+              removeCustomTemplateFromStorage(t.id);
+              return;
+            }
             if (!templateMap.has(t.id)) {
               templateMap.set(t.id, {
                 id: t.id,
@@ -379,7 +427,7 @@ export default function MailStudioTab() {
             const data = await res.json();
             if (data.templates && Array.isArray(data.templates)) {
               data.templates.forEach((t: any) => {
-                if (!templateMap.has(t.id)) {
+                if (!deletedIds.has(t.id) && !templateMap.has(t.id)) {
                   templateMap.set(t.id, t);
                 }
               });
@@ -389,6 +437,11 @@ export default function MailStudioTab() {
           console.warn("API templates fetch failed:", apiErr);
         }
 
+        // 4. Final purge: strictly remove any tombstoned IDs
+        deletedIds.forEach((delId) => {
+          templateMap.delete(delId);
+        });
+
         const mergedTemplates = Array.from(templateMap.values());
         if (mergedTemplates.length > 0) {
           setTemplates(mergedTemplates);
@@ -396,7 +449,11 @@ export default function MailStudioTab() {
             typeof window !== "undefined"
               ? localStorage.getItem("gdg_mail_active_template")
               : null;
-          if (savedTemplate && mergedTemplates.some((t: any) => t.id === savedTemplate)) {
+          if (
+            savedTemplate &&
+            !deletedIds.has(savedTemplate) &&
+            mergedTemplates.some((t: any) => t.id === savedTemplate)
+          ) {
             setActiveTemplate(savedTemplate);
           } else if (!mergedTemplates.some((t: any) => t.id === activeTemplate)) {
             setActiveTemplate(mergedTemplates[0].id);
@@ -594,6 +651,10 @@ export default function MailStudioTab() {
       let contentToPreview = typeof overrideContent === "string" ? overrideContent : undefined;
 
       if (!contentToPreview && activeTemplate) {
+        if (getDeletedTemplateIds().has(activeTemplate)) {
+          return;
+        }
+
         // Try localStorage cache first (fastest)
         const stored = getStoredCustomTemplates();
         if (stored[activeTemplate]?.content) {
@@ -606,6 +667,10 @@ export default function MailStudioTab() {
             const snap = await getDoc(doc(db, "mail_templates", activeTemplate));
             if (snap.exists()) {
               const d = snap.data();
+              if (d.deleted === true) {
+                markTemplateAsDeleted(activeTemplate);
+                return;
+              }
               if (d.content) {
                 contentToPreview = d.content;
               }
@@ -893,6 +958,10 @@ export default function MailStudioTab() {
 
   const loadTemplateToEditor = async (templateName: string) => {
     try {
+      if (getDeletedTemplateIds().has(templateName)) {
+        return;
+      }
+
       let loadedDesign: any = null;
       let loadedContent: string = "";
 
@@ -901,6 +970,10 @@ export default function MailStudioTab() {
         const snap = await getDoc(doc(db, "mail_templates", templateName));
         if (snap.exists()) {
           const d = snap.data();
+          if (d.deleted === true) {
+            markTemplateAsDeleted(templateName);
+            return;
+          }
           if (d.design) loadedDesign = d.design;
           if (d.content) loadedContent = d.content;
         }
@@ -950,6 +1023,8 @@ export default function MailStudioTab() {
         const activeMeta = templates.find((t) => t.id === activeTemplate);
         const templateDisplayName = activeMeta?.name || activeTemplate;
 
+        unmarkTemplateAsDeleted(activeTemplate);
+
         const tplData: StoredCustomTemplate = {
           id: activeTemplate,
           name: templateDisplayName,
@@ -963,7 +1038,7 @@ export default function MailStudioTab() {
         // 1. Direct Client Firestore save
         try {
           const docRef = doc(db, "mail_templates", activeTemplate);
-          await setDoc(docRef, tplData, { merge: true });
+          await setDoc(docRef, { ...tplData, deleted: false }, { merge: true });
         } catch (fsErr: any) {
           console.warn("Direct client Firestore save failed:", fsErr);
         }
@@ -1001,6 +1076,8 @@ export default function MailStudioTab() {
         const activeMeta = templates.find((t) => t.id === activeTemplate);
         const templateDisplayName = activeMeta?.name || activeTemplate;
 
+        unmarkTemplateAsDeleted(activeTemplate);
+
         const tplData: StoredCustomTemplate = {
           id: activeTemplate,
           name: templateDisplayName,
@@ -1014,7 +1091,7 @@ export default function MailStudioTab() {
         // 1. Direct Client Firestore save
         try {
           const docRef = doc(db, "mail_templates", activeTemplate);
-          await setDoc(docRef, tplData, { merge: true });
+          await setDoc(docRef, { ...tplData, deleted: false }, { merge: true });
         } catch (fsErr: any) {
           console.warn("Direct client Firestore save failed:", fsErr);
         }
@@ -1100,10 +1177,13 @@ export default function MailStudioTab() {
         updatedAt: new Date().toISOString(),
       };
 
+      // Unmark from deleted tombstones in case a template with this name was deleted previously
+      unmarkTemplateAsDeleted(cleanName);
+
       // 1. Direct Client Firestore write using authenticated session
       try {
         const docRef = doc(db, "mail_templates", cleanName);
-        await setDoc(docRef, templateData, { merge: true });
+        await setDoc(docRef, { ...templateData, deleted: false }, { merge: true });
       } catch (fsErr: any) {
         console.warn("Direct Firestore write during template creation failed:", fsErr);
       }
@@ -1163,23 +1243,34 @@ export default function MailStudioTab() {
     if (!confirm(`Are you sure you want to permanently delete template '${activeTemplate}'?`)) {
       return;
     }
+    const templateToDelete = activeTemplate;
     try {
-      // 1. Direct Client Firestore delete
+      // 1. Direct Client Firestore tombstone
       try {
-        await deleteDoc(doc(db, "mail_templates", activeTemplate));
+        const docRef = doc(db, "mail_templates", templateToDelete);
+        await setDoc(
+          docRef,
+          {
+            id: templateToDelete,
+            deleted: true,
+            deletedAt: new Date().toISOString(),
+          },
+          { merge: true }
+        );
       } catch (fsErr: any) {
-        console.warn("Direct client Firestore delete failed:", fsErr);
+        console.warn("Direct client Firestore delete tombstone failed:", fsErr);
       }
 
-      // 2. Remove from LocalStorage cache
-      removeCustomTemplateFromStorage(activeTemplate);
+      // 2. Mark in LocalStorage deleted tombstones & remove from custom templates
+      markTemplateAsDeleted(templateToDelete);
+      removeCustomTemplateFromStorage(templateToDelete);
 
       // 3. Server API route delete
-      await fetch(`/api/mail-sender/templates/${activeTemplate}`, {
+      await fetch(`/api/mail-sender/templates/${templateToDelete}`, {
         method: "DELETE",
       }).catch(() => {});
 
-      const remaining = templates.filter((t) => t.id !== activeTemplate);
+      const remaining = templates.filter((t) => t.id !== templateToDelete);
       setTemplates(remaining);
       const nextActive = remaining.length > 0 ? remaining[0].id : "not-shortlisted";
       setActiveTemplate(nextActive);
@@ -1187,7 +1278,7 @@ export default function MailStudioTab() {
         localStorage.setItem("gdg_mail_active_template", nextActive);
       }
       refreshPreview();
-      toast.success(`Template '${activeTemplate}' deleted successfully!`);
+      toast.success(`Template '${templateToDelete}' deleted successfully!`);
     } catch (e: any) {
       toast.error("Error deleting: " + e.message);
     }
@@ -1304,6 +1395,8 @@ export default function MailStudioTab() {
 
   // Gemini Studio Callbacks
   const handleSaveGeminiTemplate = async (name: string, html: string, design: any) => {
+    unmarkTemplateAsDeleted(name);
+
     const tplData: StoredCustomTemplate = {
       id: name,
       name,
@@ -1317,7 +1410,7 @@ export default function MailStudioTab() {
     // 1. Direct Client Firestore save
     try {
       const docRef = doc(db, "mail_templates", name);
-      await setDoc(docRef, tplData, { merge: true });
+      await setDoc(docRef, { ...tplData, deleted: false }, { merge: true });
     } catch (fsErr: any) {
       console.warn("Direct client Firestore save failed in handleSaveGeminiTemplate:", fsErr);
     }

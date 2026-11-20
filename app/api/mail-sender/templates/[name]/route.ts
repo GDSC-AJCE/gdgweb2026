@@ -31,6 +31,12 @@ export async function GET(
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
         const data = docSnap.data();
+        if (data.deleted === true) {
+          return NextResponse.json(
+            { success: false, error: `Template '${templateName}' has been deleted.` },
+            { status: 404 }
+          );
+        }
         foundInFirestore = true;
         if (data.name) displayName = data.name;
         if (data.content) content = data.content;
@@ -102,6 +108,7 @@ export async function POST(
         type: "html",
         hasDesign: design !== undefined ? Boolean(design) : Boolean(existingData.hasDesign || existingData.design),
         updatedAt: new Date().toISOString(),
+        deleted: false,
       };
 
       if (content !== undefined) updatePayload.content = content;
@@ -244,16 +251,21 @@ export async function DELETE(
     const templateName = name.trim().toLowerCase().replace(/[^a-z0-9_-]/g, "-");
     let deletedFirestore = false;
 
-    // 1. Delete from Firestore (Primary)
+    // 1. Mark as deleted in Firestore with tombstone (Primary source of truth)
     try {
       const docRef = doc(db, "mail_templates", templateName);
-      const snap = await getDoc(docRef);
-      if (snap.exists()) {
-        await deleteDoc(docRef);
-        deletedFirestore = true;
-      }
+      await setDoc(
+        docRef,
+        {
+          id: templateName,
+          deleted: true,
+          deletedAt: new Date().toISOString(),
+        },
+        { merge: true }
+      );
+      deletedFirestore = true;
     } catch (fsErr: any) {
-      console.warn("Firestore delete failed:", fsErr?.message || fsErr);
+      console.warn("Firestore delete tombstone failed:", fsErr?.message || fsErr);
     }
 
     // 2. Delete from disk (safely caught for serverless / read-only filesystem)

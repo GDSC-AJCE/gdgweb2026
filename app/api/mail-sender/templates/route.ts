@@ -10,18 +10,21 @@ export async function GET() {
   try {
     const diskTemplates = listTemplates();
     const templateMap = new Map<string, { id: string; name: string; hasDesign: boolean; type: string }>();
+    const deletedSet = new Set<string>();
 
-    // Add disk templates first
-    diskTemplates.forEach((t) => {
-      templateMap.set(t.id, t);
-    });
-
-    // Query Firestore mail_templates
+    // 1. Query Firestore mail_templates to identify deleted tombstones and active templates
     try {
       const snap = await getDocs(collection(db, "mail_templates"));
       snap.forEach((docSnap) => {
         const data = docSnap.data();
         const id = docSnap.id;
+
+        // If template has been marked as deleted (tombstone), register in deletedSet and exclude
+        if (data.deleted === true) {
+          deletedSet.add(id);
+          return;
+        }
+
         const displayName =
           data.name ||
           id
@@ -41,6 +44,18 @@ export async function GET() {
     } catch (fsErr) {
       console.warn("Firestore mail_templates read failed, using disk templates:", fsErr);
     }
+
+    // 2. Add disk templates, strictly filtering out any template marked as deleted
+    diskTemplates.forEach((t) => {
+      if (!deletedSet.has(t.id) && !templateMap.has(t.id)) {
+        templateMap.set(t.id, t);
+      }
+    });
+
+    // 3. Final purge: ensure no deleted template ID is ever present in templateMap
+    deletedSet.forEach((deletedId) => {
+      templateMap.delete(deletedId);
+    });
 
     const templates = Array.from(templateMap.values());
 
